@@ -1,60 +1,56 @@
-
 with AWS.Config.Set;
 with AWS.Services.Dispatchers.URI;
 with AWS.Server;
 with OCPPServer.Dispatchers;
 with OCPPServer.Dispatchers;
 with AWS.Net.WebSocket;
+with Ada.Text_IO;use Ada.Text_IO;
 
 with OCPPWebsocket;
 
 procedure OCPPServer.Main is
    use AWS;
 
-   Web_Server         : Server.HTTP;
-   Web_Config         : Config.Object;
-   Web_Dispatcher     : Services.Dispatchers.URI.Handler;
+   webServer         : Server.HTTP;
+   webConfig         : Config.Object;
 
-   Default_Dispatcher : Dispatchers.Default;
-   CSS_Dispatcher     : Dispatchers.CSS;
-   Image_Dispatcher   : Dispatchers.Image;
-   ocpp_websocket     : OCPPWebsocket.MySocket;
-
-
+   webDispatcher      : Services.Dispatchers.URI.Handler;
+   defaultDispatcher  : Dispatchers.Default;
+   cssDispatcher     : Dispatchers.CSS;
+   imageDispatcher   : Dispatchers.Image;
+   -- ocpp_websocket     : OCPPWebsocket.MySocket;
 
 begin
-
-
-
+      Put("main");
    --  Setup server
 
-   Config.Set.Server_Host (Web_Config, Host);
-   Config.Set.Server_Port (Web_Config, Port);
-   Config.Set.Reuse_Address(Web_Config, True); -- if we don't do this, we have to wait a minute or so after stopping the application to restart it to avoid 'port already in use' errors.
+   Config.Set.Server_Host (webConfig, Host);
+   Config.Set.Server_Port (webConfig, Port);
+   Config.Set.Reuse_Address(webConfig, True); -- if we don't do this, we have to wait a minute or so after stopping the application to restart it to avoid 'port already in use' errors.
 
    --  Setup dispatchers
 
-   Dispatchers.Initialize (Web_Config);
+   Dispatchers.Initialize (webConfig);
 
    Services.Dispatchers.URI.Register
-     (Web_Dispatcher,
+     (webDispatcher,
       URI    => "/css",
-      Action => CSS_Dispatcher,
+      Action => cssDispatcher,
       Prefix => True);
 
    Services.Dispatchers.URI.Register
-     (Web_Dispatcher,
+     (webDispatcher,
       URI    => "/img",
-      Action => Image_Dispatcher,
+      Action => imageDispatcher,
       Prefix => True);
 
    Services.Dispatchers.URI.Register_Default_Callback
-     (Web_Dispatcher,
-      Action => Default_Dispatcher);
+     (webDispatcher,
+      Action => defaultDispatcher);
 
    --  Start the server
 
-   Server.Start (Web_Server, Web_Dispatcher, Web_Config);
+   Server.Start (webServer, webDispatcher, webConfig);
 
 
 
@@ -66,7 +62,7 @@ begin
 
    --  Stop the server
 
-   Server.Shutdown (Web_Server);
+   Server.Shutdown (webServer);
 end OCPPServer.Main;
 
 
