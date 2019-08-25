@@ -12,42 +12,32 @@ package body OCPPWebsocket is
 
    use AWS;
 
-
-
    function Create
      (Socket  : Socket_Access;
      Request : AWS.Status.Data) return AWS.Net.WebSocket.Object'Class
-
    is
-
    begin
-      Put("Create");
+      Put_Line("OCPPWebsocket::Create");
+
       --  Note the call to the other version of Create*
-
       return MySocket'
-
         (AWS.Net.WebSocket.Object
-
            (AWS.Net.WebSocket.Create (Socket, Request)) with null record);
 
-
    end Create;
-
-
-
 
    procedure On_Open
      (Socket : in out Object; Message : String)
    is
    begin
-      Put("blah");
+      Put("On_Open");
    end On_Open;
 
    procedure On_Message
      (Socket : in out Object; Message : String)
    is
    begin
-      Put("blah");
+      Put("On_Message");
    end On_Message;
 
 

@@ -1,7 +1,9 @@
 with AWS.Config.Set;
+with AWS.Net.WebSocket.Registry;
+
+with AWS.Net.WebSocket.Registry.Control;
 with AWS.Services.Dispatchers.URI;
 with AWS.Server;
-with OCPPServer.Dispatchers;
 with OCPPServer.Dispatchers;
 with AWS.Net.WebSocket;
 with Ada.Text_IO;use Ada.Text_IO;
@@ -11,14 +13,17 @@ with OCPPWebsocket;
 procedure OCPPServer.Main is
    use AWS;
 
-   webServer         : Server.HTTP;
-   webConfig         : Config.Object;
+   webServer          : Server.HTTP;
+   webConfig          : Config.Object;
 
    webDispatcher      : Services.Dispatchers.URI.Handler;
-   defaultDispatcher  : Dispatchers.Default;
-   cssDispatcher     : Dispatchers.CSS;
-   imageDispatcher   : Dispatchers.Image;
-   -- ocpp_websocket     : OCPPWebsocket.MySocket;
+   defaultDispatcher  : OCPPServer.Dispatchers.Default ; --Dispatchers.Default;
+   cssDispatcher      : Dispatchers.CSS;
+   imageDispatcher    : Dispatchers.Image;
+   ws     : OCPPWebsocket.MySocket;
+   Rcp : Net.WebSocket.Registry.Recipient :=
+        Net.WebSocket.Registry.Create (URI => "/ocpp2p0");
+
 
 begin
       Put("main");
@@ -44,14 +49,17 @@ begin
       Action => imageDispatcher,
       Prefix => True);
 
-   Services.Dispatchers.URI.Register_Default_Callback
-     (webDispatcher,
-      Action => defaultDispatcher);
+   -- Services.Dispatchers.URI.Register_Default_Callback
+   --  (ws,
+   --   Action => defaultDispatcher);
 
    --  Start the server
+   Net.WebSocket.Registry.Register ("/ocpp2p0", OCPPWebsocket.Create'Access);
+   Net.WebSocket.Registry.Control.Start;
+   Net.WebSocket.Registry.Send (Rcp, "A simple message");
+
 
    Server.Start (webServer, webDispatcher, webConfig);
-
 
 
 

@@ -14,5 +14,6 @@ package OCPPWebsocket is
 
    --procedure On_Open
   --(Socket : in out Object; Message : String) is null;
+   procedure On_Message(Socket : in out Object; Message : String);
 
 end OCPPWebsocket;

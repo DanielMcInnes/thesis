@@ -5,6 +5,7 @@ with Ada.Strings.Unbounded;
 with AWS.Messages;
 with AWS.MIME;
 with AWS.Templates;
+with Ada.Text_IO;use Ada.Text_IO;
 
 package body OCPPServer.Dispatchers is
 
@@ -24,6 +25,7 @@ package body OCPPServer.Dispatchers is
       URI          : constant String := Status.URI (Request);
       Translations : Templates.Translate_Set;
    begin
+      Put("OCPPServer.Dispatcher.Create");
       if URI = "/" then
          Templates.Insert
            (Translations,
