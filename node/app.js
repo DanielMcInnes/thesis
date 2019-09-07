@@ -31,8 +31,8 @@ client.on('connect', function(connection) {
     sendNumber();
 });
  
-// client.connect('ws://localhost:8081/ocpp2p0', 'ocpp2.0');
-client.connect('ws://localhost:8081/ocpp2p0');
+client.connect("ws://localhost:8080/ocpp2p0", "ocpp2.0");
+//client.connect('ws://localhost:8080/echo');
 
 
 

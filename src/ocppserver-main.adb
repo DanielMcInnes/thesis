@@ -4,73 +4,85 @@ with AWS.Net.WebSocket.Registry;
 with AWS.Net.WebSocket.Registry.Control;
 with AWS.Services.Dispatchers.URI;
 with AWS.Server;
+with AWS.Templates;
 with OCPPServer.Dispatchers;
 with AWS.Net.WebSocket;
+with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 with Ada.Text_IO;use Ada.Text_IO;
 
-with OCPPWebsocket;
+with OCPP;
 
 procedure OCPPServer.Main is
    use AWS;
+   use Ada.Text_IO;
 
-   webServer          : Server.HTTP;
-   webConfig          : Config.Object;
+   recipient          : Net.WebSocket.Registry.Recipient := Net.WebSocket.Registry.Create (URI => urlPrefix);
+   httpServer         : Server.HTTP;
+   awsConfig          : AWS.Config.Object;
 
-   webDispatcher      : Services.Dispatchers.URI.Handler;
-   defaultDispatcher  : OCPPServer.Dispatchers.Default ; --Dispatchers.Default;
-   cssDispatcher      : Dispatchers.CSS;
-   imageDispatcher    : Dispatchers.Image;
-   ws     : OCPPWebsocket.MySocket;
-   Rcp : Net.WebSocket.Registry.Recipient :=
-        Net.WebSocket.Registry.Create (URI => "/ocpp2p0");
-
+   M : String (1 .. 255);
+   L : Natural;
 
 begin
-      Put("main");
+   Put_line("starting: " & OCPPServer.Host & "/" & OCPPServer.urlPrefix & ":" & OCPPServer.Port'Image );
+
    --  Setup server
-
-   Config.Set.Server_Host (webConfig, Host);
-   Config.Set.Server_Port (webConfig, Port);
-   Config.Set.Reuse_Address(webConfig, True); -- if we don't do this, we have to wait a minute or so after stopping the application to restart it to avoid 'port already in use' errors.
-
-   --  Setup dispatchers
-
-   Dispatchers.Initialize (webConfig);
-
-   Services.Dispatchers.URI.Register
-     (webDispatcher,
-      URI    => "/css",
-      Action => cssDispatcher,
-      Prefix => True);
-
-   Services.Dispatchers.URI.Register
-     (webDispatcher,
-      URI    => "/img",
-      Action => imageDispatcher,
-      Prefix => True);
-
-   -- Services.Dispatchers.URI.Register_Default_Callback
-   --  (ws,
-   --   Action => defaultDispatcher);
+   Config.Set.Reuse_Address(awsConfig, True); -- if we don't do this, we have to wait a minute or so after stopping the application to restart it to avoid 'port already in use' errors.
+   Config.Set.Server_Host (awsConfig, OCPPServer.Host);
+   Config.Set.Server_Port (awsConfig, OCPPServer.Port);
 
    --  Start the server
-   Net.WebSocket.Registry.Register ("/ocpp2p0", OCPPWebsocket.Create'Access);
-   Net.WebSocket.Registry.Control.Start;
-   Net.WebSocket.Registry.Send (Rcp, "A simple message");
+   Net.WebSocket.Registry.Register(urlPrefix, OCPP.Create'Access);
+   Net.WebSocket.Registry.Control.Start; -- starts the websocket servers
+   Put_Line("ws servers started");
 
+   Server.Start (httpServer, config => awsConfig, Callback => OCPP.HW_CB'Access);
+   Put_Line("server started");
+   for K in M'Range loop
+      M (K) := Character'Val ((Character'Pos ('0') + K mod 10));
+   end loop;
 
-   Server.Start (webServer, webDispatcher, webConfig);
+   --  Wait for at least a WebSocket to be created, no need to send a
+   --  message into the void.
 
+   while not OCPP.Created loop
+      delay 1.0;
+   end loop;
 
+   --  First send a large message (message with length > 125, see RFC 6455)
 
+   Net.WebSocket.Registry.Send (recipient, "Large message:" & M & ':');
 
-   --  Wait for the Q key
+   delay 1.0;
+
+   --  Then send some messages
+
+   for K in 1 .. 5 loop
+      Net.WebSocket.Registry.Send (recipient, "My reply " & K'Img);
+      delay 1.0;
+   end loop;
+
+   --  Get a message from user
+
+   Ada.Text_IO.Put ("Enter a message: ");
+   Ada.Text_IO.Get_Line (M, L);
+
+   --  Finally return an XML actions document. The format of this document
+   --  is identical to the one used by the Ajax framework.
+
+   Net.WebSocket.Registry.Send
+     (recipient,
+      String'(AWS.Templates.Parse
+        ("resp.xml", (1 => Templates.ASSOC ("MESSAGE", M (M'First .. L))))));
+
+   Ada.Text_IO.Put_Line ("You can now press Q to exit.");
 
    Server.Wait (Server.Q_Key_Pressed);
 
-   --  Stop the server
+   --  Now shuthdown the servers (HTTP and WebClient)
 
-   Server.Shutdown (webServer);
+   Server.Shutdown (httpServer);
+
 end OCPPServer.Main;
 
 
