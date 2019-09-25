@@ -1,0 +1,118 @@
+class parser
+!!!128642.cpp!!!	set_version(in version : std::string) : void
+    m_version = version;
+!!!128770.cpp!!!	get_header(in key : std::string) : std::string
+    header_list::const_iterator h = m_headers.find(key);
+
+    if (h == m_headers.end()) {
+        return empty_header;
+    } else {
+        return h->second;
+    }
+!!!128898.cpp!!!	get_header_as_plist(in key : std::string, inout out : parameter_list) : bool
+    header_list::const_iterator it = m_headers.find(key);
+
+    if (it == m_headers.end() || it->second.size() == 0) {
+        return false;
+    }
+
+    return this->parse_parameter_list(it->second,out);
+!!!129026.cpp!!!	get_headers() : header_list
+    return m_headers;
+!!!129154.cpp!!!	append_header(in key : std::string, in val : std::string) : void
+    if (std::find_if(key.begin(),key.end(),is_not_token_char) != key.end()) {
+        throw exception("Invalid header name",status_code::bad_request);
+    }
+
+    if (this->get_header(key).empty()) {
+        m_headers[key] = val;
+    } else {
+        m_headers[key] += ", " + val;
+    }
+!!!129282.cpp!!!	replace_header(in key : std::string, in val : std::string) : void
+    m_headers[key] = val;
+!!!129410.cpp!!!	remove_header(in key : std::string) : void
+    m_headers.erase(key);
+!!!129666.cpp!!!	set_body(in value : std::string) : void
+    if (value.size() == 0) {
+        remove_header("Content-Length");
+        m_body.clear();
+        return;
+    }
+
+    // TODO: should this method respect the max size? If so how should errors
+    // be indicated?
+
+    std::stringstream len;
+    len << value.size();
+    replace_header("Content-Length", len.str());
+    m_body = value;
+!!!130050.cpp!!!	parse_parameter_list(in in : std::string, inout out : parameter_list) : bool
+    if (in.size() == 0) {
+        return false;
+    }
+
+    std::string::const_iterator it;
+    it = extract_parameters(in.begin(),in.end(),out);
+    return (it == in.begin());
+!!!130178.cpp!!!	process_header(in begin : std::string::iterator, in end : std::string::iterator) : void
+    std::string::iterator cursor = std::search(
+        begin,
+        end,
+        header_separator,
+        header_separator + sizeof(header_separator) - 1
+    );
+
+    if (cursor == end) {
+        throw exception("Invalid header line",status_code::bad_request);
+    }
+
+    append_header(strip_lws(std::string(begin,cursor)),
+                  strip_lws(std::string(cursor+sizeof(header_separator)-1,end)));
+!!!130306.cpp!!!	prepare_body() : bool
+    if (!get_header("Content-Length").empty()) {
+        std::string const & cl_header = get_header("Content-Length");
+        char * end;
+        
+        // TODO: not 100% sure what the compatibility of this method is. Also,
+        // I believe this will only work up to 32bit sizes. Is there a need for
+        // > 4GiB HTTP payloads?
+        m_body_bytes_needed = std::strtoul(cl_header.c_str(),&end,10);
+        
+        if (m_body_bytes_needed > m_body_bytes_max) {
+            throw exception("HTTP message body too large",
+                status_code::request_entity_too_large);
+        }
+        
+        m_body_encoding = body_encoding::plain;
+        return true;
+    } else if (get_header("Transfer-Encoding") == "chunked") {
+        // TODO
+        //m_body_encoding = body_encoding::chunked;
+        return false;
+    } else {
+        return false;
+    }
+!!!130434.cpp!!!	process_body(in buf : char, in len : size_t) : size_t
+    if (m_body_encoding == body_encoding::plain) {
+        size_t processed = (std::min)(m_body_bytes_needed,len);
+        m_body.append(buf,processed);
+        m_body_bytes_needed -= processed;
+        return processed;
+    } else if (m_body_encoding == body_encoding::chunked) {
+        // TODO: 
+        throw exception("Unexpected body encoding",
+            status_code::internal_server_error);
+    } else {
+        throw exception("Unexpected body encoding",
+            status_code::internal_server_error);
+    }
+!!!130690.cpp!!!	raw_headers() : std::string
+    std::stringstream raw;
+
+    header_list::const_iterator it;
+    for (it = m_headers.begin(); it != m_headers.end(); it++) {
+        raw << it->first << ": " << it->second << "\r\n";
+    }
+
+    return raw.str();

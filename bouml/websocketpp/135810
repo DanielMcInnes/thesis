@@ -1,0 +1,1491 @@
+format 222
+"websocketpp processor" // processors::websocketpp processor
+  revision 1
+  modified_by 2 "dmcinnes"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "/home/dmcinnes/git/websocketpp/websocketpp/processors/"
+  cpp_src_dir "/home/dmcinnes/git/websocketpp/websocketpp/processors/"
+  cpp_namespace "websocketpp::processor"
+  classview 135810 "processors"
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    sequencediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    
+    activitydiagramsettings
+     end
+    class 139906 "hybi00"
+      visibility package 
+      nformals 1
+      formal name "config" type "typename" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 140034 // processor
+        rank 0 explicit_value "config"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "/ Processor for Hybi Draft version 00
+
+There are many differences between Hybi 00 and Hybi 13
+"
+      classrelation 136578 // <realization>
+	relation 136578 -_-|>
+	  stereotype "bind"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 136578 // <realization>
+	  b parent class_ref 140034 // processor
+      end
+
+      class 140162 "base"
+	visibility package stereotype "typedef" explicit_base_type "processor<config>"
+	cpp_decl "${comment}typedef ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 140290 "request_type"
+	visibility package stereotype "typedef" explicit_base_type "config::request_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 140418 "response_type"
+	visibility package stereotype "typedef" explicit_base_type "config::response_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 140546 "message_type"
+	visibility package stereotype "typedef" explicit_base_type "config::message_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 140674 "message_ptr"
+	visibility package stereotype "typedef" explicit_base_type "message_type::ptr"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 140802 "msg_manager_ptr"
+	visibility package stereotype "typedef" explicit_base_type "config::con_msg_manager_type::ptr"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      operation 144130 "hybi00"
+	cpp_inline public explicit_return_type ""
+	nparams 3
+	  param in name "secure" explicit_type "bool"
+	  param in name "p_is_server" explicit_type "bool"
+	  param in name "manager" type class_ref 140802 // msg_manager_ptr
+	cpp_decl "    ${comment}${inline}explicit ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}${)}${volatile}${throw}${abstract} : processor<config>(secure, p_is_server)
+      , msg_hdr(0x00)
+      , msg_ftr(0xff)
+      , m_state(HEADER)
+      , m_msg_manager(manager) {};
+"
+	
+	
+	
+	
+      end
+
+      operation 144258 "get_version"
+	const cpp_inline public explicit_return_type "int"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+        return 0;
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 144386 "validate_handshake"
+	const cpp_inline public explicit_return_type "lib::error_code"
+	nparams 1
+	  param in name "r" type class_ref 140290 // request_type
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+        if (r.get_method() != \"GET\") {
+            return make_error_code(error::invalid_http_method);
+        }
+
+        if (r.get_version() != \"HTTP/1.1\") {
+            return make_error_code(error::invalid_http_version);
+        }
+
+        // required headers
+        // Host is required by HTTP/1.1
+        // Connection is required by is_websocket_handshake
+        // Upgrade is required by is_websocket_handshake
+        if (r.get_header(\"Sec-WebSocket-Key1\").empty() ||
+            r.get_header(\"Sec-WebSocket-Key2\").empty() ||
+            r.get_header(\"Sec-WebSocket-Key3\").empty())
+        {
+            return make_error_code(error::missing_required_header);
+        }
+
+        return lib::error_code();
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 144514 "process_handshake"
+	const cpp_inline public explicit_return_type "lib::error_code"
+	nparams 3
+	  param in name "req" type class_ref 140290 // request_type
+	  param in name "subprotocol" explicit_type "std::string"
+	  param inout name "res" type class_ref 140418 // response_type
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}${)}${const}${volatile}${throw}${abstract} {
+        char key_final[16];
+
+        // copy key1 into final key
+        decode_client_key(req.get_header(\"Sec-WebSocket-Key1\"), &key_final[0]);
+
+        // copy key2 into final key
+        decode_client_key(req.get_header(\"Sec-WebSocket-Key2\"), &key_final[4]);
+
+        // copy key3 into final key
+        // key3 should be exactly 8 bytes. If it is more it will be truncated
+        // if it is less the final key will almost certainly be wrong.
+        // TODO: decide if it is best to silently fail here or produce some sort
+        //       of warning or exception.
+        std::string const & key3 = req.get_header(\"Sec-WebSocket-Key3\");
+        std::copy(key3.c_str(),
+                  key3.c_str()+(std::min)(static_cast<size_t>(8), key3.size()),
+                  &key_final[8]);
+
+        res.append_header(
+            \"Sec-WebSocket-Key3\",
+            md5::md5_hash_string(std::string(key_final,16))
+        );
+
+        res.append_header(\"Upgrade\",\"WebSocket\");
+        res.append_header(\"Connection\",\"Upgrade\");
+
+        // Echo back client's origin unless our local application set a
+        // more restrictive one.
+        if (res.get_header(\"Sec-WebSocket-Origin\").empty()) {
+            res.append_header(\"Sec-WebSocket-Origin\",req.get_header(\"Origin\"));
+        }
+
+        // Echo back the client's request host unless our local application
+        // set a different one.
+        if (res.get_header(\"Sec-WebSocket-Location\").empty()) {
+            uri_ptr uri = get_uri(req);
+            res.append_header(\"Sec-WebSocket-Location\",uri->str());
+        }
+
+        if (!subprotocol.empty()) {
+            res.replace_header(\"Sec-WebSocket-Protocol\",subprotocol);
+        }
+
+        return lib::error_code();
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 144642 "client_handshake_request"
+	const cpp_inline public explicit_return_type "lib::error_code"
+	nparams 3
+	  param inout name "" type class_ref 140290 // request_type
+	  param in name "" explicit_type "uri_ptr"
+	  param in name "" explicit_type "std::vector<std::string>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} & ${p0}${v0}, ${t1} ${p1}${v1}, const ${t2} & ${p2}${v2}${)}${const}${volatile}${throw}${abstract} {
+        return error::make_error_code(error::no_protocol_support);
+    };
+"
+	
+	
+	
+	
+	comment "/ Fill in a set of request headers for a client connection request
+
+The Hybi 00 processor only implements incoming connections so this will
+always return an error.
+
+@param [out] req  Set of headers to fill in
+@param [in] uri The uri being connected to
+@param [in] subprotocols The list of subprotocols to request
+"
+      end
+
+      operation 144770 "validate_server_handshake_response"
+	const cpp_inline public explicit_return_type "lib::error_code"
+	nparams 2
+	  param in name "" type class_ref 140290 // request_type
+	  param inout name "" type class_ref 140418 // response_type
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} & ${p1}${v1}${)}${const}${volatile}${throw}${abstract} {
+        return error::make_error_code(error::no_protocol_support);
+    };
+"
+	
+	
+	
+	
+	comment "/ Validate the server's response to an outgoing handshake request
+
+The Hybi 00 processor only implements incoming connections so this will
+always return an error.
+
+@param req The original request sent
+@param res The reponse to generate
+@return An error code, 0 on success, non-zero for other errors
+"
+      end
+
+      operation 144898 "get_raw"
+	const cpp_inline public explicit_return_type "std::string"
+	nparams 1
+	  param in name "res" type class_ref 140418 // response_type
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+        response_type temp = res;
+        temp.remove_header(\"Sec-WebSocket-Key3\");
+        return temp.raw() + res.get_header(\"Sec-WebSocket-Key3\");
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 145026 "get_origin"
+	const constvalue cpp_inline public explicit_return_type "std::string"
+	nparams 1
+	  param in name "r" type class_ref 140290 // request_type
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} & ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+        return r.get_header(\"Origin\");
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 145154 "extract_subprotocols"
+	cpp_inline public explicit_return_type "lib::error_code"
+	nparams 2
+	  param in name "req" type class_ref 140290 // request_type
+	  param inout name "subprotocol_list" explicit_type "std::vector<std::string>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} & ${p1}${v1}${)}${const}${volatile}${throw}${abstract} {
+        if (!req.get_header(\"Sec-WebSocket-Protocol\").empty()) {
+            http::parameter_list p;
+
+             if (!req.get_header_as_plist(\"Sec-WebSocket-Protocol\",p)) {
+                 http::parameter_list::const_iterator it;
+
+                 for (it = p.begin(); it != p.end(); ++it) {
+                     subprotocol_list.push_back(it->first);
+                 }
+             } else {
+                 return error::make_error_code(error::subprotocol_parse_error);
+             }
+        }
+        return lib::error_code();
+    };
+"
+	
+	
+	
+	
+	comment "/ Extracts requested subprotocols from a handshake request
+
+hybi00 does support subprotocols
+https://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-00#section-1.9
+
+@param [in] req The request to extract from
+@param [out] subprotocol_list A reference to a vector of strings to store
+the results in.
+"
+      end
+
+      operation 145282 "get_uri"
+	const cpp_inline public explicit_return_type "uri_ptr"
+	nparams 1
+	  param in name "request" type class_ref 140290 // request_type
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+        std::string h = request.get_header(\"Host\");
+
+        size_t last_colon = h.rfind(\":\");
+        size_t last_sbrace = h.rfind(\"]\");
+
+        // no : = hostname with no port
+        // last : before ] = ipv6 literal with no port
+        // : with no ] = hostname with port
+        // : after ] = ipv6 literal with port
+
+        if (last_colon == std::string::npos ||
+            (last_sbrace != std::string::npos && last_sbrace > last_colon))
+        {
+            return lib::make_shared<uri>(base::m_secure, h, request.get_uri());
+        } else {
+            return lib::make_shared<uri>(base::m_secure,
+                                   h.substr(0,last_colon),
+                                   h.substr(last_colon+1),
+                                   request.get_uri());
+        }
+
+        // TODO: check if get_uri is a full uri
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 145410 "get_key3"
+	const cpp_inline public explicit_return_type "std::string"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+        return \"\";
+    };
+"
+	
+	
+	
+	
+	comment "/ Get hybi00 handshake key3
+
+@todo This doesn't appear to be used anymore. It might be able to be
+removed
+"
+      end
+
+      operation 145538 "consume"
+	cpp_inline public explicit_return_type "size_t"
+	nparams 3
+	  param inout name "buf" explicit_type "uint8_t"
+	  param in name "len" explicit_type "size_t"
+	  param inout name "ec" explicit_type "lib::error_code"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} * ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} & ${p2}${v2}${)}${const}${volatile}${throw}${abstract} {
+        // if in state header we are expecting a 0x00 byte, if we don't get one
+        // it is a fatal error
+        size_t p = 0; // bytes processed
+        size_t l = 0;
+
+        ec = lib::error_code();
+
+        while (p < len) {
+            if (m_state == HEADER) {
+                if (buf[p] == msg_hdr) {
+                    p++;
+                    m_msg_ptr = m_msg_manager->get_message(frame::opcode::text,1);
+
+                    if (!m_msg_ptr) {
+                        ec = make_error_code(websocketpp::error::no_incoming_buffers);
+                        m_state = FATAL_ERROR;
+                    } else {
+                        m_state = PAYLOAD;
+                    }
+                } else {
+                    ec = make_error_code(error::protocol_violation);
+                    m_state = FATAL_ERROR;
+                }
+            } else if (m_state == PAYLOAD) {
+                uint8_t *it = std::find(buf+p,buf+len,msg_ftr);
+
+                // 0    1    2    3    4    5
+                // 0x00 0x23 0x23 0x23 0xff 0xXX
+
+                // Copy payload bytes into message
+                l = static_cast<size_t>(it-(buf+p));
+                m_msg_ptr->append_payload(buf+p,l);
+                p += l;
+
+                if (it != buf+len) {
+                    // message is done, copy it and the trailing
+                    p++;
+                    // TODO: validation
+                    m_state = READY;
+                }
+            } else {
+                // TODO
+                break;
+            }
+        }
+        // If we get one, we create a new message and move to application state
+
+        // if in state application we are copying bytes into the output message
+        // and validating them for UTF8 until we hit a 0xff byte. Once we hit
+        // 0x00, the message is complete and is dispatched. Then we go back to
+        // header state.
+
+        //ec = make_error_code(error::not_implemented);
+        return p;
+    };
+"
+	
+	
+	
+	
+	comment "/ Process new websocket connection bytes"
+      end
+
+      operation 145666 "ready"
+	const cpp_inline public explicit_return_type "bool"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+        return (m_state == READY);
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 145794 "get_error"
+	const cpp_inline public explicit_return_type "bool"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+        return false;
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 145922 "get_message"
+	cpp_inline public return_type class_ref 140674 // message_ptr
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+        message_ptr ret = m_msg_ptr;
+        m_msg_ptr = message_ptr();
+        m_state = HEADER;
+        return ret;
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 146050 "prepare_data_frame"
+	cpp_virtual cpp_inline public explicit_return_type "lib::error_code"
+	nparams 2
+	  param in name "in" type class_ref 140674 // message_ptr
+	  param in name "out" type class_ref 140674 // message_ptr
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract} {
+        if (!in || !out) {
+            return make_error_code(error::invalid_arguments);
+        }
+
+        // TODO: check if the message is prepared already
+
+        // validate opcode
+        if (in->get_opcode() != frame::opcode::text) {
+            return make_error_code(error::invalid_opcode);
+        }
+
+        std::string& i = in->get_raw_payload();
+        //std::string& o = out->get_raw_payload();
+
+        // validate payload utf8
+        if (!utf8_validator::validate(i)) {
+            return make_error_code(error::invalid_payload);
+        }
+
+        // generate header
+        out->set_header(std::string(reinterpret_cast<char const *>(&msg_hdr),1));
+
+        // process payload
+        out->set_payload(i);
+        out->append_payload(std::string(reinterpret_cast<char const *>(&msg_ftr),1));
+
+        // hybi00 doesn't support compression
+        // hybi00 doesn't have masking
+
+        out->set_prepared(true);
+
+        return lib::error_code();
+    };
+"
+	
+	
+	
+	
+	comment "/ Prepare a message for writing
+
+Performs validation, masking, compression, etc. will return an error if
+there was an error, otherwise msg will be ready to be written
+"
+      end
+
+      operation 146178 "prepare_ping"
+	const cpp_inline public explicit_return_type "lib::error_code"
+	nparams 2
+	  param in name "" explicit_type "std::string"
+	  param in name "" type class_ref 140674 // message_ptr
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract} {
+        return lib::error_code(error::no_protocol_support);
+    };
+"
+	
+	
+	
+	
+	comment "/ Prepare a ping frame
+
+Hybi 00 doesn't support pings so this will always return an error
+
+@param in The string to use for the ping payload
+@param out The message buffer to prepare the ping in.
+@return Status code, zero on success, non-zero on failure
+"
+      end
+
+      operation 146306 "prepare_pong"
+	const cpp_inline public explicit_return_type "lib::error_code"
+	nparams 2
+	  param in name "" explicit_type "std::string"
+	  param in name "" type class_ref 140674 // message_ptr
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract} {
+        return lib::error_code(error::no_protocol_support);
+    };
+"
+	
+	
+	
+	
+	comment "/ Prepare a pong frame
+
+Hybi 00 doesn't support pongs so this will always return an error
+
+@param in The string to use for the pong payload
+@param out The message buffer to prepare the pong in.
+@return Status code, zero on success, non-zero on failure
+"
+      end
+
+      operation 146434 "prepare_close"
+	const cpp_inline public explicit_return_type "lib::error_code"
+	nparams 3
+	  param in name "" explicit_type "close::status::value"
+	  param in name "" explicit_type "std::string"
+	  param in name "out" type class_ref 140674 // message_ptr
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${throw}${abstract} {
+        if (!out) {
+            return lib::error_code(error::invalid_arguments);
+        }
+
+        std::string val;
+        val.append(1,'\\xff');
+        val.append(1,'\\x00');
+        out->set_payload(val);
+        out->set_prepared(true);
+
+        return lib::error_code();
+    };
+"
+	
+	
+	
+	
+	comment "/ Prepare a close frame
+
+Hybi 00 doesn't support the close code or reason so these parameters are
+ignored.
+
+@param code The close code to send
+@param reason The reason string to send
+@param out The message buffer to prepare the fame in
+@return Status code, zero on success, non-zero on failure
+"
+      end
+
+      operation 146562 "decode_client_key"
+	const cpp_inline private explicit_return_type "void"
+	nparams 2
+	  param in name "key" explicit_type "std::string"
+	  param inout name "result" explicit_type "char"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} * ${p1}${v1}${)}${const}${volatile}${throw}${abstract} {
+        unsigned int spaces = 0;
+        std::string digits;
+        uint32_t num;
+
+        // key2
+        for (size_t i = 0; i < key.size(); i++) {
+            if (key[i] == ' ') {
+                spaces++;
+            } else if (key[i] >= '0' && key[i] <= '9') {
+                digits += key[i];
+            }
+        }
+
+        num = static_cast<uint32_t>(strtoul(digits.c_str(), NULL, 10));
+        if (spaces > 0 && num > 0) {
+            num = htonl(num/spaces);
+            std::copy(reinterpret_cast<char*>(&num),
+                      reinterpret_cast<char*>(&num)+4,
+                      result);
+        } else {
+            std::fill(result,result+4,0);
+        }
+    };
+"
+	
+	
+	
+	
+      end
+
+      class 140930 "state"
+	visibility package stereotype "enum"
+	cpp_decl "${comment}enum ${name} {
+${items}};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+	attribute 149122 "HEADER"
+	  public type class_ref 140930 // state
+	  init_value " 0"
+	  cpp_decl "  ${name}${value},${comment}"
+	  java_decl ""
+	  php_decl ""
+	  python_decl ""
+	  idl_decl ""
+	  mysql_decl ""
+	  MysqlColumn
+	end
+
+	attribute 149250 "PAYLOAD"
+	  public type class_ref 140930 // state
+	  init_value " 1"
+	  cpp_decl "  ${name}${value},${comment}"
+	  java_decl ""
+	  php_decl ""
+	  python_decl ""
+	  idl_decl ""
+	  mysql_decl ""
+	  MysqlColumn
+	end
+
+	attribute 149378 "READY"
+	  public type class_ref 140930 // state
+	  init_value " 2"
+	  cpp_decl "  ${name}${value},${comment}"
+	  java_decl ""
+	  php_decl ""
+	  python_decl ""
+	  idl_decl ""
+	  mysql_decl ""
+	  MysqlColumn
+	end
+
+	attribute 149506 "FATAL_ERROR"
+	  public type class_ref 140930 // state
+	  init_value " 3
+    "
+	  cpp_decl "  ${name}${value},${comment}"
+	  java_decl ""
+	  php_decl ""
+	  python_decl ""
+	  idl_decl ""
+	  mysql_decl ""
+	  MysqlColumn
+	end
+      end
+
+      attribute 149634 "msg_hdr"
+	const_attribute private explicit_type "uint8_t"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 149762 "msg_ftr"
+	const_attribute private explicit_type "uint8_t"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 136706 // m_state (<directional composition>)
+	relation 136706 *-->
+	  a role_name "m_state" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 136706 // m_state (<directional composition>)
+	  b parent class_ref 140930 // state
+      end
+
+      classrelation 136834 // m_msg_manager (<directional composition>)
+	relation 136834 *-->
+	  a role_name "m_msg_manager" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 136834 // m_msg_manager (<directional composition>)
+	  b parent class_ref 140802 // msg_manager_ptr
+      end
+
+      classrelation 136962 // m_msg_ptr (<directional composition>)
+	relation 136962 *-->
+	  a role_name "m_msg_ptr" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 136962 // m_msg_ptr (<directional composition>)
+	  b parent class_ref 140674 // message_ptr
+      end
+
+      attribute 149890 "m_validator"
+	private explicit_type "utf8_validator::validator"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 140034 "processor"
+      visibility package 
+      nformals 1
+      formal name "config" type "typename" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 141058 "hybi07"
+      visibility package 
+      nformals 1
+      formal name "config" type "typename" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 141186 // hybi08
+        rank 0 explicit_value "config"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "/ Processor for Hybi Draft version 07
+
+The primary difference between 07 and 08 is a version number.
+"
+      classrelation 137090 // <realization>
+	relation 137090 -_-|>
+	  stereotype "bind"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 137090 // <realization>
+	  b parent class_ref 141186 // hybi08
+      end
+
+      class 141314 "request_type"
+	visibility package stereotype "typedef" explicit_base_type "config::request_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 141442 "msg_manager_ptr"
+	visibility package stereotype "typedef" explicit_base_type "config::con_msg_manager_type::ptr"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 141570 "rng_type"
+	visibility package stereotype "typedef" explicit_base_type "config::rng_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      operation 146690 "hybi07"
+	cpp_inline public explicit_return_type ""
+	nparams 4
+	  param in name "secure" explicit_type "bool"
+	  param in name "p_is_server" explicit_type "bool"
+	  param in name "manager" type class_ref 141442 // msg_manager_ptr
+	  param inout name "rng" type class_ref 141570 // rng_type
+	cpp_decl "    ${comment}${inline}explicit ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}, ${t3} & ${p3}${v3}${)}${volatile}${throw}${abstract} : hybi08<config>(secure, p_is_server, manager, rng) {};
+"
+	
+	
+	
+	
+      end
+
+      operation 146818 "client_handshake_request"
+	const cpp_inline public explicit_return_type "lib::error_code"
+	nparams 3
+	  param inout name "" type class_ref 141314 // request_type
+	  param in name "" explicit_type "uri_ptr"
+	  param in name "" explicit_type "std::vector<std::string>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} & ${p0}${v0}, ${t1} ${p1}${v1}, const ${t2} & ${p2}${v2}${)}${const}${volatile}${throw}${abstract} {
+        return error::make_error_code(error::no_protocol_support);
+    };
+"
+	
+	
+	
+	
+	comment "/ Fill in a set of request headers for a client connection request
+
+The Hybi 07 processor only implements incoming connections so this will
+always return an error.
+
+@param [out] req  Set of headers to fill in
+@param [in] uri The uri being connected to
+@param [in] subprotocols The list of subprotocols to request
+"
+      end
+
+      operation 146946 "get_version"
+	const cpp_inline public explicit_return_type "int"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+        return 7;
+    };
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 141186 "hybi08"
+      visibility package 
+      nformals 1
+      formal name "config" type "typename" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 141698 // hybi13
+        rank 0 explicit_value "config"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "/ Processor for Hybi Draft version 08
+
+The primary difference between 08 and 13 is a different origin header name
+"
+      classrelation 137218 // <realization>
+	relation 137218 -_-|>
+	  stereotype "bind"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 137218 // <realization>
+	  b parent class_ref 141698 // hybi13
+      end
+
+      class 141826 "type"
+	visibility package stereotype "typedef" explicit_base_type "hybi08<config>"
+	cpp_decl "${comment}typedef ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 141954 "request_type"
+	visibility package stereotype "typedef" explicit_base_type "config::request_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 142082 "msg_manager_ptr"
+	visibility package stereotype "typedef" explicit_base_type "config::con_msg_manager_type::ptr"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 142210 "rng_type"
+	visibility package stereotype "typedef" explicit_base_type "config::rng_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      operation 147074 "hybi08"
+	cpp_inline public explicit_return_type ""
+	nparams 4
+	  param in name "secure" explicit_type "bool"
+	  param in name "p_is_server" explicit_type "bool"
+	  param in name "manager" type class_ref 142082 // msg_manager_ptr
+	  param inout name "rng" type class_ref 142210 // rng_type
+	cpp_decl "    ${comment}${inline}explicit ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}, ${t3} & ${p3}${v3}${)}${volatile}${throw}${abstract} : hybi13<config>(secure, p_is_server, manager, rng) {};
+"
+	
+	
+	
+	
+      end
+
+      operation 147202 "client_handshake_request"
+	const cpp_inline public explicit_return_type "lib::error_code"
+	nparams 3
+	  param inout name "" type class_ref 141954 // request_type
+	  param in name "" explicit_type "uri_ptr"
+	  param in name "" explicit_type "std::vector<std::string>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} & ${p0}${v0}, ${t1} ${p1}${v1}, const ${t2} & ${p2}${v2}${)}${const}${volatile}${throw}${abstract} {
+        return error::make_error_code(error::no_protocol_support);
+    };
+"
+	
+	
+	
+	
+	comment "/ Fill in a set of request headers for a client connection request
+
+The Hybi 08 processor only implements incoming connections so this will
+always return an error.
+
+@param [out] req  Set of headers to fill in
+@param [in] uri The uri being connected to
+@param [in] subprotocols The list of subprotocols to request
+"
+      end
+
+      operation 147330 "get_version"
+	const cpp_inline public explicit_return_type "int"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+        return 8;
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 147458 "get_origin"
+	const constvalue cpp_inline public explicit_return_type "std::string"
+	nparams 1
+	  param in name "r" type class_ref 141954 // request_type
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} & ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+        return r.get_header(\"Sec-WebSocket-Origin\");
+    };
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 141698 "hybi13"
+      visibility package 
+      nformals 1
+      formal name "config" type "typename" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 140034 // processor
+        rank 0 explicit_value "config"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "/ Processor for Hybi version 13 (RFC6455)"
+      classrelation 137346 // <realization>
+	relation 137346 -_-|>
+	  stereotype "bind"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 137346 // <realization>
+	  b parent class_ref 140034 // processor
+      end
+
+      class 142338 "base"
+	visibility package stereotype "typedef" explicit_base_type "processor<config>"
+	cpp_decl "${comment}typedef ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 142466 "request_type"
+	visibility package stereotype "typedef" explicit_base_type "config::request_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 142594 "response_type"
+	visibility package stereotype "typedef" explicit_base_type "config::response_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 142722 "message_type"
+	visibility package stereotype "typedef" explicit_base_type "config::message_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 142850 "message_ptr"
+	visibility package stereotype "typedef" explicit_base_type "message_type::ptr"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 142978 "msg_manager_type"
+	visibility package stereotype "typedef" explicit_base_type "config::con_msg_manager_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 143106 "msg_manager_ptr"
+	visibility package stereotype "typedef" explicit_base_type "msg_manager_type::ptr"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 143234 "rng_type"
+	visibility package stereotype "typedef" explicit_base_type "config::rng_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 143362 "permessage_deflate_type"
+	visibility package stereotype "typedef" explicit_base_type "config::permessage_deflate_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 143490 "err_str_pair"
+	visibility package stereotype "typedef" explicit_base_type "std::pair<lib::error_code,std::string>"
+	cpp_decl "${comment}typedef ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      operation 147586 "hybi13"
+	cpp_inline public explicit_return_type ""
+	nparams 4
+	  param in name "secure" explicit_type "bool"
+	  param in name "p_is_server" explicit_type "bool"
+	  param in name "manager" type class_ref 143106 // msg_manager_ptr
+	  param inout name "rng" type class_ref 143234 // rng_type
+	cpp_decl "    ${comment}${inline}explicit ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}, ${t3} & ${p3}${v3}${)}${volatile}${throw}${abstract} : processor<config>(secure, p_is_server)
+      , m_msg_manager(manager)
+      , m_rng(rng)
+    {
+        reset_headers();
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 147714 "get_version"
+	const cpp_inline public explicit_return_type "int"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+        return 13;
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 147842 "has_permessage_deflate"
+	const cpp_inline public explicit_return_type "bool"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+        return m_permessage_deflate.is_implemented();
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 147970 "negotiate_extensions"
+	cpp_inline public return_type class_ref 143490 // err_str_pair
+	nparams 1
+	  param in name "request" type class_ref 142466 // request_type
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+        return negotiate_extensions_helper(request);
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 148098 "negotiate_extensions"
+	cpp_inline public return_type class_ref 143490 // err_str_pair
+	nparams 1
+	  param in name "response" type class_ref 142594 // response_type
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+        return negotiate_extensions_helper(response);
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 148226 "negotiate_extensions_helper"
+	cpp_inline public explicit_return_type ""
+	nparams 1
+	  param in name "header" explicit_type "header_type"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	nformals 1
+	formal name "header_type" type "typename" explicit_default_value ""
+	  explicit_extends ""
+	
+	
+	
+	
+	comment "/ Extension negotiation helper function
+
+This exists mostly because the code for requests and responses is
+identical and I can't have virtual template methods.
+"
+      end
+    end
+  end
+
+  deploymentview 135682 "websocketpp processor"
+    //deployment diagram settings
+    deploymentdiagramsettings
+     end
+    artifact 136066 "hybi00"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 139906 // hybi00
+      end
+    end
+
+    artifact 136194 "hybi07"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 141058 // hybi07
+      end
+    end
+
+    artifact 136322 "hybi08"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 141186 // hybi08
+      end
+    end
+  end
+end

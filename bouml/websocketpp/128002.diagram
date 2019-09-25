@@ -1,0 +1,23 @@
+format 222
+
+classcanvas 128002 class_ref 129026 // parser
+  classdiagramsettings member_max_width 0 end
+  xyz 213.1 122.9 2000
+end
+classcanvas 128130 class_ref 131842 // server
+  classdiagramsettings member_max_width 0 end
+  xyz 866.6 214.5 2005
+end
+classcanvas 128258 class_ref 150018 // connection
+  classdiagramsettings member_max_width 0 end
+  xyz 1448.4 209.1 2000
+end
+classcanvas 128386 class_ref 150146 // transport::asio::connection
+  classdiagramsettings member_max_width 0 end
+  xyz 926.2 712.9 2000
+end
+classcanvas 128514 class_ref 150274 // websocketpp::transport::asio::endpoint
+  classdiagramsettings member_max_width 0 end
+  xyz 268.3 827.9 2000
+end
+end

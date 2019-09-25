@@ -32,11 +32,5 @@ client.on('connect', function(connection) {
 });
  
 // client.connect('ws://localhost:8081/ocpp2p0', 'ocpp2.0');
-client.connect('ws://localhost:8081/ocpp2p0');
-
-
-
-
-
-
-
+client.connect('ws://localhost:9012/ocpp2p0', 'ocpp2.0');
+//client.connect('ws://localhost:9012/ocpp2p0');

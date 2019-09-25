@@ -1,0 +1,20 @@
+[GENERATED OBJECT FILE]
+b__main.o
+[PROJECT FILES]
+/home/dmcinnes/git/thesis/libocppparser/ocppparser.gpr
+20190925090354
+[BOUND OBJECT FILES]
+/home/dmcinnes/git/thesis/libocppparser/obj/bootnotification.o
+/home/dmcinnes/git/thesis/libocppparser/obj/main.o
+[GENERATED SOURCE FILES]
+b__main.ads
+b__main.adb
+b__main.ali
+[RESULTING OPTIONS]
+-L/home/dmcinnes/git/thesis/libocppparser/obj/
+-L/home/dmcinnes/git/thesis/libocppparser/obj/
+-L/opt/GNAT/2019/lib/gcc/x86_64-pc-linux-gnu/8.3.1/adalib/
+-static
+-static-libgcc
+/opt/GNAT/2019/lib/gcc/x86_64-pc-linux-gnu/8.3.1/adalib/libgnat.a
+-ldl

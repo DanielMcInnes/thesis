@@ -1,0 +1,279 @@
+format 222
+"asio" // transport::asio
+  revision 1
+  modified_by 2 "dmcinnes"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "/home/dmcinnes/git/websocketpp/websocketpp/transport/asio/"
+  cpp_src_dir "/home/dmcinnes/git/websocketpp/websocketpp/transport/asio/"
+  cpp_namespace "websocketpp::transport::asio"
+  classview 128770 "asio"
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    sequencediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    
+    activitydiagramsettings
+     end
+    class 130050 "handler_allocator"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "/ Transport policy that uses asio
+
+This policy uses a single asio io_service to provide transport
+services to a WebSocket++ endpoint.
+
+ Class to manage the memory to be used for handler-based custom allocation.
+ It contains a single block of memory which may be returned for allocation
+ requests. If the memory is in use when an allocation request is made, the
+ allocator delegates allocation to the global heap."
+      attribute 137474 "size"
+	class_attribute const_attribute public explicit_type "size_t"
+	init_value "=  1024"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${h_value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      operation 133634 "handler_allocator"
+	cpp_inline public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw}${abstract} : m_in_use(false) {};
+"
+	
+	
+	
+	
+      end
+
+      operation 133762 "handler_allocator"
+	cpp_deleted public explicit_return_type ""
+	nparams 1
+	  param in name "cpy" type class_ref 130050 // handler_allocator
+	cpp_decl "    ${comment}${inline}${name}${(}const ${t0} & ${p0}${v0}${)}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${class}::${name}${(}${)}${volatile}${throw} {
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 133890 "operator ="
+	cpp_deleted public return_type class_ref 130050 // handler_allocator
+	nparams 1
+	  param in name "" type class_ref 130050 // handler_allocator
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} & ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 134018 "allocate"
+	cpp_inline public explicit_return_type "void"
+	nparams 1
+	  param in name "memsize" explicit_type "std::size_t"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} * ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+        if (!m_in_use && memsize < size) {
+            m_in_use = true;
+            return static_cast<void*>(&m_storage);
+        } else {
+            return ::operator new(memsize);
+        }
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 134146 "deallocate"
+	cpp_inline public explicit_return_type "void"
+	nparams 1
+	  param inout name "pointer" explicit_type "void"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} * ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+        if (pointer == &m_storage) {
+            m_in_use = false;
+        } else {
+            ::operator delete(pointer);
+        }
+    };
+"
+	
+	
+	
+	
+      end
+
+      attribute 137602 "m_storage"
+	private explicit_type "lib::aligned_storage<size>::type"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " Storage space used for handler-based custom memory allocation.
+"
+      end
+
+      attribute 137730 "m_in_use"
+	private explicit_type "bool"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " Whether the handler-based custom allocation storage has been used.
+"
+      end
+    end
+
+    class 130178 "custom_alloc_handler"
+      visibility package 
+      nformals 1
+      formal name "Handler" type "typename" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " Wrapper class template for handler objects to allow handler memory
+ allocation to be customised. Calls to operator() are forwarded to the
+ encapsulated handler."
+      operation 134274 "custom_alloc_handler"
+	cpp_inline public explicit_return_type ""
+	nparams 2
+	  param inout name "a" type class_ref 130050 // handler_allocator
+	  param in name "h" explicit_type "Handler"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} & ${p0}${v0}, ${t1} ${p1}${v1}${)}${volatile}${throw}${abstract} : allocator_(a),
+        handler_(h)
+    {};
+"
+	
+	
+	
+	
+      end
+
+      operation 134402 "operator ()"
+	cpp_inline public explicit_return_type ""
+	nparams 1
+	  param in name "arg1" explicit_type "Arg1"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	nformals 1
+	formal name "Arg1" type "typename" explicit_default_value ""
+	  explicit_extends ""
+	
+	
+	
+	
+      end
+    end
+  end
+
+  deploymentview 128642 "asio"
+    //deployment diagram settings
+    deploymentdiagramsettings
+     end
+    artifact 128898 "base"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 130050 // handler_allocator
+      end
+    end
+  end
+end

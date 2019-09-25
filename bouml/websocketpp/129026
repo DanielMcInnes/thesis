@@ -1,0 +1,786 @@
+format 222
+"roles" // roles
+  revision 1
+  modified_by 2 "dmcinnes"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "/home/dmcinnes/git/websocketpp/websocketpp/roles/"
+  cpp_src_dir "/home/dmcinnes/git/websocketpp/websocketpp/roles/"
+  cpp_namespace "websocketpp"
+  classview 129026 "roles"
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    sequencediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    
+    activitydiagramsettings
+     end
+    class 130562 "client"
+      visibility package 
+      nformals 1
+      formal name "config" type "typename" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "/ Client endpoint role based on the given config
+
+
+"
+      classrelation 129538 // <generalisation>
+	relation 129538 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 129538 // <generalisation>
+	  b parent class_ref 130690 // typedef1
+      end
+
+      class 130818 "type"
+	visibility package stereotype "typedef" explicit_base_type "client<config>"
+	cpp_decl "${comment}typedef ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 130946 "concurrency_type"
+	visibility package stereotype "typedef" explicit_base_type "config::concurrency_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 131074 "transport_type"
+	visibility package stereotype "typedef" explicit_base_type "config::transport_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 131202 "connection_type"
+	visibility package stereotype "typedef" explicit_base_type "connection<config>"
+	cpp_decl "${comment}typedef ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 131330 "connection_ptr"
+	visibility package stereotype "typedef" explicit_base_type "connection_type::ptr"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 131458 "transport_con_type"
+	visibility package stereotype "typedef" explicit_base_type "transport_type::transport_con_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 131586 "transport_con_ptr"
+	visibility package stereotype "typedef" explicit_base_type "transport_con_type::ptr"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 131714 "endpoint_type"
+	visibility package stereotype "typedef" base_type class_ref 131202 // connection_type
+	cpp_decl "${comment}typedef endpoint<${type},config> ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+	classrelation 129666 // <dependency>
+	  relation 129666 -_->
+	    a public
+	      cpp default "#include in source"
+	      classrelation_ref 129666 // <dependency>
+	    b parent class_ref 131202 // connection_type
+	end
+      end
+
+      extra_member 128002 "friend"
+	
+	cpp "
+    friend class connection<config>;" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+	mysql ""
+      end
+
+      operation 135426 "client"
+	cpp_inline public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}explicit ${name}${(}${)}${volatile}${throw}${abstract} : endpoint_type(false)
+    {
+        endpoint_type::m_alog->write(log::alevel::devel, \"client constructor\");
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 135554 "get_connection"
+	cpp_inline public return_type class_ref 131330 // connection_ptr
+	nparams 2
+	  param in name "location" explicit_type "uri_ptr"
+	  param inout name "ec" explicit_type "lib::error_code"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} & ${p1}${v1}${)}${const}${volatile}${throw}${abstract} {
+        if (location->get_secure() && !transport_type::is_secure()) {
+            ec = error::make_error_code(error::endpoint_not_secure);
+            return connection_ptr();
+        }
+
+        connection_ptr con = endpoint_type::create_connection();
+
+        if (!con) {
+            ec = error::make_error_code(error::con_creation_failed);
+            return con;
+        }
+
+        con->set_uri(location);
+
+        ec = lib::error_code();
+        return con;
+    };
+"
+	
+	
+	
+	
+	comment "/ Get a new connection
+
+Creates and returns a pointer to a new connection to the given URI
+suitable for passing to connect(connection_ptr). This method allows
+applying connection specific settings before performing the opening
+handshake.
+
+@param [in] location URI to open the connection to as a uri_ptr
+@param [out] ec An status code indicating failure reasons, if any
+
+@return A connection_ptr to the new connection
+"
+      end
+
+      operation 135682 "get_connection"
+	cpp_inline public return_type class_ref 131330 // connection_ptr
+	nparams 2
+	  param in name "u" explicit_type "std::string"
+	  param inout name "ec" explicit_type "lib::error_code"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} & ${p1}${v1}${)}${const}${volatile}${throw}${abstract} {
+        uri_ptr location = lib::make_shared<uri>(u);
+
+        if (!location->get_valid()) {
+            ec = error::make_error_code(error::invalid_uri);
+            return connection_ptr();
+        }
+
+        return get_connection(location, ec);
+    };
+"
+	
+	
+	
+	
+	comment "/ Get a new connection (string version)
+
+Creates and returns a pointer to a new connection to the given URI
+suitable for passing to connect(connection_ptr). This overload allows
+default construction of the uri_ptr from a standard string.
+
+@param [in] u URI to open the connection to as a string
+@param [out] ec An status code indicating failure reasons, if any
+
+@return A connection_ptr to the new connection
+"
+      end
+
+      operation 135810 "connect"
+	cpp_inline public return_type class_ref 131330 // connection_ptr
+	nparams 1
+	  param in name "con" type class_ref 131330 // connection_ptr
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+        // Ask transport to perform a connection
+        transport_type::async_connect(
+            lib::static_pointer_cast<transport_con_type>(con),
+            con->get_uri(),
+            lib::bind(
+                &type::handle_connect,
+                this,
+                con,
+                lib::placeholders::_1
+            )
+        );
+
+        return con;
+    };
+"
+	
+	
+	
+	
+	comment "/ Begin the connection process for the given connection
+
+Initiates the opening connection handshake for connection con. Exact
+behavior depends on the underlying transport policy.
+
+@param con The connection to connect
+
+@return The pointer to the connection originally passed in.
+"
+      end
+
+      operation 135938 "handle_connect"
+	cpp_inline private explicit_return_type "void"
+	nparams 2
+	  param in name "con" type class_ref 131330 // connection_ptr
+	  param in name "ec" explicit_type "lib::error_code"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, const ${t1} & ${p1}${v1}${)}${const}${volatile}${throw}${abstract} {
+        if (ec) {
+            con->terminate(ec);
+
+            endpoint_type::m_elog->write(log::elevel::rerror,
+                    \"handle_connect error: \"+ec.message());
+        } else {
+            endpoint_type::m_alog->write(log::alevel::connect,
+                \"Successful connection\");
+
+            con->start();
+        }
+    };
+"
+	
+	
+	
+	
+	comment " handle_connect"
+      end
+    end
+
+    class 130690 "typedef1"
+      visibility package stereotype "typedef" explicit_base_type "endpoint<connection<config>,config>"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 131842 "server"
+      visibility package 
+      nformals 1
+      formal name "config" type "typename" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "/ Server endpoint role based on the given config
+
+
+"
+      classrelation 129794 // <generalisation>
+	relation 129794 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 129794 // <generalisation>
+	  b parent class_ref 130690 // typedef1
+      end
+
+      class 131970 "type"
+	visibility package stereotype "typedef" explicit_base_type "server<config>"
+	cpp_decl "${comment}typedef ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 132098 "concurrency_type"
+	visibility package stereotype "typedef" explicit_base_type "config::concurrency_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 132226 "transport_type"
+	visibility package stereotype "typedef" explicit_base_type "config::transport_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 132354 "connection_type"
+	visibility package stereotype "typedef" explicit_base_type "connection<config>"
+	cpp_decl "${comment}typedef ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 132482 "connection_ptr"
+	visibility package stereotype "typedef" explicit_base_type "connection_type::ptr"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 132610 "transport_con_type"
+	visibility package stereotype "typedef" explicit_base_type "transport_type::transport_con_type"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 132738 "transport_con_ptr"
+	visibility package stereotype "typedef" explicit_base_type "transport_con_type::ptr"
+	cpp_decl "${comment}typedef  typename ${type} ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+      end
+
+      class 132866 "endpoint_type"
+	visibility package stereotype "typedef" base_type class_ref 132354 // connection_type
+	cpp_decl "${comment}typedef endpoint<${type},config> ${name};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+	classrelation 129922 // <dependency>
+	  relation 129922 -_->
+	    a public
+	      cpp default "#include in source"
+	      classrelation_ref 129922 // <dependency>
+	    b parent class_ref 132354 // connection_type
+	end
+      end
+
+      extra_member 128130 "friend"
+	
+	cpp "
+    friend class connection<config>;" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+	mysql ""
+      end
+
+      operation 136066 "server"
+	cpp_inline public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}explicit ${name}${(}${)}${volatile}${throw}${abstract} : endpoint_type(true)
+    {
+        endpoint_type::m_alog->write(log::alevel::devel, \"server constructor\");
+    };
+"
+	
+	
+	
+	
+      end
+
+      operation 136194 "~server<config>"
+	cpp_inline public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {};
+"
+	
+	
+	
+	
+	comment "/ Destructor"
+      end
+
+      operation 136322 "server<config>"
+	cpp_deleted cpp_inline public explicit_return_type ""
+	nparams 1
+	  param inout name "" type class_ref 131842 // server
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+	comment " no copy constructor because endpoints are not copyable"
+      end
+
+      operation 136450 "operator ="
+	cpp_deleted cpp_inline public return_type class_ref 131842 // server
+	nparams 1
+	  param in name "" type class_ref 131842 // server
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} & ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+	comment " no copy assignment operator because endpoints are not copyable"
+      end
+
+      operation 136578 "server<config>"
+	cpp_inline public explicit_return_type ""
+	nparams 1
+	  param inout name "o" type class_ref 131842 // server
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} && ${p0}${v0}${)}${const}${volatile}${throw}${abstract} : endpoint<connection<config>,config>(std::move(o)) {};
+"
+	
+	
+	
+	
+	comment "/ Move constructor"
+      end
+
+      operation 136706 "operator ="
+	cpp_deleted cpp_inline public return_type class_ref 131842 // server
+	nparams 1
+	  param inout name "" type class_ref 131842 // server
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} & ${name}${(}${t0} && ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+	comment " no move assignment operator because of const member variables"
+      end
+
+      operation 136834 "get_connection"
+	cpp_inline public return_type class_ref 132482 // connection_ptr
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+        return endpoint_type::create_connection();
+    };
+"
+	
+	
+	
+	
+	comment "/ Create and initialize a new connection
+
+The connection will be initialized and ready to begin. Call its start()
+method to begin the processing loop.
+
+Note: The connection must either be started or terminated using
+connection::terminate in order to avoid memory leaks.
+
+@return A pointer to the new connection.
+"
+      end
+
+      operation 136962 "start_accept"
+	cpp_inline public explicit_return_type "void"
+	nparams 1
+	  param inout name "ec" explicit_type "lib::error_code"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+        if (!transport_type::is_listening()) {
+            ec = error::make_error_code(error::async_accept_not_listening);
+            return;
+        }
+        
+        ec = lib::error_code();
+        connection_ptr con = get_connection();
+
+        if (!con) {
+          ec = error::make_error_code(error::con_creation_failed);
+          return;
+        }
+
+        transport_type::async_accept(
+            lib::static_pointer_cast<transport_con_type>(con),
+            lib::bind(&type::handle_accept,this,con,lib::placeholders::_1),
+            ec
+        );
+
+        if (ec && con) {
+            // If the connection was constructed but the accept failed,
+            // terminate the connection to prevent memory leaks
+            con->terminate(lib::error_code());
+        }
+    };
+"
+	
+	
+	
+	
+	comment "/ Starts the server's async connection acceptance loop (exception free)
+
+Initiates the server connection acceptance loop. Must be called after
+listen. This method will have no effect until the underlying io_service
+starts running. It may be called after the io_service is already running.
+
+Refer to documentation for the transport policy you are using for
+instructions on how to stop this acceptance loop.
+
+@param [out] ec A status code indicating an error, if any.
+"
+      end
+
+      operation 137090 "start_accept"
+	cpp_inline public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+        lib::error_code ec;
+        start_accept(ec);
+        if (ec) {
+            throw exception(ec);
+        }
+    };
+"
+	
+	
+	
+	
+	comment "/ Starts the server's async connection acceptance loop
+
+Initiates the server connection acceptance loop. Must be called after
+listen. This method will have no effect until the underlying io_service
+starts running. It may be called after the io_service is already running.
+
+Refer to documentation for the transport policy you are using for
+instructions on how to stop this acceptance loop.
+"
+      end
+
+      operation 137218 "handle_accept"
+	cpp_inline public explicit_return_type "void"
+	nparams 2
+	  param in name "con" type class_ref 132482 // connection_ptr
+	  param in name "ec" explicit_type "lib::error_code"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, const ${t1} & ${p1}${v1}${)}${const}${volatile}${throw}${abstract} {
+        if (ec) {
+            con->terminate(ec);
+
+            if (ec == error::operation_canceled) {
+                endpoint_type::m_elog->write(log::elevel::info,
+                    \"handle_accept error: \"+ec.message());
+            } else {
+                endpoint_type::m_elog->write(log::elevel::rerror,
+                    \"handle_accept error: \"+ec.message());
+            }
+        } else {
+            con->start();
+        }
+
+        lib::error_code start_ec;
+        start_accept(start_ec);
+        if (start_ec == error::async_accept_not_listening) {
+            endpoint_type::m_elog->write(log::elevel::info,
+                \"Stopping acceptance of new connections because the underlying transport is no longer listening.\");
+        } else if (start_ec) {
+            endpoint_type::m_elog->write(log::elevel::rerror,
+                \"Restarting async_accept loop failed: \"+ec.message());
+        }
+    };
+"
+	
+	
+	
+	
+	comment "/ Handler callback for start_accept"
+      end
+    end
+  end
+
+  deploymentview 128898 "roles"
+    //deployment diagram settings
+    deploymentdiagramsettings
+     end
+    artifact 129154 "client_endpoint"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 130690 // typedef1
+	class_ref 130562 // client
+      end
+    end
+
+    artifact 129282 "server_endpoint"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 131842 // server
+      end
+    end
+  end
+end

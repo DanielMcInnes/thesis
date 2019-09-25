@@ -1,0 +1,605 @@
+format 222
+"websocketpp processor error" // processors::websocketpp processor error
+  revision 1
+  modified_by 2 "dmcinnes"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "/home/dmcinnes/git/websocketpp/websocketpp/processors/"
+  cpp_src_dir "/home/dmcinnes/git/websocketpp/websocketpp/processors/"
+  cpp_namespace "websocketpp::processor::error"
+  classview 135682 "processors"
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    sequencediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    
+    activitydiagramsettings
+     end
+    class 139522 "processor_errors"
+      visibility package stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " Error was the result of improperly formatted user input
+ Error was a logic error internal to WebSocket++
+ Error was due to receiving invalid payload data
+ namespace error_cat
+/ Error code category and codes used by all processor types"
+      attribute 145282 "general"
+	public type class_ref 139522 // processor_errors
+	init_value " 1"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 145410 "bad_request"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 145538 "protocol_violation"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 145666 "message_too_big"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 145794 "invalid_payload"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 145922 "invalid_arguments"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146050 "invalid_opcode"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146178 "control_too_big"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146306 "invalid_rsv_bit"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146434 "fragmented_control"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146562 "invalid_continuation"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146690 "masking_required"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146818 "masking_forbidden"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146946 "non_minimal_encoding"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 147074 "requires_64bit"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 147202 "invalid_utf8"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 147330 "not_implemented"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 147458 "invalid_http_method"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 147586 "invalid_http_version"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 147714 "invalid_http_status"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 147842 "missing_required_header"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 147970 "sha1_library"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148098 "no_protocol_support"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148226 "reserved_close_code"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148354 "invalid_close_code"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148482 "reason_requires_code"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148610 "subprotocol_parse_error"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148738 "extension_parse_error"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148866 "extensions_disabled"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148994 "short_key3"
+	public type class_ref 139522 // processor_errors
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 139650 "processor_category"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "/ Catch-all error for processor policy errors that don't fit in other
+/ categories
+/ Error was the result of improperly formatted user input
+/ Processor encountered a protocol violation in an incoming message
+/ Processor encountered a message that was too large
+/ Processor encountered invalid payload data.
+/ The processor method was called with invalid arguments
+/ Opcode was invalid for requested operation
+/ Control frame too large
+/ Illegal use of reserved bit
+/ Fragmented control message
+/ Continuation without message
+/ Clients may not send unmasked frames
+/ Servers may not send masked frames
+/ Payload length not minimally encoded
+/ Not supported on 32 bit systems
+/ Invalid UTF-8 encoding
+/ Operation required not implemented functionality
+/ Invalid HTTP method
+/ Invalid HTTP version
+/ Invalid HTTP status
+/ Missing Required Header
+/ Embedded SHA-1 library error
+/ No support for this feature in this protocol version.
+/ Reserved close code used
+/ Invalid close code used
+/ Using a reason requires a close code
+/ Error parsing subprotocols
+/ Error parsing extensions
+/ Extension related operation was ignored because extensions are disabled
+/ Short Ke3 read. Hybi00 requires a third key to be read from the 8 bytes
+/ after the handshake. Less than 8 bytes were read.
+/ Category for processor errors"
+      classrelation 136450 // <generalisation>
+	relation 136450 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 136450 // <generalisation>
+	  b parent class_ref 139778 // typedef1
+      end
+
+      operation 143746 "processor_category"
+	cpp_inline public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw}${abstract} {};
+"
+	
+	
+	
+	
+      end
+
+      operation 143874 "name"
+	const constvalue public explicit_return_type "char"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 144002 "message"
+	const cpp_inline public explicit_return_type "std::string"
+	nparams 1
+	  param in name "value" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+        switch(value) {
+            case error::general:
+                return \"Generic processor error\";
+            case error::bad_request:
+                return \"invalid user input\";
+            case error::protocol_violation:
+                return \"Generic protocol violation\";
+            case error::message_too_big:
+                return \"A message was too large\";
+            case error::invalid_payload:
+                return \"A payload contained invalid data\";
+            case error::invalid_arguments:
+                return \"invalid function arguments\";
+            case error::invalid_opcode:
+                return \"invalid opcode\";
+            case error::control_too_big:
+                return \"Control messages are limited to fewer than 125 characters\";
+            case error::invalid_rsv_bit:
+                return \"Invalid use of reserved bits\";
+            case error::fragmented_control:
+                return \"Control messages cannot be fragmented\";
+            case error::invalid_continuation:
+                return \"Invalid message continuation\";
+            case error::masking_required:
+                return \"Clients may not send unmasked frames\";
+            case error::masking_forbidden:
+                return \"Servers may not send masked frames\";
+            case error::non_minimal_encoding:
+                return \"Payload length was not minimally encoded\";
+            case error::requires_64bit:
+                return \"64 bit frames are not supported on 32 bit systems\";
+            case error::invalid_utf8:
+                return \"Invalid UTF8 encoding\";
+            case error::not_implemented:
+                return \"Operation required not implemented functionality\";
+            case error::invalid_http_method:
+                return \"Invalid HTTP method.\";
+            case error::invalid_http_version:
+                return \"Invalid HTTP version.\";
+            case error::invalid_http_status:
+                return \"Invalid HTTP status.\";
+            case error::missing_required_header:
+                return \"A required HTTP header is missing\";
+            case error::sha1_library:
+                return \"SHA-1 library error\";
+            case error::no_protocol_support:
+                return \"The WebSocket protocol version in use does not support this feature\";
+            case error::reserved_close_code:
+                return \"Reserved close code used\";
+            case error::invalid_close_code:
+                return \"Invalid close code used\";
+            case error::reason_requires_code:
+                return \"Using a close reason requires a valid close code\";
+            case error::subprotocol_parse_error:
+                return \"Error parsing subprotocol header\";
+            case error::extension_parse_error:
+                return \"Error parsing extension header\";
+            case error::extensions_disabled:
+                return \"Extensions are disabled\";
+            case error::short_key3:
+                return \"Short Hybi00 Key 3 read\";
+            default:
+                return \"Unknown\";
+        }
+    };
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 139778 "typedef1"
+      visibility package stereotype "typedef" explicit_base_type "lib::error_category"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+  end
+
+  deploymentview 135554 "websocketpp processor error"
+    //deployment diagram settings
+    deploymentdiagramsettings
+     end
+    artifact 135938 "base"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 139522 // processor_errors
+	class_ref 139778 // typedef1
+	class_ref 139650 // processor_category
+      end
+    end
+  end
+end
