@@ -1,13 +1,16 @@
 pragma SPARK_Mode (On);
+pragma Inline (Max_Length);
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Bounded; use Ada.Strings.Bounded;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings.Maps; use Ada.Strings.Maps;
+with Ada.Strings.Bounded; use Ada.Strings.Bounded;
 
 package body BootNotification is
 
-   function IsBootNotificationRequest(msg: Ada.Strings.Bounded.Generic_Bounded_Length (Max => 20)) return Integer is
+   function IsBootNotificationRequest(msg: SB) return Integer is
       Tmp : constant Integer := 4;
       str : String := "";
    begin

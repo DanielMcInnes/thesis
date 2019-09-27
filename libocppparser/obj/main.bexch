@@ -4,7 +4,6 @@ b__main.o
 /home/dmcinnes/git/thesis/libocppparser/ocppparser.gpr
 20190925090354
 [BOUND OBJECT FILES]
-/home/dmcinnes/git/thesis/libocppparser/obj/bootnotification.o
 /home/dmcinnes/git/thesis/libocppparser/obj/main.o
 [GENERATED SOURCE FILES]
 b__main.ads
