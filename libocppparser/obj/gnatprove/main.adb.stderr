@@ -1,2 +1,0 @@
-main.adb:8:04: warning: initialization of "temp" has no effect[#0]
-main.adb:27:07: warning: unused assignment, in call inlined at main.adb:34[#1]

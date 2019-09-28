@@ -2,13 +2,17 @@ pragma SPARK_Mode (On);
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Bounded; use Ada.Strings.Bounded;
+with ocpp;
+with ocpp.BootNotification;
+
 procedure Main is
 
-   package ocpp_packet is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 500);
 
    Dummy : Integer := 0;
    temp: Integer := 0;
-   packet: ocpp_packet.Bounded_String := ocpp_packet.To_Bounded_String( ""
+   isvalid : Boolean := false;
+
+   packet: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String( ""
      & "[2," & ASCII.LF
      & '"'  &"19223201"  &'"' & "," & ASCII.LF
      & '"' & "BootNotification" & '"' & "," & ASCII.LF
@@ -49,7 +53,10 @@ begin
 
    Put(integer'Image(temp));   Put_Line("hello world");
 
-   Put_Line(ocpp_packet.To_String(packet));
+   Put_Line(ocpp.packet.To_String(packet));
+   Put(ocpp.BootNotification.isa(packet)'Image);
+
+   isvalid := ocpp.BootNotification.parse(packet);
 
 
 end Main;
