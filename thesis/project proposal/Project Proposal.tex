@@ -1,0 +1,559 @@
+% TODO
+% expand on SPARK examples
+% expand conclusion
+
+\documentclass[11pt]{article}
+\usepackage{graphics}	% if you want encapsulated PS figures.
+\usepackage{graphicx}
+\usepackage[colorlinks,allcolors=blue]{hyperref, xcolor} % must be bfore pgfplots
+\usepackage{pgfplots} % must be after xcolor
+\usepackage{pgfgantt}
+\usepackage{pdfpages}
+
+%Gummi|065|=)
+\title{\textbf{Project Proposal}}
+\author{Daniel McInnes}
+\date{}
+\begin{document}
+
+\maketitle
+
+\section{Abbreviations}
+CSMS: Charging Station Management System: manages Charging Stations and has the information for authorizing
+Users for using its Charging Stations.\\
+JVM: Java Virtual Machine \\
+OCA: Open Charge Alliance\\
+OCPP: Open Charge Point Protocol\\
+\section{Topic Definition}
+
+\subsection{Background}
+Currently, networks of publicly available electric vehicle fast chargers communicate with servers using the Open Charge Point Protocol (OCPP). Ideally, the software running on these servers would be error free and never crash. Numerous software verification tools exist to prove desirable properties of the server software, such as functional correctness, the absence of race conditions, memory leaks, and certain runtime errors. 
+
+The International Energy Agency \cite{GlobalEVOutlook2019} reports that the number of publicly available fast chargers ($>$ 22kW) increased from 107\,650 in 2017 to 143\,502 in 2018.\\
+
+\begin{tikzpicture}
+	\begin{axis}
+	[
+		ybar,
+		scaled y ticks = false,
+      		y tick label style={/pgf/number format/fixed,/pgf/number format/1000 sep = \thinspace},
+		symbolic x coords={2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018},
+   	 	y label style={at={(axis description cs:-0.1,.5)},anchor=south},
+		ylabel={Number of chargers},
+		x label style={at={(axis description cs:0.5,-0.2)},anchor=north},
+		xlabel={Year},
+		x tick label style = {font = \small, text width = 1.7cm, align = center, rotate = 70, anchor = north east},
+		xtick=data
+	]
+    	\addplot[ybar,fill=blue] coordinates {
+        		(2007,42)
+        		(2008,42)
+        		(2009,47)
+		(2010,372)
+        		(2011,1356)
+        		(2012,3332)
+        		(2013,5044)
+        		(2014,16762)
+        		(2015,26784)
+        		(2016,73851)
+        		(2017,107650)
+        		(2018,143502)
+	};
+\end{axis}
+\end{tikzpicture}
+
+
+The Open Charge Alliance \cite{OCAappraisal} reports that more than 10\,000 charging stations\footnote{Note that a ``charging station'' may consist of multiple fast chargers, thus the disparity between 143\,502 ``fast chargers'' and ``more than 10\,000 charging stations''} in over 50 countries are managed using the OCPP protocol.
+
+
+
+\subsection{Project Goal}
+The goal of this project is to develop an OCPP v2.0 server for use in electric vehicle charger networks. The server software should verifiably have the following desirable properties: 
+
+\begin{itemize}
+	\item The program should not leak memory.
+	\item The program should never access uninitialized memory (for example, should never read past the end of an array).
+	\item The program should never crash or exit unexpectedly.
+	\item The program should be bounded in terms of memory (RAM) usage at runtime.
+ 	\item The program should be bounded in terms of the time taken to complete operations, i.e. should never `hang'.
+	\item The program should verifiably meet its requirements. These requirements are typically in the form of preconditions and postconditions.
+	\item The program should never exhibit undefined behaviour.
+	\item The program should constrain information flow, i.e. not leak sensitive information such as passwords.
+\end{itemize}
+
+
+\subsection{Criteria for the Selection of Software Verification Tools}
+Several automated software verification tools are currently available. The features of these tools will be evaluated and a suitable candidate selected for the implementation of the server. The criteria for the selection is as follows:
+
+\begin{itemize}
+	\item The tool should verify the properties listed in the previous section.
+	\item The tool should be sound. Many of the tools claim to be sound ``modulo bugs in the tool'', and have lengthy lists of known bugs.
+	\item There are many cases where a verification tool cannot prove or disprove properties of a piece of software within a certain timeframe. Preference will be given to verification tools that perform better in this respect.
+	\item Preference will be given to verification tools with Evidence of successful use in commercial software development.
+	\item Preference will be given to languages with existing libraries.
+	\item Preference will be given to verification tools with permissive licenses.
+	\item Preference will be given to verification tools that support multiple platforms (eg. Windows, Linux).
+	\item Preference will be given to verification tools that detect data races in multithreaded applications.
+\end{itemize}
+
+
+
+
+
+\subsection{A Minimal OCPP v2.0 Implementation}
+The OCPP v2.0 specification covers many use cases that are not essential for the implementation of a basic CSMS. The goal of this project is to implement a basic subset, as defined in \cite[p.10]{ocpp}.
+
+This includes booting a charge station (use cases B01-B04), configuring a charge station (B05-07), resetting a charge station (B11-B12), authorization options (C01), a transaction mechanism (E01), availability (G01), monitoring events (G05, N07), sending transaction related meter values (J02), and data transfer(P01, P02)
+ 
+\section{Review of Background and Related Work}
+Numerous software verification tools were considered for use in implementing the OCPP server. These tools include AdaSPARK, Dafny, KeY, OpenJML, Spec\#, VCC, Verifast, Viper, Whiley, and Why3.
+
+\subsection{SPARK 2014}
+	SPARK 2014 is both a formally defined programming language and a set of verification tools. In typical 		use, a programmer writes SPARK code, which is compiled by the GNAT compiler, then analyzed by the
+	GNATprove tool to produce numerous verification conditions.
+	
+	GNATprove uses Alt-Ergo (OCamlPro, 2014), CVC4 (NYU, 2014), YICES (Dutertre, 2014) and Z3 (Bjorner, 2012) 		to prove the verification conditions.
+
+	\subsubsection{Features}
+	Formally verifies:
+	\begin{itemize}
+		\item information flow
+		\item freedom from runtime errors	
+		\item functional correctness
+	\end{itemize}
+
+	\subsubsection{Safety Standards}
+		SPARK 2014 satisifes:
+	\begin{itemize}
+		\item DO-178B/C
+		\item Formal Methods supplement DO-333
+		\item CENELEC 51028
+		\item IEC 61508
+		\item DEFSTAN 00-56
+	\end{itemize}
+
+	\subsubsection{Soundness}
+		SPARK is thought to be sound. Internet searches failed to find examples of unsoundness.
+
+	\subsubsection{Supported Platforms}
+		Windows, Linux, OSX.
+
+	\subsubsection{License Information}
+		Dual license:
+
+		SPARK GPL is available for free from http://libre.adacore.com under the GPL.
+
+		SPARK PRO is available under a commercial license from http://www.adacore.com.
+
+
+	\subsubsection{Evidence of successful use in commercial software development}
+	There is abundant evidence of the successful use of SPARK in high integrity software development. See: \cite{spark01}, \cite{spark02}, \cite{spark03}, \cite{spark04}, \cite{spark05}, \cite{spark06}, \cite{spark07}, \cite{spark08}, \cite{spark09}, \cite{spark10}, \cite{spark11}, \cite{spark12}, \cite{spark13}, \cite{spark14}, \cite{spark15}, \cite{spark16}, \cite{spark17}, \cite{spark18}, \cite{spark19}, \cite{spark20}, \cite{spark21}, \cite{spark22}, \cite{spark23}, \cite{spark24}, \cite{spark25}, \cite{spark26}, \cite{spark27}, \cite{spark28}, \cite{spark29}, \cite{spark30}, \cite{spark31}, \cite{spark32}, \cite{spark33}, \cite{spark34}, \cite{spark35}, \cite{spark36}, \cite{spark37}, \cite{spark38}, \cite{spark39}, \cite{spark40}, \cite{spark41}, \cite{spark42}, \cite{spark43}, \cite{spark44}, \cite{spark45}.
+	
+	
+	Of particular relevance is the experience of the CubeSat Laboratory at Vermont Technical College\cite{sparkstudents}. Cubesats are small cubes launched into space with various sensors onboard, in this case without post-launch software update capabilities. This means the software must be fault free at the time of launch. The students (mostly third and fourth year undergraduates, with no prior knowledge of SPARK or Ada, and a high turnover rate) proved the software to be free of runtime errors. 14 Cubesats were launched in November 2013. Most were never heard from again, but the SPARK Cubesat worked for 2 years until it reentered Earth's atmosphere as planned in November 2015. 
+
+	\subsubsection{Existing Libraries}
+	SPARK has a minimal container library. SPARK interfaces easily with Ada, which has an extensive standard library.
+
+	\subsubsection{Multithreaded Application Support}
+	Unsupported.
+
+	\subsubsection{Supported Languages}
+	SPARK 2104 supports a subset of Ada 2012.
+
+
+	See \cite[p.18]{McCormickJohnW.2015Bhia}
+
+	``The following Ada 2012 features are not currently supported by Spark:
+
+	Aliasing of names; no object may be referenced by multiple names
+
+	Pointers (access types) and dynamic memory allocation
+
+	Goto statements
+
+	Expressions or functions with side effects
+
+	Exception handlers
+
+	Controlled types; types that provide fine control of object creation, assignment, and destruction
+
+	Tasking/multithreading (will be included in future releases)''
+	
+\subsection{Dafny}
+	\subsubsection{Home Page}%	
+		https://rise4fun.com/Dafny
+	\subsubsection{Features}
+		Dafny is both a language and a verifier \cite{LeinoK.R.M.2010DAap}. Dafny supports feature verification via preconditions, postconditions, loop invariants and loop variants. It uses the 'Boogie' intermediate language and the Z3 theorem prover. The Dafny compiler produces executable files for the .NET platform \cite{dafny02}.
+	\subsubsection{Soundness}
+		Dafny is designed to be sound but incomplete, and is known to report errors on correct programs \cite{dafny01}.
+	\subsubsection{Supported Platforms}
+		Windows, Linux, OSX host, for a .NET target platform.
+	\subsubsection{License Information}
+		MIT
+	\subsubsection{Evidence of successful use in commercial software development}
+		Internet searches failed to find any evidence of Dafny being used in commercial software development. 		
+	\subsubsection{Existing Libraries}
+		There is a `mathematics' library for Dafny.
+		
+	\subsubsection{Multithreaded Application Support}
+		Internet searches failed to find evidence of multithreaded application support. 
+		
+	\subsubsection{Supported Languages}
+		Dafny.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{KeY}
+	\subsubsection{Home Page}%	
+	https://www.key-project.org/
+	\subsubsection{Features} 
+		KeY offers functional verification for Java programs. The specifications are written as comments in JML in the Java source code. KeY is built on a formal logic called `Java Card DL', which is itself a first-order dynamic logic, and an extension of Hoare logic. It is targeted at JavaCard programs. 
+	\subsubsection{Soundness} 
+		KeY is thought to be sound. Internet searches failed to find examples of unsoundness.
+	\subsubsection{Supported Platforms} 
+		Windows, Linux, and OSX hosts, for a JVM target.
+	\subsubsection{License Information} 
+		GPL.		
+	\subsubsection{Evidence of successful use in commercial software development} 
+		Internet searches failed to find any evidence of KeY being used in commercial software development. 
+	\subsubsection{Existing Libraries} 
+		There are extensive libraries available for Java programs.
+	\subsubsection{Multithreaded Application Support} 
+		No.
+	\subsubsection{Supported Languages} 
+		Java.	
+
+
+
+
+
+
+
+
+
+
+\subsection{OpenJML}
+	\subsubsection{Home Page}%	
+	http://www.openjml.org/
+	\subsubsection{Features}
+	OpenJML is a suite of tools for verifying Java programs that are annotated with JML statements. It is based on OpenJDKv1.8. It detects illegal memory access at compile time. It verifies preconditions and postconditions. It arguably guarantees the absence of undefined behaviour for single threaded applications. It does not constrain information flow.
+	
+	\subsubsection{Soundness}
+	Yes
+	\subsubsection{Supported Platforms}
+	Windows, Linux, OSX.
+	\subsubsection{License Information}
+		GPLv2.
+	\subsubsection{Evidence of successful use in commercial software development} 
+		Internet searches failed to find any evidence of OpenJML being used in commercial software development. 
+
+	\subsubsection{Existing Libraries} 
+		There are extensive libraries available for Java programs.
+	\subsubsection{Multithreaded Application Support}
+	No.
+	\subsubsection{Supported Languages}
+	Java (only OpenJDK v1.8, may become unsupported in December 2020)
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Spec\#}
+	https://www.microsoft.com/en-us/research/project/spec/
+	\subsubsection{Features}
+		Spec\# consists of the Spec\# programming language, the Spec\# compiler, and the Spec\# static program verifier. The programming language is an extension of C\#, adding non-null types, checked exceptions, preconditions, postconditions, and object invariants \cite{spec01}. It uses Boogie for verification.
+	\subsubsection{Soundness}
+		Spec\# claims to be sound\cite{BarnettMike2005TSPS}.
+	\subsubsection{Supported Platforms}
+		Windows host platform, .NET target platform.
+	\subsubsection{License Information}
+		Internet searches failed to find Spec\# license information.
+	\subsubsection{Evidence of successful use in commercial software development}
+		Internet searches failed to find evidence of Spec\# being used in commercial software development.
+	\subsubsection{Existing Libraries}
+		Internet searches failed to find Spec\# libraries. However, Spec\# offers interoperability with the .NET platform, which has an extensive standard library, although the soundness of this library is not guaranteed.
+	\subsubsection{Multithreaded Application Support}
+		Yes\cite{spec01}.
+	\subsubsection{Supported Languages}
+		Spec\#.
+
+
+
+
+
+
+
+
+
+\subsection{VCC}
+	\subsubsection{Home Page}%	
+		https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/	
+	\subsubsection{Features}
+	VCC verifies preconditions and postconditions written in the form of special comments in the source code. 		It detects data races in multithreaded applications and illegal memory access at compile time. It does not 		guarantee the absence of undefined behaviour.
+
+	\subsubsection{Soundness}
+	Yes
+
+	\subsubsection{Supported Platforms}
+	Windows
+
+	\subsubsection{License Information}
+	%https://github.com/microsoft/vcc/blob/master/LICENSE
+	MIT \cite{vcc01}
+
+	\subsubsection{Evidence of successful use in commercial software development}
+		VCC has been used successfully in at least one major commercial project, the verification of the Microsoft Hypervisor, the virtualization kernel of Hyper-V \cite{vcc2}.
+
+	\subsubsection{Existing Libraries}
+		Internet searches failed to find libraries verified with VCC. However, applications written with VCC can link against unverified libraries, effectively giving access to extensive library support.
+
+	\subsubsection{Multithreaded Application Support}
+	Yes
+
+	\subsubsection{Supported Languages}
+	C
+
+
+
+
+\subsection{Verifast}
+	\subsubsection{Home Page}%	
+	https://github.com/verifast/verifast
+
+	\subsubsection{Features}
+	Verifast verifies preconditions, and postconditions in the form of special comments in the source code.
+	It detects race conditions in multithreaded applications. It does not guarantee the absence of undefined behaviour, or verify the absence of stack overflows.	
+	
+	\subsubsection{Soundness}
+	No, see https://github.com/verifast/verifast/blob/master/soundness.md
+	\subsubsection{Supported Platforms}
+	Windows, Linux, OSX.
+
+	\subsubsection{License Information} 
+	MIT \cite {verifastlicense}.
+	\subsubsection{Evidence of successful use in commercial software development}
+	There is evidence of some use in industrial applications\cite{PhilippaertsPieter2014SvwV}.
+	\subsubsection{Existing Libraries}
+		Internet searches failed to find libraries verified by / written with VeriFast annotations. However, applications written with VeriFast can link against unverified libraries, effectively gaining access to extensive library support.
+	\subsubsection{Multithreaded Application Support}
+	Yes.
+	\subsubsection{Supported Languages}
+	C, Java
+
+
+
+
+
+
+
+
+
+\subsection{Viper}
+	\subsubsection{Home Page}%	
+https://www.pm.inf.ethz.ch/research/viper.html
+	\subsubsection{Features}
+		Viper consists of the Viper intermediate verification language, automatic verifiers, and example front end tools \cite{viper01}. It is more of a tool for creating other verification tools than a tool for verifying software. In practice, a developer would write code in Python and use the `Nagini' front end (based on Viper) to verify the code \cite{Eilers2018NaginiAS}. A corresponding front end for Rust exists, `Prusti' \cite{AstrauskasMuellerPoliSummers19}.
+	\subsubsection{Soundness}
+		Yes.
+	\subsubsection{Supported Platforms}
+		Windows, MacOS, Linux\cite{JuhaszUri2014VAVI}.
+	\subsubsection{License Information}
+	https://bitbucket.org/viperproject/carbon/src/default/LICENSE.txt
+		Mozilla Public License Version 2.0\cite{viperlicense}
+	\subsubsection{Evidence of successful use in commercial software development}
+		Internet searches failed to find evidence of Viper being used in commercial software development.
+	\subsubsection{Existing Libraries}
+		Internet searches failed to find libraries verified by Viper front ends. However, applications written with these front ends can link against unverified libraries, effectively gaining access to extensive library support.
+	\subsubsection{Multithreaded Application Support}
+	Yes.
+	\subsubsection{Supported Languages}
+	Python, Rust, Java, OpenCL, Chalice.
+
+
+
+
+
+\subsection{Whiley}
+	\subsubsection{Home Page}
+	http://whiley.org/
+	
+	\subsubsection{Features}
+	Whiley consists of the Whiley language, the Whiley Build System, the Whiley Compiler, the Whiley Intermediate Language, the Whiley-2-Java Compiler, the Whiley-2-C Compiler, and the Whiley Constraint Solver\cite{10.1007/978-3-319-02654-1_13}. 
+	
+	Whiley uses a variant of first-order logic called the Whiley Assertion Language for verification.
+	
+	In typical use, a developer will write source code in Whiley, build with the Whiley Build system, and execute the resulting Java class file on the JVM.  
+
+	\subsubsection{Soundness}
+	Internet searches did not find evidence to say that Whiley is unsound.
+	\subsubsection{Supported Platforms}
+	JVM.
+	\subsubsection{License Information}
+	BSD.
+	\subsubsection{Evidence of successful use in commercial software development}
+		Internet searches failed to find evidence of Whiley being used in commercial software development.
+	\subsubsection{Existing Libraries}
+		Internet searches failed to find libraries verified by Whiley. However, applications written with Whiley can link against unverified Java functions, effectively gaining access to extensive library support.
+	\subsubsection{Multithreaded Application Support}
+	No.
+	\subsubsection{Supported Languages}
+	Whiley. The Whiley-2-Java Compiler (WyJC) can convert verified Whiley programs into JVM class files. Whiley can import Java functions, and export Whiley functions for use in Java programs.
+
+
+
+
+
+
+\subsection{Why3}
+	\subsubsection{Home Page}
+	http://why3.lri.fr/
+	\subsubsection{Features}
+	The Why3 deductive program verification platform includes the WhyML language, a standard library of logical theories, and basic programming data structures\cite{why3homepage}. In typical use, a developer will write software in WhyML, and get correct-by-construction OCaml programs through an automated extraction mechanism. It verifies preconditions and postconditions.
+	
+	WhyML is also used by numerous popular verification tools (FramaC, SPARK2014, Krakatoa) as an intermediate language for verification of C, Java and Ada programs.
+	\subsubsection{Soundness}
+	Yes.
+	\subsubsection{Supported Platforms}
+	Windows, Linux, OSX. Why3 is distributed as a Debian package and as an OPAM package.
+	
+	\subsubsection{License Information}
+	GNU LGPL 2.1.
+	\subsubsection{Evidence of successful use in commercial software development}
+		Internet searches failed to find evidence of WhyML being used in commercial software development. However, there are countless cases of commercial software development using WhyML as an intermediate language, as it is used by FramaC, SPARK, and others.
+ 
+	\subsubsection{Existing Libraries}
+	Why3 comes with a standard library of logical theories and basic programming data structures.
+	\subsubsection{Multithreaded Application Support}
+	No.
+	\subsubsection{Supported Languages}
+	WhyML.
+
+\subsection{Conclusion of Review of Background and Associated Work}
+Based on the properties of the verification tools available, it has been decided to use SPARK 2014 for the implementation and verification of the OCPP server. It has wide use in industry, which gives me confidence that it is a practical choice. It verifies all of the properties that are important to me, and has good library support.
+
+
+\section{Risk Assessment}
+
+\subsection{OHS} 
+The student will work in a home office, covered by general OHS laboratory rules. Although the project is related to charging electric vehicles, there is no requirement for exposure to high voltages. The project is confined to the development of a transaction processing server.
+ 
+\subsection{Other Risks} 
+\subsubsection{Project risks} 
+The goal of this project is to create a verified OCPP v2.0 server. Even if this goal is met, there is a chance that the OCPP v2.0 protocol never achieves acceptance in the field, which would render the server useless. There is no practical mitigation for this risk.
+
+\subsubsection{Technology risks} 
+A decision has been made to use SPARK 2014. There is no real support available in the event of technical issues. The project supervisor has no experience with SPARK. The student has minimal experience with SPARK. However, there are many resources available online.
+
+\subsubsection{Scheduling risks} 
+Due to a lack of experience in the development of verified software, the student has nothing to base task estimates on. The timeline associated with feature delivery is based on nothing more than a gut feeling. 
+ 
+
+\section{Project Plan}
+
+\begin{ganttchart}[
+	expand chart=\textwidth,
+	hgrid,
+	vgrid,
+%	time slot format=isodate-yearmonth,
+	time slot format=isodate,
+	time slot unit=month,
+	]{2019-06-01}{2020-03-01}
+	\gantttitlecalendar{year, month=shortname} \\
+%	\ganttbar{Select a verification framework}{2019-08}{2019-09} \\
+%	\ganttlinkedbar{Ada websocket running}{2019-09}{2019-10} \ganttnewline
+%	\ganttlink{elem1}{elem2}
+\ganttbar{1}{2019-07-02}{2019-08-16} \\
+\ganttlinkedbar{2}{2019-08-16}{2019-09-01} \ganttnewline
+\ganttlinkedbar{3}{2019-09-01}{2019-09-15} \ganttnewline
+\ganttlinkedbar{4}{2019-09-15}{2019-10-01} \ganttnewline
+\ganttlinkedbar{5}{2019-10-01}{2019-10-14} \ganttnewline
+\ganttlinkedbar{6}{2019-10-14}{2019-11-01} \ganttnewline
+\ganttlinkedbar{7}{2019-11-01}{2019-11-15} \ganttnewline
+\ganttlinkedbar{8}{2019-11-15}{2019-12-01} \ganttnewline
+\ganttlinkedbar{9}{2019-12-01}{2019-12-15} \ganttnewline
+\ganttlinkedbar{10}{2019-12-15}{2020-01-01} \ganttnewline
+\ganttlinkedbar{11}{2020-01-02}{2020-01-15} \ganttnewline
+\ganttlinkedbar{12}{2020-01-15}{2020-02-01} \ganttnewline
+\ganttlinkedbar{13}{2020-02-01}{2020-02-16} \ganttnewline
+\end{ganttchart}
+
+
+\begin{itemize}
+	\item 1. Review the literature of the verification tools, and choose one based on the selection criteria.
+	
+	Duration: 8 days. 2019-07-02 $\rightarrow$ 2019-08-16.
+	
+	\item 2. Get an Ada websocket server running, and a basic websocket client connecting to it.
+	
+	Duration: 4 days. 2019-08-1 $\rightarrow$ 2019-09-01.
+	
+	\item 3. Modify the websocket client to request upgrading the websocket connection to an OCPP connection.
+	
+	Duration: 2 days. 2019-09-01 $\rightarrow$ 2019-09-15. 
+	
+	\item 4. Modify the websocket server to accept websocket connection `upgrade to OCPP' requests.
+	
+	Duration: 2 days. 2019-09-15 $\rightarrow$ 2019-10-01. 
+	
+	\item 5. Modify the OCPP server to accept and respond to `Boot Notification' requests.
+	
+	Duration: 2 days. 2019-10-01 $\rightarrow$ 2019-10-14.
+	
+	\item 6. Modify the OCPP server to accept and respond to `Get Variable' and 'Set Variable' requests.	
+	
+	Duration: 2 days. 2019-10-14 $\rightarrow$ 2019-11-01.
+	
+	\item 7. Modify the OCPP server to handle `Reset' requests and responses.	
+	
+	Duration: 2 days. 2019-11-01 $\rightarrow$ 2019-11-15.
+	
+	\item 8. Modify the OCPP server to handle `Authorize' requests and responses.
+	
+	Duration: 2 days. 2019-11-15 $\rightarrow$ 2019-12-01.
+	
+	\item 9. Modify the OCPP server to handle `TransactionEvent' requests and responses.	
+	
+	Duration: 2 days. 2019-12-01 $\rightarrow$ 2019-12-15.
+	
+	\item 10. Modify the OCPP server to handle `StatusNotification' requests and responses.	
+	
+	Duration: 2 days. 2019-12-15 $\rightarrow$ 2020-01-01.
+	
+	\item 11. Modify the OCPP server to handle `NotifyEvent' requests and responses.
+	
+	Duration: 2 days. 2020-01-01 $\rightarrow$ 2020-01-15.
+	
+	\item 12. Modify the OCPP server to handle `TransactionEvent (Meter Values)' requests and responses.
+	
+	Duration: 2 days. 2020-01-15 $\rightarrow$ 2020-02-01.
+	
+	\item 13. Modify the OCPP server to handle `DataTransfer' requests and responses.
+	Duration: 2 days. 2020-02-01 $\rightarrow$ 2020-02-16.
+	
+\end{itemize}
+	
+\nocite{*}
+\bibliographystyle{IEEEannot}
+\bibliography{annot}
+
+
+\end{document}

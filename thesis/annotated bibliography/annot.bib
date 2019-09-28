@@ -1,0 +1,351 @@
+% This is annote.bib
+% Author: Ayman Ammoura
+% A demo for CMPUT 603 Fall 2002.
+% The order of the following entries is irrelevant. They will be sorted according to the
+% bibliography style used.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%article
+%    An article from a journal or magazine.
+%    Required fields: author, title, journal, year, volume
+%    Optional fields: number, pages, month, doi, note, key
+%book
+%    A book with an explicit publisher.
+%    Required fields: author/editor, title, publisher, year
+%    Optional fields: volume/number, series, address, edition, month, note, key, url
+%booklet
+%    A work that is printed and bound, but without a named publisher or sponsoring institution.
+%    Required fields: title
+%    Optional fields: author, howpublished, address, month, year, note, key
+%conference
+%    The same as inproceedings, included for Scribe compatibility.
+%inbook
+%    A part of a book, usually untitled. May be a chapter (or section, etc.) and/or a range of pages.
+%    Required fields: author/editor, title, chapter/pages, publisher, year
+%    Optional fields: volume/number, series, type, address, edition, month, note, key
+%incollection
+%    A part of a book having its own title.
+%    Required fields: author, title, booktitle, publisher, year
+%    Optional fields: editor, volume/number, series, type, chapter, pages, address, edition, month, note, key
+%inproceedings
+%    An article in a conference proceedings.
+%    Required fields: author, title, booktitle, year
+%    Optional fields: editor, volume/number, series, pages, address, month, organization, publisher, note, key
+%manual
+%    Technical documentation.
+%    Required fields: title
+%    Optional fields: author, organization, address, edition, month, year, note, key
+%mastersthesis
+%    A Master's thesis.
+%    Required fields: author, title, school, year
+%    Optional fields: type, address, month, note, key
+%misc
+%    For use when nothing else fits.
+%    Required fields: none
+%    Optional fields: author, title, howpublished, month, year, note, key
+%phdthesis
+%    A Ph.D. thesis.
+%    Required fields: author, title, school, year
+%    Optional fields: type, address, month, note, key
+%proceedings
+%    The proceedings of a conference.
+%    Required fields: title, year
+%    Optional fields: editor, volume/number, series, address, month, publisher, organization, note, key
+%techreport
+%    A report published by a school or other institution, usually numbered within a series.
+%    Required fields: author, title, institution, year
+%    Optional fields: type, number, address, month, note, key
+%unpublished
+%    A document having an author and title, but not formally published.
+%    Required fields: author, title, note
+%    Optional fields: month, year, key
+%
+
+
+% https://guides.lib.monash.edu/c.php?g=219786&p=1454302
+%This is the format for months in IEEE style references: Jan., Feb., Mar., Apr., May, June, July, Aug., Sept., Oct., Nov., and Dec.
+
+% K. TechreportSupportedfields:author,title,language,howpublished,institution,address,number,type,month,year,note,url.Techreport is used for technical reports [36]. The optionaltype field can be used to override the default designation“Tech. Rep.” [37], [38].
+
+%Electronic: Supported    fields:author,month,year,title,language,howpublished,organization,address,note,url.
+
+% IEA Global EV Outlook 2019
+@TechReport{GlobalEVOutlook2019,
+  title     = {{Global} {EV} {Outlook} 2019},
+  year      = {2019},
+  month     = {May},
+  institution = {International Energy Agency},
+  address   = {Paris, France},
+  url       = {https://webstore.iea.org/global-ev-outlook-2019},
+  note      = {{Accessed: June 25, 2019}},
+  annote    = "This annual publication describes the state of electric mobility around the world. It includes statistics for the number of publicly available fast chargers, which increased 33\% from 107\,650 in 2017 to 143\,502 in 2018. These numbers show the potential usefulness of a verified OCPP v2.0 server."
+}
+
+% The Verifast Program Verifier: A Tutorial
+%\bibitem{theverifastprogramverifiertutorial} B. Jacobs, J. Smans, and F. Piessens, ``The Verifast Program Verifier: A Tutorial'', Department of Computer Science, Katholieke Universiteit Leuven, Belgium, [online document], November 28, 2017. Available: \href{https://people.cs.kuleuven.be/~bart.jacobs/verifast/tutorial.pdf}{\color{blue}{\underline{https://people.cs.kuleuven.be/~bart.jacobs/verifast/tutorial.pdf}}}. [Accessed June 20, 2019]. \\
+%2. \\
+@TechReport{theverifastprogramverifiertutorial2,
+  author = {B. Jacobs and J. Smans and F. Piessens}, 
+  title     = {{The Verifast Program Verifier: A Tutorial}},
+  year      = {2017},
+  month     = {November},
+  institution = {Department of Computer Science, Katholieke Universiteit},
+  address   = {Leuven, Belgium},
+  url       = "https://people.cs.kuleuven.be/\~{}bart.jacobs/verifast/tutorial.pdf",
+  note      = {{Accessed: June 20, 2019}},
+  annote    = "This report gives useful examples of how to use the VeriFast Program Verifier to prove the absence of buffer overflows, data races and functional correctness as specified by preconditions and postconditions."
+}
+
+% Professional internet site
+%European Telecommunications Standards Institute, “Digital Video Broadcasting
+%(DVB): Implementation guide for DVB terrestrial services; transmission aspects,”
+%European Telecommunications Standards Institute, ETSI-TR-101, 2007. [Online].
+%Available: http://www.etsi.org. [Accessed: Nov. 12, 2007].
+
+% https://www.openchargealliance.org/about-us/appraisal-ocpp/
+%\bibitem{ocaappraisal} Open Charge Alliance, ``Appraisal OCPP'',  todo - undated. [online]. Available: \href{https://www.openchargealliance.org/about-us/appraisal-ocpp/}{\color{blue}{\underline{https://www.openchargealliance.org/about-us/appraisal-ocpp/}}}. [Accessed June 22, 2019]. \\
+% M. Electronic(IEEEtran.bst extension)Supported    fields:author,month,year,title,language,howpublished,organization,address,note,url.
+@Electronic{OCAappraisal,
+  organization = {OpenChargeAlliance.org},
+  title        = "``{Appraisal} {OCPP}''",
+  note         = {{Accessed: June 22, 2019}},
+  url          = "www.openchargealliance.org/about-us/appraisal-ocpp/",
+  annote    = "This webpage gives the goals of the OCPP protocol. It includes statistics for the number of charging stations (which may consist of 1 or more chargers) using the OCPP protocol, which currently number of 10\,000 in over 50 different countries. These numbers show the potential usefulness of a verified OCPP v2.0 server. The web site is operated by the Open Charge Alliance, whose stated mission is to ``Uphold OCPP and OSCP as vital standards, with implementations widely adopted and deployed'', i.e., they have a vested interest in portraying the adoption of the OCPP protocol in a positive light. In spite of this vested interest, the data seems trustworthy."
+}
+
+% https://github.com/verifast/verifast/
+@Electronic{VeriFast,
+  organization = {VeriFast},
+  title        = "``{Research prototype tool for modular formal verification of C and Java programs}''",
+  note         = {{Accessed:} June 22, 2019},
+  url          = "https://github.com/verifast/verifast/",
+  annote    = "This website is the home page of the VeriFast project. It gives an overview of the product, installation instructions and links to tutorials and papers. It was useful when evaluating the different verification tools available, particularly the list of known bugs in the tool."
+}
+
+% Featherweight Verifast
+%A. Article Supportedfields:author,title,language,journal,volume,number,pages,month,year,note,url.
+@Article{FeatherweightVerifast,
+  author = {F. Vogels and B. Jacobs and F. Piessens}, 
+  title  = {{Featherweight Verifast}}, 
+  journal = {Logical Methods in Computer Science},
+  volume = {11},
+  number = {3:19},
+  pages = {1–57},
+  year = {2015},
+  url = {https://lmcs.episciences.org/1595},
+  annote = "In this article Vogels \textit{et al.} discuss VeriFast, a tool for modular verification of safety and correctness properties of single threaded and multithreaded C and Java programs. The authors present a formal definition and soundness proof of a core subset of the VeriFast program verification approach. The article provides a detailed description of what VeriFast does and how it works, then introduces a simplified version of Verifast, ``Featherweight Verifast'', as well as another variant called ``Mechanised Featherweight Verifast''. The article is useful mainly for its description of what guarantees VeriFast provides. Surprisingly, these features are not obvious from the VeriFast website https://github.com/verifast/verifast or from internet searches. The main limitation of the article is that it focuses on a subset of VeriFast. The authors list future work to be done to create formal definitions and proofs for those features of VeriFast that are not included in Featherweight Verifast. This article provides useful supplementary information for comparing different software verification tools."
+}
+
+% http://www.openjml.org/
+%\bibitem{openjmlwebsite} OpenJML, ``Does your program do what it is supposed to do?'', http://www.openjml.org, todo - undated. [online]. Available: \href{http://www.openjml.org/}{\color{blue}{\underline{http://www.openjml.org/}}}. [Accessed June 22, 2019]. \\
+%2. This is the website for the OpenJML verification tool.\\
+@Electronic{openjml,
+  organization = {OpenJML},
+  title        = "``{Does your program do what it is supposed to do?}''",
+  note         = {{Accessed: June 22, 2019}},
+  url          = "https://github.com/verifast/verifast/",
+  annote       = "This is the website for the OpenJML verification tool. It gives an overview of the product, installation instructions and links to more documentation. It is useful for evaluating the different verification tools available."
+}
+
+@inproceedings{CokD.R.2014OSvf,
+issn = {20752180},
+journal = {Electronic Proceedings in Theoretical Computer Science, EPTCS},
+pages = {79--92},
+volume = {149},
+publisher = {Open Publishing Association},
+year = {2014},
+title = {{OpenJML}: Software verification for {Java} 7 using {JML}, {OpenJDK}, and {Eclipse}},
+copyright = {Copyright 2015 Elsevier B.V., All rights reserved.},
+author = {Cok, D.R.},
+keywords = {Computer Science - Software Engineering ; Computer Science - Logic In Computer Science ; Computer Science - Programming Languages;},
+annote = "This paper describes `OpenJML', a verification tool for Java programs. It has a section on the soundness of the tool, which is vague and inconclusive. The paper is useful for evaluating the different verification tools available."
+}
+
+% https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/
+%\bibitem{vccwebsite} M. Moskal, ``VCC: A Verifier for Concurrent C'', microsoft.com, December 10, 2008. [online]. Available: \href{https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/}{\color{blue}{\underline{https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/}}}. [Accessed June 22, 2019]. \\
+%2. This is the website for the VCC verification tool.\\
+@Electronic{vcc,
+  organization = {Microsoft},
+  title        = "``{VCC: A Verifier for Concurrent C}''",
+  note         = {{Accessed:June 22, 2019}},
+  url          = "https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/",
+  annote       = "This is the website for the VCC verification tool. It gives an overview of the product, installation instructions and links to more documentation. It is useful for evaluating the different verification tools available."
+}
+
+% A practical verification methodology for concurrent programs
+@TechReport{vcc2,
+  author = {E. Cohen and S. Tobies and M. Moskal and W. Schulte}, 
+  title     = {{A Practical Verification Methodology for Concurrent Programs}},
+  year      = {2009},
+  month     = {February 12},
+  institution = {Microsoft Research},
+  address   = {1 Microsoft Way, Redmond, WA},
+  url       = "https://www.microsoft.com/en-us/research/publication/a-practical-verification-methodology-for-concurrent-programs/",
+  note      = {Accessed: June 22, 2019},
+  annote    = "This paper describes the verification methodology used in `VCC', an automated, sound C verifier, which translates annotated C code into BoogiePL. Boogie generates verification conditions, which are then fed into the Z3 SMT solver.  It was useful for evaluating the different verification tools available."
+}
+
+% Verifying C Programs: A VCC Tutorial
+@TechReport{vcctutorial,
+  author = {E. Cohen and M. Hillebrand and S. Tobies and M. Moskal and W. Schulte}, 
+  title     = {{Verifying C Programs: A VCC Tutorial}},
+  year      = {2015},
+  month     = {July 10},
+  institution = {University of Freiburg},
+  address   = {Leuven, Belgium},
+  url       = "https://swt.informatik.uni-freiburg.de/teaching/SS2015/swtvl/Resources/literature/vcc-tutorial-col2.pdf",
+  note      = {Accessed: June 22, 2019},
+  annote    = "This tutorial gives useful examples of how to use the VCC verification tool. It is not obvious from the project webpage what features the tool provides, and the tutorial was used to infer these features. The tutorial indicates that is a ``working draft, version 0.2'', and it is not available on the Microsoft website, rather it is available indirectly via the University of Freiburg. In spite of this, it is well written, and it was easy to follow the examples and perform the proofs."
+}
+
+@inproceedings{0e6db16b44c94a84a74afdb7ee00ce3b,
+title = "Tool support for correctness-by-construction",
+abstract = "Correctness-by-Construction (CbC) is an approach to incrementally create formally correct programs guided by pre- and postcondition specifications. A program is created using refinement rules that guarantee the resulting implementation is correct with respect to the specification. Although CbC is supposed to lead to code with a low defect rate, it is not prevalent, especially because appropriate tool support is missing. To promote CbC, we provide tool support for CbC-based program development. We present CorC, a graphical and textual IDE to create programs in a simple while-language following the CbC approach. Starting with a specification, our open source tool supports CbC developers in refining a program by a sequence of refinement steps and in verifying the correctness of these refinement steps using the theorem prover KeY. We evaluated the tool with a set of standard examples on CbC where we reveal errors in the provided specification. The evaluation shows that our tool reduces the verification time in comparison to post-hoc verification.",
+author = "Tobias Runge and Ina Schaefer and Loek Cleophas and Thomas Th{\"u}m and Derrick Kourie and Watson, {Bruce W.}",
+year = "2019",
+month = "1",
+day = "1",
+doi = "10.1007/978-3-030-16722-6_2",
+language = "English",
+isbn = "9783030167219",
+series = "Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)",
+publisher = "Springer",
+pages = "25--42",
+editor = "Reiner H{\"a}hnle and {van der Aalst}, Wil",
+booktitle = "Fundamental Approaches to Software Engineering - 22nd International Conference, FASE 2019, Held as Part of the European Joint Conferences on Theory and Practice of Software, ETAPS 2019, Proceedings",
+address = "Germany",
+annote    = "This paper introduces `CorC', a graphical and textual IDE for creating software using the `correctness by construction' methodology. `CorC' uses the `KeY' theorem prover. The authors found that when a set of algorithms were developed using the `correctness by construction' approach, verification was much faster than post-hoc verification. The graphical component is surprisingly effective at making the software and its proof easier to understand."
+}
+
+@inproceedings{bobot:hal-00790310,
+  TITLE = {{Why3: Shepherd Your Herd of Provers}},
+  AUTHOR = {Bobot, Fran{\c c}ois and Filli{\^a}tre, Jean-Christophe and March{\'e}, Claude and Paskevich, Andrei},
+  URL = {https://hal.inria.fr/hal-00790310},
+  BOOKTITLE = {{Boogie 2011: First International Workshop on Intermediate Verification Languages}},
+  ADDRESS = {Wroclaw, Poland},
+  PAGES = {53-64},
+  YEAR = {2011},
+  PDF = {https://hal.inria.fr/hal-00790310/file/main.pdf},
+  HAL_ID = {hal-00790310},
+  HAL_VERSION = {v1},
+  annote    = "This article describes the Why3 software verification platform. All of the authors are members of the ``Toccata'' project, which developed Why3, and therefore have a vested interest in portraying the platform in a positive light. It was useful for evaluating the different verification tools available."
+}
+
+@inproceedings{filliatre:hal-00789533,
+  TITLE = {{Why3 -- Where Programs Meet Provers}},
+  AUTHOR = {Filli{\^a}tre, Jean-Christophe and Paskevich, Andrei},
+  URL = {https://hal.inria.fr/hal-00789533},
+  BOOKTITLE = {{ESOP'13 22nd European Symposium on Programming}},
+  ADDRESS = {Rome, Italy},
+  PUBLISHER = {{Springer}},
+  SERIES = {LNCS},
+  VOLUME = {7792},
+  YEAR = {2013},
+  MONTH = Mar,
+  PDF = {https://hal.inria.fr/hal-00789533/file/main.pdf},
+  HAL_ID = {hal-00789533},
+  HAL_VERSION = {v1},
+  annote    = "This article describes the Why3 software verification platform, and the WhyML language. WhyML is used for both specification and programming. It was useful for evaluating the different verification tools available."
+}
+
+@misc{JuhaszUri2014VAVI,
+abstract = {<p>The automation of verification techniques based on firstorder logic specifications has benefited greatly from verification infrastructures such as Boogie and Why. These offer an intermediate language that can express diverse language features and verification techniques, as well as back-end tools such as verification condition generators. However, these infrastructures are not well suited for verification techniques based on separation logic and other permission logics, because they do not provide direct support for permissions and because existing tools for these logics often prefer symbolic execution over verification condition generation. Consequently, tool support for these logics is typically developed independently for each technique, dramatically increasing the burden of developing automatic tools for permission-based verification. In this paper, we present a verification infrastructure whose intermediate language supports an expressive permission model natively. We provide tool support, including two back-end verifiers, one based on symbolic execution, and one on verification condition generation; this facilitates experimenting with the two prevailing techniques in automated verification. Various existing verification techniques can be implemented via this infrastructure, alleviating much of the burden of building permissionbased verifiers, and allowing the developers of higher-level techniques to focus their efforts at the appropriate level of abstraction.</p>},
+publisher = {ETH-Zürich},
+year = {2014},
+title = {Viper: A Verification Infrastructure for Permission-Based Reasoning},
+language = {eng},
+author = {Juhasz, Uri and Kassios, Ioannis T and Müller, Peter and Novacek, Milos and Schwerhoff, Malte and Summers, Alexander J},
+keywords = {Verification (Software Engineering) ; Verifikation (Software Engineering) ; Data Processing, Computer Science},
+annote    = "This paper describes the ``Viper'' verification infrastructure, the ``Silver'' intermediate language and the ``Silicon'' and ``Carbon'' back-end verifiers. The ``Viper'' tool provides a verification infrastructure based on permission logics. Three of the six authors are current members of the Viper project, and therefore have a vested interest in portraying Viper in a positive light. The paper was useful for evaluating the different verification tools available."
+}
+
+@book{KeYBook2016dd,
+  editor       = {Wolfgang Ahrendt and Bernhard Beckert and Richard Bubel and Reiner H\"ahnle and Peter H. Schmitt and Mattias Ulbrich},
+  title        = {Deductive Software Verification - The KeY Book: From Theory to Practice},
+  series       = {Lecture Notes in Computer Science},
+  volume       = {10001},
+  publisher    = {Springer},
+  url          = {http://dx.doi.org/10.1007/978-3-319-49812-6},
+  doi          = {10.1007/978-3-319-49812-6},
+  year         = {2016},
+  annote       = "This book describes the KeY software verification framework. The framework uses the Java Modeling Language to formally specify Java programs, and provides both automatic and interactive functional verification. The book was useful for evaluating the different verification tools available."
+}
+
+@incollection{BarnettMike2005TSPS,
+series = {Lecture Notes in Computer Science},
+abstract = {<p>The Spec# programming system is a new attempt at a more cost effective way to develop and maintain high-quality software. This paper describes the goals and architecture of the Spec# programming system, consisting of the object-oriented Spec# programming language, the Spec# compiler, and the Boogie static program verifier. The language includes constructs for writing specifications that capture programmer intentions about how methods and data are to be used, the compiler emits run-time checks to enforce these specifications, and the verifier can check the consistency between a program and its specifications.</p>},
+pages = {49--69},
+volume = {3362},
+publisher = {Springer Berlin Heidelberg},
+booktitle = {Construction and Analysis of Safe, Secure, and Interoperable Smart Devices: International Workshop, CASSIS 2004, Marseille, France, March 10-14, 2004, Revised Selected Papers},
+isbn = {9783540242871},
+year = {2005},
+title = {The {Spec\#} Programming System: An Overview},
+language = {eng},
+address = {Berlin, Heidelberg},
+author = {Barnett, Mike and Leino, K Rustan M and Schulte, Wolfram},
+keywords = {Computer Science ; Software Engineering ; Special Purpose and Application-Based Systems ; Programming Techniques ; Programming Languages, Compilers, Interpreters ; Operating Systems ; Logics and Meanings of Programs ; Engineering ; Computer Science},
+annote    = "This article describes the Spec\# software verification system. The Spec\# language is a superset of C\#, which uses Boogie to check specifications statically. The article was useful for evaluating the different verification tools available."
+}
+
+@inproceedings{LeinoK.R.M.2010DAap,
+issn = {03029743},
+journal = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+pages = {348--370},
+volume = {6355},
+isbn = {3642175104},
+year = {2010},
+title = {Dafny: An automatic program verifier for functional correctness},
+copyright = {Copyright 2011 Elsevier B.V., All rights reserved.},
+author = {Leino, K.R.M.},
+annote    = "This article describes the Dafny Automatic Program Verifier. The Dafny verifier translates Dafny source code into Boogie2, which generates first order verification conditions, which are proved by the Z3 SMT solver. The article was useful for evaluating the different verification tools available."
+}
+
+@inproceedings{UttingM.2017Mwb,
+issn = {03029743},
+journal = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+pages = {69--84},
+volume = {10510},
+publisher = {Springer Verlag},
+isbn = {9783319668444},
+year = {2017},
+title = {Making {Whiley} {Boogie}!},
+copyright = {Copyright 2017 Elsevier B.V., All rights reserved.},
+author = {Utting, M. and Pearce, D.J. and Groves, L.},
+keywords = {Boogie ; Impedance Mismatch ; Intermediate Verification Language ; Semantic Translation ; Verifying Compiler ; Whiley},
+annote    = "This article describes the Whiley programming language. The article was useful for evaluating the different verification tools available."
+}
+
+@InProceedings{10.1007/978-3-319-02654-1_13,
+author="Pearce, David J.
+and Groves, Lindsay",
+editor="Erwig, Martin
+and Paige, Richard F.
+and Van Wyk, Eric",
+title="Whiley: A Platform for Research in Software Verification",
+booktitle="Software Language Engineering",
+year="2013",
+publisher="Springer International Publishing",
+address="Cham",
+pages="238--248",
+abstract="An ongoing challenge for computer science is the development of a tool which automatically verifies programs meet their specifications, and are free from runtime errors such as divide-by-zero, array out-of-bounds and null dereferences. Several impressive systems have been developed to this end, such as ESC/Java and Spec{\#}, which build on existing programming languages (e.g. Java, C{\#}). However, there remains a need for an open research platform in this area. We have developed the Whiley programming language, and its accompanying verifying compiler, as an open platform for research. Whiley has been designed from the ground up to simplify the verification process. In this paper, we introduce the Whiley language and it accompanying verifying compiler tool.",
+isbn="978-3-319-02654-1"
+annote    = "This article describes the Whiley programming language and its verifying compiler. Whiley serves an important role as on open platform (BSD licensed) for research into software verification. The article was useful for evaluating the different verification tools available."
+}
+
+@book{McCormickJohnW.2015Bhia,
+issn = {97811070},
+abstract = {The formally defined programming language SPARK provides a means to guarantee that a computer program has no errors. This makes it a natural system for designing safety - and security - critical applications. This first introduction to SPARK 2014 will allow students and developers to master the basic concepts for building systems with SPARK. Software is pervasive in our lives. We are accustomed to dealing with the failures of much of that software - restarting an application is a very familiar solution. Such solutions are unacceptable when the software controls our cars, airplanes and medical devices or manages our private information. These applications must run without error. SPARK provides a means, based on mathematical proof, to guarantee that a program has no errors. SPARK is a formally defined programming language and a set of verification tools specifically designed to support the development of software used in high integrity applications. Using SPARK, developers can formally verify properties of their code such as information flow, freedom from runtime errors, functional correctness, security properties and safety properties. Written by two SPARK experts, this is the first introduction to the just-released 2014 version. It will help students and developers alike master the basic concepts for building systems with SPARK.},
+isbn = {9781107040731},
+year = {2015},
+title = {Building High Integrity Applications with SPARK},
+language = {eng},
+author = {McCormick, John W.},
+keywords = {Spark (Computer Program Language) ; Fault-Tolerant Computing ; Computers And It ; Information Technology: General Issues ; Software Engineering ; Business Applications ; Programming &Amp;Amp Amp Scripting Languages: General ; Computer Science},
+lccn = {2015014814},
+annote    = "This book describes the Spark programming language. It is not written by the tool vendor, the authors are users and teachers of the technology, so therefore have some vested interest in portraying the technology in a positive light. The book has a more practical approach than many scientific articles. The book was useful for evaluating the different verification tools available."
+}
+ 	
+
+
+%%

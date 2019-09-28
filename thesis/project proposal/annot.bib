@@ -1,0 +1,845 @@
+% This is annote.bib
+% Author: Ayman Ammoura
+% A demo for CMPUT 603 Fall 2002.
+% The order of the following entries is irrelevant. They will be sorted according to the
+% bibliography style used.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%article
+%    An article from a journal or magazine.
+%    Required fields: author, title, journal, year, volume
+%    Optional fields: number, pages, month, doi, note, key
+%book
+%    A book with an explicit publisher.
+%    Required fields: author/editor, title, publisher, year
+%    Optional fields: volume/number, series, address, edition, month, note, key, url
+%booklet
+%    A work that is printed and bound, but without a named publisher or sponsoring institution.
+%    Required fields: title
+%    Optional fields: author, howpublished, address, month, year, note, key
+%conference
+%    The same as inproceedings, included for Scribe compatibility.
+%inbook
+%    A part of a book, usually untitled. May be a chapter (or section, etc.) and/or a range of pages.
+%    Required fields: author/editor, title, chapter/pages, publisher, year
+%    Optional fields: volume/number, series, type, address, edition, month, note, key
+%incollection
+%    A part of a book having its own title.
+%    Required fields: author, title, booktitle, publisher, year
+%    Optional fields: editor, volume/number, series, type, chapter, pages, address, edition, month, note, key
+%inproceedings
+%    An article in a conference proceedings.
+%    Required fields: author, title, booktitle, year
+%    Optional fields: editor, volume/number, series, pages, address, month, organization, publisher, note, key
+%manual
+%    Technical documentation.
+%    Required fields: title
+%    Optional fields: author, organization, address, edition, month, year, note, key
+%mastersthesis
+%    A Master's thesis.
+%    Required fields: author, title, school, year
+%    Optional fields: type, address, month, note, key
+%misc
+%    For use when nothing else fits.
+%    Required fields: none
+%    Optional fields: author, title, howpublished, month, year, note, key
+%phdthesis
+%    A Ph.D. thesis.
+%    Required fields: author, title, school, year
+%    Optional fields: type, address, month, note, key
+%proceedings
+%    The proceedings of a conference.
+%    Required fields: title, year
+%    Optional fields: editor, volume/number, series, address, month, publisher, organization, note, key
+%techreport
+%    A report published by a school or other institution, usually numbered within a series.
+%    Required fields: author, title, institution, year
+%    Optional fields: type, number, address, month, note, key
+%unpublished
+%    A document having an author and title, but not formally published.
+%    Required fields: author, title, note
+%    Optional fields: month, year, key
+%
+
+
+% https://guides.lib.monash.edu/c.php?g=219786&p=1454302
+%This is the format for months in IEEE style references: Jan., Feb., Mar., Apr., May, June, July, Aug., Sept., Oct., Nov., and Dec.
+
+% K. TechreportSupportedfields:author,title,language,howpublished,institution,address,number,type,month,year,note,url.Techreport is used for technical reports [36]. The optionaltype field can be used to override the default designation“Tech. Rep.” [37], [38].
+
+%Electronic: Supported    fields:author,month,year,title,language,howpublished,organization,address,note,url.
+
+% IEA Global EV Outlook 2019
+@TechReport{GlobalEVOutlook2019,
+  title     = {{Global} {EV} {Outlook} 2019},
+  year      = {2019},
+  month     = {May},
+  institution = {International Energy Agency},
+  address   = {Paris, France},
+  url       = {https://webstore.iea.org/global-ev-outlook-2019},
+  note      = {{Accessed: June 25, 2019}},
+}
+
+% The Verifast Program Verifier: A Tutorial
+%\bibitem{theverifastprogramverifiertutorial} B. Jacobs, J. Smans, and F. Piessens, ``The Verifast Program Verifier: A Tutorial'', Department of Computer Science, Katholieke Universiteit Leuven, Belgium, [online document], November 28, 2017. Available: \href{https://people.cs.kuleuven.be/~bart.jacobs/verifast/tutorial.pdf}{\color{blue}{\underline{https://people.cs.kuleuven.be/~bart.jacobs/verifast/tutorial.pdf}}}. [Accessed June 20, 2019]. \\
+%2. \\
+@TechReport{theverifastprogramverifiertutorial2,
+  author = {B. Jacobs and J. Smans and F. Piessens}, 
+  title     = {{The Verifast Program Verifier: A Tutorial}},
+  year      = {2017},
+  month     = {November},
+  institution = {Department of Computer Science, Katholieke Universiteit},
+  address   = {Leuven, Belgium},
+  url       = "https://people.cs.kuleuven.be/\~{}bart.jacobs/verifast/tutorial.pdf",
+  note      = {{Accessed: June 20, 2019}},
+}
+
+% Professional internet site
+%European Telecommunications Standards Institute, “Digital Video Broadcasting
+%(DVB): Implementation guide for DVB terrestrial services; transmission aspects,”
+%European Telecommunications Standards Institute, ETSI-TR-101, 2007. [Online].
+%Available: http://www.etsi.org. [Accessed: Nov. 12, 2007].
+
+% https://www.openchargealliance.org/about-us/appraisal-ocpp/
+%\bibitem{ocaappraisal} Open Charge Alliance, ``Appraisal OCPP'',  todo - undated. [online]. Available: \href{https://www.openchargealliance.org/about-us/appraisal-ocpp/}{\color{blue}{\underline{https://www.openchargealliance.org/about-us/appraisal-ocpp/}}}. [Accessed June 22, 2019]. \\
+% M. Electronic(IEEEtran.bst extension)Supported    fields:author,month,year,title,language,howpublished,organization,address,note,url.
+@Electronic{OCAappraisal,
+  organization = {OpenChargeAlliance.org},
+  title        = "``{Appraisal} {OCPP}''",
+  note         = {{Accessed: June 22, 2019}},
+  url          = "www.openchargealliance.org/about-us/appraisal-ocpp/",
+}
+
+% https://www.openchargealliance.org/downloads/
+@Electronic{ocpp,
+  organization = {OpenChargeAlliance.org},
+  title        = "``{OCA OCPP 2.0 Part 0 - Introduction}''",
+  note         = {{Accessed: June 22, 2019}},
+  url          = "https://www.openchargealliance.org/downloads/",
+}
+
+% https://www.openchargealliance.org/downloads/
+@Electronic{ocpp1,
+  organization = {OpenChargeAlliance.org},
+  title        = "``{OCA OCPP 2.0 Part 1 - Architecture \& Topology}''",
+  note         = {{Accessed: June 22, 2019}},
+  url          = "https://www.openchargealliance.org/downloads/",
+}
+
+% https://www.openchargealliance.org/downloads/
+@Electronic{ocpp2a,
+  organization = {OpenChargeAlliance.org},
+  title        = "``{OCA OCPP 2.0 Part 2 - Appendices}''",
+  note         = {{Accessed: June 22, 2019}},
+  url          = "https://www.openchargealliance.org/downloads/",
+}
+
+% https://www.openchargealliance.org/downloads/
+@Electronic{ocpp2b,
+  organization = {OpenChargeAlliance.org},
+  title        = "``{OCA OCPP 2.0 Part 2 - Specification}''",
+  note         = {{Accessed: June 22, 2019}},
+  url          = "https://www.openchargealliance.org/downloads/",
+}
+
+% https://www.openchargealliance.org/downloads/
+@Electronic{ocpp4,
+  organization = {OpenChargeAlliance.org},
+  title        = "``{OCA OCPP 2.0 Part 4 - OCPP-J Specification}''",
+  note         = {{Accessed: June 22, 2019}},
+  url          = "https://www.openchargealliance.org/downloads/",
+}
+
+% https://github.com/verifast/verifast/
+@Electronic{VeriFast,
+  organization = {VeriFast},
+  title        = "``{Research prototype tool for modular formal verification of C and Java programs}''",
+  note         = {{Accessed:} June 22, 2019},
+  url          = "https://github.com/verifast/verifast/",
+}
+
+% Featherweight Verifast
+%A. Article Supportedfields:author,title,language,journal,volume,number,pages,month,year,note,url.
+@Article{FeatherweightVerifast,
+  author = {F. Vogels and B. Jacobs and F. Piessens}, 
+  title  = {{Featherweight Verifast}}, 
+  journal = {Logical Methods in Computer Science},
+  volume = {11},
+  number = {3:19},
+  pages = {1–57},
+  year = {2015},
+  url = {https://lmcs.episciences.org/1595},
+}
+
+% http://www.openjml.org/
+%\bibitem{openjmlwebsite} OpenJML, ``Does your program do what it is supposed to do?'', http://www.openjml.org, todo - undated. [online]. Available: \href{http://www.openjml.org/}{\color{blue}{\underline{http://www.openjml.org/}}}. [Accessed June 22, 2019]. \\
+%2. This is the website for the OpenJML verification tool.\\
+@Electronic{openjml,
+  organization = {OpenJML},
+  title        = "``{Does your program do what it is supposed to do?}''",
+  note         = {{Accessed: June 22, 2019}},
+  url          = "https://github.com/verifast/verifast/",
+}
+
+@inproceedings{CokD.R.2014OSvf,
+issn = {20752180},
+journal = {Electronic Proceedings in Theoretical Computer Science, EPTCS},
+pages = {79--92},
+volume = {149},
+publisher = {Open Publishing Association},
+year = {2014},
+title = {{OpenJML}: Software verification for {Java} 7 using {JML}, {OpenJDK}, and {Eclipse}},
+copyright = {Copyright 2015 Elsevier B.V., All rights reserved.},
+author = {Cok, D.R.},
+keywords = {Computer Science - Software Engineering ; Computer Science - Logic In Computer Science ; Computer Science - Programming Languages;},
+}
+
+% https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/
+%\bibitem{vccwebsite} M. Moskal, ``VCC: A Verifier for Concurrent C'', microsoft.com, December 10, 2008. [online]. Available: \href{https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/}{\color{blue}{\underline{https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/}}}. [Accessed June 22, 2019]. \\
+%2. This is the website for the VCC verification tool.\\
+@Electronic{vcc,
+  organization = {Microsoft},
+  title        = "``{VCC: A Verifier for Concurrent C}''",
+  note         = {{Accessed:June 22, 2019}},
+  url          = "https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/",
+}
+
+% A practical verification methodology for concurrent programs
+@TechReport{vcc2,
+  author = {E. Cohen and S. Tobies and M. Moskal and W. Schulte}, 
+  title     = {{A Practical Verification Methodology for Concurrent Programs}},
+  year      = {2009},
+  month     = {February 12},
+  institution = {Microsoft Research},
+  address   = {1 Microsoft Way, Redmond, WA},
+  url       = "https://www.microsoft.com/en-us/research/publication/a-practical-verification-methodology-for-concurrent-programs/",
+  note      = {Accessed: June 22, 2019},
+}
+% Verifying C Programs: A VCC Tutorial
+@TechReport{vcctutorial,
+  author = {E. Cohen and M. Hillebrand and S. Tobies and M. Moskal and W. Schulte}, 
+  title     = {{Verifying C Programs: A VCC Tutorial}},
+  year      = {2015},
+  month     = {July 10},
+  institution = {University of Freiburg},
+  address   = {Leuven, Belgium},
+  url       = "https://swt.informatik.uni-freiburg.de/teaching/SS2015/swtvl/Resources/literature/vcc-tutorial-col2.pdf",
+  note      = {Accessed: June 22, 2019},
+}
+
+@inproceedings{0e6db16b44c94a84a74afdb7ee00ce3b,
+title = "Tool support for correctness-by-construction",
+abstract = "Correctness-by-Construction (CbC) is an approach to incrementally create formally correct programs guided by pre- and postcondition specifications. A program is created using refinement rules that guarantee the resulting implementation is correct with respect to the specification. Although CbC is supposed to lead to code with a low defect rate, it is not prevalent, especially because appropriate tool support is missing. To promote CbC, we provide tool support for CbC-based program development. We present CorC, a graphical and textual IDE to create programs in a simple while-language following the CbC approach. Starting with a specification, our open source tool supports CbC developers in refining a program by a sequence of refinement steps and in verifying the correctness of these refinement steps using the theorem prover KeY. We evaluated the tool with a set of standard examples on CbC where we reveal errors in the provided specification. The evaluation shows that our tool reduces the verification time in comparison to post-hoc verification.",
+author = "Tobias Runge and Ina Schaefer and Loek Cleophas and Thomas Th{\"u}m and Derrick Kourie and Watson, {Bruce W.}",
+year = "2019",
+month = "1",
+day = "1",
+doi = "10.1007/978-3-030-16722-6_2",
+language = "English",
+isbn = "9783030167219",
+series = "Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)",
+publisher = "Springer",
+pages = "25--42",
+editor = "Reiner H{\"a}hnle and {van der Aalst}, Wil",
+booktitle = "Fundamental Approaches to Software Engineering - 22nd International Conference, FASE 2019, Held as Part of the European Joint Conferences on Theory and Practice of Software, ETAPS 2019, Proceedings",
+address = "Germany",
+}
+
+@inproceedings{bobot:hal-00790310,
+  TITLE = {{Why3: Shepherd Your Herd of Provers}},
+  AUTHOR = {Bobot, Fran{\c c}ois and Filli{\^a}tre, Jean-Christophe and March{\'e}, Claude and Paskevich, Andrei},
+  URL = {https://hal.inria.fr/hal-00790310},
+  BOOKTITLE = {{Boogie 2011: First International Workshop on Intermediate Verification Languages}},
+  ADDRESS = {Wroclaw, Poland},
+  PAGES = {53-64},
+  YEAR = {2011},
+  PDF = {https://hal.inria.fr/hal-00790310/file/main.pdf},
+  HAL_ID = {hal-00790310},
+  HAL_VERSION = {v1},
+}
+
+@inproceedings{filliatre:hal-00789533,
+  TITLE = {{Why3 -- Where Programs Meet Provers}},
+  AUTHOR = {Filli{\^a}tre, Jean-Christophe and Paskevich, Andrei},
+  URL = {https://hal.inria.fr/hal-00789533},
+  BOOKTITLE = {{ESOP'13 22nd European Symposium on Programming}},
+  ADDRESS = {Rome, Italy},
+  PUBLISHER = {{Springer}},
+  SERIES = {LNCS},
+  VOLUME = {7792},
+  YEAR = {2013},
+  MONTH = Mar,
+  PDF = {https://hal.inria.fr/hal-00789533/file/main.pdf},
+  HAL_ID = {hal-00789533},
+  HAL_VERSION = {v1},
+}
+
+@misc{JuhaszUri2014VAVI,
+abstract = {<p>The automation of verification techniques based on firstorder logic specifications has benefited greatly from verification infrastructures such as Boogie and Why. These offer an intermediate language that can express diverse language features and verification techniques, as well as back-end tools such as verification condition generators. However, these infrastructures are not well suited for verification techniques based on separation logic and other permission logics, because they do not provide direct support for permissions and because existing tools for these logics often prefer symbolic execution over verification condition generation. Consequently, tool support for these logics is typically developed independently for each technique, dramatically increasing the burden of developing automatic tools for permission-based verification. In this paper, we present a verification infrastructure whose intermediate language supports an expressive permission model natively. We provide tool support, including two back-end verifiers, one based on symbolic execution, and one on verification condition generation; this facilitates experimenting with the two prevailing techniques in automated verification. Various existing verification techniques can be implemented via this infrastructure, alleviating much of the burden of building permissionbased verifiers, and allowing the developers of higher-level techniques to focus their efforts at the appropriate level of abstraction.</p>},
+publisher = {ETH-Zürich},
+year = {2014},
+title = {Viper: A Verification Infrastructure for Permission-Based Reasoning},
+language = {eng},
+author = {Juhasz, Uri and Kassios, Ioannis T and Müller, Peter and Novacek, Milos and Schwerhoff, Malte and Summers, Alexander J},
+keywords = {Verification (Software Engineering) ; Verifikation (Software Engineering) ; Data Processing, Computer Science},
+}
+
+@book{KeYBook2016dd,
+  editor       = {Wolfgang Ahrendt and Bernhard Beckert and Richard Bubel and Reiner H\"ahnle and Peter H. Schmitt and Mattias Ulbrich},
+  title        = {Deductive Software Verification - The KeY Book: From Theory to Practice},
+  series       = {Lecture Notes in Computer Science},
+  volume       = {10001},
+  publisher    = {Springer},
+  url          = {http://dx.doi.org/10.1007/978-3-319-49812-6},
+  doi          = {10.1007/978-3-319-49812-6},
+  year         = {2016},
+}
+
+@incollection{BarnettMike2005TSPS,
+series = {Lecture Notes in Computer Science},
+abstract = {<p>The Spec# programming system is a new attempt at a more cost effective way to develop and maintain high-quality software. This paper describes the goals and architecture of the Spec# programming system, consisting of the object-oriented Spec# programming language, the Spec# compiler, and the Boogie static program verifier. The language includes constructs for writing specifications that capture programmer intentions about how methods and data are to be used, the compiler emits run-time checks to enforce these specifications, and the verifier can check the consistency between a program and its specifications.</p>},
+pages = {49--69},
+volume = {3362},
+publisher = {Springer Berlin Heidelberg},
+booktitle = {Construction and Analysis of Safe, Secure, and Interoperable Smart Devices: International Workshop, CASSIS 2004, Marseille, France, March 10-14, 2004, Revised Selected Papers},
+isbn = {9783540242871},
+year = {2005},
+title = {The {Spec\#} Programming System: An Overview},
+language = {eng},
+address = {Berlin, Heidelberg},
+author = {Barnett, Mike and Leino, K Rustan M and Schulte, Wolfram},
+keywords = {Computer Science ; Software Engineering ; Special Purpose and Application-Based Systems ; Programming Techniques ; Programming Languages, Compilers, Interpreters ; Operating Systems ; Logics and Meanings of Programs ; Engineering ; Computer Science},
+}
+
+@inproceedings{LeinoK.R.M.2010DAap,
+issn = {03029743},
+journal = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+pages = {348--370},
+volume = {6355},
+isbn = {3642175104},
+year = {2010},
+title = {Dafny: An automatic program verifier for functional correctness},
+copyright = {Copyright 2011 Elsevier B.V., All rights reserved.},
+author = {Leino, K.R.M.},
+}
+
+@inproceedings{UttingM.2017Mwb,
+issn = {03029743},
+journal = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+pages = {69--84},
+volume = {10510},
+publisher = {Springer Verlag},
+isbn = {9783319668444},
+year = {2017},
+title = {Making {Whiley} {Boogie}!},
+copyright = {Copyright 2017 Elsevier B.V., All rights reserved.},
+author = {Utting, M. and Pearce, D.J. and Groves, L.},
+keywords = {Boogie ; Impedance Mismatch ; Intermediate Verification Language ; Semantic Translation ; Verifying Compiler ; Whiley},
+}
+
+@InProceedings{10.1007/978-3-319-02654-1_13,
+author="Pearce, David J.
+and Groves, Lindsay",
+editor="Erwig, Martin
+and Paige, Richard F.
+and Van Wyk, Eric",
+title="Whiley: A Platform for Research in Software Verification",
+booktitle="Software Language Engineering",
+year="2013",
+publisher="Springer International Publishing",
+address="Cham",
+pages="238--248",
+abstract="An ongoing challenge for computer science is the development of a tool which automatically verifies programs meet their specifications, and are free from runtime errors such as divide-by-zero, array out-of-bounds and null dereferences. Several impressive systems have been developed to this end, such as ESC/Java and Spec{\#}, which build on existing programming languages (e.g. Java, C{\#}). However, there remains a need for an open research platform in this area. We have developed the Whiley programming language, and its accompanying verifying compiler, as an open platform for research. Whiley has been designed from the ground up to simplify the verification process. In this paper, we introduce the Whiley language and it accompanying verifying compiler tool.",
+isbn="978-3-319-02654-1"
+}
+
+@book{McCormickJohnW.2015Bhia,
+issn = {97811070},
+abstract = {The formally defined programming language SPARK provides a means to guarantee that a computer program has no errors. This makes it a natural system for designing safety - and security - critical applications. This first introduction to SPARK 2014 will allow students and developers to master the basic concepts for building systems with SPARK. Software is pervasive in our lives. We are accustomed to dealing with the failures of much of that software - restarting an application is a very familiar solution. Such solutions are unacceptable when the software controls our cars, airplanes and medical devices or manages our private information. These applications must run without error. SPARK provides a means, based on mathematical proof, to guarantee that a program has no errors. SPARK is a formally defined programming language and a set of verification tools specifically designed to support the development of software used in high integrity applications. Using SPARK, developers can formally verify properties of their code such as information flow, freedom from runtime errors, functional correctness, security properties and safety properties. Written by two SPARK experts, this is the first introduction to the just-released 2014 version. It will help students and developers alike master the basic concepts for building systems with SPARK.},
+isbn = {9781107040731},
+year = {2015},
+title = {Building High Integrity Applications with SPARK},
+language = {eng},
+author = {McCormick, John W.},
+keywords = {Spark (Computer Program Language) ; Fault-Tolerant Computing ; Computers And It ; Information Technology: General Issues ; Software Engineering ; Business Applications ; Programming &Amp;Amp Amp Scripting Languages: General ; Computer Science},
+lccn = {2015014814},
+}
+
+@Electronic{OCAappraisal,
+  organization = {OpenChargeAlliance.org},
+  title        = "``{Appraisal} {OCPP}''",
+  note         = {{Accessed: June 22, 2019}},
+  url          = "www.openchargealliance.org/about-us/appraisal-ocpp/",
+}
+
+%Revolutionary Artificial Heart https://www.adacore.com/press/scandinavian-real-heart-selects-adacore-embedded-software-development-platform-for-revolutionary-artificial-heart
+@Electronic{spark01,
+  organization = {AdaCore},
+  title        = "``{Revolutionary Artificial Heart}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/scandinavian-real-heart-selects-adacore-embedded-software-development-platform-for-revolutionary-artificial-heart",
+}
+ 	
+ 
+%MDA Selects AdaCore’s GNAT Pro Assurance Development Platform for International Space Station Software	https://www.adacore.com/press/mda-gnatpro-space-station
+@Electronic{spark02,
+  organization = {AdaCore},
+  title        = "``{MDA Selects AdaCore’s GNAT Pro Assurance Development Platform for International Space Station Software}''",
+  note         = {{Accessed: Aug 17, 2019}},
+  url          = "www.adacore.com/press/mda-gnatpro-space-station",
+}
+ 	
+%MHI Aerospace Systems Corp. Selects AdaCore’s QGen for Model-Based Development	https://www.adacore.com/press/mhi-aerospace-systems-qgen
+@Electronic{spark03,
+  organization = {AdaCore},
+  title        = "``{MHI Aerospace Systems Corp. Selects AdaCore’s QGen for Model-Based Development}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/mhi-aerospace-systems-qgen",
+}
+ 	
+%Ada on Board: GNAT Pro Helps ExoMars Get to the Red Planet	https://www.adacore.com/press/ada-on-board-gnat-pro-helps-exomars-get-to-the-red-planet
+@Electronic{spark04,
+  organization = {AdaCore},
+  title        = "``{Ada on Board: GNAT Pro Helps ExoMars Get to the Red Planet}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/ada-on-board-gnat-pro-helps-exomars-get-to-the-red-planet",
+}
+ 	
+%AdaCore’s CodePeer Selected for Digital Terrain System Requiring DO-178B Certification	https://www.adacore.com/press/codepeer-do178b-certification
+@Electronic{spark05,
+  organization = {AdaCore},
+  title        = "``{AdaCore’s CodePeer Selected for Digital Terrain System Requiring DO-178B Certification}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/codepeer-do178b-certification",
+}
+ 	
+%French Agency DGA Selects AdaCore’s GNAT Pro with SQUORE Technology	https://www.adacore.com/press/dga-gnat-pro-squore-technology
+@Electronic{spark06,
+  organization = {AdaCore},
+  title        = "``{French Agency DGA Selects AdaCore’s GNAT Pro with SQUORE Technology}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/dga-gnat-pro-squore-technology",
+}
+ 	
+%SPARK Going to the Moon	https://www.adacore.com/press/spark-going-to-the-moon
+@Electronic{spark07,
+  organization = {AdaCore},
+  title        = "``{SPARK Going to the Moon}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/spark-going-to-the-moon",
+}
+ 	
+%AdaCore Development Environment Selected for New Spanish Satellite Project	https://www.adacore.com/press/spanish-satellite-project
+@Electronic{spark08,
+  organization = {AdaCore},
+  title        = "``{AdaCore Development Environment Selected for New Spanish Satellite Project}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/spanish-satellite-project",
+}
+ 	
+%SmartWard Pty Ltd Selects AdaCore Tools for Hospital Information System Development	https://www.adacore.com/press/smartward-hospital-information-system
+@Electronic{spark09,
+  organization = {AdaCore},
+  title        = "``{SmartWard Pty Ltd Selects AdaCore Tools for Hospital Information System Development}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/smartward-hospital-information-system",
+}
+ 	
+%Deep Blue Capital Selects AdaCore Products for Financial System Development	https://www.adacore.com/press/deep-blue-capital-financial-system-development
+@Electronic{spark10,
+  organization = {AdaCore},
+  title        = "``{Deep Blue Capital Selects AdaCore Products for Financial System Development}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/deep-blue-capital-financial-system-development",
+}
+ 	
+@Electronic{sparkstudents,
+  organization = {AdaCore},
+  title        = "``Ten Years of Using SPARK to Build CubeSat Nano Satellites With Students''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://blog.adacore.com/ten-years-of-using-spark-to-build-cubesat-nano-satellites-with-students",
+}
+ 	
+%AdaCore and Altran Toolsets Help Launch CubeSat into Orbit	https://www.adacore.com/press/cubesat
+@Electronic{spark11,
+  organization = {AdaCore},
+  title        = "``{AdaCore and Altran Toolsets Help Launch CubeSat into Orbit}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/cubesat",
+}
+ 	
+%Astrium Selects AdaCore’s GNAT Pro and PolyORB for International Space Station	https://www.adacore.com/press/astrium-polyorb
+@Electronic{spark12,
+  organization = {AdaCore},
+  title        = "``{Astrium Selects AdaCore’s GNAT Pro and PolyORB for International Space Station}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/astrium-polyorb",
+}
+ 	
+%TOYOTA ITC Japan Selects SPARK Pro Language and Toolset for High-Reliability Research Project	https://www.adacore.com/press/toyota-itc-japan-selects-spark-pro-language-and-toolset-for-high-reliabilit
+@Electronic{spark13,
+  organization = {AdaCore},
+  title        = "``{TOYOTA ITC Japan Selects SPARK Pro Language and Toolset for High-Reliability Research Project}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/toyota-itc-japan-selects-spark-pro-language-and-toolset-for-high-reliabilit",
+}
+ 	
+%GNAT Pro Safety-Critical used by Terma A/S for Space Monitor Project 	https://www.adacore.com/press/terma
+@Electronic{spark14,
+  organization = {AdaCore},
+  title        = "``{GNAT Pro Safety-Critical used by Terma A/S for Space Monitor Project}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/terma",
+}
+ 	
+%Rockwell Collins Develops SecureOne™ with SPARK Pro and GNAT Pro High-Security	https://www.adacore.com/press/secureone
+@Electronic{spark15,
+  organization = {AdaCore},
+  title        = "``{Rockwell Collins Develops SecureOne™ with SPARK Pro and GNAT Pro High-Security}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/secureone",
+}
+ 	
+%SmartSide Adopts Ada and GNAT Pro for Smart Devices Platform	https://www.adacore.com/press/smartside-adopts-ada-gnat-pro
+@Electronic{spark16,
+  organization = {AdaCore},
+  title        = "``{SmartSide Adopts Ada and GNAT Pro for Smart Devices Platform}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/smartside-adopts-ada-gnat-pro",
+}
+ 	
+%Saab Electronic Defence Systems Adopts CodePeer	https://www.adacore.com/press/saab-electronic-defence-systems-adopts-codepeer
+@Electronic{spark17,
+  organization = {AdaCore},
+  title        = "``{Saab Electronic Defence Systems Adopts CodePeer}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/saab-electronic-defence-systems-adopts-codepeer",
+}
+ 	
+%Eurocopter Selects GNAT Pro for Military Helicopter ARINC 653 Project 	https://www.adacore.com/press/arinc-653-project
+@Electronic{spark18,
+  organization = {AdaCore},
+  title        = "``{Eurocopter Selects GNAT Pro for Military Helicopter ARINC 653 Project}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/arinc-653-project",
+}
+ 	
+%Embraer Selects Ada and AdaCore’s GNAT Pro for AMX Upgrade	https://www.adacore.com/press/embraer-amx-upgrade
+@Electronic{spark19,
+  organization = {AdaCore},
+  title        = "``{Embraer Selects Ada and AdaCore’s GNAT Pro for AMX Upgrade}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/embraer-amx-upgrade",
+}
+ 	
+%Digicomp Shows Continuing Success with Ada and GNAT Pro	https://www.adacore.com/press/digicomp-success
+@Electronic{spark20,
+  organization = {AdaCore},
+  title        = "``{Digicomp Shows Continuing Success with Ada and GNAT Pro}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/digicomp-success",
+}
+ 	
+%Siemens Switzerland Selects AdaCore Toolset for Railway Project siemens-railway	https://www.adacore.com/press/siemens-railway
+@Electronic{spark21,
+  organization = {AdaCore},
+  title        = "``{Siemens Switzerland Selects AdaCore Toolset for Railway Project siemens-railway}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/siemens-railway",
+}
+ 	
+%Case Studies : Singo Solution	https://www.contactcenterworld.com/view/contact-center-case-study/singo-solution.aspx
+@Electronic{spark22,
+  organization = {AdaCore},
+  title        = "``{Singo Solution}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.contactcenterworld.com/view/contact-center-case-study/singo-solution.aspx",
+}
+ 	
+%Thales Selects AdaCore Toolset for Argos Satellite Project	https://www.adacore.com/press/thales-argos-satellite
+@Electronic{spark23,
+  organization = {AdaCore},
+  title        = "``{Thales Selects AdaCore Toolset for Argos Satellite Project}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/thales-argos-satellite",
+}
+ 	
+%GNAT Pro Chosen for UK’s Next Generation ATC System	https://www.adacore.com/press/adacore-gnat-pro-chosen-for-uk-next-generation
+@Electronic{spark24,
+  organization = {AdaCore},
+  title        = "``{GNAT Pro Chosen for UK’s Next Generation ATC System}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/adacore-gnat-pro-chosen-for-uk-next-generation",
+}
+ 	
+%Barco selects GNAT Pro for Advanced Avionics Applications	https://www.adacore.com/press/barco
+@Electronic{spark25,
+  organization = {AdaCore},
+  title        = "``{Barco selects GNAT Pro for Advanced Avionics Applications}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/barco",
+}
+ 	
+%Rockwell Collins Selects GNAT Pro for Advanced Avionics Display System	https://www.adacore.com/press/rockwell-avionics-display
+@Electronic{spark26,
+  organization = {AdaCore},
+  title        = "``{Rockwell Collins Selects GNAT Pro for Advanced Avionics Display System}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/rockwell-avionics-display",
+}
+ 	
+%EADS CASA Selects AdaCore Toolset for nEUROn Unmanned Aircraft	https://www.adacore.com/press/neuron-unmanned-aircraft
+@Electronic{spark27,
+  organization = {AdaCore},
+  title        = "``{EADS CASA Selects AdaCore Toolset for nEUROn Unmanned Aircraft}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/neuron-unmanned-aircraft",
+}
+ 	
+%Case Study EADS CASA In-flight Refuelling Boom System https://www.adacore.com/uploads/customers/CaseStudy_Boom.pdf
+@Electronic{spark28,
+  organization = {AdaCore},
+  title        = "``{Case Study EADS CASA In-flight Refuelling Boom System}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/uploads/customers/CaseStudy\_Boom.pdf",
+}
+ 	
+%SPARK Pro Adopted by secunet	https://www.adacore.com/press/spark-pro-secunet
+@Electronic{spark29,
+  organization = {AdaCore},
+  title        = "``{SPARK Pro Adopted by secunet}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/spark-pro-secunet",
+}
+ 	
+%Hamilton Sundstrand Selects GNAT Pro For Boeing 787 Air Conditioning Control Unit	https://www.adacore.com/press/hamilton-sundstrand-boeing-air-conditioning
+@Electronic{spark30,
+  organization = {AdaCore},
+  title        = "``{Hamilton Sundstrand Selects GNAT Pro For Boeing 787 Air Conditioning Control Unit}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/hamilton-sundstrand-boeing-air-conditioning",
+}
+ 	
+%Lockheed Martin Selects GNAT Pro for C-130J Software	https://www.adacore.com/press/a350
+@Electronic{spark31,
+  organization = {AdaCore},
+  title        = "``{Lockheed Martin Selects GNAT Pro for C-130J Software}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/a350",
+}
+ 	
+%Thales Aerospace Division Selects GNAT Pro for Airbus A350 XWB (Xtra Wide-Body)	https://www.adacore.com/press/astrium
+@Electronic{spark32,
+  organization = {AdaCore},
+  title        = "``{Thales Aerospace Division Selects GNAT Pro for Airbus A350 XWB (Xtra Wide-Body)}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/astrium",
+}
+ 	
+%Astrium in the UK Selects GNAT Pro for Environmental Satellite System	https://www.adacore.com/customers/astute-class-submarine-periscope
+@Electronic{spark33,
+  organization = {AdaCore},
+  title        = "``{Astrium in the UK Selects GNAT Pro for Environmental Satellite System}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/customers/astute-class-submarine-periscope",
+}
+ 	
+%Wind River Powers New Generation of Periscope on Royal Navy’s Next-Generation Astute Class Submarines https://www.adacore.com/uploads/customers/adacore_casestudy_uret.pdf
+@Electronic{spark34,
+  organization = {AdaCore},
+  title        = "``{Wind River Powers New Generation of Periscope on Royal Navy’s Next-Generation Astute Class Submarines}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/uploads/customers/adacore\_casestudy\_uret.pdf",
+}
+ 	
+%Protecting Navy Vessels with Ship Anti-Air Warfare Capability	https://www.raytheon.com/capabilities/products/ssds
+@Electronic{spark35,
+  organization = {AdaCore},
+  title        = "``{Protecting Navy Vessels with Ship Anti-Air Warfare Capability}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.raytheon.com/capabilities/products/ssds",
+}
+ 	
+%AdaCore Helps AAI Upgrade the T25 SECT Electronic Combat Trainer	https://www.adacore.com/press/adacore-helps-aai-upgrade-the-t25-sect-electronic-combat-trainer
+@Electronic{spark36,
+  organization = {AdaCore},
+  title        = "``{AdaCore Helps AAI Upgrade the T25 SECT Electronic Combat Trainer}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/adacore-helps-aai-upgrade-the-t25-sect-electronic-combat-trainer",
+}
+ 	
+%AVIO Selects AdaCore’s GNAT Pro Assurance Toolsuite for European Space Agency Program	https://www.adacore.com/press/avio-selects-adacores-gnat-pro-assurance-toolsuite-for-european-space-agency-program
+@Electronic{spark37,
+  organization = {AdaCore},
+  title        = "``{AVIO Selects AdaCore’s GNAT Pro Assurance Toolsuite for European Space Agency Program}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/avio-selects-adacores-gnat-pro-assurance-toolsuite-for-european-space-agency-program",
+}
+ %Wind River Teams with AdaCore on Safety-Critical ARINC 653 for use in Boeing 7E7	https://www.adacore.com/press/arinc-653
+@Electronic{spark38,
+  organization = {AdaCore},
+  title        = "``{Wind River Teams with AdaCore on Safety-Critical ARINC 653 for use in Boeing 7E7}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/arinc-653",
+}
+ 	
+%Case Study BAE Systems Eurofighter Typhoon	https://www.adacore.com/customers/eurofighter-typhoon
+@Electronic{spark39,
+  organization = {AdaCore},
+  title        = "``{Case Study BAE Systems Eurofighter Typhoon}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/customers/eurofighter-typhoon",
+}
+
+%AdaCore Enhances Security-Critical Firmware with NVIDIA	https://www.adacore.com/press/adacore-enhances-security-critical-firmware-with-nvidia
+@Electronic{spark40,
+  organization = {AdaCore},
+  title        = "``{AdaCore Enhances Security-Critical Firmware with NVIDIA}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/adacore-enhances-security-critical-firmware-with-nvidia",
+}
+  	
+%Case Study Pilot Ejection Seat https://www.adacore.com/customers/pilot-ejection-seat
+@Electronic{spark41,
+  organization = {AdaCore},
+  title        = "``{Case Study Pilot Ejection Seat}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/customers/pilot-ejection-seat",
+}
+ 	
+%Case Study MDA - Canadian Space Arm https://www.adacore.com/uploads/customers/CaseStudy_SpaceArm.pdf
+@Electronic{spark42,
+  organization = {AdaCore},
+  title        = "``{Case Study MDA - Canadian Space Arm}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/uploads/customers/CaseStudy\_SpaceArm.pdf",
+}
+ 	
+%University of Colorado’s Laboratory for Atmospheric and Space Physics adopts Ada and GNAT Pro for NASA project	https://www.adacore.com/press/lasp-selects-gnat-pro-for-clarreo
+@Electronic{spark43,
+  organization = {AdaCore},
+  title        = "``{University of Colorado’s Laboratory for Atmospheric and Space Physics adopts Ada and GNAT Pro for NASA project}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/lasp-selects-gnat-pro-for-clarreo",
+}
+ 	
+%DENSO Using SPARK Technology for Automotive Research Project	https://www.adacore.com/press/denso-spark-automotive-research
+@Electronic{spark44,
+  organization = {AdaCore},
+  title        = "``{DENSO Using SPARK Technology for Automotive Research Project}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = ""https://www.adacore.com/press/denso-spark-automotive-research,
+}
+ 	
+%Ada on Board: Thales Using AdaCore’s GNAT Pro for Critical Avionics Software	https://www.adacore.com/press/ada-on-board-thales-using-adacores-gnat-pro-for-critical-avionics-software
+@Electronic{spark45,
+  organization = {AdaCore},
+  title        = "``{Ada on Board: Thales Using AdaCore’s GNAT Pro for Critical Avionics Software}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.adacore.com/press/ada-on-board-thales-using-adacores-gnat-pro-for-critical-avionics-software",
+}
+ 	
+$https://github.com/dafny-lang/dafny/wiki/FAQ
+@Electronic{dafny01,
+  organization = {Microsoft},
+  title        = "``{Dafny FAQ}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://github.com/dafny-lang/dafny/wiki/FAQ",
+}
+
+%https://www.microsoft.com/en-us/research/project/dafny-a-language-and-program-verifier-for-functional-correctness/
+@Electronic{dafny02,
+  organization = {Microsoft},
+  title        = "``{Dafny: A Language and Program Verifier for Functional Correctness}''",
+  note         = {{Accessed:} Aug 17, 2019},
+  url          = "https://www.microsoft.com/en-us/research/project/dafny-a-language-and-program-verifier-for-functional-correctness/",
+}
+
+%spec# https://www.microsoft.com/en-us/research/project/spec/
+@Electronic{spec01,
+  organization = {Microsoft},
+  title        = "``{Spec\#}''",
+  note         = {{Accessed:} Aug 18, 2019},
+  url          = "https://www.microsoft.com/en-us/research/project/spec/",
+}
+
+%https://github.com/microsoft/vcc/blob/master/LICENSE 
+@Electronic{vcc01,
+  organization = {Microsoft},
+  title        = "``{VCC License}''",
+  note         = {{Accessed:} Aug 18, 2019},
+  url          = "https://github.com/microsoft/vcc/blob/master/LICENSE",
+}
+	
+%https://github.com/verifast/verifast/blob/master/LICENSE.md
+@Electronic{verifastlicense,
+  organization = {Katholieke Universiteit Leuven},
+  title        = "``{VeriFast License}''",
+  note         = {{Accessed:} Aug 18, 2019},
+  url          = "https://github.com/verifast/verifast/blob/master/LICENSE.md",
+}
+
+@article{PhilippaertsPieter2014SvwV,
+issn = {0167-6423},
+abstract = {In this article, we present a series of four industrial case studies in software verification. We applied VeriFast, a sound and modular software verifier based on separation logic, to two Java Card smart card applets, a Linux device driver, and an embedded Linux network management component, the latter two written in C. Our case studies have been carefully selected so as to evaluate the industrial applicability of VeriFast. We focus on proving the absence of safety violations, e.g., that the programs do not perform illegal operations such as dividing by zero or illegal memory accesses. Yet, given the sensitive application environment of our case studies, these safety properties typically have security implications. In this article we give a detailed description of the VeriFast approach to software verification based on two of the above case studies, one in Java and one in C. Finally, we draw conclusions on the overall feasibility of using VeriFast to verify software components in industrial domains that have stringent requirements on reliability and security. ► We have verified 4 industrial case studies (Java Card and C code) using the VeriFast software verifier. ► We report on the findings (i.e. number of bugs found, time needed to annotate, verification time, etc.). ► We conclude that verification of industrial code is feasible. ► We give guidance on how to approach similar verification projects with VeriFast.},
+journal = {Science of Computer Programming},
+pages = {77--97},
+volume = {82},
+publisher = {Elsevier B.V.},
+number = {C},
+year = {2014},
+title = {Software verification with VeriFast: Industrial case studies},
+language = {eng},
+author = {Philippaerts, Pieter and Mühlberg, Jan Tobias and Penninckx, Willem and Smans, Jan and Jacobs, Bart and Piessens, Frank},
+keywords = {Software Verification ; Industrial Case Studies ; Verifast},
+}
+%https://www.pm.inf.ethz.ch/research/viper.html
+@Electronic{viper01,
+  organization = {ETH Zurich},
+  title        = "``{Viper}''",
+  note         = {{Accessed:} Aug 18, 2019},
+  url          = "https://www.pm.inf.ethz.ch/research/viper.html",
+}
+
+@inproceedings{Eilers2018NaginiAS,
+  title={Nagini: A Static Verifier for Python},
+  author={Marco Eilers and Peter M{\"u}ller},
+  booktitle={CAV},
+  year={2018}
+}
+
+@techreport{AstrauskasMuellerPoliSummers19,
+ author = {V. Astrauskas and P. M\"uller and F. Poli and A. J. Summers},
+ title = {Leveraging {R}ust Types for Modular Specification and Verification},
+ institution = {ETH Zurich},
+ year = {2019},
+ doi = {10.3929/ethz-b-000311092},
+}
+
+https://bitbucket.org/viperproject/carbon/src/default/LICENSE.txt
+@Electronic{viperlicense,
+  organization = {ETH Zurich},
+  title        = "``{Carbon License}''",
+  note         = {{Accessed:} Aug 18, 2019},
+  url          = "https://bitbucket.org/viperproject/carbon/src/default/LICENSE.txt",
+}
+
+%http://whiley.org/
+@Electronic{whileyhomepage,
+  organization = {Whiley},
+  title        = "``{Whiley A Programming Language with Extended Static Checking}''",
+  note         = {{Accessed:} Aug 18, 2019},
+  url          = "http://whiley.org/",
+}
+
+%http://why3.lri.fr/
+@Electronic{why3homepage,
+  organization = {Why3},
+  title        = "``{Why3 Where Programs Meet Provers}''",
+  note         = {{Accessed:} Aug 18, 2019},
+  url          = "http://why3.lri.fr/",
+}
+% IEA Global EV Outlook 2019
+%\bibitem{ieaglobalevoutlook} International Energy Agency, ``Global EV Outlook 2019'', \textit{International Energy Agency}, May 2019. Available: \href{https://webstore.iea.org/global-ev-outlook-2019}{\color{blue}{\underline{https://webstore.iea.org/global-ev-outlook-2019}}}. [Accessed June 25, 2019]. \\
+
+%%
