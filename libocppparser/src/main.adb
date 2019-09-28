@@ -11,6 +11,7 @@ procedure Main is
    Dummy : Integer := 0;
    temp: Integer := 0;
    isvalid : Boolean := false;
+   bootnotificationrequest : ocpp.BootNotifications.ptr := ocpp.BootNotifications.bnr'Access;
 
    packet: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String( ""
      & "[2," & ASCII.LF
@@ -54,9 +55,9 @@ begin
    Put(integer'Image(temp));   Put_Line("hello world");
 
    Put_Line(ocpp.packet.To_String(packet));
-   Put(ocpp.BootNotification.isa(packet)'Image);
+   Put(ocpp.BootNotifications.isa(packet)'Image);
 
-   isvalid := ocpp.BootNotification.parse(packet);
+   isvalid := ocpp.BootNotifications.parse(bootnotificationrequest, packet);
 
 
 end Main;
