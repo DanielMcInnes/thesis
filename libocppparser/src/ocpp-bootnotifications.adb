@@ -20,16 +20,6 @@ package body ocpp.BootNotifications is
       put("20: index: "); put_line(index'image);
    end findnonwhitespace;
 
-   
-   procedure trimlf(msg: out ocpp.packet.Bounded_String) is
-      temp : character :=  ocpp.packet.Element(msg, 1);
-   begin
-      while ((temp = ASCII.LF) or (temp = ' ')) loop
-         ocpp.packet.Delete(msg, 1, 1);
-         temp := ocpp.packet.Element(msg, 1);
-      end loop;      
-   end trimlf;
-
    procedure findtoken(msg: in ocpp.packet.Bounded_String;
                        index : in out Integer;
                        found : out Boolean;
@@ -160,8 +150,6 @@ package body ocpp.BootNotifications is
       dummybounded: ocpp.packet.Bounded_String;
       bootreasons : BootReasons_t;
       index: Integer := 1;            
-      package SB is new Ada.Strings.Bounded.Generic_Bounded_Length (Max => 50);
-      X : SB.Bounded_String := SB.To_Bounded_String("blah");      
    begin
       put("161 index: "); put_line(index'image);
       
@@ -274,9 +262,7 @@ package body ocpp.BootNotifications is
       
       Put_Line("hooray!"); 
       --put( ocpp.packet.Bounded_String'Max(self.vendor));
-      Put_Line (SB.To_String(X));
       --Put(X.Length'Image);
-      Put(SB.Length(X)'Image);
       Put(ocpp.packet.Length(self.vendor)'Image);
       return true;
    end parse;
