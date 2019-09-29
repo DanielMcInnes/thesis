@@ -13,18 +13,17 @@ with ocpp;
 package ocpp.BootNotifications is
    type BootNotification is tagged record
       reason: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
-      br1 : ocpp.packet.Bounded_String;
-      model: ocpp.packet.Bounded_String;
+      model:  ocpp.packet.Bounded_String;
       vendor: ocpp.packet.Bounded_String;
    end record;
-   bnr : aliased BootNotification;
-
    type ptr is access all BootNotification;
 
-   function Isa(msg: in out ocpp.packet.Bounded_String) return Boolean;
+   g_bootnotificationrequest : aliased BootNotification;
+
    function parse(self: ptr;
                   msg: in out ocpp.packet.Bounded_String) return Boolean;
-   package br is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 20);
+   --with Post => ocpp.packet.Bounded_String' --'Length(self.reason) > 0;
+
    type BootReasons_t is array(1..9) of ocpp.packet.Bounded_String;
 
 end ocpp.BootNotifications;

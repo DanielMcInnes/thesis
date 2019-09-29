@@ -7,19 +7,6 @@ with ocpp; use ocpp;
 
 package body ocpp.BootNotifications is
 
-   function Isa(msg: in out ocpp.packet.Bounded_String) return Boolean is
-      Tmp : Integer := 4;
-   begin
-      Put("IsBootNotificationRequest: ");
-      --str := Trim(msg, Left);
-      --msg := Trim_End(msg);
-      --Put_Line(ocpp.packet.To_String(msg));
-      ocpp.packet.trim(msg,Left);
-      
-      return true;
-   end IsA;
-
-    
    procedure trimlf(msg: out ocpp.packet.Bounded_String) is
       temp : character :=  ocpp.packet.Element(msg, 1);
    begin
@@ -228,7 +215,9 @@ package body ocpp.BootNotifications is
       
       retval := consumequotedstring(msg, self.vendor);
       if (retval = false) then return false; end if;
-      put("vendor: "); Put_Line(ocpp.packet.To_String(self.vendor));
+      put("vendor: "); Put_Line(ocpp.packet.To_String(self.vendor)); 
+      --put_Line(ocpp.packet.To_String(ocpp.packet.Bounded_String.Length(self.vendor)));
+                                                                                
       
       retval := consumetoken(msg, '}');
       if (retval = false) then return false; end if;
@@ -252,6 +241,7 @@ package body ocpp.BootNotifications is
 --]
       
       Put_Line("hooray!");
+      --put( ocpp.packet.Bounded_String'Max(self.vendor));
       
       return true;
    end parse;
