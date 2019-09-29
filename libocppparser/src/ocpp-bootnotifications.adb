@@ -10,27 +10,29 @@ package body ocpp.BootNotifications is
 
    procedure findnonwhitespace(msg: in ocpp.packet.Bounded_String;
                                index: in out Integer;
-                               retval: out boolean) with
-     pre => index < msg'size
+                               retval: out boolean)
+     with pre => msg'size = ocpp.packet.Bounded_String'Size and index < 500--msg'size
    is
       temp : character;
    begin
+      put("18: msg'size: "); put_line(msg'Size'Image);
+      --put("18: msg'size: "); put_line(msg. );
       if ((index <= 0) or (index > ocpp.packet.Length(msg))) then
          retval := false;
          put("20: index: "); put_line("ERROR");
          return;
       end if;
            
-      temp :=  ocpp.packet.Element(msg, index); put("24: index: "); put(index'Image); put(" temp: "); put_line(temp'image);
-      put("13: index: "); put_line(index'image);
+      temp :=  ocpp.packet.Element(msg, index); --put("24: index: "); put(index'Image); put(" temp: "); put_line(temp'image); put("13: index: "); put_line(index'image);
       while ((temp = ASCII.LF) or (temp = ' ')) loop
+         index := index + 1;
          if (index >= ocpp.packet.Length(msg)) then
             retval := false; put("28: ERROR"); put(" packet: "); Put_Line(ocpp.packet.To_String(msg));
             return;
          end if;
          
-         pragma Loop_Invariant (index in msg'Size);
-         index := index + 1;
+         pragma Loop_Invariant (index < 500);
+         
          temp := ocpp.packet.Element(msg, index);
       end loop;      
       put("20: index: "); put_line(index'image);
@@ -40,11 +42,14 @@ package body ocpp.BootNotifications is
    procedure findtoken(msg: in ocpp.packet.Bounded_String;
                        index : in out Integer;
                        found : out Boolean;
-                       token: in Character) is
+                       token: in Character) with
+     pre => index < msg'size,
+     post => index < msg'size is
       temp : character;
    begin
-      put("45: index: "); put(index'image); put(" looking for: "); put_line(token'image);
+      --put("45: index: "); put(index'image); put(" looking for: "); put_line(token'image);
       --found := false;
+
       findnonwhitespace(msg, index, found);
       put("48: index: "); put_line(index'image);
       temp := ocpp.packet.Element(msg, index);
@@ -79,7 +84,10 @@ package body ocpp.BootNotifications is
    procedure findquotedinteger(msg: in ocpp.packet.Bounded_String;
                                index : in out Integer;
                                found : out Boolean;
-                               foundInteger: in out integer) is
+                               foundInteger: in out integer)
+     with
+       pre => index < msg'size
+   is
    begin
       findnonwhitespace(msg, index, found);
       if (found = false) then
@@ -98,7 +106,7 @@ package body ocpp.BootNotifications is
          return;
       end if;
 
-      Put("111 found integer: "); Put_Line(foundInteger'Image);
+      --Put("111 found integer: "); Put_Line(foundInteger'Image);
 
       findtoken(msg, index, found, '"');
       if (found = false) then
@@ -126,8 +134,7 @@ package body ocpp.BootNotifications is
       while (temp /= '"') loop
          ocpp.packet.Append(tempstring, temp);
          index := index + 1;
-         temp := ocpp.packet.Element(msg, index);
-         Put("1found: "); Put_Line(ocpp.packet.To_String(tempstring));
+         temp := ocpp.packet.Element(msg, index); -- Put("137: found: "); Put_Line(ocpp.packet.To_String(tempstring));
       end loop;      
 
       findtoken(msg, index, found, '"');
@@ -170,8 +177,7 @@ package body ocpp.BootNotifications is
    begin
       bn.reason := ocpp.packet.To_Bounded_String("");
       bn.model := ocpp.packet.To_Bounded_String("");
-      bn.vendor := ocpp.packet.To_Bounded_String("");
-      put("161 index: "); put_line(index'image);
+      bn.vendor := ocpp.packet.To_Bounded_String(""); --put("161 index: "); put_line(index'image);
       
       findtoken(msg, index, retval, '[');
       if (retval = false) then
@@ -268,7 +274,7 @@ package body ocpp.BootNotifications is
 
       pragma Warnings (Off, "unused assignment",
                        Reason => "don't care");      
-      findtoken(msg, index, retval, ']');
+      findtoken(msg, index, retval, ']');      
       if (retval = false) then return; end if;
       pragma Warnings (On, "unused assignment");      
       --   [2,
