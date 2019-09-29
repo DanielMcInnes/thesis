@@ -38,25 +38,7 @@ procedure Main is
 --}
 --]
 
-
-   function F return Integer is
-      Tmp : constant Integer := Dummy;
-   begin
-      --Dummy := Dummy + 1;
-      return Tmp;
-   end F;
-
 begin
-
-
-
-   temp := F;
-
-   Put(integer'Image(temp));   Put_Line("hello world");
-
    Put_Line(ocpp.packet.To_String(packet));
-
    isvalid := ocpp.BootNotifications.parse(bootnotificationrequest, packet);
-
-
 end Main;

@@ -8,6 +8,19 @@ with ocpp.BootNotifications;
 
 package body ocpp.BootNotifications is
 
+   procedure findnonwhitespace(msg: in ocpp.packet.Bounded_String;
+                               index: in out Integer) is
+      temp : character :=  ocpp.packet.Element(msg, index);
+   begin
+      put("13: index: "); put_line(index'image);
+      while ((temp = ASCII.LF) or (temp = ' ')) loop
+         index := index + 1;
+         temp := ocpp.packet.Element(msg, index);
+      end loop;      
+      put("20: index: "); put_line(index'image);
+   end findnonwhitespace;
+
+   
    procedure trimlf(msg: out ocpp.packet.Bounded_String) is
       temp : character :=  ocpp.packet.Element(msg, 1);
    begin
@@ -17,94 +30,104 @@ package body ocpp.BootNotifications is
       end loop;      
    end trimlf;
 
-   function consumetoken(msg: out ocpp.packet.Bounded_String;
-                         token: in Character) return Boolean is
+   procedure findtoken(msg: in ocpp.packet.Bounded_String;
+                       index : in out Integer;
+                       found : out Boolean;
+                       token: in Character) is
       temp : character := ' ';
-      retval : Boolean := false;
-   begin      
-      trimlf(msg);
-      temp := ocpp.packet.Element(msg, 1);
-      Put_Line("found:"); put(temp); put_line("");
+   begin
+      found := false;
+      findnonwhitespace(msg, index);
+      put("39: index: "); put_line(index'image);
+      temp := ocpp.packet.Element(msg, index);
+      Put("found:"); put_line(temp'image);
       if (temp = token) then
-         retval := true;
+         found := true;
       end if;
-      ocpp.packet.Delete(msg, 1, 1);      
-      Put_Line("retval:"); put(retval'image); put_line("");
-      return retval;      
-   end consumetoken;
+      
+      index := index + 1;
+      
+   end findtoken;
    
-   function consumeinteger(msg: out ocpp.packet.Bounded_String;
-                           consumedInteger: out integer;
-                           stopatthischar: character := '"') return Boolean is
+   procedure findinteger(msg: in ocpp.packet.Bounded_String;
+                         index : in out Integer;
+                         foundInteger: out integer;
+                         found : out Boolean;
+                         stopatthischar: character := '"') is
       temp : character := ' ';
       retval : Boolean := false;
       intstring : ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
-   begin      
-      temp :=  ocpp.packet.Element(msg, 1);
+   begin
+      found := false;
+      temp :=  ocpp.packet.Element(msg, index);
+      put("63: index: "); put(index'image); put(" temp: "); put(temp'Image); put(" stopping at: "); put_line(stopatthischar'image);
       while (temp /= stopatthischar) loop
          ocpp.packet.Append(intstring, temp);
-         ocpp.packet.Delete(msg, 1, 1);
-         temp := ocpp.packet.Element(msg, 1);
-         Put("1found integer: "); Put_Line(ocpp.packet.To_String(intstring));
+         index := index + 1;
+         temp := ocpp.packet.Element(msg, index);
+         put("68: index: "); put(index'image); put(" temp: "); put(temp'Image); put(" stopping at: "); put_line(stopatthischar'image);
+         Put("69 found integer: "); Put_Line(ocpp.packet.To_String(intstring));
       end loop;      
       
-      consumedInteger := Integer'Value(ocpp.packet.To_String(intstring));
-      return true;
-   end consumeinteger;
+      foundInteger := Integer'Value(ocpp.packet.To_String(intstring));
+      found := true;
+   end findinteger;
    
-   function consumequotedinteger(msg: out ocpp.packet.Bounded_String;
-                                 consumedInteger: out integer) return Boolean is
+   procedure findquotedinteger(msg: in out ocpp.packet.Bounded_String;
+                               index : in out Integer;
+                               found : in out Boolean;
+                               foundInteger: in out integer) is
       temp : character := ' ';
-      retval : Boolean := false;
+      tempindex : Integer := index;
       intstring : ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
    begin      
-      retval := consumetoken(msg, '"');
-      if (retval = false) then
-         return false;
+      findtoken(msg, index, found, '"');
+      if (found = false) then
+         return;
       end if;
 
-      retval := consumeinteger(msg, consumedInteger);
-      if (retval = false) then
-         return false;
+      findinteger(msg, index, foundInteger, found );
+      if (found = false) then
+         return;
       end if;
 
-      Put("111 found integer: "); Put_Line(consumedInteger'Image);
+      Put("111 found integer: "); Put_Line(foundInteger'Image);
 
-      retval := consumetoken(msg, '"');
-      if (retval = false) then
-         return false;
+      findtoken(msg, index, found, '"');
+      if (found = false) then
+         return;
       end if;
       
-      return true;
-   end consumequotedinteger;
+      found := true;
+   end findquotedinteger;
       
-   function consumequotedstring(msg: out ocpp.packet.Bounded_String;
-                                consumedString: out ocpp.packet.Bounded_String) return Boolean is
+   procedure findquotedstring(msg: in out ocpp.packet.Bounded_String;
+                              index : in out Integer;
+                              found : in out Boolean;
+                              foundString: out ocpp.packet.Bounded_String) is
       temp : character := ' ';
-      retval : Boolean := false;
       tempstring : ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
    begin      
-      retval := consumetoken(msg, '"');
-      if (retval = false) then
-         return false;
+      findtoken(msg, index, found, '"');
+      if (found = false) then
+         return;
       end if;
 
-      temp :=  ocpp.packet.Element(msg, 1);
+      temp :=  ocpp.packet.Element(msg, index);
       while (temp /= '"') loop
          ocpp.packet.Append(tempstring, temp);
-         ocpp.packet.Delete(msg, 1, 1);
-         temp := ocpp.packet.Element(msg, 1);
+         index := index + 1;
+         temp := ocpp.packet.Element(msg, index);
          Put("1found: "); Put_Line(ocpp.packet.To_String(tempstring));
       end loop;      
 
-      retval := consumetoken(msg, '"');
-      if (retval = false) then
-         return false;
+      findtoken(msg, index, found, '"');
+      if (found = false) then
+         return;
       end if;
       
-      consumedString := tempstring;
-      return true;
-   end consumequotedstring;
+      foundString := tempstring;
+   end findquotedstring;
    
    function validreason(thereason: ocpp.packet.Bounded_String) return Boolean is
       bootreasons : constant BootReasons_t := (ocpp.packet.To_Bounded_String("ApplicationReset"),
@@ -128,98 +151,98 @@ package body ocpp.BootNotifications is
    end validreason;   
       
    function parse(self: ptr;
-                  msg: in out ocpp.packet.Bounded_String) return Boolean is
+                  msg: in out ocpp.packet.Bounded_String) return Boolean     
+   is
       temp : character :=  ocpp.packet.Element(msg, 1);
       str : string := "";
       retval : boolean := false;
       temp2: integer := 0;
-      --br2 : BootNotification.br.Bounded_String := br.To_Bounded_String("aaa");
       dummybounded: ocpp.packet.Bounded_String;
       bootreasons : BootReasons_t;
-      --p : packet_ptr := aliased self.vendor;
-
-            
+      index: Integer := 1;            
       package SB is new Ada.Strings.Bounded.Generic_Bounded_Length (Max => 50);
-      X : SB.Bounded_String := SB.To_Bounded_String("blah");
-      --bootreasons := br.To_Bounded_String("aaa"), br.To_Bounded_String("aaa"),               br.To_Bounded_String"aaa",                 br.To_Bounded_String"aaa",                 "aaa",                 "aaa",                   br.To_Bounded_String"aaa",                     br.To_Bounded_String"aaa",                     br.To_Bounded_String"aaa";      Put("parse: ");
-      begin
-
+      X : SB.Bounded_String := SB.To_Bounded_String("blah");      
+   begin
+      put("161 index: "); put_line(index'image);
       
-      retval := consumetoken(msg, '[');
+      findtoken(msg, index, retval, '[');
       if (retval = false) then
          return false;
       end if;
       
-      retval := consumeinteger(msg, messageTypeId, ',');
+      put("169 index: "); put_line(index'image);
+
+      findinteger(msg, index, messageTypeId, retval, ',');
+      put("171 index: "); put_line(index'image);
       if (retval = false) then return false; end if;
       if (messageTypeId /= 2) then return false; end if;
 
-      retval := consumetoken(msg, ',');
+      findtoken(msg, index, retval, ',');
       if (retval = false) then return false; end if;
 
-      retval := consumequotedinteger(msg, messageId);
+      findquotedinteger(msg, index, retval, messageId);
       if (retval = false) then return false; end if;      
       put("messageId: "); Put_Line(messageId'Image);
       
-      retval := consumetoken(msg, ',');
+      findtoken(msg,index,retval, ',');
       if (retval = false) then return false; end if;
       
-      retval := consumequotedstring(msg, action);
+      findquotedstring(msg, index, retval, action);
       if (retval = false) then return false; end if;
 
-      retval := consumetoken(msg, ',');
+      findtoken(msg, index, retval, ',');
       if (retval = false) then return false; end if;
             
-      retval := consumetoken(msg, '{');
+      findtoken(msg, index, retval, '{');
       if (retval = false) then return false; end if;
       
-      retval := consumequotedstring(msg, dummybounded);
+      findquotedstring(msg, index, retval, dummybounded);
       if (retval = false) then return false; end if;
       if (ocpp.packet.To_String(dummybounded) /= "reason") then return false; end if;
 
-      retval := consumetoken(msg, ':');
+      findtoken(msg, index, retval, ':');
       if (retval = false) then return false; end if;
       
-      retval := consumequotedstring(msg, self.reason);
+      findquotedstring(msg, index, retval, self.reason);
       if (retval = false) then return false; end if;
       put("reason: "); Put_Line(ocpp.packet.To_String(self.reason));
       if (validreason(self.reason) = false) then return false; end if;
       
-      retval := consumetoken(msg, ',');
+      findtoken(msg, index, retval, ',');
       if (retval = false) then return false; end if;
       
-      retval := consumequotedstring(msg, dummybounded);
+      findquotedstring(msg, index, retval, dummybounded);
       if (retval = false) then return false; end if;
       if (ocpp.packet.To_String(dummybounded) /= "chargingStation") then return false; end if;
       
-      retval := consumetoken(msg, ':');
+      findtoken(msg, index, retval, ':');
       if (retval = false) then return false; end if;
       
-      retval := consumetoken(msg, '{');
+      findtoken(msg, index, retval, '{');
       if (retval = false) then return false; end if;
       
-      retval := consumequotedstring(msg, dummybounded);
+      findquotedstring(msg, index, retval, dummybounded);
       if (retval = false) then return false; end if;
       if (ocpp.packet.To_String(dummybounded) /= "model") then return false; end if;
       
-      retval := consumetoken(msg, ':');
+      findtoken(msg, index, retval, ':');
       if (retval = false) then return false; end if;
       
-      retval := consumequotedstring(msg, self.model);
+      findquotedstring(msg, index, retval, self.model);
       if (retval = false) then return false; end if;
       put("model: "); Put_Line(ocpp.packet.To_String(self.model));
       
-      retval := consumetoken(msg, ',');
+      findtoken(msg, index, retval, ',');
       if (retval = false) then return false; end if;
       
-      retval := consumequotedstring(msg, dummybounded);
+      findquotedstring(msg, index, retval, dummybounded);
       if (retval = false) then return false; end if;
       if (ocpp.packet.To_String(dummybounded) /= "vendorName") then return false; end if;
       
-      retval := consumetoken(msg, ':');
+      findtoken(msg, index, retval, ':');
       if (retval = false) then return false; end if;
       
-      retval := consumequotedstring(msg, self.vendor);
+      findquotedstring(msg, index, retval, self.vendor);
       if (retval = false) then return false; end if;
       put("vendor: "); Put_Line(ocpp.packet.To_String(self.vendor)); 
       put_Line(ocpp.packet.To_String(self.vendor) );
@@ -228,13 +251,13 @@ package body ocpp.BootNotifications is
       --put_Line(ocpp.packet.To_String((self.vendor.Length)));
                                                                                 
       
-      retval := consumetoken(msg, '}');
+      findtoken(msg, index, retval, '}');
       if (retval = false) then return false; end if;
       
-      retval := consumetoken(msg, '}');
+      findtoken(msg, index, retval, '}');
       if (retval = false) then return false; end if;
       
-      retval := consumetoken(msg, ']');
+      findtoken(msg, index, retval, ']');
       if (retval = false) then return false; end if;
       
       --   [2,
