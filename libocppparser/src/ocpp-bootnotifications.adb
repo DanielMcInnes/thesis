@@ -3,7 +3,8 @@ pragma SPARK_Mode (On);
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Bounded; use Ada.Strings.Bounded;
-with ocpp; use ocpp;
+with ocpp; 
+with ocpp.BootNotifications;
 
 package body ocpp.BootNotifications is
 
@@ -17,7 +18,7 @@ package body ocpp.BootNotifications is
    end trimlf;
 
    function consumetoken(msg: out ocpp.packet.Bounded_String;
-                       token: in Character) return Boolean is
+                         token: in Character) return Boolean is
       temp : character := ' ';
       retval : Boolean := false;
    begin      
@@ -34,7 +35,7 @@ package body ocpp.BootNotifications is
    
    function consumeinteger(msg: out ocpp.packet.Bounded_String;
                            consumedInteger: out integer;
-                          stopatthischar: character := '"') return Boolean is
+                           stopatthischar: character := '"') return Boolean is
       temp : character := ' ';
       retval : Boolean := false;
       intstring : ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
@@ -44,7 +45,7 @@ package body ocpp.BootNotifications is
          ocpp.packet.Append(intstring, temp);
          ocpp.packet.Delete(msg, 1, 1);
          temp := ocpp.packet.Element(msg, 1);
-      Put("1found integer: "); Put_Line(ocpp.packet.To_String(intstring));
+         Put("1found integer: "); Put_Line(ocpp.packet.To_String(intstring));
       end loop;      
       
       consumedInteger := Integer'Value(ocpp.packet.To_String(intstring));
@@ -52,7 +53,7 @@ package body ocpp.BootNotifications is
    end consumeinteger;
    
    function consumequotedinteger(msg: out ocpp.packet.Bounded_String;
-                       consumedInteger: out integer) return Boolean is
+                                 consumedInteger: out integer) return Boolean is
       temp : character := ' ';
       retval : Boolean := false;
       intstring : ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
@@ -78,7 +79,7 @@ package body ocpp.BootNotifications is
    end consumequotedinteger;
       
    function consumequotedstring(msg: out ocpp.packet.Bounded_String;
-                       consumedString: out ocpp.packet.Bounded_String) return Boolean is
+                                consumedString: out ocpp.packet.Bounded_String) return Boolean is
       temp : character := ' ';
       retval : Boolean := false;
       tempstring : ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
@@ -106,15 +107,15 @@ package body ocpp.BootNotifications is
    end consumequotedstring;
    
    function validreason(thereason: ocpp.packet.Bounded_String) return Boolean is
-   bootreasons : constant BootReasons_t := (ocpp.packet.To_Bounded_String("ApplicationReset"),
-                                    ocpp.packet.To_Bounded_String("FirmwareUpdate"),
-                                    ocpp.packet.To_Bounded_String("LocalReset"),
-                                    ocpp.packet.To_Bounded_String("PowerUp"),
-                                    ocpp.packet.To_Bounded_String("RemoteReset"),
-                                    ocpp.packet.To_Bounded_String("ScheduledReset"),
-                                    ocpp.packet.To_Bounded_String("Triggered"),
-                                    ocpp.packet.To_Bounded_String("Unknown"),
-                                    ocpp.packet.To_Bounded_String("Watchdog"));
+      bootreasons : constant BootReasons_t := (ocpp.packet.To_Bounded_String("ApplicationReset"),
+                                               ocpp.packet.To_Bounded_String("FirmwareUpdate"),
+                                               ocpp.packet.To_Bounded_String("LocalReset"),
+                                               ocpp.packet.To_Bounded_String("PowerUp"),
+                                               ocpp.packet.To_Bounded_String("RemoteReset"),
+                                               ocpp.packet.To_Bounded_String("ScheduledReset"),
+                                               ocpp.packet.To_Bounded_String("Triggered"),
+                                               ocpp.packet.To_Bounded_String("Unknown"),
+                                               ocpp.packet.To_Bounded_String("Watchdog"));
       --use all type ocpp.BootNotification.BootReasons_t;
    begin
       for I in bootreasons'Range loop
@@ -135,10 +136,15 @@ package body ocpp.BootNotifications is
       --br2 : BootNotification.br.Bounded_String := br.To_Bounded_String("aaa");
       dummybounded: ocpp.packet.Bounded_String;
       bootreasons : BootReasons_t;
-   begin
-      --bootreasons := br.To_Bounded_String("aaa"), br.To_Bounded_String("aaa"),               br.To_Bounded_String"aaa",                 br.To_Bounded_String"aaa",                 "aaa",                 "aaa",                   br.To_Bounded_String"aaa",                     br.To_Bounded_String"aaa",                     br.To_Bounded_String"aaa";      Put("parse: ");
-      
+      --p : packet_ptr := aliased self.vendor;
 
+            
+      package SB is new Ada.Strings.Bounded.Generic_Bounded_Length (Max => 50);
+      X : SB.Bounded_String := SB.To_Bounded_String("blah");
+      --bootreasons := br.To_Bounded_String("aaa"), br.To_Bounded_String("aaa"),               br.To_Bounded_String"aaa",                 br.To_Bounded_String"aaa",                 "aaa",                 "aaa",                   br.To_Bounded_String"aaa",                     br.To_Bounded_String"aaa",                     br.To_Bounded_String"aaa";      Put("parse: ");
+      begin
+
+      
       retval := consumetoken(msg, '[');
       if (retval = false) then
          return false;
@@ -216,7 +222,10 @@ package body ocpp.BootNotifications is
       retval := consumequotedstring(msg, self.vendor);
       if (retval = false) then return false; end if;
       put("vendor: "); Put_Line(ocpp.packet.To_String(self.vendor)); 
-      --put_Line(ocpp.packet.To_String(ocpp.packet.Bounded_String.Length(self.vendor)));
+      put_Line(ocpp.packet.To_String(self.vendor) );
+      --str := ocpp.packet.To_String(self.vendor);
+      --put ((self.vendor.length));
+      --put_Line(ocpp.packet.To_String((self.vendor.Length)));
                                                                                 
       
       retval := consumetoken(msg, '}');
@@ -228,21 +237,24 @@ package body ocpp.BootNotifications is
       retval := consumetoken(msg, ']');
       if (retval = false) then return false; end if;
       
---   [2,
---"19223201",
---"BootNotification",
---{
---"reason": "PowerUp",
---"chargingStation": {
---"model": "SingleSocketCharger",
---"vendorName": "VendorX"
---}
---}
---]
+      --   [2,
+      --"19223201",
+      --"BootNotification",
+      --{
+      --"reason": "PowerUp",
+      --"chargingStation": {
+      --"model": "SingleSocketCharger",
+      --"vendorName": "VendorX"
+      --}
+      --}
+      --]
       
-      Put_Line("hooray!");
+      Put_Line("hooray!"); 
       --put( ocpp.packet.Bounded_String'Max(self.vendor));
-      
+      Put_Line (SB.To_String(X));
+      --Put(X.Length'Image);
+      Put(SB.Length(X)'Image);
+      Put(ocpp.packet.Length(self.vendor)'Image);
       return true;
    end parse;
    
