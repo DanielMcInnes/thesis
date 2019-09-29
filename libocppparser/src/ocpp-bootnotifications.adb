@@ -9,26 +9,44 @@ with ocpp.BootNotifications;
 package body ocpp.BootNotifications is
 
    procedure findnonwhitespace(msg: in ocpp.packet.Bounded_String;
-                               index: in out Integer) is
-      temp : character :=  ocpp.packet.Element(msg, index);
+                               index: in out Integer;
+                               retval: out boolean) with
+     pre => index < msg'size
+   is
+      temp : character;
    begin
+      if ((index <= 0) or (index > ocpp.packet.Length(msg))) then
+         retval := false;
+         put("20: index: "); put_line("ERROR");
+         return;
+      end if;
+           
+      temp :=  ocpp.packet.Element(msg, index); put("24: index: "); put(index'Image); put(" temp: "); put_line(temp'image);
       put("13: index: "); put_line(index'image);
       while ((temp = ASCII.LF) or (temp = ' ')) loop
+         if (index >= ocpp.packet.Length(msg)) then
+            retval := false; put("28: ERROR"); put(" packet: "); Put_Line(ocpp.packet.To_String(msg));
+            return;
+         end if;
+         
+         pragma Loop_Invariant (index in msg'Size);
          index := index + 1;
          temp := ocpp.packet.Element(msg, index);
       end loop;      
       put("20: index: "); put_line(index'image);
+      retval := true;
    end findnonwhitespace;
 
    procedure findtoken(msg: in ocpp.packet.Bounded_String;
                        index : in out Integer;
                        found : out Boolean;
                        token: in Character) is
-      temp : character := ' ';
+      temp : character;
    begin
-      found := false;
-      findnonwhitespace(msg, index);
-      put("39: index: "); put_line(index'image);
+      put("45: index: "); put(index'image); put(" looking for: "); put_line(token'image);
+      --found := false;
+      findnonwhitespace(msg, index, found);
+      put("48: index: "); put_line(index'image);
       temp := ocpp.packet.Element(msg, index);
       Put("found:"); put_line(temp'image);
       if (temp = token) then
@@ -44,33 +62,32 @@ package body ocpp.BootNotifications is
                          foundInteger: out integer;
                          found : out Boolean;
                          stopatthischar: character := '"') is
-      temp : character := ' ';
-      retval : Boolean := false;
+      temp : character;
       intstring : ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
    begin
-      found := false;
       temp :=  ocpp.packet.Element(msg, index);
-      put("63: index: "); put(index'image); put(" temp: "); put(temp'Image); put(" stopping at: "); put_line(stopatthischar'image);
       while (temp /= stopatthischar) loop
          ocpp.packet.Append(intstring, temp);
          index := index + 1;
          temp := ocpp.packet.Element(msg, index);
-         put("68: index: "); put(index'image); put(" temp: "); put(temp'Image); put(" stopping at: "); put_line(stopatthischar'image);
-         Put("69 found integer: "); Put_Line(ocpp.packet.To_String(intstring));
       end loop;      
       
       foundInteger := Integer'Value(ocpp.packet.To_String(intstring));
       found := true;
    end findinteger;
    
-   procedure findquotedinteger(msg: in out ocpp.packet.Bounded_String;
+   procedure findquotedinteger(msg: in ocpp.packet.Bounded_String;
                                index : in out Integer;
-                               found : in out Boolean;
+                               found : out Boolean;
                                foundInteger: in out integer) is
-      temp : character := ' ';
-      tempindex : Integer := index;
-      intstring : ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
-   begin      
+   begin
+      findnonwhitespace(msg, index, found);
+      if (found = false) then
+         return;
+      end if;
+
+
+
       findtoken(msg, index, found, '"');
       if (found = false) then
          return;
@@ -91,13 +108,15 @@ package body ocpp.BootNotifications is
       found := true;
    end findquotedinteger;
       
-   procedure findquotedstring(msg: in out ocpp.packet.Bounded_String;
+   procedure findquotedstring(msg: in ocpp.packet.Bounded_String;
                               index : in out Integer;
-                              found : in out Boolean;
+                              found : out Boolean;
                               foundString: out ocpp.packet.Bounded_String) is
-      temp : character := ' ';
+      temp : character;
       tempstring : ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
-   begin      
+   begin
+      foundString := ocpp.packet.To_Bounded_String("");
+      
       findtoken(msg, index, found, '"');
       if (found = false) then
          return;
@@ -132,7 +151,7 @@ package body ocpp.BootNotifications is
       --use all type ocpp.BootNotification.BootReasons_t;
    begin
       for I in bootreasons'Range loop
-         put(ocpp.packet.To_String(bootreasons(I)));
+         --put(ocpp.packet.To_String(bootreasons(I)));
          if (ocpp.packet.To_String(bootreasons(I)) = ocpp.packet.To_String(thereason)) then 
             return true;
          end if;
@@ -140,114 +159,118 @@ package body ocpp.BootNotifications is
       return false;      
    end validreason;   
       
-   function parse(self: ptr;
-                  msg: in out ocpp.packet.Bounded_String) return Boolean     
+   procedure parse(msg: in ocpp.packet.Bounded_String;
+                   bn: out ocpp.BootNotifications.BootNotification)
    is
-      temp : character :=  ocpp.packet.Element(msg, 1);
-      str : string := "";
-      retval : boolean := false;
-      temp2: integer := 0;
-      dummybounded: ocpp.packet.Bounded_String;
-      bootreasons : BootReasons_t;
-      index: Integer := 1;            
+      --str : string;
+      retval : boolean;
+      --temp2: integer;
+      dummybounded: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
+      index: Integer range 1 .. ocpp.packet.Max_Length := 1;
    begin
+      bn.reason := ocpp.packet.To_Bounded_String("");
+      bn.model := ocpp.packet.To_Bounded_String("");
+      bn.vendor := ocpp.packet.To_Bounded_String("");
       put("161 index: "); put_line(index'image);
       
       findtoken(msg, index, retval, '[');
       if (retval = false) then
-         return false;
+         return;
       end if;
       
       put("169 index: "); put_line(index'image);
 
       findinteger(msg, index, messageTypeId, retval, ',');
+      put ("messageTypeId: "); put_line(messageTypeId'image); 
       put("171 index: "); put_line(index'image);
-      if (retval = false) then return false; end if;
-      if (messageTypeId /= 2) then return false; end if;
+      if (retval = false) then return; end if;
+      if (messageTypeId /= 2) then return; end if;
 
       findtoken(msg, index, retval, ',');
-      if (retval = false) then return false; end if;
+      if (retval = false) then return; end if;
 
       findquotedinteger(msg, index, retval, messageId);
-      if (retval = false) then return false; end if;      
+      if (retval = false) then return; end if;      
       put("messageId: "); Put_Line(messageId'Image);
       
       findtoken(msg,index,retval, ',');
-      if (retval = false) then return false; end if;
+      if (retval = false) then return; end if;
       
       findquotedstring(msg, index, retval, action);
-      if (retval = false) then return false; end if;
+      if (retval = false) then return; end if;
 
       findtoken(msg, index, retval, ',');
-      if (retval = false) then return false; end if;
+      if (retval = false) then return; end if;
             
       findtoken(msg, index, retval, '{');
-      if (retval = false) then return false; end if;
+      if (retval = false) then return; end if;
       
       findquotedstring(msg, index, retval, dummybounded);
-      if (retval = false) then return false; end if;
-      if (ocpp.packet.To_String(dummybounded) /= "reason") then return false; end if;
+      if (retval = false) then return; end if;
+      if (ocpp.packet.To_String(dummybounded) /= "reason") then return; end if;
 
       findtoken(msg, index, retval, ':');
-      if (retval = false) then return false; end if;
+      if (retval = false) then return; end if;
       
-      findquotedstring(msg, index, retval, self.reason);
-      if (retval = false) then return false; end if;
-      put("reason: "); Put_Line(ocpp.packet.To_String(self.reason));
-      if (validreason(self.reason) = false) then return false; end if;
+      findquotedstring(msg, index, retval, bn.reason);
+      if (retval = false) then return; end if;
+      put("reason: "); Put_Line(ocpp.packet.To_String(bn.reason));
+      if (validreason(bn.reason) = false) then return; end if;
       
       findtoken(msg, index, retval, ',');
-      if (retval = false) then return false; end if;
+      if (retval = false) then return; end if;
       
       findquotedstring(msg, index, retval, dummybounded);
-      if (retval = false) then return false; end if;
-      if (ocpp.packet.To_String(dummybounded) /= "chargingStation") then return false; end if;
+      if (retval = false) then return; end if;
+      if (ocpp.packet.To_String(dummybounded) /= "chargingStation") then return; end if;
       
       findtoken(msg, index, retval, ':');
-      if (retval = false) then return false; end if;
+      if (retval = false) then return; end if;
       
       findtoken(msg, index, retval, '{');
-      if (retval = false) then return false; end if;
+      if (retval = false) then return; end if;
       
       findquotedstring(msg, index, retval, dummybounded);
-      if (retval = false) then return false; end if;
-      if (ocpp.packet.To_String(dummybounded) /= "model") then return false; end if;
+      if (retval = false) then return; end if;
+      if (ocpp.packet.To_String(dummybounded) /= "model") then return; end if;
       
       findtoken(msg, index, retval, ':');
-      if (retval = false) then return false; end if;
+      if (retval = false) then return; end if;
       
-      findquotedstring(msg, index, retval, self.model);
-      if (retval = false) then return false; end if;
-      put("model: "); Put_Line(ocpp.packet.To_String(self.model));
+      findquotedstring(msg, index, retval, bn.model);
+      if (retval = false) then return; end if;
+      put("model: "); Put_Line(ocpp.packet.To_String(bn.model));
       
       findtoken(msg, index, retval, ',');
-      if (retval = false) then return false; end if;
+      if (retval = false) then return; end if;
       
       findquotedstring(msg, index, retval, dummybounded);
-      if (retval = false) then return false; end if;
-      if (ocpp.packet.To_String(dummybounded) /= "vendorName") then return false; end if;
+      if (retval = false) then return; end if;
+      if (ocpp.packet.To_String(dummybounded) /= "vendorName") then return; end if;
       
       findtoken(msg, index, retval, ':');
-      if (retval = false) then return false; end if;
+      if (retval = false) then return; end if;
       
-      findquotedstring(msg, index, retval, self.vendor);
-      if (retval = false) then return false; end if;
-      put("vendor: "); Put_Line(ocpp.packet.To_String(self.vendor)); 
-      put_Line(ocpp.packet.To_String(self.vendor) );
-      --str := ocpp.packet.To_String(self.vendor);
-      --put ((self.vendor.length));
-      --put_Line(ocpp.packet.To_String((self.vendor.Length)));
+      findquotedstring(msg, index, retval, bn.vendor);
+      if (retval = false) then return; end if;
+      put("vendor: "); Put_Line(ocpp.packet.To_String(bn.vendor)); 
+      put_Line(ocpp.packet.To_String(bn.vendor) );
+      --str := ocpp.packet.To_String(bn.vendor);
+      --put ((bn.vendor.length));
+      --put_Line(ocpp.packet.To_String((bn.vendor.Length)));
                                                                                 
       
       findtoken(msg, index, retval, '}');
-      if (retval = false) then return false; end if;
+      if (retval = false) then return; end if;
       
       findtoken(msg, index, retval, '}');
-      if (retval = false) then return false; end if;
-      
+      if (retval = false) then return; end if;
+
+      pragma Warnings (Off, "unused assignment",
+                       Reason => "don't care");      
       findtoken(msg, index, retval, ']');
-      if (retval = false) then return false; end if;
-      
+      if (retval = false) then return; end if;
+      pragma Warnings (On, "unused assignment");      
       --   [2,
       --"19223201",
       --"BootNotification",
@@ -261,10 +284,9 @@ package body ocpp.BootNotifications is
       --]
       
       Put_Line("hooray!"); 
-      --put( ocpp.packet.Bounded_String'Max(self.vendor));
+      --put( ocpp.packet.Bounded_String'Max(bn.vendor));
       --Put(X.Length'Image);
-      Put(ocpp.packet.Length(self.vendor)'Image);
-      return true;
+      Put(ocpp.packet.Length(bn.vendor)'Image);
    end parse;
    
 

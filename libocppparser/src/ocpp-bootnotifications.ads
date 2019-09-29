@@ -13,16 +13,16 @@ with ocpp;
 package ocpp.BootNotifications is
    type BootNotification is tagged record
       reason: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
-      model:  ocpp.packet.Bounded_String;
-      vendor: ocpp.packet.Bounded_String;
+      model:  ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
+      vendor: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
    end record;
-   type ptr is access all BootNotification;
+   --type ptr is access all BootNotification;
+   procedure parse(msg: in ocpp.packet.Bounded_String;
+                  bn: out ocpp.BootNotifications.BootNotification);
 
-   g_bootnotificationrequest : aliased BootNotification;
+   --g_bootnotificationrequest : aliased BootNotification;
 
-   function parse(self: ptr;
-                  msg: in out ocpp.packet.Bounded_String) return Boolean
-   with Post => ocpp.packet.Length(self.vendor) > 0;
+--   with Post => ocpp.packet.Length(self.vendor) > 0;
 --      Put(ocpp.packet.Length(self.vendor)'Image);
 
    type BootReasons_t is array(1..9) of ocpp.packet.Bounded_String;

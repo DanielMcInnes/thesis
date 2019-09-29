@@ -6,12 +6,10 @@ with ocpp;
 with ocpp.BootNotifications;
 
 procedure Main is
-
-
    Dummy : Integer := 0;
-   temp: Integer := 0;
-   isvalid : Boolean := false;
-   bootnotificationrequest : ocpp.BootNotifications.ptr := ocpp.BootNotifications.g_bootnotificationrequest'Access;
+   b: ocpp.BootNotifications.BootNotification;
+
+   --bootnotificationrequest : ocpp.BootNotifications.ptr := ocpp.BootNotifications.g_bootnotificationrequest'Access;
 
    packet: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String( ""
      & "[2," & ASCII.LF
@@ -40,5 +38,6 @@ procedure Main is
 
 begin
    Put_Line(ocpp.packet.To_String(packet));
-   isvalid := ocpp.BootNotifications.parse(bootnotificationrequest, packet);
+   ocpp.BootNotifications.parse(packet, b);
+   put_line(ocpp.packet.To_String(b.reason));
 end Main;
