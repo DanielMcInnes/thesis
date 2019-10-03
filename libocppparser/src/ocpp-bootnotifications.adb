@@ -37,8 +37,12 @@ package body ocpp.BootNotifications is
          end if;
          
          index := index + 1;
+         if (index >= ocpp.packet.Length(msg))
+         then
+            retval := false; put("    findnonwhitespace 34: ERROR"); put(" packet: "); Put_Line(ocpp.packet.To_String(msg));
+            return;
+         end if;
          
-         temp := ocpp.packet.Element(msg, index);
          temp :=  ocpp.packet.Element(msg, index); put("    findnonwhitespace 41: index: "); put(index'Image); put(" temp: "); put_line(temp'image); 
          put("    13: index: "); put_line(index'image);
       end loop;      
@@ -82,14 +86,13 @@ package body ocpp.BootNotifications is
    end findtoken;
    
    procedure findnextinteger(msg: in ocpp.packet.Bounded_String;
-                         index : in out Positive;
-                         foundInteger: out integer;
+                             index : in out Positive;
+                             foundInteger: out integer;
                              found : out Boolean) 
-                             is
+   is
       temp : character;
       intstring : ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
    begin
-      found := false;
       foundInteger := 0;
       if (index > ocpp.packet.Length(msg)) then
          found := false;
@@ -98,10 +101,27 @@ package body ocpp.BootNotifications is
       end if;
            
       findnonwhitespace(msg, index, found);
+      if (found = false) then
+         return;
+      end if;      
+        
+      if (index > ocpp.packet.Length(msg)) then
+         found := false;
+         put("    110: "); put_line("ERROR");
+         return;
+      end if;
+        
       temp :=  ocpp.packet.Element(msg, index);
-      ocpp.packet.Append(intstring, temp);     
+      ocpp.packet.Append(intstring, temp);
+      if (ocpp.packet.Length(intstring) /= 1) then
+         found := false;
+         put("    118: "); put_line("ERROR");
+         return;
+      end if;
+      
       foundInteger := Integer'Value(ocpp.packet.To_String(intstring));
       found := true;
+      
    end findnextinteger;
    
    procedure findquotedstring(msg: in ocpp.packet.Bounded_String;
@@ -154,13 +174,7 @@ package body ocpp.BootNotifications is
          return;
       end if;
       
-      --foundString := ocpp.packet.To_String(msg);-- ..msg'First + second - 1;
-      --tempstring := tempstring'First + first - 1..tempstring'First + second - 1;
-      foundString := ocpp.packet.Bounded_Slice(msg, first + 1, second -1);
-      --tempstring :=  ocpp.packet'First(msg) + first - 1..ocpp.packet'First(msg) + second - 1);
-      
-        
-      put("    146: tempstring: first: "); put(first'Image); put(" second: "); put(second'image); put(" foundString: "); put_line(ocpp.packet.To_String(foundString));
+      foundString := ocpp.packet.Bounded_Slice(msg, first + 1, second -1); put("    146: tempstring: first: "); put(first'Image); put(" second: "); put(second'image); put(" foundString: "); put_line(ocpp.packet.To_String(foundString));
       found := true;
       index := second + 1;
 
