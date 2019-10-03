@@ -1,6 +1,6 @@
 format 222
 "websocketpp"
-  revision 4
+  revision 6
   modified_by 2 "dmcinnes"
 
 
@@ -67,6 +67,11 @@ format 222
     classdiagram 128002 "cd1"
       classdiagramsettings show_members_full_definition yes show_members_visibility yes member_max_width 0 end
       size A0
+    end
+
+    classdiagram 147586 "cd2 function deps"
+      classdiagramsettings member_max_width 0 end
+      size A4
     end
 
     class 150018 "connection"
@@ -175,6 +180,43 @@ ${inlines}
 	
       end
     end
+
+    class 163458 "findnextinteger"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 163714 "parse"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 144002 // <dependency>
+	relation 144002 -_->
+	  a public
+	    cpp default "#include in source"
+	    classrelation_ref 144002 // <dependency>
+	  b parent class_ref 163458 // findnextinteger
+      end
+    end
   end
 
   package_ref 128002 // http
@@ -186,4 +228,95 @@ ${inlines}
   package_ref 129026 // roles
 
   package_ref 135554 // processors
+
+  classview 142338 "cv2libocpp"
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    sequencediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    
+    activitydiagramsettings
+     end
+    classdiagram 141058 "cd2 libocpp"
+      classdiagramsettings show_members_full_definition yes member_max_width 0 end
+      size A4
+    end
+
+    class 156802 "main"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 156930 "bootnotification"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 162946 "reason"
+	private explicit_type "string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 163074 "model"
+	private explicit_type "string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 163202 "vendor"
+	private explicit_type "string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+  end
 end

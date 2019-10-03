@@ -2,11 +2,11 @@ format 222
 
 classcanvas 128002 class_ref 129026 // parser
   classdiagramsettings member_max_width 0 end
-  xyz 213.1 122.9 2000
+  xyz 213.4 122.6 2000
 end
 classcanvas 128130 class_ref 131842 // server
   classdiagramsettings member_max_width 0 end
-  xyz 866.6 214.5 2005
+  xyz 867.8 213.6 2005
 end
 classcanvas 128258 class_ref 150018 // connection
   classdiagramsettings member_max_width 0 end
@@ -14,10 +14,10 @@ classcanvas 128258 class_ref 150018 // connection
 end
 classcanvas 128386 class_ref 150146 // transport::asio::connection
   classdiagramsettings member_max_width 0 end
-  xyz 926.2 712.9 2000
+  xyz 925.9 712.3 2000
 end
 classcanvas 128514 class_ref 150274 // websocketpp::transport::asio::endpoint
   classdiagramsettings member_max_width 0 end
-  xyz 268.3 827.9 2000
+  xyz 268.6 828.2 2000
 end
 end
