@@ -41,6 +41,18 @@ package body ocpp is
    end find_token;
 
    procedure move_index_past_token
+     (msg   : packet.Bounded_String;
+      token : Character;
+      index : in out Positive;
+      last  : out Natural)
+   is
+      first  : Positive;
+   begin
+      find_token(msg, token, index, first, last);
+      index := first + 1;
+   end move_index_past_token;
+
+   procedure move_index_past_token
      (msg : packet.Bounded_String;
       token    : Character;
       index   : in out Positive;

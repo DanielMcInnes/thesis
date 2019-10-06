@@ -98,9 +98,9 @@ package body ocpp.BootNotifications is
                               index : in out Positive;
                               found : out Boolean;
                               foundString: out ocpp.packet.Bounded_String) is
-      tempPositive : Positive;
-      first : Positive;
-      second : Positive;
+      tempPositive : Integer;
+      first : Integer;
+      second : Integer;
       
    begin
       foundString := ocpp.packet.To_Bounded_String("");
@@ -162,8 +162,8 @@ package body ocpp.BootNotifications is
       retval : boolean;
       --temp2: integer;
       dummybounded: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
-      index: Integer range 1 .. ocpp.packet.Max_Length := 1;
-      tempPositive: Positive;
+      index: Integer := 1;
+      tempPositive: integer;
       first: Integer;
       
    begin
@@ -171,7 +171,7 @@ package body ocpp.BootNotifications is
       bn.model := ocpp.packet.To_Bounded_String("");
       bn.vendor := ocpp.packet.To_Bounded_String(""); --put("161 index: "); put_line(index'image);
       
-      ocpp.move_index_past_token(msg, '[', index, first, tempPositive); if (tempPositive = 0) then return; end if;
+      ocpp.move_index_past_token(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
       
       put("parse: 169 index: "); put_line(index'image);
 
