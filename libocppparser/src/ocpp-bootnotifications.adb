@@ -179,6 +179,7 @@ package body ocpp.BootNotifications is
       bn.messageTypeId := 0;
       bn.messageId := ocpp.packet.To_Bounded_String("");
       bn.action := ocpp.packet.To_Bounded_String("");
+      
       ocpp.move_index_past_token(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
       
       put("parse: 169 index: "); put_line(index'image);

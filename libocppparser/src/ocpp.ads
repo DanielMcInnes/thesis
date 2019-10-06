@@ -1,4 +1,3 @@
-pragma SPARK_Mode (On);
 
 with Ada.Strings.Bounded;
 with Ada.Text_IO;
