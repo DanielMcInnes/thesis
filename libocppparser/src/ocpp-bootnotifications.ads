@@ -13,10 +13,13 @@ package ocpp.BootNotifications is
       reason: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
       model:  ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
       vendor: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
-   end record;
-   procedure parse(msg: in ocpp.packet.Bounded_String;
-                  bn: out ocpp.BootNotifications.BootNotification);
+      messageTypeId: Integer := 0; -- eg. 2, 3
+      messageId: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
+      action: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");   end record;
 
    type BootReasons_t is array(1..9) of ocpp.packet.Bounded_String;
 
+   procedure parse(msg: in ocpp.packet.Bounded_String;
+                   bn: out ocpp.BootNotifications.BootNotification)
+     with Global => (In_Out => Ada.Text_IO.File_System);--, Output => );
 end ocpp.BootNotifications;
