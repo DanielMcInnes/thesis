@@ -10,14 +10,17 @@ package ocpp is
                                 retval : out Integer)
      with Pre     => ocpp.packet.Length(intstring) = 1;
 
-   procedure Find_Token
+   procedure move_index_past_token
      (msg : packet.Bounded_String;
       token    : Character;
-      index   : Positive;
+      index   : in out Positive;
       First  : out Positive;
       Last   : out Natural)
      with
        Pre    => (if ocpp.packet.Length(msg) /= 0 then index <= ocpp.packet.Length(msg)),
+       Post => (Last <= ocpp.packet.Length(msg)) and 
+       (Last < Integer'Last) and
+       (if Last /= 0 then First <= ocpp.packet.Length(msg)),
        Global => null;
 
 end ocpp;
