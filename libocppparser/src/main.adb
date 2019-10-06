@@ -12,7 +12,7 @@ procedure Main is
    --bootnotificationrequest : ocpp.BootNotifications.ptr := ocpp.BootNotifications.g_bootnotificationrequest'Access;
 
    packet: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String( ""
-     & "[2," & ASCII.LF
+     & " [2," & ASCII.LF
      & '"'  &"19223201"  &'"' & "," & ASCII.LF
      & '"' & "BootNotification" & '"' & "," & ASCII.LF
      & "{" & ASCII.LF
