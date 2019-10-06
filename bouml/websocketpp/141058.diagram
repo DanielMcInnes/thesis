@@ -1,0 +1,11 @@
+format 222
+
+classcanvas 128002 class_ref 156802 // main
+  classdiagramsettings member_max_width 0 end
+  xyz 235 157 2000
+end
+classcanvas 128130 class_ref 156930 // bootnotification
+  classdiagramsettings member_max_width 0 end
+  xyz 315 391 2000
+end
+end

@@ -1,0 +1,29 @@
+format 222
+
+classcanvas 128002 class_ref 163458 // findnextinteger
+  classdiagramsettings member_max_width 0 end
+  xyz 299 409 2000
+end
+classcanvas 128386 class_ref 163714 // parse
+  classdiagramsettings member_max_width 0 end
+  xyz 476 233 2000
+end
+classcanvas 128642 class_ref 170242 // findnonwhitespace
+  classdiagramsettings member_max_width 0 end
+  xyz 188 557 2000
+end
+classcanvas 128898 class_ref 170370 // ocpp.find_token
+  classdiagramsettings member_max_width 0 end
+  xyz 546 438 2000
+end
+relationcanvas 128514 relation_ref 144002 // <dependency>
+  from ref 128386 z 2001 to ref 128002
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128770 relation_ref 150530 // <dependency>
+  from ref 128002 z 2001 to ref 128642
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end
