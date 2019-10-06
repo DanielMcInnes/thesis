@@ -266,10 +266,7 @@ package body ocpp.BootNotifications is
       
       ocpp.move_index_past_token(msg, '}', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
 
-      pragma Warnings (Off, "unused assignment",
-                       Reason => "don't care");      
       ocpp.find_token(msg, ']', index, first, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
-      pragma Warnings (On, "unused assignment");      
       --[2,
       --"19223201",
       --"BootNotification",

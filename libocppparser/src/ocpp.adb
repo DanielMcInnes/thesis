@@ -14,7 +14,7 @@ package body ocpp is
    procedure find_token
      (msg : packet.Bounded_String;
       token    : Character;
-      index   : in out Positive;
+      index   : in Positive;
       first  : out Positive;
       last   : out Natural)
    is

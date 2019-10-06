@@ -40,7 +40,7 @@ package ocpp is
    procedure find_token
      (msg : packet.Bounded_String;
       token    : Character;
-      index   : in out Positive;
+      index   : in Positive;
       First  : out Positive;
       Last   : out Natural)
      with
