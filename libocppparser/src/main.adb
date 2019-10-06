@@ -4,6 +4,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Bounded;
 with ocpp;
 with ocpp.BootNotification;
+with ocpp.server;
 
 procedure Main is
    Dummy : Integer := 0;
