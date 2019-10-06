@@ -11,7 +11,7 @@ package body ocpp is
       retval := Integer'Value(ocpp.packet.To_String(intstring));
    end single_char_to_int;
 
-   procedure move_index_past_token
+   procedure find_token
      (msg : packet.Bounded_String;
       token    : Character;
       index   : in out Positive;
@@ -27,7 +27,6 @@ package body ocpp is
                              First => Integer(first),
                              Test => Ada.Strings.Inside,
                              Last => last);
-      index := first + 1;
       if (last > ocpp.packet.Length(msg)) then
          last := 0;
          put("ERROR: move_index_past_token: 31: index: ");
@@ -39,6 +38,18 @@ package body ocpp is
 
       put("    find_token: 30: index: "); put(index'image); put(" first: "); Put(first'image); put(" last: "); Put_Line(last'image);
 
+   end find_token;
+
+   procedure move_index_past_token
+     (msg : packet.Bounded_String;
+      token    : Character;
+      index   : in out Positive;
+      first  : out Positive;
+      last   : out Natural)
+   is
+   begin
+      find_token(msg, token, index, first, last);
+      index := first + 1;
    end move_index_past_token;
 
 

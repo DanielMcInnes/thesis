@@ -20,6 +20,20 @@ package ocpp is
        Pre    => (if ocpp.packet.Length(msg) /= 0 then index <= ocpp.packet.Length(msg)),
        Post => (Last <= ocpp.packet.Length(msg)) and 
        (Last < Integer'Last) and
+     (if Last /= 0 then First <= ocpp.packet.Length(msg)) and
+     (index <= ocpp.packet.Length(msg)),
+       Global => null;
+
+   procedure find_token
+     (msg : packet.Bounded_String;
+      token    : Character;
+      index   : in out Positive;
+      First  : out Positive;
+      Last   : out Natural)
+     with
+       Pre    => (if ocpp.packet.Length(msg) /= 0 then index <= ocpp.packet.Length(msg)),
+       Post => (Last <= ocpp.packet.Length(msg)) and 
+       (Last < Integer'Last) and
        (if Last /= 0 then First <= ocpp.packet.Length(msg)),
        Global => null;
 
