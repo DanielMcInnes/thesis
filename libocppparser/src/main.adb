@@ -3,11 +3,11 @@ pragma SPARK_Mode (On);
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Bounded;
 with ocpp;
-with ocpp.BootNotifications;
+with ocpp.BootNotification;
 
 procedure Main is
    Dummy : Integer := 0;
-   b: ocpp.BootNotifications.BootNotification;
+   b: ocpp.BootNotification.Request;
 
    --bootnotificationrequest : ocpp.BootNotifications.ptr := ocpp.BootNotifications.g_bootnotificationrequest'Access;
 
@@ -38,6 +38,6 @@ procedure Main is
 
 begin
    Put_Line(ocpp.packet.To_String(packet));
-   ocpp.BootNotifications.parse(packet, b);
+   ocpp.BootNotification.parse(packet, b);
    put_line(ocpp.packet.To_String(b.reason));
 end Main;

@@ -1,6 +1,6 @@
 format 222
 "websocketpp"
-  revision 6
+  revision 7
   modified_by 2 "dmcinnes"
 
 
@@ -194,6 +194,13 @@ ${inlines}
       explicit_switch_type ""
       mysql_decl ""
       
+      classrelation 150530 // <dependency>
+	relation 150530 -_->
+	  a public
+	    cpp default "#include in source"
+	    classrelation_ref 150530 // <dependency>
+	  b parent class_ref 170242 // findnonwhitespace
+      end
     end
 
     class 163714 "parse"
@@ -216,6 +223,36 @@ ${inlines}
 	    classrelation_ref 144002 // <dependency>
 	  b parent class_ref 163458 // findnextinteger
       end
+    end
+
+    class 170242 "findnonwhitespace"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 170370 "ocpp.find_token"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
     end
   end
 
