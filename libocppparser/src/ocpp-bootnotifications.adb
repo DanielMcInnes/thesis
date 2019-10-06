@@ -148,14 +148,8 @@ package body ocpp.BootNotifications is
       
       if (index > ocpp.packet.Length(msg)) then return; end if;
       ocpp.move_index_past_token(msg, '"', index, first, tempPositive);
+      if (tempPositive = 0) then put_line("121: ERROR"); found := false; return; end if;
 
-      if (tempPositive = 0) then
-         put_line("121: ERROR");
-         found := false;
-         return;
-      end if;
-
-      index := index + 1;
       put("    133: index: "); put_line(index'image);
       
       if (index > ocpp.packet.Length(msg)) then return; end if;
@@ -204,7 +198,6 @@ package body ocpp.BootNotifications is
       dummybounded: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
       index: Integer range 1 .. ocpp.packet.Max_Length := 1;
       tempPositive: Positive;
-      leftBracket: Character := '[';
       first: Integer;
       
    begin
@@ -224,26 +217,22 @@ package body ocpp.BootNotifications is
       if (retval = false) then return; end if;
       if (messageTypeId /= 2) then return; end if;
 
-      findtoken(msg, index, retval, ',');
-      if (retval = false) then return; end if;
+      ocpp.move_index_past_token(msg, ',', index, first, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
 
       put_line("parse: searching for messageId...");
       findquotedstring(msg, index, retval, messageId);
       if (retval = false) then return; end if;      
       put("parse: messageId: "); Put_Line(ocpp.packet.To_String(messageId));
       
-      findtoken(msg,index,retval, ',');
-      if (retval = false) then return; end if;
+      ocpp.move_index_past_token(msg, ',', index, first, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
       
       findquotedstring(msg, index, retval, action);
       if (retval = false) then return; end if;
       put("parse: action: "); Put_Line(ocpp.packet.To_String(action));
 
-      findtoken(msg, index, retval, ',');
-      if (retval = false) then return; end if;
+      ocpp.move_index_past_token(msg, ',', index, first, tempPositive); if (tempPositive = 0) then put_line("ERROR: 233"); return; end if;
             
-      findtoken(msg, index, retval, '{');
-      if (retval = false) then return; end if;
+      ocpp.move_index_past_token(msg, '{', index, first, tempPositive); if (tempPositive = 0) then put_line("ERROR: 235"); return; end if;
 
       put("parse: looking for 'reason': ");
       findquotedstring(msg, index, retval, dummybounded);
@@ -261,10 +250,7 @@ package body ocpp.BootNotifications is
       end if;
 
       put("parse: 244: looking for ':' ");
-      findtoken(msg, index, retval, ':');
-      if (retval = false) then put("parse: 250: ERROR: looking for 'reason': ");        
-         return; 
-      end if;
+      ocpp.move_index_past_token(msg, ':', index, first, tempPositive); if (tempPositive = 0) then put_line("ERROR: 253"); return; end if;
       
       put("parse: looking for reason ");
       findquotedstring(msg, index, retval, bn.reason);
@@ -275,25 +261,21 @@ package body ocpp.BootNotifications is
       put("parse: reason: "); Put_Line(ocpp.packet.To_String(bn.reason));
       if (validreason(bn.reason) = false) then return; end if;
       
-      findtoken(msg, index, retval, ',');
-      if (retval = false) then return; end if;
+      ocpp.move_index_past_token(msg, ',', index, first, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
       
       findquotedstring(msg, index, retval, dummybounded);
       if (retval = false) then return; end if;
       if (ocpp.packet.To_String(dummybounded) /= "chargingStation") then return; end if;
       
-      findtoken(msg, index, retval, ':');
-      if (retval = false) then return; end if;
+      ocpp.move_index_past_token(msg, ':', index, first, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
       
-      findtoken(msg, index, retval, '{');
-      if (retval = false) then return; end if;
+      ocpp.move_index_past_token(msg, '{', index, first, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
       
       findquotedstring(msg, index, retval, dummybounded);
       if (retval = false) then return; end if;
       if (ocpp.packet.To_String(dummybounded) /= "model") then return; end if;
       
-      findtoken(msg, index, retval, ':');
-      if (retval = false) then return; end if;
+      ocpp.move_index_past_token(msg, ':', index, first, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
       
       findquotedstring(msg, index, retval, bn.model);
       if (retval = false) then return; end if;

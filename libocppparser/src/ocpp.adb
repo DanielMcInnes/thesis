@@ -28,6 +28,12 @@ package body ocpp is
                              Test => Ada.Strings.Inside,
                              Last => last);
       index := first + 1;
+      if (index > ocpp.packet.Length(msg)) then
+         last := 0;
+         put_line("ERROR: move_index_past_token: 31");
+         return;
+      end if;
+
       put("    find_token: 30: index: "); put(index'image); put(" first: "); Put(first'image); put(" last: "); Put_Line(last'image);
 
    end move_index_past_token;
