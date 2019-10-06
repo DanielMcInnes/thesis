@@ -117,10 +117,11 @@ package body ocpp.BootNotifications is
          found := false;
          put("    118: "); put_line("ERROR");
          return;
-      end if;
-      
-      foundInteger := Integer'Value(ocpp.packet.To_String(intstring));
+      else
+         ocpp.single_char_to_int(intstring, foundInteger);
       found := true;
+         
+      end if;
       
    end findnextinteger;
    
@@ -128,9 +129,6 @@ package body ocpp.BootNotifications is
                               index : in out Positive;
                               found : out Boolean;
                               foundString: out ocpp.packet.Bounded_String) is
-      --temp : character;
-      tempstring : ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
-      --tempstring : string := "";
       tempPositive : Positive;
       first : Positive;
       second : Positive;
@@ -145,6 +143,8 @@ package body ocpp.BootNotifications is
       end if;
       put("    120: index: "); put_line(index'image);
       
+      --if (index > ocpp.packet.Length(msg)) then return; end if;
+      --ocpp.Find_Token(msg, '"', index, index, tempPositive);
       ocpp.packet.Find_Token(Source => msg, 
                              Set => Ada.Strings.Maps.To_Set('"'), 
                              From => index, 
