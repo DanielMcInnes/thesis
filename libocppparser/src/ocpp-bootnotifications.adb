@@ -281,8 +281,7 @@ package body ocpp.BootNotifications is
       if (retval = false) then return; end if;
       put("parse: model: "); Put_Line(ocpp.packet.To_String(bn.model));
       
-      findtoken(msg, index, retval, ',');
-      if (retval = false) then return; end if;
+      ocpp.move_index_past_token(msg, ',', index, first, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
       
       findquotedstring(msg, index, retval, dummybounded);
       if (retval = false) then return; end if;
@@ -295,16 +294,11 @@ package body ocpp.BootNotifications is
       if (retval = false) then return; end if;
       put("parse: vendor: "); Put_Line(ocpp.packet.To_String(bn.vendor)); 
       put_Line(ocpp.packet.To_String(bn.vendor) );
-      --str := ocpp.packet.To_String(bn.vendor);
-      --put ((bn.vendor.length));
-      --put_Line(ocpp.packet.To_String((bn.vendor.Length)));
                                                                                 
       
-      findtoken(msg, index, retval, '}');
-      if (retval = false) then return; end if;
+      ocpp.move_index_past_token(msg, '}', index, first, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
       
-      findtoken(msg, index, retval, '}');
-      if (retval = false) then return; end if;
+      ocpp.move_index_past_token(msg, '}', index, first, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
 
       pragma Warnings (Off, "unused assignment",
                        Reason => "don't care");      
