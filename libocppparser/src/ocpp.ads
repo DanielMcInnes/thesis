@@ -4,18 +4,35 @@ with Ada.Text_IO;
 
 package ocpp is  
    package packet is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 500);
-   package string36 is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    package messageid_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    package action_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    
-   package bootnotificationreason is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
-   package bootnotificationmodel is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
-   package bootnotificationvendor is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   package bootnotification_t is
+   package reason is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   package model is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   package vendor is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   end bootnotification_t;
+   
+   
       
+   
+      currentTime: ocpp.BootNotification_t.reason.Bounded_String := ocpp.BootNotification_t.reason.To_Bounded_String(""); --eg. PowerUp
+      interval:  ocpp.BootNotification_t.model.Bounded_String := ocpp.BootNotification_t.model.To_Bounded_String(""); -- eg. SingleSocketCharger
+      status: ocpp.BootNotification_t.vendor.Bounded_String := ocpp.BootNotification_t.vendor.To_Bounded_String(""); -- eg. VendorX
+   
+   package bootnotificationresponse_currentTime is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   package bootnotificationresponse_interval is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   package bootnotificationresponse_status is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+
    type call is tagged record
       messagetypeid : integer;-- eg. 2, 3
       messageid : messageid_t.Bounded_String; -- eg. 19223201
       action : action_t.Bounded_String;-- eg. BootNotification
+   end record;
+   
+   type callresult is tagged record
+      messagetypeid : integer;-- eg. 2, 3
+      messageid : messageid_t.Bounded_String; -- eg. 19223201
    end record;
    
    procedure single_char_to_int(intstring : in ocpp.packet.Bounded_String; 

@@ -7,10 +7,7 @@ with ocpp.BootNotification;
 with ocpp.server;
 
 procedure Main is
-   Dummy : Integer := 0;
-   b: ocpp.BootNotification.Request;
-
-   --bootnotificationrequest : ocpp.BootNotifications.ptr := ocpp.BootNotifications.g_bootnotificationrequest'Access;
+   bootNotificationRequest: ocpp.BootNotification.Request;
 
    packet: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String( ""
      & " [2," & ASCII.LF
@@ -39,6 +36,6 @@ procedure Main is
 
 begin
    Put_Line(ocpp.packet.To_String(packet));
-   ocpp.BootNotification.parse(packet, b);
-   put_line(ocpp.BootNotificationreason.To_String(b.reason));
+   ocpp.BootNotification.parse(packet, bootNotificationRequest);
+   put_line(ocpp.bootnotification_t.reason.To_String(bootNotificationRequest.reason));
 end Main;

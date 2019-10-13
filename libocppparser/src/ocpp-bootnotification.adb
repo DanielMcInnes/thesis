@@ -47,27 +47,27 @@ package body ocpp.BootNotification is
                                                               );
 
    procedure findquotedstring_reason is new findquotedstring(
-                                                                Max => ocpp.bootnotificationreason.Max_Length, 
-                                                               string_t => ocpp.BootNotificationReason.Bounded_String,
-                                                               length => ocpp.BootNotificationReason.Length,
-                                                               To_String => ocpp.BootNotificationReason.to_string,
-                                                               To_Bounded_String =>  ocpp.BootNotificationReason.To_Bounded_String
+                                                                Max => ocpp.BootNotification_t.reason.Max_Length, 
+                                                               string_t => ocpp.BootNotification_t.Reason.Bounded_String,
+                                                               length => ocpp.BootNotification_t.Reason.Length,
+                                                               To_String => ocpp.BootNotification_t.Reason.to_string,
+                                                               To_Bounded_String =>  ocpp.BootNotification_t.Reason.To_Bounded_String
                                                               );
 
    procedure findquotedstring_model is new findquotedstring(
-                                                                Max => ocpp.bootnotificationmodel.Max_Length, 
-                                                               string_t => ocpp.BootNotificationModel.Bounded_String,
-                                                               length => ocpp.BootNotificationModel.Length,
-                                                               To_String => ocpp.BootNotificationModel.to_string,
-                                                               To_Bounded_String =>  ocpp.BootNotificationModel.To_Bounded_String
+                                                                Max => ocpp.bootnotification_t.model.Max_Length, 
+                                                               string_t => ocpp.BootNotification_t.Model.Bounded_String,
+                                                               length => ocpp.BootNotification_t.Model.Length,
+                                                               To_String => ocpp.BootNotification_t.Model.to_string,
+                                                               To_Bounded_String =>  ocpp.BootNotification_t.Model.To_Bounded_String
                                                               );
 
    procedure findquotedstring_vendor is new findquotedstring(
-                                                                Max => ocpp.bootnotificationvendor.Max_Length, 
-                                                               string_t => ocpp.BootNotificationVendor.Bounded_String,
-                                                               length => ocpp.BootNotificationVendor.Length,
-                                                               To_String => ocpp.BootNotificationVendor.to_string,
-                                                               To_Bounded_String =>  ocpp.BootNotificationVendor.To_Bounded_String
+                                                                Max => ocpp.bootnotification_t.vendor.Max_Length, 
+                                                               string_t => ocpp.BootNotification_t.Vendor.Bounded_String,
+                                                               length => ocpp.BootNotification_t.Vendor.Length,
+                                                               To_String => ocpp.BootNotification_t.Vendor.to_string,
+                                                               To_Bounded_String =>  ocpp.BootNotification_t.Vendor.To_Bounded_String
                                                               );
 
    
@@ -116,23 +116,23 @@ package body ocpp.BootNotification is
       
    end findnextinteger;
    
-   function validreason(thereason: ocpp.BootNotificationreason.Bounded_String) return Boolean 
+   function validreason(thereason: ocpp.BootNotification_t.reason.Bounded_String) return Boolean 
      with  Global => null
    is
-      bootreasons : constant BootReasons_t := (ocpp.BootNotificationreason.To_Bounded_String("ApplicationReset"),
-                                               ocpp.BootNotificationreason.To_Bounded_String("FirmwareUpdate"),
-                                               ocpp.BootNotificationreason.To_Bounded_String("LocalReset"),
-                                               ocpp.BootNotificationreason.To_Bounded_String("PowerUp"),
-                                               ocpp.BootNotificationreason.To_Bounded_String("RemoteReset"),
-                                               ocpp.BootNotificationreason.To_Bounded_String("ScheduledReset"),
-                                               ocpp.BootNotificationreason.To_Bounded_String("Triggered"),
-                                               ocpp.BootNotificationreason.To_Bounded_String("Unknown"),
-                                               ocpp.BootNotificationreason.To_Bounded_String("Watchdog"));
+      bootreasons : constant BootReasons_t := (ocpp.BootNotification_t.reason.To_Bounded_String("ApplicationReset"),
+                                               ocpp.BootNotification_t.reason.To_Bounded_String("FirmwareUpdate"),
+                                               ocpp.BootNotification_t.reason.To_Bounded_String("LocalReset"),
+                                               ocpp.BootNotification_t.reason.To_Bounded_String("PowerUp"),
+                                               ocpp.BootNotification_t.reason.To_Bounded_String("RemoteReset"),
+                                               ocpp.BootNotification_t.reason.To_Bounded_String("ScheduledReset"),
+                                               ocpp.BootNotification_t.reason.To_Bounded_String("Triggered"),
+                                               ocpp.BootNotification_t.reason.To_Bounded_String("Unknown"),
+                                               ocpp.BootNotification_t.reason.To_Bounded_String("Watchdog"));
       --use all type ocpp.BootNotification.BootReasons_t;
    begin
       for I in bootreasons'Range loop
          --put(ocpp.packet.To_String(bootreasons(I)));
-         if (ocpp.BootNotificationreason.To_String(bootreasons(I)) = ocpp.BootNotificationreason.To_String(thereason)) then 
+         if (ocpp.BootNotification_t.reason.To_String(bootreasons(I)) = ocpp.BootNotification_t.reason.To_String(thereason)) then 
             return true;
          end if;
       end loop;      
@@ -149,9 +149,9 @@ package body ocpp.BootNotification is
       tempPositive: integer;
       
    begin
-      bn.reason := ocpp.BootNotificationReason.To_Bounded_String("");
-      bn.model := ocpp.BootNotificationModel.To_Bounded_String("");
-      bn.vendor := ocpp.BootNotificationVendor.To_Bounded_String(""); --put("161 index: "); put_line(index'image);
+      bn.reason := ocpp.BootNotification_t.reason.To_Bounded_String("");
+      bn.model := ocpp.BootNotification_t.Model.To_Bounded_String("");
+      bn.vendor := ocpp.BootNotification_t.Vendor.To_Bounded_String(""); --put("161 index: "); put_line(index'image);
       bn.messageTypeId := 0;
       bn.messageId := ocpp.messageid_t.To_Bounded_String("");
       bn.action := ocpp.action_t.To_Bounded_String("");
@@ -209,7 +209,7 @@ package body ocpp.BootNotification is
          return; 
       end if;
       
-      put("parse: reason: "); Put_Line(ocpp.BootNotificationReason.To_String(bn.reason));
+      put("parse: reason: "); Put_Line(ocpp.BootNotification_t.reason.To_String(bn.reason));
       if (validreason(bn.reason) = false) then return; end if;
       
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
@@ -230,7 +230,7 @@ package body ocpp.BootNotification is
       
       findquotedstring_model(msg, index, retval, bn.model);
       if (retval = false) then return; end if;
-      put("parse: model: "); Put_Line(ocpp.BootNotificationModel.To_String(bn.model));
+      put("parse: model: "); Put_Line(ocpp.BootNotification_t.Model.To_String(bn.model));
       
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
       
@@ -242,7 +242,7 @@ package body ocpp.BootNotification is
       
       findquotedstring_vendor(msg, index, retval, bn.vendor);
       if (retval = false) then return; end if;
-      put("parse: vendor: "); Put_Line(ocpp.BootNotificationVendor.To_String(bn.vendor)); 
+      put("parse: vendor: "); Put_Line(ocpp.BootNotification_t.Vendor.To_String(bn.vendor)); 
                                                                                       
       ocpp.move_index_past_token(msg, '}', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
       
@@ -262,7 +262,7 @@ package body ocpp.BootNotification is
       --]
       
       Put_Line("parse: hooray!"); 
-      Put(ocpp.BootNotificationVendor.Length(bn.vendor)'Image);
+      Put(ocpp.BootNotification_t.Vendor.Length(bn.vendor)'Image);
    end parse;
    
 
