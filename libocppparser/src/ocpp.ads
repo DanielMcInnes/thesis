@@ -7,6 +7,10 @@ package ocpp is
    package string36 is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    package messageid_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    package action_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   
+   package bootnotificationreason is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   package bootnotificationmodel is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   package bootnotificationvendor is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
       
    type call is tagged record
       messagetypeid : integer;-- eg. 2, 3
@@ -59,25 +63,24 @@ package ocpp is
       type string_t (<>) is limited private;
       with function length (msg : string_t) return integer;
       with function element(msg : string_t; index: Positive) return character;
-      with function to_string(msg : string_t) return string;      
+      with function to_string(msg : string_t) return string;        
    procedure findnonwhitespace(msg: in string_t;
                                index: in out Positive;
                                retval: out boolean);
    
 
---   generic
---      type string_t (<>) is private;
---      with function to_string(msg : string_t) return string;      
---      with function To_Bounded_String(msg : string;
---                                     Drop : Ada.Strings.Truncation := Ada.Strings.Error) return string_t;
---      with function Bounded_Slice (Source : ocpp.packet.Bounded_String;
---                                  Low    : Positive;
---                                  High   : Natural) return string_t;
+   generic
+      Max: Positive;
+      type string_t (<>) is private;
+      with function to_string(msg : string_t) return string;      
+      with function To_Bounded_String(msg : string;
+                                     Drop : Ada.Strings.Truncation := Ada.Strings.Error) return string_t;
+      with function length (msg : string_t) return integer;
       
---   procedure findquotedstring(msg: in ocpp.packet.Bounded_String;
---                              index : in out Positive;
---                              found : out Boolean;
---                              foundString: in out string_t) 
---     with  Global => (In_Out => Ada.Text_IO.File_System);
+   procedure findquotedstring(msg: in ocpp.packet.Bounded_String;
+                              index : in out Positive;
+                              found : out Boolean;
+                              foundString: in out string_t) 
+     with  Global => (In_Out => Ada.Text_IO.File_System);
 
 end ocpp;

@@ -109,7 +109,58 @@ package body ocpp is
                                                                element => ocpp.packet.Element,
                                                                To_String => ocpp.packet.to_string
                                                               );
-
    
+   procedure findquotedstring(msg: in ocpp.packet.Bounded_String;
+                              index : in out Positive;
+                              found : out Boolean;
+                              foundString: in out string_t)
+   is
+      tempPositive : Integer;
+      first : Integer;
+      second : Integer;
+      tempbs : ocpp.packet.Bounded_String;      
+
+   begin
+      put("    117: index: "); put_line(index'image);
+      findnonwhitespace_packet(msg, index, found);
+      if (found = false) then
+         return;
+      end if;
+      put("    120: index: "); put_line(index'image);
+
+      if (index > ocpp.packet.Length(msg)) then return; end if;
+      ocpp.move_index_past_token(msg, '"', index, first, tempPositive);
+      if (tempPositive = 0) then put_line("121: ERROR"); found := false; return; end if;
+
+      put("    133: index: "); put_line(index'image);
+
+      if (index > ocpp.packet.Length(msg)) then return; end if;
+      ocpp.move_index_past_token(msg, '"', index, second, tempPositive);
+
+      if (tempPositive = 0) then
+         put_line("138: ERROR");
+         found := false;
+         return;
+      end if;
+
+      if ((first + 1) > ocpp.packet.Length(msg)) then return; end if;
+      tempbs := ocpp.packet.Bounded_Slice(msg, first + 1, second -1);
+      put("    153: tempbs:"); Put_Line(ocpp.packet.To_String(tempbs));
+      
+      --put("max messageId length: "); put_line(ocpp.bootnotificationreason.Max_Length'Image);
+      if (ocpp.packet.Length(tempbs) > Max ) then
+         found := false;
+         put_line("ERROR: "); put(" source length:"); put(ocpp.packet.Length(tempbs)'Image) ;put(" dest length: ");put(Length(foundString)'Image);
+         return;
+      end if;
+      
+          
+      foundString := To_Bounded_String(ocpp.packet.To_String(tempbs));
+
+      put("    146: tempstring: first: "); put(first'Image); put(" second: "); put(second'image); put(" foundString: "); put_line(To_String(foundString));
+      found := true;
+      index := second + 1;
+
+   end findquotedstring;
 
 end ocpp;

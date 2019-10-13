@@ -40,5 +40,5 @@ procedure Main is
 begin
    Put_Line(ocpp.packet.To_String(packet));
    ocpp.BootNotification.parse(packet, b);
-   put_line(ocpp.packet.To_String(b.reason));
+   put_line(ocpp.BootNotificationreason.To_String(b.reason));
 end Main;
