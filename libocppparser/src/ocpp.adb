@@ -65,6 +65,51 @@ package body ocpp is
    end move_index_past_token;
 
 
+   procedure findnonwhitespace(msg: in string_t;
+                               index: in out Positive;
+                               retval: out boolean) is
+      temp : character;
+   begin
+      put("    findnonwhitespace 21: msg'size: "); put_line(msg'Size'Image);
+      if ((index <= 0) or (index > Length(msg))) then
+         retval := false;
+         put("    findnonwhitespace 25: index: "); put_line("ERROR");
+         return;
+      end if;
+           
+      temp :=  Element(msg, index); put("    findnonwhitespace 27: index: "); put(index'Image); put(" temp: "); put_line(temp'image); 
+      put("    findnonwhitespace 30: index: "); put_line(index'image);
+      while ((temp = ASCII.LF) or (temp = ' ')) loop
+         if (
+             (index = Integer'Last)  or 
+               (index >= Length(msg)) 
+            ) 
+         then
+            retval := false; put("    findnonwhitespace 34: ERROR"); put(" packet: "); Put_Line(To_String(msg));
+            return;
+         end if;
+         
+         index := index + 1;
+         if (index >= Length(msg))
+         then
+            retval := false; put("    findnonwhitespace 34: ERROR"); put(" packet: "); Put_Line(To_String(msg));
+            return;
+         end if;
+         
+         temp :=  Element(msg, index); put("    findnonwhitespace 41: index: "); put(index'Image); put(" temp: "); put_line(temp'image); 
+         put("    13: index: "); put_line(index'image);
+      end loop;      
+      put("    findnonwhitespace 51: index: "); put_line(index'image);
+      retval := true;
+   end findnonwhitespace;
 
+   procedure findnonwhitespace_packet is new findnonwhitespace(
+                                                               string_t => ocpp.packet.Bounded_String, 
+                                                               length => ocpp.packet.Length,
+                                                               element => ocpp.packet.Element,
+                                                               To_String => ocpp.packet.to_string
+                                                              );
+
+   
 
 end ocpp;

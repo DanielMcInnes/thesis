@@ -8,50 +8,28 @@ with ocpp;
 with ocpp.BootNotification;
 
 package body ocpp.BootNotification is
+   procedure findnonwhitespace_packet is new findnonwhitespace(
+                                                               string_t => ocpp.packet.Bounded_String, 
+                                                               length => ocpp.packet.Length,
+                                                               element => ocpp.packet.Element,
+                                                               To_String => ocpp.packet.to_string
+                                                              );
 
-   procedure findnonwhitespace(msg: in ocpp.packet.Bounded_String;
-                               index: in out Positive;
-                               retval: out boolean)
-     --with pre => msg'size = ocpp.packet.Bounded_String'Size and index < 500--msg'size
-     with Global => (In_Out => Ada.Text_IO.File_System),
-     post => (if retval = true then index <= ocpp.packet.Length(msg))
-   is
-      temp : character;
-   begin
-      put("    findnonwhitespace 21: msg'size: "); put_line(msg'Size'Image);
-      --put("18: msg'size: "); put_line(msg. );
-      if ((index <= 0) or (index > ocpp.packet.Length(msg))) then
-         retval := false;
-         put("    findnonwhitespace 25: index: "); put_line("ERROR");
-         return;
-      end if;
-           
-      temp :=  ocpp.packet.Element(msg, index); put("    findnonwhitespace 27: index: "); put(index'Image); put(" temp: "); put_line(temp'image); 
-      put("    findnonwhitespace 30: index: "); put_line(index'image);
-      while ((temp = ASCII.LF) or (temp = ' ')) loop
-         if (
-             (index = Integer'Last)  or 
-               (index >= ocpp.packet.Length(msg)) 
-            ) 
-         then
-            retval := false; put("    findnonwhitespace 34: ERROR"); put(" packet: "); Put_Line(ocpp.packet.To_String(msg));
-            return;
-         end if;
-         
-         index := index + 1;
-         if (index >= ocpp.packet.Length(msg))
-         then
-            retval := false; put("    findnonwhitespace 34: ERROR"); put(" packet: "); Put_Line(ocpp.packet.To_String(msg));
-            return;
-         end if;
-         
-         temp :=  ocpp.packet.Element(msg, index); put("    findnonwhitespace 41: index: "); put(index'Image); put(" temp: "); put_line(temp'image); 
-         put("    13: index: "); put_line(index'image);
-      end loop;      
-      put("    findnonwhitespace 51: index: "); put_line(index'image);
-      retval := true;
-   end findnonwhitespace;
+   procedure findnonwhitespace_messageid is new findnonwhitespace(
+                                                                  string_t => ocpp.messageid_t.Bounded_String, 
+                                                                  length => ocpp.messageid_t.Length,
+                                                                  element => ocpp.messageid_t.Element,
+                                                                  To_String => ocpp.messageid_t.to_string
+                                                                 );
+   
+--   procedure findquotedstring_messageid is new findquotedstring(
+--                                                                string_t => ocpp.messageid_t.Bounded_String,
+--                                                                To_String => ocpp.messageid_t.To_String,
+--                                                                To_Bounded_String => ocpp.messageid_t.To_Bounded_String,
+--                                                                Bounded_Slice => ocpp.messageid_t.Bounded_Slice
+--                                                                  );
 
+   
    procedure findnextinteger(msg: in ocpp.packet.Bounded_String;
                              index : in out Positive;
                              foundInteger: out integer;
@@ -70,7 +48,7 @@ package body ocpp.BootNotification is
          return;
       end if;
            
-      findnonwhitespace(msg, index, found); Put_Line("    105: findnextinteger:");
+      findnonwhitespace_packet(msg, index, found); Put_Line("    105: findnextinteger:");
       if (found = false) then
          return;
       end if;      
@@ -96,48 +74,6 @@ package body ocpp.BootNotification is
       Put_Line("    127: findnextinteger: finished");
       
    end findnextinteger;
-   
-   procedure findquotedstring(msg: in ocpp.packet.Bounded_String;
-                              index : in out Positive;
-                              found : out Boolean;
-                              foundString: out ocpp.packet.Bounded_String) 
-     with  Global => (In_Out => Ada.Text_IO.File_System)
-   is
-      tempPositive : Integer;
-      first : Integer;
-      second : Integer;
-      
-   begin
-      foundString := ocpp.packet.To_Bounded_String("");
-      
-      put("    117: index: "); put_line(index'image);
-      findnonwhitespace(msg, index, found);
-      if (found = false) then 
-         return; 
-      end if;
-      put("    120: index: "); put_line(index'image);
-      
-      if (index > ocpp.packet.Length(msg)) then return; end if;
-      ocpp.move_index_past_token(msg, '"', index, first, tempPositive);
-      if (tempPositive = 0) then put_line("121: ERROR"); found := false; return; end if;
-
-      put("    133: index: "); put_line(index'image);
-      
-      if (index > ocpp.packet.Length(msg)) then return; end if;
-      ocpp.move_index_past_token(msg, '"', index, second, tempPositive);
-
-      if (tempPositive = 0) then
-         put_line("138: ERROR");
-         found := false;
-         return;
-      end if;
-      
-      if ((first + 1) > ocpp.packet.Length(msg)) then return; end if;
-      foundString := ocpp.packet.Bounded_Slice(msg, first + 1, second -1); put("    146: tempstring: first: "); put(first'Image); put(" second: "); put(second'image); put(" foundString: "); put_line(ocpp.packet.To_String(foundString));
-      found := true;
-      index := second + 1;
-
-   end findquotedstring;
    
    function validreason(thereason: ocpp.packet.Bounded_String) return Boolean 
      with  Global => null
@@ -177,8 +113,8 @@ package body ocpp.BootNotification is
       bn.model := ocpp.packet.To_Bounded_String("");
       bn.vendor := ocpp.packet.To_Bounded_String(""); --put("161 index: "); put_line(index'image);
       bn.messageTypeId := 0;
-      bn.messageId := ocpp.packet.To_Bounded_String("");
-      bn.action := ocpp.packet.To_Bounded_String("");
+      bn.messageId := ocpp.messageid_t.To_Bounded_String("");
+      bn.action := ocpp.action_t.To_Bounded_String("");
       
       ocpp.move_index_past_token(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
       
@@ -194,10 +130,10 @@ package body ocpp.BootNotification is
 
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
 
-      put_line("parse: searching for messageId...");
-      findquotedstring(msg, index, retval, bn.messageId);
+      put_line("parse: searching for messageId..."); 
+      findquotedstring_messageid(msg, index, retval, bn.messageId);
       if (retval = false) then return; end if;      
-      put("parse: messageId: "); Put_Line(ocpp.packet.To_String(bn.messageId));
+      put("parse: messageId: "); Put_Line(To_String(bn.messageId));
       
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
       
