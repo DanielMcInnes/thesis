@@ -116,27 +116,17 @@ package body ocpp.BootNotification is
       
    end findnextinteger;
    
-   function validreason(thereason: ocpp.BootNotification_t.request.reason.Bounded_String) return Boolean 
-     with  Global => null
+   procedure validreason(thereason: in ocpp.BootNotification_t.request.reason.Bounded_String;
+                        valid: out Boolean)
    is
-      bootreasons : constant BootReasons_t := (ocpp.BootNotification_t.request.reason.To_Bounded_String("ApplicationReset"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("FirmwareUpdate"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("LocalReset"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("PowerUp"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("RemoteReset"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("ScheduledReset"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("Triggered"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("Unknown"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("Watchdog"));
-      --use all type ocpp.BootNotification.BootReasons_t;
-   begin
-      for I in bootreasons'Range loop
-         --put(ocpp.packet.To_String(bootreasons(I)));
-         if (ocpp.BootNotification_t.request.reason.To_String(bootreasons(I)) = ocpp.BootNotification_t.request.reason.To_String(thereason)) then 
-            return true;
+   begin      
+      for I in validreasons'Range loop
+         if (ocpp.BootNotification_t.request.reason.To_String(validreasons(I)) = ocpp.BootNotification_t.request.reason.To_String(thereason)) then 
+            valid := true;
+            return;
          end if;
       end loop;      
-      return false;      
+      valid := false;      
    end validreason;   
    
    procedure parse(msg:   in  ocpp.packet.Bounded_String;
@@ -215,7 +205,8 @@ package body ocpp.BootNotification is
       end if;
       
       put("parse: reason: "); Put_Line(ocpp.BootNotification_t.request.reason.To_String(request.reason));
-      if (validreason(request.reason) = false) then return; end if;
+      validreason(request.reason, retval); 
+      if (retval = false) then return; end if;
       
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
       
