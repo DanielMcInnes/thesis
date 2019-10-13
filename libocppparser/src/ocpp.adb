@@ -118,7 +118,7 @@ package body ocpp is
       tempPositive : Integer;
       first : Integer;
       second : Integer;
-      tempbs : ocpp.packet.Bounded_String;      
+      tempbs : ocpp.packet.Bounded_String;
 
    begin
       put("    117: index: "); put_line(index'image);
@@ -156,10 +156,16 @@ package body ocpp is
       
           
       foundString := To_Bounded_String(ocpp.packet.To_String(tempbs));
+      if (Length(foundString) = 0) then
+         return;
+      end if;
+      
 
       put("    146: tempstring: first: "); put(first'Image); put(" second: "); put(second'image); put(" foundString: "); put_line(To_String(foundString));
+      
       found := true;
       index := second + 1;
+      
 
    end findquotedstring;
 

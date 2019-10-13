@@ -140,7 +140,7 @@ package body ocpp.BootNotification is
    end validreason;   
    
    procedure parse(msg:   in  ocpp.packet.Bounded_String;
-                   request:    out ocpp.BootNotification.Request;
+                   request: out ocpp.BootNotification.Request;
                    valid: out Boolean)
    is
       str : string := "reason";
@@ -158,7 +158,6 @@ package body ocpp.BootNotification is
       request.messageId := ocpp.messageid_t.To_Bounded_String("");
       request.action := ocpp.action_t.To_Bounded_String("");
       
-      -- ocpp-bootnotification.adb:162:11: high: "Text_IO.File_System" is not initialized
       ocpp.move_index_past_token(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
       
       put("parse: 169 index: "); put_line(index'image);
@@ -166,7 +165,7 @@ package body ocpp.BootNotification is
       findnextinteger(msg, index, request.messageTypeId, retval); if (retval = false) then return; end if;
       index := index + 1;
       put ("parse: messageTypeId: "); put_line(request.messageTypeId'image); 
-
+      
       put("parse: 171 index: "); put_line(index'image);
       if (retval = false) then return; end if;
       if (request.messageTypeId /= 2) then return; end if;
@@ -175,6 +174,7 @@ package body ocpp.BootNotification is
 
       put_line("parse: searching for messageId..."); 
       findquotedstring_messageid(msg, index, retval, request.messageId);
+      if (ocpp.messageid_t.Length(request.messageid) = 0) then return; end if;
       if (retval = false) then return; end if;      
       put("parse: messageId: "); Put_Line(ocpp.messageid_t.To_String(request.messageId));
       
@@ -182,6 +182,8 @@ package body ocpp.BootNotification is
       
       findquotedstring_action(msg, index, retval, request.action);
       if (retval = false) then return; end if;
+      if (ocpp.action_t.To_String(request.action) /= ("BootNotification")) then return; end if;
+      
       put("parse: action: "); Put_Line(ocpp.action_t.To_String(request.action));
 
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 233"); return; end if;

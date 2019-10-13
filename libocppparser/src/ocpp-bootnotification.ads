@@ -30,8 +30,14 @@ package ocpp.BootNotification is
                    valid: out Boolean)
      with Global => (in_out => Ada.Text_IO.File_System),
      Depends => (
-                 request => (msg, Ada.Text_IO.File_System),
+                   request => (msg, Ada.Text_IO.File_System),
                  valid => (msg, Ada.Text_IO.File_System),
                  Ada.Text_IO.File_System => (msg, Ada.Text_IO.File_System)
-                );
+                ),
+     post => (if valid = true then
+                (request.messagetypeid = 2) and
+                  (ocpp.messageid_t.Length(request.messageid) > 0) and
+                    (ocpp.action_t.To_String(request.action) = "BootNotification")
+             );
+
 end ocpp.BootNotification;

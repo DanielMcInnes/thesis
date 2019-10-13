@@ -105,5 +105,4 @@ package ocpp is
                               found : out Boolean;
                               foundString: in out string_t) 
      with  Global => (In_Out => Ada.Text_IO.File_System);
-
 end ocpp;
