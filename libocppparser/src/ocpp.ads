@@ -8,21 +8,28 @@ package ocpp is
    package action_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    
    package bootnotification_t is
-   package reason is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
-   package model is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
-   package vendor is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+
+      package request is
+         package reason is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+         package model is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+         package vendor is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+      end request;
+      
+      package response is
+         package currentTime is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+         package interval is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+         package status is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+      end response;
+      
    end bootnotification_t;
    
    
       
    
-      currentTime: ocpp.BootNotification_t.reason.Bounded_String := ocpp.BootNotification_t.reason.To_Bounded_String(""); --eg. PowerUp
-      interval:  ocpp.BootNotification_t.model.Bounded_String := ocpp.BootNotification_t.model.To_Bounded_String(""); -- eg. SingleSocketCharger
-      status: ocpp.BootNotification_t.vendor.Bounded_String := ocpp.BootNotification_t.vendor.To_Bounded_String(""); -- eg. VendorX
+   currentTime: ocpp.BootNotification_t.request.reason.Bounded_String := ocpp.BootNotification_t.request.reason.To_Bounded_String(""); --eg. PowerUp
+   interval:  ocpp.BootNotification_t.request.model.Bounded_String := ocpp.BootNotification_t.request.model.To_Bounded_String(""); -- eg. SingleSocketCharger
+   status: ocpp.BootNotification_t.request.vendor.Bounded_String := ocpp.BootNotification_t.request.vendor.To_Bounded_String(""); -- eg. VendorX
    
-   package bootnotificationresponse_currentTime is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
-   package bootnotificationresponse_interval is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
-   package bootnotificationresponse_status is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
 
    type call is tagged record
       messagetypeid : integer;-- eg. 2, 3
@@ -90,7 +97,7 @@ package ocpp is
       type string_t (<>) is private;
       with function to_string(msg : string_t) return string;      
       with function To_Bounded_String(msg : string;
-                                     Drop : Ada.Strings.Truncation := Ada.Strings.Error) return string_t;
+                                      Drop : Ada.Strings.Truncation := Ada.Strings.Error) return string_t;
       with function length (msg : string_t) return integer;
       
    procedure findquotedstring(msg: in ocpp.packet.Bounded_String;
