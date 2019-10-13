@@ -12,7 +12,6 @@ package body ocpp.BootNotification is
    procedure findnonwhitespace(msg: in ocpp.packet.Bounded_String;
                                index: in out Positive;
                                retval: out boolean)
-     --with pre => msg'size = ocpp.packet.Bounded_String'Size and index < 500--msg'size
      with Global => (In_Out => Ada.Text_IO.File_System),
      post => (if retval = true then index <= ocpp.packet.Length(msg))
    is
@@ -167,7 +166,6 @@ package body ocpp.BootNotification is
    is
       str : string := "reason";
       retval : boolean;
-      --temp2: integer;
       dummybounded: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
       index: Integer := 1;
       tempPositive: integer;
