@@ -1,9 +1,23 @@
-
+with Ada.Strings; 
 with Ada.Strings.Bounded;
 with Ada.Text_IO;
 
 package ocpp is  
    package packet is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 500);
+   package string36 is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   package messageid_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   package action_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   
+   package bootnotificationreason is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   package bootnotificationmodel is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   package bootnotificationvendor is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+      
+   type call is tagged record
+      messagetypeid : integer;-- eg. 2, 3
+      messageid : messageid_t.Bounded_String; -- eg. 19223201
+      action : action_t.Bounded_String;-- eg. BootNotification
+   end record;
+   
    procedure single_char_to_int(intstring : in ocpp.packet.Bounded_String; 
                                 retval : out Integer)
      with Pre     => ocpp.packet.Length(intstring) = 1;
@@ -26,8 +40,8 @@ package ocpp is
       First  : out Positive;
       Last   : out Natural)
      with
-     Post => (Last <= ocpp.packet.Length(msg)) and 
-     (Last < Integer'Last) and
+       Post => (Last <= ocpp.packet.Length(msg)) and 
+       (Last < Integer'Last) and
      (if Last /= 0 then First <= ocpp.packet.Length(msg)) and
      (index <= ocpp.packet.Length(msg)),
      Global => null;
@@ -44,5 +58,28 @@ package ocpp is
        (Last < Integer'Last) and
      (if Last /= 0 then First <= ocpp.packet.Length(msg)),
      Global => null;
+   
+   generic
+      type string_t (<>) is limited private;
+      with function length (msg : string_t) return integer;
+      with function element(msg : string_t; index: Positive) return character;
+      with function to_string(msg : string_t) return string;        
+   procedure findnonwhitespace(msg: in string_t;
+                               index: in out Positive;
+                               retval: out boolean);
+   
+   generic
+      Max: Positive;
+      type string_t (<>) is private;
+      with function to_string(msg : string_t) return string;      
+      with function To_Bounded_String(msg : string;
+                                     Drop : Ada.Strings.Truncation := Ada.Strings.Error) return string_t;
+      with function length (msg : string_t) return integer;
+      
+   procedure findquotedstring(msg: in ocpp.packet.Bounded_String;
+                              index : in out Positive;
+                              found : out Boolean;
+                              foundString: in out string_t) 
+     with  Global => (In_Out => Ada.Text_IO.File_System);
 
 end ocpp;

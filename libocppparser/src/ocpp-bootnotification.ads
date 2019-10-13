@@ -9,16 +9,14 @@ with Ada.Command_Line;
 with ocpp;
 
 package ocpp.BootNotification is
-   type Request is tagged record
-      reason: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String(""); --eg. PowerUp
-      model:  ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String(""); -- eg. SingleSocketCharger
-      vendor: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String(""); -- eg. VendorX
-      messageTypeId: Integer := 0; -- eg. 2, 3
-      messageId: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String(""); -- eg. 19223201
-      action: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String(""); -- eg. BootNotification
+
+   type Request is new call with record
+      reason: ocpp.BootNotificationreason.Bounded_String := ocpp.BootNotificationreason.To_Bounded_String(""); --eg. PowerUp
+      model:  ocpp.BootNotificationmodel.Bounded_String := ocpp.BootNotificationmodel.To_Bounded_String(""); -- eg. SingleSocketCharger
+      vendor: ocpp.BootNotificationvendor.Bounded_String := ocpp.BootNotificationvendor.To_Bounded_String(""); -- eg. VendorX
    end record;
 
-   type BootReasons_t is array(1..9) of ocpp.packet.Bounded_String;
+   type BootReasons_t is array(1..9) of ocpp.BootNotificationreason.Bounded_String;
 
    procedure parse(msg: in ocpp.packet.Bounded_String;
                    bn: out ocpp.BootNotification.Request)
