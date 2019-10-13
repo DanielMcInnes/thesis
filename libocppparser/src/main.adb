@@ -8,6 +8,7 @@ with ocpp.server;
 
 procedure Main is
    bootNotificationRequest: ocpp.BootNotification.Request;
+   valid: Boolean;
 
    packet: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String( ""
      & " [2," & ASCII.LF
@@ -36,6 +37,6 @@ procedure Main is
 
 begin
    Put_Line(ocpp.packet.To_String(packet));
-   ocpp.BootNotification.parse(packet, bootNotificationRequest);
+   ocpp.BootNotification.parse(packet, bootNotificationRequest, valid);
    put_line(ocpp.bootnotification_t.request.reason.To_String(bootNotificationRequest.reason));
 end Main;

@@ -26,6 +26,12 @@ package ocpp.BootNotification is
    type BootReasons_t is array(1..9) of ocpp.BootNotification_t.request.reason.Bounded_String;
 
    procedure parse(msg: in ocpp.packet.Bounded_String;
-                   bn: out ocpp.BootNotification.Request)
-     with Global => (In_Out => Ada.Text_IO.File_System);
+                   request: out ocpp.BootNotification.Request;
+                   valid: out Boolean)
+     with Global => (in_out => Ada.Text_IO.File_System),
+     Depends => (
+                 request => (msg, Ada.Text_IO.File_System),
+                 valid => (msg, Ada.Text_IO.File_System),
+                 Ada.Text_IO.File_System => (msg, Ada.Text_IO.File_System)
+                );
 end ocpp.BootNotification;
