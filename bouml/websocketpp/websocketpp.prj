@@ -1,6 +1,6 @@
 format 222
 "websocketpp"
-  revision 7
+  revision 8
   modified_by 2 "dmcinnes"
 
 
@@ -241,6 +241,21 @@ ${inlines}
     end
 
     class 170370 "ocpp.find_token"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 176898 "findquotedstring"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};

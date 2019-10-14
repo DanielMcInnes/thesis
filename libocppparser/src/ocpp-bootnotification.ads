@@ -63,4 +63,5 @@ package ocpp.BootNotification is
                 (ocpp.action_t.To_String(request.action) = "BootNotification")
              );
 
+
 end ocpp.BootNotification;

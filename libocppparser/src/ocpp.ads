@@ -32,13 +32,13 @@ package ocpp is
    
 
    type call is tagged record
-      messagetypeid : integer;-- eg. 2, 3
+      messagetypeid : integer;-- eg. 2
       messageid : messageid_t.Bounded_String; -- eg. 19223201
       action : action_t.Bounded_String;-- eg. BootNotification
    end record;
    
    type callresult is tagged record
-      messagetypeid : integer;-- eg. 2, 3
+      messagetypeid : integer;-- eg. 3
       messageid : messageid_t.Bounded_String; -- eg. 19223201
    end record;
    

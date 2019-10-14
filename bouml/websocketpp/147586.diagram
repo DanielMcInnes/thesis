@@ -16,6 +16,10 @@ classcanvas 128898 class_ref 170370 // ocpp.find_token
   classdiagramsettings member_max_width 0 end
   xyz 546 438 2000
 end
+classcanvas 129026 class_ref 176898 // findquotedstring
+  classdiagramsettings member_max_width 0 end
+  xyz 405 589 2000
+end
 relationcanvas 128514 relation_ref 144002 // <dependency>
   from ref 128386 z 2001 to ref 128002
   no_role_a no_role_b

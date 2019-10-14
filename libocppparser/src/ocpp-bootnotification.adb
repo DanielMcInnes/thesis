@@ -69,7 +69,6 @@ package body ocpp.BootNotification is
                                                              To_String => ocpp.BootNotification_t.request.Vendor.to_string,
                                                              To_Bounded_String =>  ocpp.BootNotification_t.request.Vendor.To_Bounded_String
                                                             );
-
    
    procedure findnextinteger(msg: in ocpp.packet.Bounded_String;
                              index : in out Positive;
@@ -81,7 +80,6 @@ package body ocpp.BootNotification is
       temp : character;
       intstring : ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
    begin
-      Put_Line("    97: findnextinteger: started");
       foundInteger := 0;
       if (index > ocpp.packet.Length(msg)) then
          found := false;
@@ -89,7 +87,7 @@ package body ocpp.BootNotification is
          return;
       end if;
            
-      findnonwhitespace_packet(msg, index, found); Put_Line("    105: findnextinteger:");
+      findnonwhitespace_packet(msg, index, found); --Put_Line("    105: findnextinteger:");
       if (found = false) then
          return;
       end if;      
@@ -100,19 +98,19 @@ package body ocpp.BootNotification is
          return;
       end if;
         
-      temp :=  ocpp.packet.Element(msg, index);Put_Line("    116: findnextinteger:");
+      temp :=  ocpp.packet.Element(msg, index);--Put_Line("    116: findnextinteger:");
       ocpp.packet.Append(intstring, temp);
       if (ocpp.packet.Length(intstring) /= 1) then
          found := false;
          put("    118: "); put_line("ERROR");
          return;
       else
-         Put("    123: findnextinteger:"); put_line(ocpp.packet.To_String(intstring));
-         ocpp.single_char_to_int(intstring, foundInteger);Put_Line("    124: findnextinteger:");
+         --Put("    123: findnextinteger:"); put_line(ocpp.packet.To_String(intstring));
+         ocpp.single_char_to_int(intstring, foundInteger); --Put_Line("    124: findnextinteger:");
          found := true;
          
       end if;
-      Put_Line("    127: findnextinteger: finished");
+      --Put_Line("    127: findnextinteger: finished");
       
    end findnextinteger;
    
@@ -150,23 +148,23 @@ package body ocpp.BootNotification is
       
       ocpp.move_index_past_token(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
       
-      put("parse: 169 index: "); put_line(index'image);
+      --put("parse: 169 index: "); put_line(index'image);
 
       findnextinteger(msg, index, request.messageTypeId, retval); if (retval = false) then return; end if;
       index := index + 1;
-      put ("parse: messageTypeId: "); put_line(request.messageTypeId'image); 
+      --put ("parse: messageTypeId: "); put_line(request.messageTypeId'image); 
       
-      put("parse: 171 index: "); put_line(index'image);
+      --put("parse: 171 index: "); put_line(index'image);
       if (retval = false) then return; end if;
       if (request.messageTypeId /= 2) then return; end if;
 
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
 
-      put_line("parse: searching for messageId..."); 
+      --put_line("parse: searching for messageId..."); 
       findquotedstring_messageid(msg, index, retval, request.messageId);
       if (ocpp.messageid_t.Length(request.messageid) = 0) then return; end if;
       if (retval = false) then return; end if;      
-      put("parse: messageId: "); Put_Line(ocpp.messageid_t.To_String(request.messageId));
+      --put("parse: messageId: "); Put_Line(ocpp.messageid_t.To_String(request.messageId));
       
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
       
@@ -174,37 +172,36 @@ package body ocpp.BootNotification is
       if (retval = false) then return; end if;
       if (ocpp.action_t.To_String(request.action) /= ("BootNotification")) then return; end if;
       
-      put("parse: action: "); Put_Line(ocpp.action_t.To_String(request.action));
+      --put("parse: action: "); Put_Line(ocpp.action_t.To_String(request.action));
 
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 233"); return; end if;
             
       ocpp.move_index_past_token(msg, '{', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 235"); return; end if;
 
-      put("parse: looking for 'reason': ");
+      --put("parse: looking for 'reason': ");
       findquotedstring_packet(msg, index, retval, dummybounded);
       if (retval = false) then 
          put("parse: ERROR: looking for 'reason': ");
          return; 
       end if;
       
-      put("parse: found: "); Put_Line(ocpp.packet.To_String(dummybounded));
-      put_line(ocpp.packet.To_String(dummybounded));
+      --put("parse: found: "); Put_Line(ocpp.packet.To_String(dummybounded));
       if (ocpp.packet.To_String(dummybounded) /= str) then 
-         put("parse: 243: ERROR: looking for 'reason': ");
-         put("comparing with: "); put_line(str);
+         --put("parse: 243: ERROR: looking for 'reason': ");
+         --put("comparing with: "); put_line(str);
          return; 
       end if;
 
-      put("parse: 244: looking for ':' ");
+      --put("parse: 244: looking for ':' ");
       ocpp.move_index_past_token(msg, ':', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 253"); return; end if;
       
-      put("parse: looking for reason ");
+      --put("parse: looking for reason ");
       findquotedstring_reason(msg, index, retval, request.reason);
       if (retval = false) then 
          return; 
       end if;
       
-      put("parse: reason: "); Put_Line(ocpp.BootNotification_t.request.reason.To_String(request.reason));
+      --put("parse: reason: "); Put_Line(ocpp.BootNotification_t.request.reason.To_String(request.reason));
       validreason(request.reason, retval); 
       if (retval = false) then return; end if;
       
@@ -226,7 +223,7 @@ package body ocpp.BootNotification is
       
       findquotedstring_model(msg, index, retval, request.model);
       if (retval = false) then return; end if;
-      put("parse: model: "); Put_Line(ocpp.BootNotification_t.request.Model.To_String(request.model));
+      --put("parse: model: "); Put_Line(ocpp.BootNotification_t.request.Model.To_String(request.model));
       
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
       
@@ -238,7 +235,7 @@ package body ocpp.BootNotification is
       
       findquotedstring_vendor(msg, index, retval, request.vendor);
       if (retval = false) then return; end if;
-      put("parse: vendor: "); Put_Line(ocpp.BootNotification_t.request.Vendor.To_String(request.vendor)); 
+      --put("parse: vendor: "); Put_Line(ocpp.BootNotification_t.request.Vendor.To_String(request.vendor)); 
                                                                                       
       ocpp.move_index_past_token(msg, '}', index, tempPositive); if (tempPositive = 0) then put_line("ERROR: 227"); return; end if;
       
@@ -258,8 +255,7 @@ package body ocpp.BootNotification is
       --]
       
       valid := true;
-      Put_Line("parse: hooray!"); 
-      Put(ocpp.BootNotification_t.request.Vendor.Length(request.vendor)'Image);
+      Put_Line("parse: Received valid BootNoticationRequest packet"); 
    end parse;
    
 end ocpp.BootNotification;
