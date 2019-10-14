@@ -4,7 +4,7 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Bounded; use Ada.Strings.Bounded;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Bounded; use Ada.Strings.Bounded;
-with Ada.Text_IO;
+--with Ada.Text_IO;
 with Ada.Command_Line;
 with ocpp;
 use ocpp.bootnotification_t;
@@ -51,11 +51,10 @@ package ocpp.BootNotification is
    procedure parse(msg: in ocpp.packet.Bounded_String;
                    request: out ocpp.BootNotification.Request;
                    valid: out Boolean)
-     with Global => (in_out => Ada.Text_IO.File_System),
+     with Global => null,
      Depends => (
-                   request => (msg, Ada.Text_IO.File_System),
-                 valid => (msg, Ada.Text_IO.File_System),
-                 Ada.Text_IO.File_System => (msg, Ada.Text_IO.File_System)
+                 request => msg,
+                 valid => msg
                 ),
      post => (if valid = true then
                 (request.messagetypeid = 2) and

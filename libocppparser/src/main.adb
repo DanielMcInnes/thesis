@@ -7,8 +7,8 @@ with ocpp.BootNotification;
 with ocpp.server;
 
 procedure Main is
-   bootNotificationRequest: ocpp.BootNotification.Request;
-   valid: Boolean;
+   --bootNotificationRequest: ocpp.BootNotification.Request;
+   --valid: Boolean;
    server: ocpp.server.Class;
 
    packet: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String( ""

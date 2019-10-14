@@ -168,5 +168,17 @@ package body ocpp is
       
 
    end findquotedstring;
+   procedure put(msg : string)
+   is
+   begin
+      put(msg);
+   end put;
+   
+   procedure put_line(msg : string)
+   is
+   begin      
+      ada.Text_IO.put_line(msg);
+   end put_line;
+   
 
 end ocpp;

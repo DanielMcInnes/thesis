@@ -55,7 +55,7 @@ package ocpp is
        Post => (Last <= ocpp.packet.Length(msg)) and 
        (Last < Integer'Last) and
      (if Last /= 0 then (index <= ocpp.packet.Length(msg))),
-     Global => (In_Out => Ada.Text_IO.File_System);
+     Global => null;
 
    procedure move_index_past_token
      (msg : packet.Bounded_String;
@@ -69,6 +69,9 @@ package ocpp is
      (if Last /= 0 then First <= ocpp.packet.Length(msg)) and
      (index <= ocpp.packet.Length(msg)),
      Global => null;
+
+   procedure put(msg : string);
+   procedure put_line(msg : string);
 
    procedure find_token
      (msg : packet.Bounded_String;
@@ -104,5 +107,5 @@ package ocpp is
                               index : in out Positive;
                               found : out Boolean;
                               foundString: in out string_t) 
-     with  Global => (In_Out => Ada.Text_IO.File_System);
+     with  Global => null;
 end ocpp;
