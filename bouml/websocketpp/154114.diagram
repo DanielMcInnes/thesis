@@ -1,0 +1,21 @@
+format 222
+
+classinstance 128002 class_ref 183426 // server
+  name ""   xyz 132.2 4.2 2005 life_line_z 2000
+classinstance 128130 class_ref 156802 // main
+  name ""   xyz 32 4 2005 life_line_z 2000
+classinstance 128642 class_ref 156930 // bootnotification
+  name ""   xyz 232 4.2 2000 life_line_z 2000
+durationcanvas 128258 classinstance_ref 128130 // :main
+  xyzwh 51 90 2010 11 41
+end
+durationcanvas 128386 classinstance_ref 128002 // :server
+  xyzwh 155 93.1 2010 11 126
+end
+msg 128514 synchronous
+  from durationcanvas_ref 128258
+  to durationcanvas_ref 128386
+  yz 92 2015 msg operation_ref 161538 // "handle(in request : string, out response : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 62 67
+end

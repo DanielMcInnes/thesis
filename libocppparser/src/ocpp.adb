@@ -171,7 +171,7 @@ package body ocpp is
    procedure put(msg : string)
    is
    begin
-      put(msg);
+      ada.Text_IO.put(msg);
    end put;
    
    procedure put_line(msg : string)

@@ -14,14 +14,14 @@ package ocpp.server is
    end record;   
 
    procedure handle(request: in ocpp.packet.Bounded_String;
-                   response: out ocpp.packet.Bounded_String)
-     with --Global => (in_out => Ada.Text_IO.File_System)
-     Depends => (
-                   response => request
-                );
+                    response: out ocpp.packet.Bounded_String)
+     with
+       Depends => (
+                     response => request
+                  );
 
    procedure toString(msg: out ocpp.packet.Bounded_String;
-                           response: in ocpp.BootNotification.Response);
+                      response: in ocpp.BootNotification.Response);
                            
    
-  end ocpp.server;
+end ocpp.server;
