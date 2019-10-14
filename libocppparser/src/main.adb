@@ -12,15 +12,15 @@ procedure Main is
    server: ocpp.server.Class;
 
    packet: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String( ""
-     & " [2," & ASCII.LF
+     & "[2," & ASCII.LF
      & '"'  &"19223201"  &'"' & "," & ASCII.LF
      & '"' & "BootNotification" & '"' & "," & ASCII.LF
      & "{" & ASCII.LF
-     & '"' & "reason" & '"' & ": " & '"' & "PowerUp" & '"' & "," & ASCII.LF
-     & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
-     & '"' & "model"  & '"' & ":" & '"' & "SingleSocketCharger" & '"' & "," & ASCII.LF
-     & '"' & "vendorName" & '"' & ": " & '"' & "VendorX" & '"' & ASCII.LF
-     & "}" & ASCII.LF
+     & "   " & '"' & "reason" & '"' & ": " & '"' & "PowerUp" & '"' & "," & ASCII.LF
+     & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
+     & "      " & '"' & "model"  & '"' & ":" & '"' & "SingleSocketCharger" & '"' & "," & ASCII.LF
+     & "      " & '"' & "vendorName" & '"' & ": " & '"' & "VendorX" & '"' & ASCII.LF
+     & "   }" & ASCII.LF
      & "}" & ASCII.LF
      & "]");
 
