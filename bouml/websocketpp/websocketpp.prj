@@ -1,6 +1,6 @@
 format 222
 "websocketpp"
-  revision 9
+  revision 10
   modified_by 2 "dmcinnes"
 
 
@@ -405,6 +405,22 @@ ${inlines}
 	MysqlColumn
       end
 
+      operation 161794 "parse"
+	public explicit_return_type ""
+	nparams 3
+	  param in name "randomText" explicit_type "string"
+	  param out name "bnr" explicit_type "BootNotificationRequest"
+	  param in name "valid" explicit_type "bool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} & ${p1}, ${t2} ${p2}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
     end
   end
 end

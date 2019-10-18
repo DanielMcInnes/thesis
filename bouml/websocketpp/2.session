@@ -7,15 +7,18 @@ diagrams
     120 106 100 A4 0 0
   classdiagram_ref 141058 // cd2 libocpp
     1528 843 100 A4 0 0
-  active  classdiagram_ref 147586 // cd2 function deps
+  classdiagram_ref 147586 // cd2 function deps
     1528 843 100 A4 0 0
+  active  sequencediagram_ref 154114 // sd1 boot not
+    1528 843 200 A4 0 0
 end
 show_stereotypes
-selected classdiagram_ref 147586 // cd2 function deps
+selected operation_ref 161794 // parse
 open
   class_ref 150018 // connection
   class_ref 150146 // transport::asio::connection
   class_ref 150274 // websocketpp::transport::asio::endpoint
+  class_ref 183426 // server
   classview_ref 128770 // asio
   deploymentview_ref 128642 // asio
   class_ref 156930 // bootnotification
