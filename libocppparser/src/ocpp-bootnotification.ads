@@ -11,23 +11,12 @@ use ocpp.bootnotification_t;
 
 package ocpp.BootNotification --with Annotate => (GNATprove, Terminating)
 is
+   package modemType is
+
+   end modemType;
+
    strBootNotification : constant String := "BootNotification";
 
-   type Request is new call with record
-      reason: ocpp.BootNotification_t.request.reason.Bounded_String := ocpp.BootNotification_t.request.reason.To_Bounded_String(""); --eg. PowerUp
-      --ApplicationReset - The Charging Station rebooted due to an application error.
-      --FirmwareUpdate - The Charging Station rebooted due to a firmware update.
-      --LocalReset - The Charging Station rebooted due to a local reset command.
-      --PowerUp - The Charging Station powered up and registers itself with the CSMS.
-      --RemoteReset - The Charging Station rebooted due to a remote reset command.
-      --ScheduledReset -The Charging Station rebooted due to a scheduled reset command.
-      --Triggered - Requested by the CSMS via a TriggerMessage
-      --Unknown - The boot reason is unknown.
-      --Watchdog -The Charging Station rebooted due to an elapsed watchdog timer.
-
-      model:  ocpp.BootNotification_t.request.model.Bounded_String := ocpp.BootNotification_t.request.model.To_Bounded_String(""); -- eg. SingleSocketCharger
-      vendor: ocpp.BootNotification_t.request.vendor.Bounded_String := ocpp.BootNotification_t.request.vendor.To_Bounded_String(""); -- eg. VendorX
-   end record;
 
    type Response is new callresult with record
       currentTime: ocpp.BootNotification_t.response.currentTime.Bounded_String := ocpp.BootNotification_t.response.currentTime.To_Bounded_String(""); --eg. 2013-02-01T20:53:32.486Z
@@ -35,23 +24,23 @@ is
       status: ocpp.BootNotification_t.response.status.Bounded_String := ocpp.BootNotification_t.response.status.To_Bounded_String(""); -- eg. Accepted
    end record;
 
-   type BootReasons_t is array(1..9) of ocpp.BootNotification_t.request.reason.Bounded_String;
-   validreasons : constant BootReasons_t := (ocpp.BootNotification_t.request.reason.To_Bounded_String("ApplicationReset"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("FirmwareUpdate"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("LocalReset"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("PowerUp"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("RemoteReset"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("ScheduledReset"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("Triggered"),
-                                               ocpp.BootNotification_t.request.reason.To_Bounded_String("Unknown"),
-                                             ocpp.BootNotification_t.request.reason.To_Bounded_String("Watchdog"));
+   type BootReasons_t is array(1..9) of ocpp.BootReasonEnumType.Bounded_String;
+   validreasons : constant BootReasons_t := (ocpp.BootReasonEnumType.To_Bounded_String("ApplicationReset"),
+                                               ocpp.BootReasonEnumType.To_Bounded_String("FirmwareUpdate"),
+                                               ocpp.BootReasonEnumType.To_Bounded_String("LocalReset"),
+                                               ocpp.BootReasonEnumType.To_Bounded_String("PowerUp"),
+                                               ocpp.BootReasonEnumType.To_Bounded_String("RemoteReset"),
+                                               ocpp.BootReasonEnumType.To_Bounded_String("ScheduledReset"),
+                                               ocpp.BootReasonEnumType.To_Bounded_String("Triggered"),
+                                               ocpp.BootReasonEnumType.To_Bounded_String("Unknown"),
+                                             ocpp.BootReasonEnumType.To_Bounded_String("Watchdog"));
 
-   procedure validreason(thereason: in ocpp.BootNotification_t.request.reason.Bounded_String;
+   procedure validreason(thereason: in ocpp.BootReasonEnumType.Bounded_String;
                         valid: out Boolean)
      with  Global => null;
 
    procedure parse(msg: in ocpp.packet.Bounded_String;
-                   request: out ocpp.BootNotification.Request;
+                   request: out ocpp.Request;
                    valid: out Boolean)
      with Global => null,
      Depends => (

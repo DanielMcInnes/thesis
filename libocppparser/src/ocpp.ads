@@ -1,19 +1,47 @@
+with Ada.Finalization;
 with Ada.Strings; 
 with Ada.Strings.Bounded;
 with Ada.Text_IO;
 
-package ocpp is  
+package ocpp is
+   
    package packet is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 500);
    package messageid_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    package action_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+
+   package BootReasonEnumType is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 16);         
+   --ApplicationReset - The Charging Station rebooted due to an application error.
+   --FirmwareUpdate - The Charging Station rebooted due to a firmware update.
+   --LocalReset - The Charging Station rebooted due to a local reset command.
+   --PowerUp - The Charging Station powered up and registers itself with the CSMS.
+   --RemoteReset - The Charging Station rebooted due to a remote reset command.
+   --ScheduledReset -The Charging Station rebooted due to a scheduled reset command.
+   --Triggered - Requested by the CSMS via a TriggerMessage
+   --Unknown - The boot reason is unknown.
+   --Watchdog -The Charging Station rebooted due to an elapsed watchdog timer.
+
+   package ModemType is
+      package iccid is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 20);
+      package imsi is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 20);
+   end ModemType;
+   
+   package ChargingStationType is
+      ------------------------------------------------------------------------------------------------------------      
+      -- Field Name      Field Type    Card. Description
+      ------------------------------------------------------------------------------------------------------------      
+      -- serialNumber    string[0..20] 0..1  Optional. Vendor-specific device identifier.
+      -- model           string[0..20] 1..1  Required. Defines the model of the device.
+      -- vendorName      string[0..50] 1..1  Required. Identifies the vendor (not necessarily in a unique manner).
+      -- firmwareVersion string[0..50] 0..1  Optional. This contains the firmware version of the Charging Station.
+      -- modem           ModemType     0..1  Optional. Defines the functional parameters of a communication link.
+      
+      package serialNumber is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 20);
+      package model is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 20);
+      package vendorName is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50);
+      package firmwareVersion is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50);
+   end ChargingStationType;
    
    package bootnotification_t is
-
-      package request is
-         package reason is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
-         package model is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
-         package vendor is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
-      end request;
       
       package response is
          package currentTime is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
@@ -26,9 +54,9 @@ package ocpp is
    
       
    
-   currentTime: ocpp.BootNotification_t.request.reason.Bounded_String := ocpp.BootNotification_t.request.reason.To_Bounded_String(""); --eg. PowerUp
-   interval:  ocpp.BootNotification_t.request.model.Bounded_String := ocpp.BootNotification_t.request.model.To_Bounded_String(""); -- eg. SingleSocketCharger
-   status: ocpp.BootNotification_t.request.vendor.Bounded_String := ocpp.BootNotification_t.request.vendor.To_Bounded_String(""); -- eg. VendorX
+   currentTime: ocpp.BootReasonEnumType.Bounded_String := ocpp.BootReasonEnumType.To_Bounded_String(""); --eg. PowerUp
+   interval:  ocpp.BootNotification_t.response.interval.Bounded_String := ocpp.BootNotification_t.response.interval.To_Bounded_String(""); -- eg. SingleSocketCharger
+   status: ocpp.ChargingStationType.vendorName.Bounded_String := ocpp.ChargingStationType.vendorName.To_Bounded_String(""); -- eg. VendorX
    
 
    type call is tagged record
@@ -42,6 +70,22 @@ package ocpp is
       messageid : messageid_t.Bounded_String; -- eg. 19223201
    end record;
    
+   type ChargingStation_t is tagged record
+      serialNumber : ocpp.ChargingStationType.serialNumber.Bounded_String := ocpp.ChargingStationType.serialNumber.To_Bounded_String("");
+      model:  ocpp.ChargingStationType.model.Bounded_String := ocpp.ChargingStationType.model.To_Bounded_String(""); -- eg. SingleSocketCharger
+      vendorName: ocpp.ChargingStationType.vendorName.Bounded_String := ocpp.ChargingStationType.vendorName.To_Bounded_String(""); -- eg. VendorX
+      firmwareVersion: ocpp.ChargingStationType.firmwareVersion.Bounded_String := ocpp.ChargingStationType.firmwareVersion.To_Bounded_String("");
+   end record;
+   
+   procedure Initialize(Self : out ChargingStation_t);
+   
+   type Request is new call with record
+      reason: ocpp.BootReasonEnumType.Bounded_String := ocpp.BootReasonEnumType.To_Bounded_String(""); --eg. PowerUp
+      chargingStation: ChargingStation_t;      
+   end record;
+   
+   procedure Initialize(Self : out ocpp.Request);
+
    procedure single_char_to_int(intstring : in ocpp.packet.Bounded_String; 
                                 retval : out Integer)
      with Pre     => ocpp.packet.Length(intstring) = 1;

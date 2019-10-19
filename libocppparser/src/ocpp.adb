@@ -4,6 +4,21 @@ with ada.strings.maps;
 
 package body ocpp is
 
+   procedure Initialize(Self : out ChargingStation_t) is
+   begin
+      self.serialNumber := ocpp.ChargingStationType.serialNumber.To_Bounded_String("");
+      self.model := ocpp.ChargingStationType.model.To_Bounded_String(""); -- eg. SingleSocketCharger
+      self.vendorName := ocpp.ChargingStationType.vendorName.To_Bounded_String(""); -- eg. VendorX
+      self.firmwareVersion := ocpp.ChargingStationType.firmwareVersion.To_Bounded_String("");
+   end Initialize;
+
+   procedure Initialize(Self : out ocpp.Request) is
+   begin
+      self.reason:= ocpp.BootReasonEnumType.To_Bounded_String(""); --eg. PowerUp
+      ocpp.Initialize(self.chargingStation);
+   end Initialize;
+
+
    procedure single_char_to_int(intstring : in ocpp.packet.Bounded_String;
                                 retval : out Integer)
    is
