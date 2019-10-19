@@ -20,6 +20,22 @@ classcanvas 129026 class_ref 176898 // findquotedstring
   classdiagramsettings member_max_width 0 end
   xyz 405 589 2000
 end
+classcanvas 129154 class_ref 189954 // BootNotificationRequest
+  classdiagramsettings member_max_width 0 end
+  xyz 827 303 2000
+end
+classcanvas 129282 class_ref 190082 // BootReasonEnumType
+  classdiagramsettings member_max_width 0 end
+  xyz 807 432 2000
+end
+classcanvas 129538 class_ref 190210 // ChargingStationType
+  classdiagramsettings member_max_width 0 end
+  xyz 992 430 2000
+end
+classcanvas 129794 class_ref 190338 // ModemType
+  classdiagramsettings member_max_width 0 end
+  xyz 1033 628 2000
+end
 relationcanvas 128514 relation_ref 144002 // <dependency>
   from ref 128386 z 2001 to ref 128002
   no_role_a no_role_b
@@ -27,6 +43,21 @@ relationcanvas 128514 relation_ref 144002 // <dependency>
 end
 relationcanvas 128770 relation_ref 150530 // <dependency>
   from ref 128002 z 2001 to ref 128642
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129410 relation_ref 157058 // reason
+  from ref 129154 z 2001 label "reason" italic max_width 255 xyz 882 368 3000 to ref 129282
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129666 relation_ref 157186 // chargingStation
+  from ref 129154 z 2001 label "chargingStation" italic max_width 255 xyz 927.5 366.5 3000 to ref 129538
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129922 relation_ref 157314 // modem
+  from ref 129538 z 2001 label "modem" italic max_width 255 xyz 1056 588.5 3000 to ref 129794
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
