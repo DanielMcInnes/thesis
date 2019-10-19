@@ -6,8 +6,16 @@ with Ada.Strings.Maps;
 with Ada.Strings.Bounded; use Ada.Strings.Bounded;
 with ocpp; 
 with ocpp.BootNotification;
+with utils;
 
 package body ocpp.BootNotification is
+
+   procedure packetContainsString is new utils.contains(
+                                               string_haystack => ocpp.packet.Bounded_String, 
+                                                        haystack_to_string => ocpp.packet.To_String,
+                                                        haystack_length => ocpp.packet.Length
+                                                        );
+
    procedure findnonwhitespace_packet is new findnonwhitespace(
                                                                string_t => ocpp.packet.Bounded_String, 
                                                                length => ocpp.packet.Length,
@@ -137,14 +145,19 @@ package body ocpp.BootNotification is
       index: Integer := 1;
       tempPositive: integer;
    begin
-      valid:= false;
-      
+      valid:= false;      
       request.reason := ocpp.BootNotification_t.request.reason.To_Bounded_String("");
       request.model := ocpp.BootNotification_t.request.Model.To_Bounded_String("");
       request.vendor := ocpp.BootNotification_t.request.Vendor.To_Bounded_String(""); --ocpp.put("161 index: "); ocpp.put_line(index'image);
       request.messageTypeId := 0;
       request.messageId := ocpp.messageid_t.To_Bounded_String("");
       request.action := ocpp.action_t.To_Bounded_String("");
+      
+      packetContainsString(msg, strBootNotification, retval);
+      
+      if retval = false then
+         return;
+      end if;
       
       ocpp.move_index_past_token(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
       

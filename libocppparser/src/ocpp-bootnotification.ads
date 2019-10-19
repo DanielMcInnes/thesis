@@ -9,7 +9,9 @@ with Ada.Command_Line;
 with ocpp;
 use ocpp.bootnotification_t;
 
-package ocpp.BootNotification is
+package ocpp.BootNotification --with Annotate => (GNATprove, Terminating)
+is
+   strBootNotification : constant String := "BootNotification";
 
    type Request is new call with record
       reason: ocpp.BootNotification_t.request.reason.Bounded_String := ocpp.BootNotification_t.request.reason.To_Bounded_String(""); --eg. PowerUp
@@ -59,7 +61,8 @@ package ocpp.BootNotification is
      post => (if valid = true then
                 (request.messagetypeid = 2) and
                   (ocpp.messageid_t.Length(request.messageid) > 0) and
-                (ocpp.action_t.To_String(request.action) = "BootNotification")
+                (ocpp.action_t.To_String(request.action) = "BootNotification") and
+                  (Index(ocpp.packet.To_String(msg), strBootNotification) /= 0) -- prove that the original packet contains "BootNotification"
              );
 
 
