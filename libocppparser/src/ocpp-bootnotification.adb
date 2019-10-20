@@ -136,8 +136,18 @@ package body ocpp.BootNotification is
       valid := false;      
    end validreason;   
    
+   procedure DefaultInitialize(Self : out ocpp.BootNotification.Request) is
+   begin
+      self.messagetypeid := 0;
+      self.messageid := messageid_t.To_Bounded_String("");
+      self.action := action_t.To_Bounded_String("");
+      self.reason:= ocpp.BootReasonEnumType.To_Bounded_String(""); --eg. PowerUp
+      ocpp.Initialize(self.chargingStation);
+   end DefaultInitialize;
+
+   
    procedure parse(msg:   in  ocpp.packet.Bounded_String;
-                   request: out ocpp.Request;
+                   request: out ocpp.BootNotification.Request;
                    valid: out Boolean)
    is
       str : string := "reason";
@@ -147,7 +157,7 @@ package body ocpp.BootNotification is
       tempPositive: integer;
    begin
       valid:= false;
-      ocpp.Initialize(request);
+      DefaultInitialize(request);
       packetContainsString(msg, strBootNotification, retval);
       
       if retval = false then

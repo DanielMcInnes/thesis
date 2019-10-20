@@ -79,12 +79,6 @@ package ocpp is
    
    procedure Initialize(Self : out ChargingStation_t);
    
-   type Request is new call with record
-      reason: ocpp.BootReasonEnumType.Bounded_String := ocpp.BootReasonEnumType.To_Bounded_String(""); --eg. PowerUp
-      chargingStation: ChargingStation_t;      
-   end record;
-   
-   procedure Initialize(Self : out ocpp.Request);
 
    procedure single_char_to_int(intstring : in ocpp.packet.Bounded_String; 
                                 retval : out Integer)

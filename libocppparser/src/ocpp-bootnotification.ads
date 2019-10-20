@@ -17,6 +17,12 @@ is
 
    strBootNotification : constant String := "BootNotification";
 
+   type Request is new call with record
+      reason: ocpp.BootReasonEnumType.Bounded_String := ocpp.BootReasonEnumType.To_Bounded_String(""); --eg. PowerUp
+      chargingStation: ChargingStation_t;
+   end record;
+   procedure DefaultInitialize(Self : out ocpp.BootNotification.Request);
+
 
    type Response is new callresult with record
       currentTime: ocpp.BootNotification_t.response.currentTime.Bounded_String := ocpp.BootNotification_t.response.currentTime.To_Bounded_String(""); --eg. 2013-02-01T20:53:32.486Z
@@ -40,9 +46,10 @@ is
      with  Global => null;
 
    procedure parse(msg: in ocpp.packet.Bounded_String;
-                   request: out ocpp.Request;
+                   request: out ocpp.BootNotification.Request;
                    valid: out Boolean)
-     with Global => null,
+     with
+       Global => null,
      Depends => (
                  request => msg,
                  valid => msg
@@ -50,7 +57,7 @@ is
      post => (if valid = true then
                 (request.messagetypeid = 2) and
                   (ocpp.messageid_t.Length(request.messageid) > 0) and
-                (ocpp.action_t.To_String(request.action) = "BootNotification") and
+                (ocpp.action_t.To_String(request.action) = strBootNotification) and
                   (Index(ocpp.packet.To_String(msg), strBootNotification) /= 0) -- prove that the original packet contains "BootNotification"
              );
 

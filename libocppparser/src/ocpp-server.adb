@@ -10,7 +10,7 @@ package body ocpp.server is
                     response: out ocpp.packet.Bounded_String)
    is
       valid : Boolean;
-      bootNotificationRequest : ocpp.Request;
+      bootNotificationRequest : ocpp.BootNotification.Request;
       bootNotificationResponse : ocpp.bootnotification.Response;
    begin
       

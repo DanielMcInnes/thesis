@@ -12,13 +12,6 @@ package body ocpp is
       self.firmwareVersion := ocpp.ChargingStationType.firmwareVersion.To_Bounded_String("");
    end Initialize;
 
-   procedure Initialize(Self : out ocpp.Request) is
-   begin
-      self.reason:= ocpp.BootReasonEnumType.To_Bounded_String(""); --eg. PowerUp
-      ocpp.Initialize(self.chargingStation);
-   end Initialize;
-
-
    procedure single_char_to_int(intstring : in ocpp.packet.Bounded_String;
                                 retval : out Integer)
    is
