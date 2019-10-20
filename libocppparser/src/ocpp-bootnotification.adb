@@ -188,7 +188,7 @@ package body ocpp.BootNotification is
       
       findquotedstring_action(msg, index, retval, request.action);
       if (retval = false) then return; end if;
-      if (ocpp.action_t.To_String(request.action) /= ("BootNotification")) then return; end if;
+      if (ocpp.action_t.To_String(request.action) /= strBootNotification) then return; end if;
       
       --ocpp.put("parse: action: "); Ocpp.Put_Line(ocpp.action_t.To_String(request.action));
 
