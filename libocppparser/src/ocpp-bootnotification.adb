@@ -11,75 +11,75 @@ with utils;
 package body ocpp.BootNotification is
 
    procedure packetContainsString is new utils.contains(
-                                               string_haystack => ocpp.packet.Bounded_String, 
-                                                        haystack_to_string => ocpp.packet.To_String,
-                                                        haystack_length => ocpp.packet.Length
+                                               string_haystack => NonSparkTypes.packet.Bounded_String, 
+                                                        haystack_to_string => NonSparkTypes.packet.To_String,
+                                                        haystack_length => NonSparkTypes.packet.Length
                                                         );
 
    procedure findnonwhitespace_packet is new findnonwhitespace(
-                                                               string_t => ocpp.packet.Bounded_String, 
-                                                               length => ocpp.packet.Length,
-                                                               element => ocpp.packet.Element,
-                                                               To_String => ocpp.packet.to_string
+                                                               string_t => NonSparkTypes.packet.Bounded_String, 
+                                                               length => NonSparkTypes.packet.Length,
+                                                               element => NonSparkTypes.packet.Element,
+                                                               To_String => NonSparkTypes.packet.to_string
                                                               );
 
    procedure findnonwhitespace_messageid is new findnonwhitespace(
-                                                                  string_t => ocpp.messageid_t.Bounded_String, 
-                                                                  length => ocpp.messageid_t.Length,
-                                                                  element => ocpp.messageid_t.Element,
-                                                                  To_String => ocpp.messageid_t.to_string
+                                                                  string_t => NonSparkTypes.messageid_t.Bounded_String, 
+                                                                  length => NonSparkTypes.messageid_t.Length,
+                                                                  element => NonSparkTypes.messageid_t.Element,
+                                                                  To_String => NonSparkTypes.messageid_t.to_string
                                                                  );
    
    procedure findquotedstring_messageid is new findquotedstring(
-                                                                Max => ocpp.messageid_t.Max_Length, 
-                                                                string_t => ocpp.messageid_t.Bounded_String, 
-                                                                length => ocpp.messageid_t.Length,
-                                                                To_String => ocpp.messageid_t.to_string,
-                                                                To_Bounded_String =>  ocpp.messageid_t.To_Bounded_String
+                                                                Max => NonSparkTypes.messageid_t.Max_Length, 
+                                                                string_t => NonSparkTypes.messageid_t.Bounded_String, 
+                                                                length => NonSparkTypes.messageid_t.Length,
+                                                                To_String => NonSparkTypes.messageid_t.to_string,
+                                                                To_Bounded_String =>  NonSparkTypes.messageid_t.To_Bounded_String
                                                                );
 
    procedure findquotedstring_action is new findquotedstring(
-                                                             Max => ocpp.action_t.Max_Length, 
-                                                             string_t => ocpp.action_t.Bounded_String, 
-                                                             length => ocpp.action_t.Length,
-                                                             To_String => ocpp.action_t.to_string,
-                                                             To_Bounded_String =>  ocpp.action_t.To_Bounded_String
+                                                             Max => NonSparkTypes.action_t.Max_Length, 
+                                                             string_t => NonSparkTypes.action_t.Bounded_String, 
+                                                             length => NonSparkTypes.action_t.Length,
+                                                             To_String => NonSparkTypes.action_t.to_string,
+                                                             To_Bounded_String =>  NonSparkTypes.action_t.To_Bounded_String
                                                             );
 
    procedure findquotedstring_packet is new findquotedstring(
-                                                             Max => ocpp.packet.Max_Length, 
-                                                             string_t => ocpp.packet.Bounded_String, 
-                                                             length => ocpp.packet.Length,
-                                                             To_String => ocpp.packet.to_string,
-                                                             To_Bounded_String =>  ocpp.packet.To_Bounded_String
+                                                             Max => NonSparkTypes.packet.Max_Length, 
+                                                             string_t => NonSparkTypes.packet.Bounded_String, 
+                                                             length => NonSparkTypes.packet.Length,
+                                                             To_String => NonSparkTypes.packet.to_string,
+                                                             To_Bounded_String =>  NonSparkTypes.packet.To_Bounded_String
                                                             );
 
    procedure findquotedstring_reason is new findquotedstring(
-                                                             Max => ocpp.BootReasonEnumType.Max_Length, 
-                                                             string_t => ocpp.BootReasonEnumType.Bounded_String,
-                                                             length => ocpp.BootReasonEnumType.Length,
-                                                             To_String => ocpp.BootReasonEnumType.to_string,
-                                                             To_Bounded_String =>  ocpp.BootReasonEnumType.To_Bounded_String
+                                                             Max => NonSparkTypes.BootReasonEnumType.Max_Length, 
+                                                             string_t => NonSparkTypes.BootReasonEnumType.Bounded_String,
+                                                             length => NonSparkTypes.BootReasonEnumType.Length,
+                                                             To_String => NonSparkTypes.BootReasonEnumType.to_string,
+                                                             To_Bounded_String =>  NonSparkTypes.BootReasonEnumType.To_Bounded_String
                                                             );
 
    procedure findquotedstring_model is new findquotedstring(
-                                                            Max => ocpp.ChargingStationType.model.Max_Length, 
-                                                            string_t => ocpp.ChargingStationType.Model.Bounded_String,
-                                                            length => ocpp.ChargingStationType.Model.Length,
-                                                            To_String => ocpp.ChargingStationType.Model.to_string,
-                                                            To_Bounded_String =>  ocpp.ChargingStationType.Model.To_Bounded_String
+                                                            Max => NonSparkTypes.ChargingStationType.model.Max_Length, 
+                                                            string_t => NonSparkTypes.ChargingStationType.Model.Bounded_String,
+                                                            length => NonSparkTypes.ChargingStationType.Model.Length,
+                                                            To_String => NonSparkTypes.ChargingStationType.Model.to_string,
+                                                            To_Bounded_String =>  NonSparkTypes.ChargingStationType.Model.To_Bounded_String
                                                            );
 
    procedure findquotedstring_vendor is new findquotedstring(
-                                                             Max => ocpp.ChargingStationType.vendorName.Max_Length, 
-                                                             string_t => ocpp.ChargingStationType.vendorName.Bounded_String,
-                                                             length => ocpp.ChargingStationType.vendorName.Length,
-                                                             To_String => ocpp.ChargingStationType.vendorName.to_string,
-                                                             To_Bounded_String =>  ocpp.ChargingStationType.vendorName.To_Bounded_String
+                                                             Max => NonSparkTypes.ChargingStationType.vendorName.Max_Length, 
+                                                             string_t => NonSparkTypes.ChargingStationType.vendorName.Bounded_String,
+                                                             length => NonSparkTypes.ChargingStationType.vendorName.Length,
+                                                             To_String => NonSparkTypes.ChargingStationType.vendorName.to_string,
+                                                             To_Bounded_String =>  NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String
                                                             );
 
    
-   procedure findnextinteger(msg: in ocpp.packet.Bounded_String;
+   procedure findnextinteger(msg: in NonSparkTypes.packet.Bounded_String;
                              index : in out Positive;
                              foundInteger: out integer;
                              found : out Boolean) 
@@ -87,48 +87,48 @@ package body ocpp.BootNotification is
      post => (if found = true then index < Integer'Last)
    is
       temp : character;
-      intstring : ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
+      intstring : NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
    begin
       foundInteger := 0;
-      if (index > ocpp.packet.Length(msg)) then
+      if (index > NonSparkTypes.packet.Length(msg)) then
          found := false;
-         ocpp.put("    20: index: "); ocpp.put_line("ERROR");
+         NonSparkTypes.put("    20: index: "); NonSparkTypes.put_line("ERROR");
          return;
       end if;
            
-      findnonwhitespace_packet(msg, index, found); --Ocpp.Put_Line("    105: findnextinteger:");
+      findnonwhitespace_packet(msg, index, found); --NonSparkTypes.put_Line("    105: findnextinteger:");
       if (found = false) then
          return;
       end if;      
         
-      if (index > ocpp.packet.Length(msg)) then
+      if (index > NonSparkTypes.packet.Length(msg)) then
          found := false;
-         ocpp.put("    110: "); ocpp.put_line("ERROR");
+         NonSparkTypes.put("    110: "); NonSparkTypes.put_line("ERROR");
          return;
       end if;
         
-      temp :=  ocpp.packet.Element(msg, index);--Ocpp.Put_Line("    116: findnextinteger:");
-      ocpp.packet.Append(intstring, temp);
-      if (ocpp.packet.Length(intstring) /= 1) then
+      temp :=  NonSparkTypes.packet.Element(msg, index);--NonSparkTypes.put_Line("    116: findnextinteger:");
+      NonSparkTypes.packet.Append(intstring, temp);
+      if (NonSparkTypes.packet.Length(intstring) /= 1) then
          found := false;
-         ocpp.put("    118: "); ocpp.put_line("ERROR");
+         NonSparkTypes.put("    118: "); NonSparkTypes.put_line("ERROR");
          return;
       else
-         --Ocpp.Put("    123: findnextinteger:"); ocpp.put_line(ocpp.packet.To_String(intstring));
-         ocpp.single_char_to_int(intstring, foundInteger); --Ocpp.Put_Line("    124: findnextinteger:");
+         --NonSparkTypes.put("    123: findnextinteger:"); NonSparkTypes.put_line(NonSparkTypes.packet.To_String(intstring));
+         NonSparkTypes.single_char_to_int(intstring, foundInteger); --NonSparkTypes.put_Line("    124: findnextinteger:");
          found := true;
          
       end if;
-      --Ocpp.Put_Line("    127: findnextinteger: finished");
+      --NonSparkTypes.put_Line("    127: findnextinteger: finished");
       
    end findnextinteger;
    
-   procedure validreason(thereason: in ocpp.BootReasonEnumType.Bounded_String;
+   procedure validreason(thereason: in NonSparkTypes.BootReasonEnumType.Bounded_String;
                         valid: out Boolean)
    is
    begin      
       for I in validreasons'Range loop
-         if (ocpp.BootReasonEnumType.To_String(validreasons(I)) = ocpp.BootReasonEnumType.To_String(thereason)) then 
+         if (NonSparkTypes.BootReasonEnumType.To_String(validreasons(I)) = NonSparkTypes.BootReasonEnumType.To_String(thereason)) then 
             valid := true;
             return;
          end if;
@@ -141,18 +141,18 @@ package body ocpp.BootNotification is
       self.messagetypeid := 0;
       self.messageid := messageid_t.To_Bounded_String("");
       self.action := action_t.To_Bounded_String("");
-      self.reason:= ocpp.BootReasonEnumType.To_Bounded_String(""); --eg. PowerUp
+      self.reason:= NonSparkTypes.BootReasonEnumType.To_Bounded_String(""); --eg. PowerUp
       ocpp.Initialize(self.chargingStation);
    end DefaultInitialize;
 
    
-   procedure parse(msg:   in  ocpp.packet.Bounded_String;
+   procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    request: out ocpp.BootNotification.Request;
                    valid: out Boolean)
    is
       str : string := "reason";
       retval : boolean;
-      dummybounded: ocpp.packet.Bounded_String := ocpp.packet.To_Bounded_String("");
+      dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       index: Integer := 1;
       tempPositive: integer;
    begin
@@ -166,100 +166,100 @@ package body ocpp.BootNotification is
       
       ocpp.move_index_past_token(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
       
-      --ocpp.put("parse: 169 index: "); ocpp.put_line(index'image);
+      --NonSparkTypes.put("parse: 169 index: "); NonSparkTypes.put_line(index'image);
 
       findnextinteger(msg, index, request.messageTypeId, retval); if (retval = false) then return; end if;
       index := index + 1;
-      --ocpp.put ("parse: messageTypeId: "); ocpp.put_line(request.messageTypeId'image); 
+      --NonSparkTypes.put ("parse: messageTypeId: "); NonSparkTypes.put_line(request.messageTypeId'image); 
       
-      --ocpp.put("parse: 171 index: "); ocpp.put_line(index'image);
+      --NonSparkTypes.put("parse: 171 index: "); NonSparkTypes.put_line(index'image);
       if (retval = false) then return; end if;
       if (request.messageTypeId /= 2) then return; end if;
 
-      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then ocpp.put_line("ERROR: 227"); return; end if;
+      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
 
-      --ocpp.put_line("parse: searching for messageId..."); 
+      --NonSparkTypes.put_line("parse: searching for messageId..."); 
       findquotedstring_messageid(msg, index, retval, request.messageId);
-      if (ocpp.messageid_t.Length(request.messageid) = 0) then return; end if;
+      if (NonSparkTypes.messageid_t.Length(request.messageid) = 0) then return; end if;
       if (retval = false) then return; end if;      
-      --ocpp.put("parse: messageId: "); Ocpp.Put_Line(ocpp.messageid_t.To_String(request.messageId));
+      --NonSparkTypes.put("parse: messageId: "); NonSparkTypes.put_Line(NonSparkTypes.messageid_t.To_String(request.messageId));
       
-      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then ocpp.put_line("ERROR: 227"); return; end if;
+      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
       
       findquotedstring_action(msg, index, retval, request.action);
       if (retval = false) then return; end if;
-      if (ocpp.action_t.To_String(request.action) /= strBootNotification) then return; end if;
+      if (NonSparkTypes.action_t.To_String(request.action) /= strBootNotification) then return; end if;
       
-      --ocpp.put("parse: action: "); Ocpp.Put_Line(ocpp.action_t.To_String(request.action));
+      --NonSparkTypes.put("parse: action: "); NonSparkTypes.put_Line(NonSparkTypes.action_t.To_String(request.action));
 
-      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then ocpp.put_line("ERROR: 233"); return; end if;
+      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 233"); return; end if;
             
-      ocpp.move_index_past_token(msg, '{', index, tempPositive); if (tempPositive = 0) then ocpp.put_line("ERROR: 235"); return; end if;
+      ocpp.move_index_past_token(msg, '{', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 235"); return; end if;
 
-      --ocpp.put("parse: looking for 'reason': ");
+      --NonSparkTypes.put("parse: looking for 'reason': ");
       findquotedstring_packet(msg, index, retval, dummybounded);
       if (retval = false) then 
-         ocpp.put("parse: ERROR: looking for 'reason': ");
+         NonSparkTypes.put("parse: ERROR: looking for 'reason': ");
          return; 
       end if;
       
-      --ocpp.put("parse: found: "); Ocpp.Put_Line(ocpp.packet.To_String(dummybounded));
-      if (ocpp.packet.To_String(dummybounded) /= str) then 
-         --ocpp.put("parse: 243: ERROR: looking for 'reason': ");
-         --ocpp.put("comparing with: "); ocpp.put_line(str);
+      --NonSparkTypes.put("parse: found: "); NonSparkTypes.put_Line(NonSparkTypes.packet.To_String(dummybounded));
+      if (NonSparkTypes.packet.To_String(dummybounded) /= str) then 
+         --NonSparkTypes.put("parse: 243: ERROR: looking for 'reason': ");
+         --NonSparkTypes.put("comparing with: "); NonSparkTypes.put_line(str);
          return; 
       end if;
 
-      --ocpp.put("parse: 244: looking for ':' ");
-      ocpp.move_index_past_token(msg, ':', index, tempPositive); if (tempPositive = 0) then ocpp.put_line("ERROR: 253"); return; end if;
+      --NonSparkTypes.put("parse: 244: looking for ':' ");
+      ocpp.move_index_past_token(msg, ':', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 253"); return; end if;
       
-      --ocpp.put("parse: looking for reason ");
+      --NonSparkTypes.put("parse: looking for reason ");
       findquotedstring_reason(msg, index, retval, request.reason);
       if (retval = false) then 
          return; 
       end if;
       
-      --ocpp.put("parse: reason: "); Ocpp.Put_Line(ocpp.BootReasonEnumType.To_String(request.reason));
+      --NonSparkTypes.put("parse: reason: "); NonSparkTypes.put_Line(NonSparkTypes.BootReasonEnumType.To_String(request.reason));
       validreason(request.reason, retval); 
       if (retval = false) then return; end if;
       
-      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then ocpp.put_line("ERROR: 227"); return; end if;
+      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
       
       findquotedstring_packet(msg, index, retval, dummybounded);
       if (retval = false) then return; end if;
-      if (ocpp.packet.To_String(dummybounded) /= "chargingStation") then return; end if;
+      if (NonSparkTypes.packet.To_String(dummybounded) /= "chargingStation") then return; end if;
       
-      ocpp.move_index_past_token(msg, ':', index, tempPositive); if (tempPositive = 0) then ocpp.put_line("ERROR: 227"); return; end if;
+      ocpp.move_index_past_token(msg, ':', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
       
-      ocpp.move_index_past_token(msg, '{', index, tempPositive); if (tempPositive = 0) then ocpp.put_line("ERROR: 227"); return; end if;
+      ocpp.move_index_past_token(msg, '{', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
       
       findquotedstring_packet(msg, index, retval, dummybounded);
       if (retval = false) then return; end if;
-      if (ocpp.packet.To_String(dummybounded) /= "model") then return; end if;
+      if (NonSparkTypes.packet.To_String(dummybounded) /= "model") then return; end if;
       
-      ocpp.move_index_past_token(msg, ':', index, tempPositive); if (tempPositive = 0) then ocpp.put_line("ERROR: 227"); return; end if;
+      ocpp.move_index_past_token(msg, ':', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
       
       findquotedstring_model(msg, index, retval, request.chargingStation.model);
       if (retval = false) then return; end if;
-      --ocpp.put("parse: model: "); Ocpp.Put_Line(ocpp.BootNotification_t.request.Model.To_String(request.model));
+      --NonSparkTypes.put("parse: model: "); NonSparkTypes.put_Line(NonSparkTypes.bootnotification_t.request.Model.To_String(request.model));
       
-      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then ocpp.put_line("ERROR: 227"); return; end if;
+      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
       
       findquotedstring_packet(msg, index, retval, dummybounded);
       if (retval = false) then return; end if;
-      if (ocpp.packet.To_String(dummybounded) /= "vendorName") then return; end if;
+      if (NonSparkTypes.packet.To_String(dummybounded) /= "vendorName") then return; end if;
       
-      ocpp.move_index_past_token(msg, ':', index, tempPositive); if (tempPositive = 0) then ocpp.put_line("ERROR: 227"); return; end if;
+      ocpp.move_index_past_token(msg, ':', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
       
       findquotedstring_vendor(msg, index, retval, request.chargingStation.vendorName);
       if (retval = false) then return; end if;
-      --ocpp.put("parse: vendor: "); Ocpp.Put_Line(ocpp.BootNotification_t.request.Vendor.To_String(request.vendor)); 
+      --NonSparkTypes.put("parse: vendor: "); NonSparkTypes.put_Line(NonSparkTypes.bootnotification_t.request.Vendor.To_String(request.vendor)); 
                                                                                       
-      ocpp.move_index_past_token(msg, '}', index, tempPositive); if (tempPositive = 0) then ocpp.put_line("ERROR: 227"); return; end if;
+      ocpp.move_index_past_token(msg, '}', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
       
-      ocpp.move_index_past_token(msg, '}', index, tempPositive); if (tempPositive = 0) then ocpp.put_line("ERROR: 227"); return; end if;
+      ocpp.move_index_past_token(msg, '}', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
 
-      ocpp.find_token(msg, ']', index, index, tempPositive); if ((tempPositive = 0) or (index > ocpp.packet.length(msg))) then ocpp.put_line("ERROR: 227"); return; end if;
+      ocpp.find_token(msg, ']', index, index, tempPositive); if ((tempPositive = 0) or (index > NonSparkTypes.packet.length(msg))) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
       --[2,
       --"19223201",
       --"BootNotification",
@@ -273,7 +273,7 @@ package body ocpp.BootNotification is
       --]
       
       valid := true;
-      Ocpp.Put_Line("parse: Received valid BootNoticationRequest packet"); 
+      NonSparkTypes.put_Line("parse: Received valid BootNoticationRequest packet"); 
    end parse;
    
 end ocpp.BootNotification;

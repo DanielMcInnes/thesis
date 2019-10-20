@@ -1,23 +1,25 @@
-with Ada.Text_IO; use Ada.Text_IO;
+pragma SPARK_Mode (On);
+
 with ocpp;
 with ada.strings.maps;
 
 package body ocpp is
 
-   procedure Initialize(Self : out ChargingStation_t) is
-   begin
-      self.serialNumber := ocpp.ChargingStationType.serialNumber.To_Bounded_String("");
-      self.model := ocpp.ChargingStationType.model.To_Bounded_String(""); -- eg. SingleSocketCharger
-      self.vendorName := ocpp.ChargingStationType.vendorName.To_Bounded_String(""); -- eg. VendorX
-      self.firmwareVersion := ocpp.ChargingStationType.firmwareVersion.To_Bounded_String("");
-   end Initialize;
-
-   procedure single_char_to_int(intstring : in ocpp.packet.Bounded_String;
-                                retval : out Integer)
+   procedure Initialize(Self : out ModemType_t)
    is
    begin
-      retval := Integer'Value(ocpp.packet.To_String(intstring));
-   end single_char_to_int;
+      self.iccid := NonSparkTypes.ModemType.iccid_t.To_Bounded_String("");
+      self.imsi := NonSparkTypes.ModemType.imsi_t.To_Bounded_String("");
+   end Initialize;
+   
+   procedure Initialize(Self : out ChargingStation_t) is
+   begin
+      self.serialNumber := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("");
+      self.model := NonSparkTypes.ChargingStationType.model.To_Bounded_String(""); -- eg. SingleSocketCharger
+      self.vendorName := NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String(""); -- eg. VendorX
+      self.firmwareVersion := NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String("");
+      Initialize(self.modem);
+   end Initialize;
 
    procedure find_token
      (msg : packet.Bounded_String;
@@ -29,18 +31,18 @@ package body ocpp is
    begin
       --put("    find_token: 22: index: "); put_line(index'image);
       --put("    find_token: 23: token: "); put_line(token'Image);
-      ocpp.packet.Find_Token(Source => msg,
-                             Set => Ada.Strings.Maps.To_Set(token),
-                             From => Integer(index),
-                             First => Integer(first),
-                             Test => Ada.Strings.Inside,
-                             Last => last);
-      if (last > ocpp.packet.Length(msg)) then
+      NonSparkTypes.packet.Find_Token(Source => msg,
+                                      Set => Ada.Strings.Maps.To_Set(token),
+                                      From => Integer(index),
+                                      First => Integer(first),
+                                      Test => Ada.Strings.Inside,
+                                      Last => last);
+      if (last > NonSparkTypes.packet.Length(msg)) then
          last := 0;
-         put("ERROR: move_index_past_token: 31: index: ");
-         put (index'image);
+         --put("ERROR: move_index_past_token: 31: index: ");
+         --put (index'image);
          put(" length: ");
-         put (ocpp.packet.Length(msg)'image);
+         put (NonSparkTypes.packet.Length(msg)'image);
          return;
       end if;
 
@@ -56,6 +58,12 @@ package body ocpp is
    is
       first  : Positive;
    begin
+      last := 0;
+      --if (index <= NonSparkTypes.packet.Length(msg)) 
+      --then 
+      --   return;
+      --end if;
+      --pragma assert(index <= NonSparkTypes.packet.Length(msg)); 
       find_token(msg, token, index, first, last);
       index := first + 1;
    end move_index_past_token;
@@ -112,13 +120,13 @@ package body ocpp is
    end findnonwhitespace;
 
    procedure findnonwhitespace_packet is new findnonwhitespace(
-                                                               string_t => ocpp.packet.Bounded_String, 
-                                                               length => ocpp.packet.Length,
-                                                               element => ocpp.packet.Element,
-                                                               To_String => ocpp.packet.to_string
+                                                               string_t => NonSparkTypes.packet.Bounded_String, 
+                                                               length => NonSparkTypes.packet.Length,
+                                                               element => NonSparkTypes.packet.Element,
+                                                               To_String => NonSparkTypes.packet.to_string
                                                               );
    
-   procedure findquotedstring(msg: in ocpp.packet.Bounded_String;
+   procedure findquotedstring(msg: in NonSparkTypes.packet.Bounded_String;
                               index : in out Positive;
                               found : out Boolean;
                               foundString: in out string_t)
@@ -126,7 +134,7 @@ package body ocpp is
       tempPositive : Integer;
       first : Integer;
       second : Integer;
-      tempbs : ocpp.packet.Bounded_String;
+      tempbs : NonSparkTypes.packet.Bounded_String;
 
    begin
       --put("    117: index: "); put_line(index'image);
@@ -136,13 +144,13 @@ package body ocpp is
       end if;
       --put("    120: index: "); put_line(index'image);
 
-      if (index > ocpp.packet.Length(msg)) then return; end if;
+      if (index > NonSparkTypes.packet.Length(msg)) then return; end if;
       ocpp.move_index_past_token(msg, '"', index, first, tempPositive);
       if (tempPositive = 0) then put_line("121: ERROR"); found := false; return; end if;
 
       --put("    133: index: "); put_line(index'image);
 
-      if (index > ocpp.packet.Length(msg)) then return; end if;
+      if (index > NonSparkTypes.packet.Length(msg)) then return; end if;
       ocpp.move_index_past_token(msg, '"', index, second, tempPositive);
 
       if (tempPositive = 0) then
@@ -151,19 +159,19 @@ package body ocpp is
          return;
       end if;
 
-      if ((first + 1) > ocpp.packet.Length(msg)) then return; end if;
-      tempbs := ocpp.packet.Bounded_Slice(msg, first + 1, second -1);
-      --put("    153: tempbs:"); Put_Line(ocpp.packet.To_String(tempbs));
+      if ((first + 1) > NonSparkTypes.packet.Length(msg)) then return; end if;
+      tempbs := NonSparkTypes.packet.Bounded_Slice(msg, first + 1, second -1);
+      --put("    153: tempbs:"); Put_Line(NonSparkTypes.packet.To_String(tempbs));
       
       --put("max messageId length: "); put_line(ocpp.bootnotificationreason.Max_Length'Image);
-      if (ocpp.packet.Length(tempbs) > Max ) then
+      if (NonSparkTypes.packet.Length(tempbs) > Max ) then
          found := false;
-         put_line("ERROR: "); put(" source length:"); put(ocpp.packet.Length(tempbs)'Image) ;put(" dest length: ");put(Length(foundString)'Image);
+         put_line("ERROR: "); put(" source length:"); put(NonSparkTypes.packet.Length(tempbs)'Image) ;put(" dest length: ");put(Length(foundString)'Image);
          return;
       end if;
       
           
-      foundString := To_Bounded_String(ocpp.packet.To_String(tempbs));
+      foundString := To_Bounded_String(NonSparkTypes.packet.To_String(tempbs));
       if (Length(foundString) = 0) then
          return;
       end if;
@@ -176,17 +184,5 @@ package body ocpp is
       
 
    end findquotedstring;
-   procedure put(msg : string)
-   is
-   begin
-      ada.Text_IO.put(msg);
-   end put;
-   
-   procedure put_line(msg : string)
-   is
-   begin      
-      ada.Text_IO.put_line(msg);
-   end put_line;
-   
 
 end ocpp;
