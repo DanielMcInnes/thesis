@@ -96,7 +96,7 @@ package body ocpp.BootNotification is
          return;
       end if;
            
-      findnonwhitespace_packet(msg, index, found); --NonSparkTypes.put_Line("    105: findnextinteger:");
+      findnonwhitespace_packet(msg, index, found); NonSparkTypes.put_Line("    105: findnextinteger:");
       if (found = false) then
          return;
       end if;      
@@ -107,19 +107,19 @@ package body ocpp.BootNotification is
          return;
       end if;
         
-      temp :=  NonSparkTypes.packet.Element(msg, index);--NonSparkTypes.put_Line("    116: findnextinteger:");
+      temp :=  NonSparkTypes.packet.Element(msg, index);NonSparkTypes.put_Line("    116: findnextinteger:");
       NonSparkTypes.packet.Append(intstring, temp);
       if (NonSparkTypes.packet.Length(intstring) /= 1) then
          found := false;
          NonSparkTypes.put("    118: "); NonSparkTypes.put_line("ERROR");
          return;
       else
-         --NonSparkTypes.put("    123: findnextinteger:"); NonSparkTypes.put_line(NonSparkTypes.packet.To_String(intstring));
-         NonSparkTypes.single_char_to_int(intstring, foundInteger); --NonSparkTypes.put_Line("    124: findnextinteger:");
+         NonSparkTypes.put("    123: findnextinteger:"); NonSparkTypes.put_line(NonSparkTypes.packet.To_String(intstring));
+         NonSparkTypes.single_char_to_int(intstring, foundInteger); NonSparkTypes.put_Line("    124: findnextinteger:");
          found := true;
          
       end if;
-      --NonSparkTypes.put_Line("    127: findnextinteger: finished");
+      NonSparkTypes.put_Line("    127: findnextinteger: finished");
       
    end findnextinteger;
    
@@ -166,23 +166,23 @@ package body ocpp.BootNotification is
       
       ocpp.move_index_past_token(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
       
-      --NonSparkTypes.put("parse: 169 index: "); NonSparkTypes.put_line(index'image);
+      NonSparkTypes.put("parse: 169 index: "); NonSparkTypes.put_line(index'image);
 
       findnextinteger(msg, index, request.messageTypeId, retval); if (retval = false) then return; end if;
       index := index + 1;
-      --NonSparkTypes.put ("parse: messageTypeId: "); NonSparkTypes.put_line(request.messageTypeId'image); 
+      NonSparkTypes.put ("parse: messageTypeId: "); NonSparkTypes.put_line(request.messageTypeId'image); 
       
-      --NonSparkTypes.put("parse: 171 index: "); NonSparkTypes.put_line(index'image);
+      NonSparkTypes.put("parse: 171 index: "); NonSparkTypes.put_line(index'image);
       if (retval = false) then return; end if;
       if (request.messageTypeId /= 2) then return; end if;
 
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
 
-      --NonSparkTypes.put_line("parse: searching for messageId..."); 
+      NonSparkTypes.put_line("parse: searching for messageId..."); 
       findquotedstring_messageid(msg, index, retval, request.messageId);
       if (NonSparkTypes.messageid_t.Length(request.messageid) = 0) then return; end if;
       if (retval = false) then return; end if;      
-      --NonSparkTypes.put("parse: messageId: "); NonSparkTypes.put_Line(NonSparkTypes.messageid_t.To_String(request.messageId));
+      NonSparkTypes.put("parse: messageId: "); NonSparkTypes.put_Line(NonSparkTypes.messageid_t.To_String(request.messageId));
       
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
       
@@ -190,36 +190,36 @@ package body ocpp.BootNotification is
       if (retval = false) then return; end if;
       if (NonSparkTypes.action_t.To_String(request.action) /= strBootNotification) then return; end if;
       
-      --NonSparkTypes.put("parse: action: "); NonSparkTypes.put_Line(NonSparkTypes.action_t.To_String(request.action));
+      NonSparkTypes.put("parse: action: "); NonSparkTypes.put_Line(NonSparkTypes.action_t.To_String(request.action));
 
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 233"); return; end if;
             
       ocpp.move_index_past_token(msg, '{', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 235"); return; end if;
 
-      --NonSparkTypes.put("parse: looking for 'reason': ");
+      NonSparkTypes.put("parse: looking for 'reason': ");
       findquotedstring_packet(msg, index, retval, dummybounded);
       if (retval = false) then 
          NonSparkTypes.put("parse: ERROR: looking for 'reason': ");
          return; 
       end if;
       
-      --NonSparkTypes.put("parse: found: "); NonSparkTypes.put_Line(NonSparkTypes.packet.To_String(dummybounded));
+      NonSparkTypes.put("parse: found: "); NonSparkTypes.put_Line(NonSparkTypes.packet.To_String(dummybounded));
       if (NonSparkTypes.packet.To_String(dummybounded) /= str) then 
-         --NonSparkTypes.put("parse: 243: ERROR: looking for 'reason': ");
-         --NonSparkTypes.put("comparing with: "); NonSparkTypes.put_line(str);
+         NonSparkTypes.put("parse: 243: ERROR: looking for 'reason': ");
+         NonSparkTypes.put("comparing with: "); NonSparkTypes.put_line(str);
          return; 
       end if;
 
-      --NonSparkTypes.put("parse: 244: looking for ':' ");
+      NonSparkTypes.put("parse: 244: looking for ':' ");
       ocpp.move_index_past_token(msg, ':', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 253"); return; end if;
       
-      --NonSparkTypes.put("parse: looking for reason ");
+      NonSparkTypes.put("parse: looking for reason ");
       findquotedstring_reason(msg, index, retval, request.reason);
       if (retval = false) then 
          return; 
       end if;
       
-      --NonSparkTypes.put("parse: reason: "); NonSparkTypes.put_Line(NonSparkTypes.BootReasonEnumType.To_String(request.reason));
+      NonSparkTypes.put("parse: reason: "); NonSparkTypes.put_Line(NonSparkTypes.BootReasonEnumType.To_String(request.reason));
       validreason(request.reason, retval); 
       if (retval = false) then return; end if;
       

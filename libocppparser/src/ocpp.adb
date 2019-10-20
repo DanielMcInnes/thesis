@@ -37,6 +37,18 @@ package body ocpp is
                                       First => Integer(first),
                                       Test => Ada.Strings.Inside,
                                       Last => last);
+      if (index > NonSparkTypes.packet.Length(msg))
+      then
+         last := 0;
+         return;
+      end if;
+      
+      if (first > NonSparkTypes.packet.Length(msg))
+      then
+         last := 0;
+         return;
+      end if;
+      
       if (last > NonSparkTypes.packet.Length(msg)) then
          last := 0;
          --put("ERROR: move_index_past_token: 31: index: ");
@@ -59,13 +71,27 @@ package body ocpp is
       first  : Positive;
    begin
       last := 0;
-      --if (index <= NonSparkTypes.packet.Length(msg)) 
-      --then 
-      --   return;
-      --end if;
-      --pragma assert(index <= NonSparkTypes.packet.Length(msg)); 
+      if (index >= NonSparkTypes.packet.Length(msg))
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
+         return;
+      end if;
+      pragma assert(index < NonSparkTypes.packet.Length(msg)); 
       find_token(msg, token, index, first, last);
+
+      if (first = Positive'Last)
+      then
+         last := 0;
+         return;
+      end if;
       index := first + 1;
+      if (index >= NonSparkTypes.packet.Length(msg))
+      then
+         last := 0;
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
+         return;
+      end if;
+      pragma assert(index < NonSparkTypes.packet.Length(msg)); 
    end move_index_past_token;
 
    procedure move_index_past_token
@@ -76,8 +102,40 @@ package body ocpp is
       last   : out Natural)
    is
    begin
+      if (NonSparkTypes.packet.Length(msg) = 0)
+      then
+         first := 1;
+         last := 0;
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
+         return;
+      end if;
+
+      if (index > NonSparkTypes.packet.Length(msg))
+      then
+         first := 1;
+         last := 0;
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
+         return;
+      end if;
+      pragma assert(index <= NonSparkTypes.packet.Length(msg)); 
+
       find_token(msg, token, index, first, last);
+      if (first = Positive'Last)
+      then
+         last := 0;
+         return;
+      end if;
       index := first + 1;
+      
+      if (index > NonSparkTypes.packet.Length(msg))
+      then
+         first := 1;
+         last := 0;
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
+         return;
+      end if;
+      pragma assert(index <= NonSparkTypes.packet.Length(msg)); 
+
    end move_index_past_token;
 
 

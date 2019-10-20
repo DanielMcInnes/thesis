@@ -44,8 +44,8 @@ package ocpp is
      with
        Post => (Last <= NonSparkTypes.packet.Length(msg)) and 
        (Last < Integer'Last) and
-     (if Last /= 0 then (index <= NonSparkTypes.packet.Length(msg))),
-     Global => null;
+       (if Last /= 0 then (index <= NonSparkTypes.packet.Length(msg))),
+       Global => null;
 
    procedure move_index_past_token
      (msg : packet.Bounded_String;
@@ -56,8 +56,9 @@ package ocpp is
      with
        Post => (Last <= NonSparkTypes.packet.Length(msg)) and 
        (Last < Integer'Last) and
-     (if Last /= 0 then First <= NonSparkTypes.packet.Length(msg)) and
-     (index <= NonSparkTypes.packet.Length(msg)),
+     (if Last /= 0 then 
+        (First <= NonSparkTypes.packet.Length(msg)) and
+          (index <= NonSparkTypes.packet.Length(msg))),
      Global => null;
 
    procedure find_token
