@@ -35,7 +35,6 @@ package ocpp is
    
    procedure Initialize(Self : out ChargingStation_t);
    
-
    procedure move_index_past_token
      (msg : packet.Bounded_String;
       token    : Character;
