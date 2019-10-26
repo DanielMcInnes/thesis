@@ -206,6 +206,14 @@ ${inlines}
 	    classrelation_ref 150530 // <dependency>
 	  b parent class_ref 170242 // findnonwhitespace
       end
+
+      classrelation 157698 // <dependency>
+	relation 157698 -_->
+	  a public
+	    cpp default "#include in source"
+	    classrelation_ref 157698 // <dependency>
+	  b parent class_ref 190722 // single_char_to_int
+      end
     end
 
     class 163714 "parse"
@@ -305,7 +313,7 @@ ${inlines}
       end
     end
 
-    class 189954 "BootNotificationRequest"
+    class 189954 "BootNotification::Request"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -334,6 +342,28 @@ ${inlines}
 "
 	    classrelation_ref 157186 // (chargingStation)
 	  b parent class_ref 190210 // ChargingStationType
+      end
+
+      operation 168322 "DefaultInitialization"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      classrelation 157442 // <generalisation>
+	relation 157442 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 157442 // <generalisation>
+	  b parent class_ref 190466 // call
       end
     end
 
@@ -459,6 +489,93 @@ ${inlines}
 	mysql_decl ""
 	MysqlColumn
       end
+    end
+
+    class 190466 "call"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 170498 "messageTypeId"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 170626 "messageId"
+	private explicit_type "char[36]"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 170754 "action"
+	private explicit_type "char[36]"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 190594 "move_index_past_token"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 157570 // <dependency>
+	relation 157570 -_->
+	  a public
+	    cpp default "#include in source"
+	    classrelation_ref 157570 // <dependency>
+	  b parent class_ref 170370 // ocpp.find_token
+      end
+    end
+
+    class 190722 "single_char_to_int"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
     end
   end
 
