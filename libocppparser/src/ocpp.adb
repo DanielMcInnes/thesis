@@ -53,8 +53,8 @@ package body ocpp is
          last := 0;
          --put("ERROR: move_index_past_token: 31: index: ");
          --put (index'image);
-         put(" length: ");
-         put (NonSparkTypes.packet.Length(msg)'image);
+         NonSparkTypes.put(" length: ");
+         NonSparkTypes.put (NonSparkTypes.packet.Length(msg)'image);
          return;
       end if;
 

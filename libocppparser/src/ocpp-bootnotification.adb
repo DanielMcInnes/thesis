@@ -11,10 +11,10 @@ with utils;
 package body ocpp.BootNotification is
 
    procedure packetContainsString is new utils.contains(
-                                               string_haystack => NonSparkTypes.packet.Bounded_String, 
+                                                        string_haystack => NonSparkTypes.packet.Bounded_String, 
                                                         haystack_to_string => NonSparkTypes.packet.To_String,
                                                         haystack_length => NonSparkTypes.packet.Length
-                                                        );
+                                                       );
 
    procedure findnonwhitespace_packet is new findnonwhitespace(
                                                                string_t => NonSparkTypes.packet.Bounded_String, 
@@ -87,8 +87,9 @@ package body ocpp.BootNotification is
      post => (if found = true then index < Integer'Last)
    is
       temp : character;
-      intstring : NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
+      last : integer;
    begin
+      found := false;
       foundInteger := 0;
       if (index > NonSparkTypes.packet.Length(msg)) then
          found := false;
@@ -96,35 +97,46 @@ package body ocpp.BootNotification is
          return;
       end if;
            
-      findnonwhitespace_packet(msg, index, found); NonSparkTypes.put_Line("    105: findnextinteger:");
-      if (found = false) then
-         return;
-      end if;      
-        
-      if (index > NonSparkTypes.packet.Length(msg)) then
+      NonSparkTypes.packet.Find_Token(Source => msg,
+                                      Set => Ada.Strings.Maps.To_Set("0123456789"),
+                                      From => Integer(index),
+                                      First => Integer(index),
+                                      Test => Ada.Strings.Inside,
+                                      Last => last);
+      if (index > NonSparkTypes.packet.Length(msg) or index = 0)
+      then
          found := false;
-         NonSparkTypes.put("    110: "); NonSparkTypes.put_line("ERROR");
          return;
       end if;
-        
-      temp :=  NonSparkTypes.packet.Element(msg, index);NonSparkTypes.put_Line("    116: findnextinteger:");
-      NonSparkTypes.packet.Append(intstring, temp);
-      if (NonSparkTypes.packet.Length(intstring) /= 1) then
+      
+      if (last > NonSparkTypes.packet.Length(msg)) then
          found := false;
-         NonSparkTypes.put("    118: "); NonSparkTypes.put_line("ERROR");
          return;
-      else
-         NonSparkTypes.put("    123: findnextinteger:"); NonSparkTypes.put_line(NonSparkTypes.packet.To_String(intstring));
-         NonSparkTypes.single_char_to_int(intstring, foundInteger); NonSparkTypes.put_Line("    124: findnextinteger:");
-         found := true;
-         
       end if;
-      NonSparkTypes.put_Line("    127: findnextinteger: finished");
+      
+      
+      temp := NonSparkTypes.packet.Element(msg, index);
+      
+      case temp is
+         when '0' => foundInteger := 0;
+         when '1' => foundInteger := 1;
+         when '2' => foundInteger := 2;
+         when '3' => foundInteger := 3;
+         when '4' => foundInteger := 4;
+         when '5' => foundInteger := 5;
+         when '6' => foundInteger := 6;
+         when '7' => foundInteger := 7;
+         when '8' => foundInteger := 8;
+         when '9' => foundInteger := 9;
+         when others => return;              
+      end case;
+      
+      found := true;
       
    end findnextinteger;
    
    procedure validreason(thereason: in NonSparkTypes.BootReasonEnumType.Bounded_String;
-                        valid: out Boolean)
+                         valid: out Boolean)
    is
    begin      
       for I in validreasons'Range loop
