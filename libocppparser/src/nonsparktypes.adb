@@ -11,4 +11,14 @@ package body NonSparkTypes is
       ada.Text_IO.put_line(msg);
    end put_line;
 
+   procedure contains(theList : in out vecChargers_t;
+                      theValue: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
+                      retval: out Boolean)
+   is
+   begin
+      retval := theList.Contains(theValue);
+   end contains;
+
+
+
 end NonSparkTypes;
