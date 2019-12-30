@@ -1,3 +1,5 @@
+with ada.Containers.Formal_Vectors; 
+with ada.Containers.Vectors;
 with Ada.Finalization;
 with Ada.Strings; 
 with Ada.Strings.Bounded;
@@ -33,7 +35,14 @@ package NonSparkTypes is
       package vendorName is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50);
       package firmwareVersion is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50);
    end ChargingStationType;
-   
+
+   use ChargingStationType.serialNumber;
+   subtype index_t is Natural range 1 .. 100;
+   package vector_chargers is new Ada.Containers.Vectors
+     (Index_Type => index_t, 
+      Element_Type => NonSparkTypes.ChargingStationType.serialNumber.Bounded_String);
+   subtype vecChargers_t is vector_chargers.Vector;
+      
    package bootnotification_t is      
       package response is
          package currentTime is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
@@ -49,6 +58,11 @@ package NonSparkTypes is
    
    procedure put(msg : string);
    procedure put_line(msg : string);
+
+   procedure contains(theList : in out vecChargers_t;
+                      theValue: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
+                      retval: out Boolean);
+   
 
 
    
