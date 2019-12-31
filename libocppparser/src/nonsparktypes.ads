@@ -38,9 +38,10 @@ package NonSparkTypes is
 
    use ChargingStationType.serialNumber;
    subtype index_t is Natural range 1 .. 100;
-   package vector_chargers is new Ada.Containers.Vectors
+   
+   package vector_chargers is new Ada.Containers.Formal_Vectors
      (Index_Type => index_t, 
-      Element_Type => NonSparkTypes.ChargingStationType.serialNumber.Bounded_String);
+      Element_Type => NonSparkTypes.ChargingStationType.serialNumber.Bounded_String);   
    subtype vecChargers_t is vector_chargers.Vector;
       
    package bootnotification_t is      
@@ -59,9 +60,17 @@ package NonSparkTypes is
    procedure put(msg : string);
    procedure put_line(msg : string);
 
+   procedure put(msg : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String);
+   procedure put_line(msg : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String);
+
    procedure contains(theList : in out vecChargers_t;
                       theValue: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
                       retval: out Boolean);
+   
+   procedure append(theList : in out vecChargers_t;
+                    theValue: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String
+                   );
+   
    
 
 

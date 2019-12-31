@@ -2,43 +2,47 @@ pragma SPARK_Mode (On);
 
 with Ada.Text_IO; use Ada.Text_IO;
 
+with NonSparkTypes;
 with ocpp.BootNotification;
 
-package body ocpp.server with
-Refined_State => (State => enrolledChargers)
-  
+package body ocpp.server 
+with
+Refined_State => (State => enrolledChargers )
 is
-      -- the server maintains a list of charger ids that are allowed to connect
-      enrolledChargers: vecChargers_t;
+   -- the server maintains a list of charger ids that are allowed to connect
+   use NonSparkTypes.vector_chargers;
+      --enrolledChargers: NonSparkTypes.vector_chargers.Vector := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("");
+      --enrolledChargers: vecChargers_t; -- := vecChargers_t.
+   enrolledChargers : vecChargers_t := NonSparkTypes.vector_chargers.To_Vector(New_Item => NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String(""),
+                                                                               Length => 0);
       
    
-   procedure enrolChargingStation(theList : in out vecChargers_t;
-                                serialNumber: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
+   procedure enrolChargingStation(serialNumber: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
                                 retval: out Boolean)
    is
    begin
-      NonSparkTypes.contains(theList, serialNumber, retval);      
+      NonSparkTypes.contains(enrolledChargers, serialNumber, retval);      
       if (retval) then
          NonSparkTypes.put("ocpp.server.addChargingStation: already contains charger"); NonSparkTypes.put_line(NonSparkTypes.ChargingStationType.serialNumber.To_String(serialNumber));
          retval := true;
          return;
       end if;
 
-      theList.Append(serialNumber);
+      NonSparkTypes.append(enrolledChargers, serialNumber);
       
       retval := true;
    end enrolChargingStation;
    
-   procedure isEnrolled(theList : in vecChargers_t;
+   procedure isEnrolled(
                         serialNumber: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
                         retval: out Boolean)
    is
    begin
-      retval := theList.Contains(serialNumber);      
+      NonSparkTypes.contains(enrolledChargers, serialNumber, retval);      
+      NonSparkTypes.put("ocpp.server.isEnrolled: "); NonSparkTypes.put(serialNumber); NonSparkTypes.put(retval'Image); --NonSparkTypes.put_line(enrolledChargers.Length'Image);
    end isEnrolled;
    
-   procedure handle(server: in Class;
-                    request: in NonSparkTypes.packet.Bounded_String;
+   procedure handle(request: in NonSparkTypes.packet.Bounded_String;
                     response: out NonSparkTypes.packet.Bounded_String)
    is
       valid : Boolean;
@@ -66,7 +70,7 @@ is
          bootNotificationResponse.currentTime := NonSparkTypes.bootnotification_t.response.currentTime.To_Bounded_String("2013-02-01T20:53:32.486Z");
          bootNotificationResponse.interval := NonSparkTypes.bootnotification_t.response.interval.To_Bounded_String("300");
          
-         isEnrolled(server.enrolledChargers, bootNotificationRequest.chargingStation.serialNumber, valid);
+         isEnrolled(bootNotificationRequest.chargingStation.serialNumber, valid);
          
          if (valid) then
             bootNotificationResponse.status := NonSparkTypes.bootnotification_t.response.status.To_Bounded_String("Accepted");

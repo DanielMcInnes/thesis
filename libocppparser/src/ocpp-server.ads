@@ -4,43 +4,42 @@ with ocpp;
 with ocpp.BootNotification;
 
 package ocpp.server 
-  with Abstract_State => State
+with Abstract_State => State, Initializes => State
 is 
    
    type Class is tagged record
 
-      -- the server maintains a list of charger ids that are allowed to connect
-      enrolledChargers: vecChargers_t;
-      
       reason: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); --eg. PowerUp
+   
    end record;   
 
-   procedure enrolChargingStation(theList : in out vecChargers_t;
+   procedure enrolChargingStation(
                                   serialNumber: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
                                   retval: out Boolean)
      with
-       Global => (null),
-       Depends => (
-                     theList => (theList, serialNumber),
-                     --serialNumber => null,
-                     retval => (theList, serialNumber)
-                  );
+       Global => (In_Out => State),
+     Depends => (
+                 retval => (serialNumber, State),
+                 State => (serialNumber, State)
+                );
    
-   procedure isEnrolled(theList : in vecChargers_t;
+   procedure isEnrolled(
                         serialNumber: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
                         retval: out Boolean)
-          with
-       Global => (null),
-       Depends => (
-                     retval => (theList, serialNumber)
-                  );
+     with
+       Global => (In_Out => State),
+     Depends => (
+                   retval => (serialNumber, State),
+                 State => (serialNumber)
+                );
 
-   procedure handle(server: in Class;
-                    request: in NonSparkTypes.packet.Bounded_String;
+   procedure handle(request: in NonSparkTypes.packet.Bounded_String;
                     response: out NonSparkTypes.packet.Bounded_String)
      with
+       Global => (In_Out => State),
        Depends => (
-                     response => (request, server)
+                     response => (request, State),
+                   State => (request, State)
                   );
 
    procedure toString(msg: out NonSparkTypes.packet.Bounded_String;

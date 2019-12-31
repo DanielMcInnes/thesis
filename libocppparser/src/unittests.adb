@@ -53,11 +53,11 @@ package body unittests is
                                                 & "}" & ASCII.LF
                                                 & "]");
    begin
-      ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);
+      ocpp.server.enrolChargingStation(sn, result);
       result := false;
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server, packet, response);
+      ocpp.server.handle(packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -93,7 +93,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server, packet, response);
+      ocpp.server.handle(packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -132,7 +132,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server, packet, response);
+      ocpp.server.handle(packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -170,7 +170,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server, packet, response);
+      ocpp.server.handle(packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -191,16 +191,16 @@ package body unittests is
    procedure B03(result: out Boolean)
    is
       server: ocpp.server.Class;
-      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("01234567890123456789");
+      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("B030001");
 
       packet: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String( ""
                                                                                              & "[2," & ASCII.LF
-                                                                                             & '"'  &"19223201"  &'"' & "," & ASCII.LF
+                                                                                             & '"'  &"19223202"  &'"' & "," & ASCII.LF
                                                                                              & '"' & "BootNotification" & '"' & "," & ASCII.LF
                                                                                              & "{" & ASCII.LF
                                                                                              & "   " & '"' & "reason" & '"' & ": " & '"' & "PowerUp" & '"' & "," & ASCII.LF
                                                                                              & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
-                                                                                             & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "01234567890123456789" & '"' & "," & ASCII.LF
+                                                                                             & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "B030001" & '"' & "," & ASCII.LF
                                                                                              & "      " & '"' & "model"  & '"' & ":" & '"' & "SingleSocketCharger" & '"' & "," & ASCII.LF
                                                                                              & "      " & '"' & "vendorName" & '"' & ": " & '"' & "VendorX" & '"' & ASCII.LF
                                                                                              & "   }" & ASCII.LF
@@ -211,7 +211,7 @@ package body unittests is
       expectedresponse: NonSparkTypes.packet.Bounded_String :=
         NonSparkTypes.packet.To_Bounded_String( ""
                                                 & "[3," & ASCII.LF
-                                                & '"'  &"19223201"  &'"' & "," & ASCII.LF
+                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
                                                 & "{" & ASCII.LF
                                                 & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
                                                 & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
@@ -222,7 +222,7 @@ package body unittests is
       result := false;
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server, packet, response);
+      ocpp.server.handle(packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -231,19 +231,19 @@ package body unittests is
       if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
          Put_line("Success");
       else
-         Put_line("Error: 50");
+         Put_line("Error: 234");
          return;
       end if;
 
       -- include the optional 'firmwareVersion' and 'serialNumber'
       packet := NonSparkTypes.packet.To_Bounded_String( ""
                                                         & "[2," & ASCII.LF
-                                                        & '"'  &"19223201"  &'"' & "," & ASCII.LF
+                                                        & '"'  &"19223202"  &'"' & "," & ASCII.LF
                                                         & '"' & "BootNotification" & '"' & "," & ASCII.LF
                                                         & "{" & ASCII.LF
                                                         & "   " & '"' & "reason" & '"' & ": " & '"' & "PowerUp" & '"' & "," & ASCII.LF
                                                         & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
-                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "01234567890123456789" & '"' & "," & ASCII.LF
+                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "B030001" & '"' & "," & ASCII.LF
                                                         & "      " & '"' & "model" & '"' & ":" & '"' & "SingleSocketCharger" & '"' & "," & ASCII.LF
                                                         & "      " & '"' & "vendorName" & '"' & ": " & '"' & "VendorX" & '"' & ASCII.LF
                                                         & "      " & '"' & "firmwareVersion"  & '"' & ":" & '"' & "01.23456789" & '"' & "," & ASCII.LF
@@ -253,8 +253,8 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server, packet, response);
-      Put_line("expected response:");
+      ocpp.server.handle(packet, response);
+      Put_line("257: expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
       Put_Line(NonSparkTypes.packet.To_String(response));
@@ -272,12 +272,12 @@ package body unittests is
       
       
       
-      ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);
+      ocpp.server.enrolChargingStation(sn, result);
       
       expectedresponse :=
         NonSparkTypes.packet.To_Bounded_String( ""
                                                 & "[3," & ASCII.LF
-                                                & '"'  &"19223201"  &'"' & "," & ASCII.LF
+                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
                                                 & "{" & ASCII.LF
                                                 & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
                                                 & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
@@ -291,12 +291,12 @@ package body unittests is
       -- include the optional 'modemInfo' and 'serialNumber'
       packet := NonSparkTypes.packet.To_Bounded_String( ""
                                                         & "[2," & ASCII.LF
-                                                        & '"'  &"19223201"  &'"' & "," & ASCII.LF
+                                                        & '"'  &"19223202"  &'"' & "," & ASCII.LF
                                                         & '"' & "BootNotification" & '"' & "," & ASCII.LF
                                                         & "{" & ASCII.LF
                                                         & "   " & '"' & "reason" & '"' & ": " & '"' & "PowerUp" & '"' & "," & ASCII.LF
                                                         & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
-                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "01234567890123456789" & '"' & "," & ASCII.LF
+                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "B030001" & '"' & "," & ASCII.LF
                                                         & "      " & '"' & "model"  & '"' & ":" & '"' & "SingleSocketCharger" & '"' & "," & ASCII.LF
                                                         & "      " & '"' & "vendorName" & '"' & ": " & '"' & "VendorX" & '"' & ASCII.LF
                                                         & "      " & '"' & "firmwareVersion"  & '"' & ":" & '"' & "01.23456789" & '"' & "," & ASCII.LF
@@ -309,7 +309,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server, packet, response);
+      ocpp.server.handle(packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -330,12 +330,12 @@ package body unittests is
       -- include the optional 'modemInfo' and the optional 'firmwareVersion' and 'serialNumber'
       packet := NonSparkTypes.packet.To_Bounded_String( ""
                                                         & "[2," & ASCII.LF
-                                                        & '"'  &"19223201"  &'"' & "," & ASCII.LF
+                                                        & '"'  &"19223202"  &'"' & "," & ASCII.LF
                                                         & '"' & "BootNotification" & '"' & "," & ASCII.LF
                                                         & "{" & ASCII.LF
                                                         & "   " & '"' & "reason" & '"' & ": " & '"' & "PowerUp" & '"' & "," & ASCII.LF
                                                         & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
-                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "01234567890123456789" & '"' & "," & ASCII.LF
+                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "B030001" & '"' & "," & ASCII.LF
                                                         & "      " & '"' & "model"  & '"' & ":" & '"' & "SingleSocketCharger" & '"' & "," & ASCII.LF
                                                         & "      " & '"' & "vendorName" & '"' & ": " & '"' & "VendorX" & '"' & ASCII.LF
                                                         & "      " & '"' & "modem"  & '"' & ":" & "{" & ASCII.LF
@@ -347,7 +347,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server, packet, response);
+      ocpp.server.handle(packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
