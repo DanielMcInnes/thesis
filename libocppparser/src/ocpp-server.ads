@@ -2,44 +2,44 @@ pragma SPARK_Mode (On);
 
 with ocpp;
 with ocpp.BootNotification;
+with NonSparkTypes;
 
 package ocpp.server 
-with Abstract_State => State, Initializes => State
 is 
    
    type Class is tagged record
 
-      reason: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); --eg. PowerUp
-   
-   end record;   
+      -- the server maintains a list of charger ids that are allowed to connect
+      enrolledChargers : vecChargers_t; -- := NonSparkTypes.vector_chargers.To_Vector(New_Item => NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String(""), Length => 0);   
 
-   procedure enrolChargingStation(
+      reason: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); --eg. PowerUp
+   end record;
+
+   procedure enrolChargingStation(theList: in out NonSparkTypes.vecChargers_t;
                                   serialNumber: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
                                   retval: out Boolean)
      with
-       Global => (In_Out => State),
-     Depends => (
-                 retval => (serialNumber, State),
-                 State => (serialNumber, State)
-                );
+       Depends => (
+                     retval => (serialNumber, theList),
+                   theList => (serialNumber, theList)
+                  );
    
-   procedure isEnrolled(
+   procedure isEnrolled(theList: in out NonSparkTypes.vecChargers_t;
                         serialNumber: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
                         retval: out Boolean)
      with
-       Global => (In_Out => State),
-     Depends => (
-                   retval => (serialNumber, State),
-                 State => (serialNumber)
-                );
+       Depends => (
+                     retval => (serialNumber, theList),
+                   theList => (serialNumber)
+                  );
 
-   procedure handle(request: in NonSparkTypes.packet.Bounded_String;
+   procedure handle(theList: in out NonSparkTypes.vecChargers_t;
+                    request: in NonSparkTypes.packet.Bounded_String;
                     response: out NonSparkTypes.packet.Bounded_String)
      with
-       Global => (In_Out => State),
        Depends => (
-                     response => (request, State),
-                   State => (request, State)
+                     response => (request, theList),
+                   theList => (request, theList)
                   );
 
    procedure toString(msg: out NonSparkTypes.packet.Bounded_String;

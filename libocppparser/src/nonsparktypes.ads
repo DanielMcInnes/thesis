@@ -39,7 +39,7 @@ package NonSparkTypes is
    use ChargingStationType.serialNumber;
    subtype index_t is Natural range 1 .. 100;
    
-   package vector_chargers is new Ada.Containers.Formal_Vectors
+   package vector_chargers is new Ada.Containers.Vectors
      (Index_Type => index_t, 
       Element_Type => NonSparkTypes.ChargingStationType.serialNumber.Bounded_String);   
    subtype vecChargers_t is vector_chargers.Vector;

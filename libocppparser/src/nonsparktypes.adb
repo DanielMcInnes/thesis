@@ -30,7 +30,8 @@ package body NonSparkTypes is
                       retval: out Boolean)
    is
    begin
-      retval := NonSparkTypes.vector_chargers.Contains(theList, theValue);
+      retval := theList.Contains(theValue);
+      --retval := NonSparkTypes.vector_chargers.Contains(theList, theValue);
 
    end contains;
 

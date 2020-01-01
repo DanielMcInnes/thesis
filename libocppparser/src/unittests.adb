@@ -53,11 +53,11 @@ package body unittests is
                                                 & "}" & ASCII.LF
                                                 & "]");
    begin
-      ocpp.server.enrolChargingStation(sn, result);
+      ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);
       result := false;
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(packet, response);
+      ocpp.server.handle(server.enrolledChargers, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -93,7 +93,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(packet, response);
+      ocpp.server.handle(server.enrolledChargers, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -132,7 +132,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(packet, response);
+      ocpp.server.handle(server.enrolledChargers, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -170,7 +170,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(packet, response);
+      ocpp.server.handle(server.enrolledChargers, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -222,7 +222,7 @@ package body unittests is
       result := false;
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(packet, response);
+      ocpp.server.handle(server.enrolledChargers, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -253,7 +253,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(packet, response);
+      ocpp.server.handle(server.enrolledChargers, packet, response);
       Put_line("257: expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -272,7 +272,7 @@ package body unittests is
       
       
       
-      ocpp.server.enrolChargingStation(sn, result);
+      ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);
       
       expectedresponse :=
         NonSparkTypes.packet.To_Bounded_String( ""
@@ -309,7 +309,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(packet, response);
+      ocpp.server.handle(server.enrolledChargers, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -347,7 +347,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(packet, response);
+      ocpp.server.handle(server.enrolledChargers, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
