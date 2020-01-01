@@ -17,8 +17,6 @@ is
       reason: NonSparkTypes.BootReasonEnumType.Bounded_String := NonSparkTypes.BootReasonEnumType.To_Bounded_String(""); --eg. PowerUp
       chargingStation: ChargingStation_t;
    end record;
-   procedure DefaultInitialize(Self : out ocpp.BootNotification.Request);
-
 
    type Response is new callresult with record
       currentTime: NonSparkTypes.bootnotification_t.response.currentTime.Bounded_String := NonSparkTypes.bootnotification_t.response.currentTime.To_Bounded_String(""); --eg. 2013-02-01T20:53:32.486Z
@@ -36,6 +34,8 @@ is
                                                NonSparkTypes.BootReasonEnumType.To_Bounded_String("Triggered"),
                                                NonSparkTypes.BootReasonEnumType.To_Bounded_String("Unknown"),
                                              NonSparkTypes.BootReasonEnumType.To_Bounded_String("Watchdog"));
+
+   procedure DefaultInitialize(Self : out ocpp.BootNotification.Request);
 
    procedure validreason(thereason: in NonSparkTypes.BootReasonEnumType.Bounded_String;
                         valid: out Boolean)
@@ -57,5 +57,7 @@ is
                   (Index(NonSparkTypes.packet.To_String(msg), strBootNotification) /= 0) -- prove that the original packet contains "BootNotification"
              );
 
+   procedure To_Bounded_String(Self: in ocpp.BootNotification.Request;
+                               retval: out NonSparkTypes.packet.Bounded_String);
 
 end ocpp.BootNotification;

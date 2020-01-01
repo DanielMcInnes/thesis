@@ -164,7 +164,8 @@ package body ocpp.BootNotification is
       valid := false;      
    end validreason;   
    
-   procedure DefaultInitialize(Self : out ocpp.BootNotification.Request) is
+   procedure DefaultInitialize(Self : out ocpp.BootNotification.Request) 
+   is
    begin
       self.messagetypeid := 0;
       self.messageid := messageid_t.To_Bounded_String("");
@@ -173,7 +174,6 @@ package body ocpp.BootNotification is
       ocpp.Initialize(self.chargingStation);
    end DefaultInitialize;
 
-   
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    request: out ocpp.BootNotification.Request;
                    valid: out Boolean)
@@ -339,4 +339,28 @@ package body ocpp.BootNotification is
       NonSparkTypes.put_Line("parse: Received valid BootNoticationRequest packet"); 
    end parse;
    
+   procedure To_Bounded_String(Self: in ocpp.BootNotification.Request;
+                               retval: out NonSparkTypes.packet.Bounded_String)
+   is
+   begin
+        retval := NonSparkTypes.packet.To_Bounded_String( ""
+                                                        & "[2," & ASCII.LF
+                                                        & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) &'"' & "," & ASCII.LF
+                                                        & '"' & "BootNotification" & '"' & "," & ASCII.LF
+                                                        & "{" & ASCII.LF
+                                                        & "   " & '"' & "reason" & '"' & ": " & '"' & NonSparkTypes.BootReasonEnumType.To_String(Self.reason) & '"' & "," & ASCII.LF -- "PowerUp"
+                                                        & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
+                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & NonSparkTypes.ChargingStationType.serialNumber.To_String(Self.chargingStation.serialNumber) & '"' & "," & ASCII.LF
+                                                        & "      " & '"' & "model"  & '"' & ":" & '"' & NonSparkTypes.ChargingStationType.model.To_String(Self.chargingStation.model) & '"' & "," & ASCII.LF
+                                                        & "      " & '"' & "vendorName" & '"' & ": " & '"' & NonSparkTypes.ChargingStationType.vendorName.To_String(Self.chargingStation.vendorName) & '"' & ASCII.LF
+                                                        & "      " & '"' & "firmwareVersion"  & '"' & ":" & '"' & NonSparkTypes.ChargingStationType.firmwareVersion.To_String(Self.chargingStation.firmwareVersion) & '"' & "," & ASCII.LF
+                                                        & "      " & '"' & "modem"  & '"' & ":" & "{" & ASCII.LF
+                                                        & "         " & '"' & "iccid" & '"' & ": " & '"' & NonSparkTypes.ModemType.iccid_t.To_String(Self.chargingStation.modem.iccid) & '"' & ASCII.LF
+                                                        & "         " & '"' & "imsi" & '"' & ": " & '"' & NonSparkTypes.ModemType.imsi_t.To_String(Self.chargingStation.modem.imsi) & '"' & ASCII.LF
+                                                        & "   }" & ASCII.LF
+                                                        & "}" & ASCII.LF
+                                                        & "]");
+   end To_Bounded_String;
+   
+
 end ocpp.BootNotification;

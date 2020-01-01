@@ -19,6 +19,11 @@ package body unittests is
          return;
       end if;
             
+      B04(result);
+      if (result = false) then
+         return;
+      end if;
+            
    end testall;     
    
 
@@ -364,5 +369,71 @@ package body unittests is
       
    end B03;     
    
+   procedure B04(result: out Boolean)
+   is
+      server: ocpp.server.Class;
+      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("B030001");
+      bnr: ocpp.BootNotification.Request := (
+                                             messagetypeid => 2,
+                                             messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                             action => action_t.To_Bounded_String("BootNotification"),
+                                             reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
+                                             chargingStation => (
+                                                                 serialNumber => sn,
+                                                                 model => NonSparkTypes.ChargingStationType.model.To_Bounded_String("SingleSocketCharger"),
+                                                                 vendorName => NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String("VendorX"),
+                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String("01.23456789"),
+                                                                 modem => (
+                                                                           iccid => ModemType.iccid_t.To_Bounded_String("01234567890123456789"),
+                                                                           imsi => ModemType.imsi_t.To_Bounded_String("01234567890123456789")
+                                                                          )
+                                                                )                                                 
+                                            );
+
+      packet: NonSparkTypes.packet.Bounded_String;
+      response: NonSparkTypes.packet.Bounded_String;
+      expectedresponse: NonSparkTypes.packet.Bounded_String :=
+        NonSparkTypes.packet.To_Bounded_String( ""
+                                                & "[3," & ASCII.LF
+                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
+                                                & "{" & ASCII.LF
+                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
+                                                & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
+                                                & "   " & '"' & "status" & '"' & ": " & '"' & "Accepted" & '"' & ASCII.LF
+                                                & "}" & ASCII.LF
+                                                & "]");
+   begin
+      ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);     
+      ocpp.BootNotification.To_Bounded_String(bnr, packet);      
+      
+      Put_line("Receiving:");
+      Put_Line(NonSparkTypes.packet.To_String(packet));
+      ocpp.server.handle(server.enrolledChargers, packet, response);
+      Put_line("expected response:");
+      Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
+      Put_line("Sending:");
+      Put_Line(NonSparkTypes.packet.To_String(response));
+
+      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
+         Put_line("Success");
+      else
+         Put_line("Error: 81");
+         return;
+      end if;
+
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      result := true;
+   end B04;
    
 end unittests;

@@ -4,5 +4,6 @@ package unittests is
 
    procedure B01(result: out Boolean);
    procedure B03(result: out Boolean);
+   procedure B04(result: out Boolean);
 
 end unittests;
