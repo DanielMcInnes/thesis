@@ -1,27 +1,48 @@
 pragma SPARK_Mode (On);
 
-with ada.Containers.Bounded_Vectors;
-with ada.Containers.Vectors;
-with ada.Strings;
 with ocpp;
 with ocpp.BootNotification;
+with NonSparkTypes;
 
-package ocpp.server is 
-   --package packet is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 500);
+package ocpp.server 
+is 
+   
    type Class is tagged record
-      -- the server maintains a list of charger ids that are allowed to connect
-      reason: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); --eg. PowerUp
-   end record;   
 
-   procedure handle(request: in NonSparkTypes.packet.Bounded_String;
+      -- the server maintains a list of charger ids that are allowed to connect
+      enrolledChargers : vecChargers_t; -- := NonSparkTypes.vector_chargers.To_Vector(New_Item => NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String(""), Length => 0);   
+
+      reason: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); --eg. PowerUp
+   end record;
+
+   procedure enrolChargingStation(theList: in out NonSparkTypes.vecChargers_t;
+                                  serialNumber: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
+                                  retval: out Boolean)
+     with
+       Depends => (
+                     retval => (serialNumber, theList),
+                   theList => (serialNumber, theList)
+                  );
+   
+   procedure isEnrolled(theList: in out NonSparkTypes.vecChargers_t;
+                        serialNumber: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
+                        retval: out Boolean)
+     with
+       Depends => (
+                     retval => (serialNumber, theList),
+                   theList => (serialNumber)
+                  );
+
+   procedure handle(theList: in out NonSparkTypes.vecChargers_t;
+                    request: in NonSparkTypes.packet.Bounded_String;
                     response: out NonSparkTypes.packet.Bounded_String)
      with
        Depends => (
-                     response => request
+                     response => (request, theList),
+                   theList => (request, theList)
                   );
 
    procedure toString(msg: out NonSparkTypes.packet.Bounded_String;
                       response: in ocpp.BootNotification.Response);
-                           
    
 end ocpp.server;
