@@ -2,9 +2,11 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 
-with NonSparkTypes; use NonSparkTypes;
+with NonSparkTypes; use NonSparkTypes.action_t;
+
 
 with ocpp.BootNotification;
+with ocpp.heartbeat;
 
 package body ocpp.server 
 is
@@ -40,42 +42,54 @@ is
                     response: out NonSparkTypes.packet.Bounded_String)
    is
       valid : Boolean;
-      bootNotificationRequest : ocpp.BootNotification.Request;
-      bootNotificationResponse : ocpp.bootnotification.Response;
-      messageTypeId : Integer;
       index : Integer := 1;
+      messageTypeId : Integer;
       messageId : NonSparkTypes.messageid_t.Bounded_String;
+      action : NonSparkTypes.action_t.Bounded_String;
    begin     
       response := NonSparkTypes.packet.To_Bounded_String("");
-      
-      ocpp.GetMessageType(msg, messageTypeId, index, valid);
+
+      ocpp.ParseMessageType(msg, messageTypeId, index, valid);
       if (messageTypeId /= 2) then return; end if;
       
-      bootNotificationRequest.messagetypeid := messageTypeId;
-      
-      ocpp.GetMessageId(msg, messageId, index, valid); -- eg. "19223201"
+      ocpp.ParseMessageId(msg, messageId, index, valid); -- eg. "19223201"
       if (valid = false) then
          return;
       end if;
       
-      if (NonSparkTypes.messageid_t.To_String(messageId) = "BootNotification")
-      then
-         ocpp.BootNotification.DefaultInitialize(bootNotificationRequest);
-         bootNotificationRequest.messagetypeid := messageTypeId;
-         bootNotificationRequest.messageid := messageId;
+      ocpp.ParseAction(msg, index, action, valid); -- eg. "BootNotification"
+      if (valid = false) then
+         return;
       end if;
 
-      ocpp.BootNotification.parse(msg, bootNotificationRequest, valid);
+      if (action = ocpp.BootNotification.action)
+      then
+         handleBootNotification(theList, msg, index, valid, response, messageTypeId, messageId, action);
+      elsif (action = ocpp.heartbeat.action)
+      then
+         handleHeartbeat(theList, msg, index, valid, response, messageTypeId, messageId, action);
+      else
+         NonSparkTypes.put_line("ocpp-server: ERROR: invalid action");
+      end if;
       
-      --[3,
-      --"19223201",
-      --{
-      --"currentTime": "2013-02-01T20:53:32.486Z",
-      --"interval": 300,
-      --"status": "Accepted"
-      --}
-      --]      
-      
+   end handle;
+   
+   procedure handleBootNotification(theList: in out NonSparkTypes.vecChargers_t;
+                                    msg: in NonSparkTypes.packet.Bounded_String;
+                                    index : in out Integer;
+                                    valid: out Boolean;
+                                    response: out NonSparkTypes.packet.Bounded_String;
+                                    messageTypeId : in Integer;
+                                    messageId : in NonSparkTypes.messageid_t.Bounded_String;
+                                    action : in NonSparkTypes.action_t.Bounded_String
+                                   )
+   is
+      bootNotificationRequest : ocpp.BootNotification.Request;
+      bootNotificationResponse : ocpp.bootnotification.Response;
+   begin
+      ocpp.BootNotification.DefaultInitialize(bootNotificationRequest, messageTypeId, messageId, action);
+      ocpp.BootNotification.parse(msg, index, bootNotificationRequest, valid);
+
       if (valid = true) then
          bootNotificationResponse.messagetypeid := 2;
          bootNotificationResponse.messageid := bootNotificationRequest.messageid;
@@ -95,7 +109,37 @@ is
          NonSparkTypes.put_line("ocpp-server: 76: invalid packet");
       end if;
       
-   end handle;
+   end handleBootNotification;
+   
+   procedure handleHeartbeat(theList: in out NonSparkTypes.vecChargers_t;
+                                    msg: in NonSparkTypes.packet.Bounded_String;
+                                    index : in out Integer;
+                                    valid: out Boolean;
+                                    response: out NonSparkTypes.packet.Bounded_String;
+                                    messageTypeId : in Integer;
+                                    messageId : in NonSparkTypes.messageid_t.Bounded_String;
+                                    action : in NonSparkTypes.action_t.Bounded_String
+                                   )
+   is
+      heartbeatRequest : ocpp.heartbeat.Request;
+      heartbeatResponse : ocpp.heartbeat.Response;
+   begin
+      ocpp.heartbeat.DefaultInitialize(heartbeatRequest, messageTypeId, messageId, action);
+      ocpp.heartbeat.parse(msg, index, heartbeatRequest, valid);
+      
+      if (valid = false) then
+         NonSparkTypes.put_line("ocpp-server: 156: invalid heartbeat packet");
+         return;
+      end if;
+      
+      heartbeatResponse.messagetypeid := 3;
+      heartbeatResponse.messageid := heartbeatRequest.messageid;
+      heartbeatResponse.currentTime := NonSparkTypes.bootnotification_t.response.currentTime.To_Bounded_String("2013-02-01T20:53:32.486Z");
+      toString(response, heartbeatResponse);
+      NonSparkTypes.put("ocpp-server: 137: response:"); NonSparkTypes.put_line(NonSparkTypes.packet.To_String( response));
+   end handleHeartbeat;
+   
+   
    
    procedure toString(msg: out NonSparkTypes.packet.Bounded_String;
                       response: in ocpp.BootNotification.Response)
@@ -107,6 +151,19 @@ is
                                                     & "   " & '"' & "currentTime" & '"' & ": " & '"' & NonSparkTypes.bootnotification_t.response.currentTime.To_String(response.currentTime) & '"' & "," & ASCII.LF
                                                     & "   " &  '"' & "interval" & '"' & ": " & NonSparkTypes.bootnotification_t.response.interval.To_String(response.interval) & "," & ASCII.LF
                                                     & "   " & '"' & "status" & '"' & ": " & '"' & NonSparkTypes.bootnotification_t.response.status.To_String(response.status) & '"' & ASCII.LF
+                                                    & "}" & ASCII.LF
+                                                    & "]"
+                                                   );
+   end toString;
+
+   procedure toString(msg: out NonSparkTypes.packet.Bounded_String;
+                      response: in ocpp.heartbeat.Response)
+   is
+   begin
+      msg := NonSparkTypes.packet.To_Bounded_String("[3," & ASCII.LF
+                                                    & '"'  &  NonSparkTypes.messageid_t.To_String(response.messageid)  & '"' & "," & ASCII.LF
+                                                    & "{" & ASCII.LF
+                                                    & "   " & '"' & "currentTime" & '"' & ": " & '"' & NonSparkTypes.bootnotification_t.response.currentTime.To_String(response.currentTime) & '"' & "," & ASCII.LF
                                                     & "}" & ASCII.LF
                                                     & "]"
                                                    );

@@ -305,8 +305,15 @@ package body ocpp is
                                                                 To_Bounded_String =>  NonSparkTypes.messageid_t.To_Bounded_String
                                                                );
 
+   procedure findquotedstring_action is new findquotedstring(
+                                                             Max => NonSparkTypes.action_t.Max_Length, 
+                                                             string_t => NonSparkTypes.action_t.Bounded_String, 
+                                                             length => NonSparkTypes.action_t.Length,
+                                                             To_String => NonSparkTypes.action_t.to_string,
+                                                             To_Bounded_String =>  NonSparkTypes.action_t.To_Bounded_String
+                                                            );
 
-   procedure GetMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
+   procedure ParseMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
                             messagetypeid : out integer;-- eg. 2
                             index: in out Integer;
                             valid: out Boolean
@@ -337,10 +344,10 @@ package body ocpp is
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
       if (retval = false) then return; end if;
       valid := true;
-   end GetMessageType;
+   end ParseMessageType;
    
-   procedure GetMessageId(msg:   in  NonSparkTypes.packet.Bounded_String;
-                            messagetypeid : out NonSparkTypes.messageid_t.Bounded_String;
+   procedure ParseMessageId(msg:   in  NonSparkTypes.packet.Bounded_String;
+                            messageid : out NonSparkTypes.messageid_t.Bounded_String;
                             index: in out Integer;
                             valid: out Boolean
                          )
@@ -348,7 +355,7 @@ package body ocpp is
       tempPositive: integer;
    begin
       valid:= false;
-      messagetypeid := NonSparkTypes.messageid_t.To_Bounded_String("");
+      messageid := NonSparkTypes.messageid_t.To_Bounded_String("");
       if (index >= NonSparkTypes.packet.Length(msg))
       then
          NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
@@ -361,12 +368,52 @@ package body ocpp is
       end if;
 
       NonSparkTypes.put_line("ocpp: searching for messageId..."); 
-      findquotedstring_messageid(msg, index, valid, messagetypeid);
-      if (valid = false) then return; end if;      
-      if (NonSparkTypes.messageid_t.Length(messagetypeid) = 0) then return; end if;
-      NonSparkTypes.put("parse: messageId: "); NonSparkTypes.put_Line(NonSparkTypes.messageid_t.To_String(messagetypeid));
+      
+      findquotedstring_messageid(msg, index, valid, messageid);      
+      if (valid = false) then return; end if;
+      if (NonSparkTypes.messageid_t.Length(messageid) > 0) then 
+         valid := true;
+         pragma assert(NonSparkTypes.messageid_t.Length(messageid) > 0); 
+      end if;
+      
+      NonSparkTypes.put("parse: messageId: "); NonSparkTypes.put_Line(NonSparkTypes.messageid_t.To_String(messageid));
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
-   end GetMessageId;
+
+      
+   end ParseMessageId;
    
+   procedure ParseAction(msg:   in  NonSparkTypes.packet.Bounded_String;
+                            msgindex: in out Integer;
+                            action : out NonSparkTypes.action_t.Bounded_String;
+                            valid: out Boolean
+                        )
+   is
+   begin
+      action := NonSparkTypes.action_t.To_Bounded_String("");
+      valid:= false;
+      if (msgindex >= NonSparkTypes.packet.Length(msg))
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(msgindex'Image);
+         return;
+      end if;
+      if (msgindex < 1)
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(msgindex'Image);
+         return;
+      end if;
+
+      findquotedstring_action(msg, msgindex, valid, action);
+      if (valid = false) then 
+         NonSparkTypes.put_line("parseAction: Error: 400"); 
+         return; 
+      end if;
+      
+      NonSparkTypes.put("parse: action: "); NonSparkTypes.put_Line(NonSparkTypes.action_t.To_String(action));
+      
+      
+   end ParseAction;
+   
+     
+
 
 end ocpp;

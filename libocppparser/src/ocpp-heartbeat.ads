@@ -7,11 +7,12 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Bounded; use Ada.Strings.Bounded;
 with Ada.Command_Line;
 
-with NonSparkTypes;
+with NonSparkTypes; use NonSparkTypes.action_t;
 with ocpp;
 
 package ocpp.heartbeat is
    pragma Elaborate_Body;
+   action : constant String := "Heartbeat";
 
    type Request is new ocpp.call with null record;
 
@@ -20,7 +21,28 @@ package ocpp.heartbeat is
    end record;
    
    procedure DefaultInitialize(Self : out ocpp.heartbeat.Request);
-
+   procedure DefaultInitialize(Self : out ocpp.heartbeat.Request;
+                               messageTypeId : Integer;
+                               messageId : NonSparkTypes.messageid_t.Bounded_String;
+                               action : NonSparkTypes.action_t.Bounded_String
+                              );
+   procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
+                   msgindex: in Integer;
+                   request: in ocpp.heartbeat.Request;
+                   valid: out Boolean
+                  )
+     with
+       Global => null,
+       Depends => (
+                   valid => (msg, msgindex, request)
+                  ),
+       post => (if valid = true then
+                  (request.messagetypeid = 2) and
+                  (NonSparkTypes.messageid_t.Length(request.messageid) > 0) and
+                  (request.action = action) and
+                  (Index(NonSparkTypes.packet.To_String(msg), action) /= 0) -- prove that the original packet contains "BootNotification"
+               );
+   
    procedure To_Bounded_String(Self: in ocpp.heartbeat.Request;
                                retval: out NonSparkTypes.packet.Bounded_String);
 

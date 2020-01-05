@@ -2,6 +2,8 @@ pragma SPARK_Mode (On);
 
 with ocpp;
 with ocpp.BootNotification;
+with ocpp.heartbeat;
+
 with NonSparkTypes;
 
 package ocpp.server 
@@ -42,7 +44,45 @@ is
                    theList => (msg, theList)
                   );
 
+   procedure handleBootNotification(theList: in out NonSparkTypes.vecChargers_t;
+                                    msg: in NonSparkTypes.packet.Bounded_String;
+                                    index : in out Integer;
+                                    valid: out Boolean;
+                                    response: out NonSparkTypes.packet.Bounded_String;
+                                    messageTypeId : in Integer;
+                                    messageId : in NonSparkTypes.messageid_t.Bounded_String;
+                                    action : in NonSparkTypes.action_t.Bounded_String
+                                   )
+     with
+       Depends => (
+                     index => (msg, index),
+                   valid => (msg, index),
+                     response => (msg, index, theList, messageTypeId, messageId, action),
+                   theList => (msg, theList)
+                  );
+
+   procedure handleHeartbeat(theList: in out NonSparkTypes.vecChargers_t;
+                                    msg: in NonSparkTypes.packet.Bounded_String;
+                                    index : in out Integer;
+                                    valid: out Boolean;
+                                    response: out NonSparkTypes.packet.Bounded_String;
+                                    messageTypeId : in Integer;
+                                    messageId : in NonSparkTypes.messageid_t.Bounded_String;
+                                    action : in NonSparkTypes.action_t.Bounded_String
+                                   )
+     with
+       Depends => (
+                     index => (msg, index),
+                   valid => (msg, index),
+                     response => (msg, index, theList, messageTypeId, messageId, action),
+                   theList => (msg, theList)
+                  );
+
    procedure toString(msg: out NonSparkTypes.packet.Bounded_String;
                       response: in ocpp.BootNotification.Response);
+
+   procedure toString(msg: out NonSparkTypes.packet.Bounded_String;
+                      response: in ocpp.heartbeat.Response);
+
    
 end ocpp.server;

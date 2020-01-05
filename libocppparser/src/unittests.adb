@@ -2,7 +2,10 @@ with ocpp;
 with ocpp.BootNotification;
 with ocpp.heartbeat;
 with ocpp.server;
-with NonSparkTypes; use NonSparkTypes;
+use ocpp.heartbeat;
+with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.messageid_t;
+with System; use System;
+with Ada.Strings; use Ada.Strings;
 
 package body unittests is
    
@@ -10,20 +13,42 @@ package body unittests is
    procedure testall(result: out Boolean)
    is
    begin
-      B01(result);
-      if (result = false) then
-         return;
-      end if;
-            
-      B03(result);
-      if (result = false) then
-         return;
-      end if;
-            
-      B04(result);
-      if (result = false) then
-         return;
-      end if;
+      B01(result);      if (result = false) then         return;      end if;
+      --B02
+      B03(result);      if (result = false) then         return;      end if;
+      B04(result);      if (result = false) then         return;      end if;
+      
+      
+      --TODO:
+      --B05
+      --B06
+      --B07 
+      --B11
+      --B12
+      -- one of C01, C02, C04
+      --E01 (one of S1 - S6)
+      --E02
+      --E03
+      --E05
+      --E06 (one of S1 - S6)
+      --E07
+      --E08
+      -- one of E09-E10
+      --E11
+      --E12
+      --E13
+      --G01
+      --G04
+      --G05
+      --G05
+      --N07
+      --J02
+      --P01
+      --P02
+      
+        
+      
+        
             
    end testall;     
    
@@ -428,9 +453,26 @@ package body unittests is
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
       ocpp.server.handle(server.enrolledChargers, packet, response);
-      
-      
-      
+      Put_line("expected response:");
+      expectedresponse:=
+        NonSparkTypes.packet.To_Bounded_String( ""
+                                                & "[3," & ASCII.LF
+--                                                & '"'  & "19223202"  &'"' & "," & ASCII.LF
+                                                & '"'  & NonSparkTypes.messageid_t.To_String(hbr.messageid)  &'"' & "," & ASCII.LF
+                                                & "{" & ASCII.LF
+                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
+                                                & "}" & ASCII.LF
+                                                & "]");
+      Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
+      Put_line("Sending:");
+      Put_Line(NonSparkTypes.packet.To_String(response));
+
+      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
+         Put_line("Success");
+      else
+         Put_line("Error: 438");
+         return;
+      end if;
       
       result := true;
    end B04;

@@ -8,10 +8,11 @@ with Ada.Command_Line;
 with ocpp;
 with NonSparkTypes;
 use NonSparkTypes.bootnotification_t;
+use NonSparkTypes.action_t;
 
 package ocpp.BootNotification --with Annotate => (GNATprove, Terminating)
 is
-   strBootNotification : constant String := "BootNotification";
+   action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("BootNotification");
 
    type Request is new call with record
       reason: NonSparkTypes.BootReasonEnumType.Bounded_String := NonSparkTypes.BootReasonEnumType.To_Bounded_String(""); --eg. PowerUp
@@ -36,27 +37,34 @@ is
                                              NonSparkTypes.BootReasonEnumType.To_Bounded_String("Watchdog"));
 
    procedure DefaultInitialize(Self : out ocpp.BootNotification.Request);
+   procedure DefaultInitialize(Self : out ocpp.BootNotification.Request;
+                               messageTypeId : Integer;
+                               messageId : NonSparkTypes.messageid_t.Bounded_String;
+                               action : NonSparkTypes.action_t.Bounded_String
+                              );
 
    procedure validreason(thereason: in NonSparkTypes.BootReasonEnumType.Bounded_String;
                          valid: out Boolean)
      with  Global => null;
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
+                   msgindex: in out Integer;
                    request: in out ocpp.BootNotification.Request;
                    valid: out Boolean
                   )
      with
        Global => null,
        Depends => (
-                     request => (msg, request),
-                   valid => (msg, request)
+                     msgindex => (msg, msgindex, request),
+                   request => (msg, msgindex, request),
+                   valid => (msg, msgindex, request)
                   ),
-     post => (if valid = true then
-                (request.messagetypeid = 2) and
+       post => (if valid = true then
+                  (request.messagetypeid = 2) and
                   (NonSparkTypes.messageid_t.Length(request.messageid) > 0) and
-                (NonSparkTypes.action_t.To_String(request.action) = strBootNotification) and
-                  (Index(NonSparkTypes.packet.To_String(msg), strBootNotification) /= 0) -- prove that the original packet contains "BootNotification"
-             );
+                  (request.action = action) and
+                  (Index(NonSparkTypes.packet.To_String(msg), NonSparkTypes.action_t.To_String(action)) /= 0) -- prove that the original packet contains "BootNotification"
+               );
 
    procedure To_Bounded_String(Self: in ocpp.BootNotification.Request;
                                retval: out NonSparkTypes.packet.Bounded_String);

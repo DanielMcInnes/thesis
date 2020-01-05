@@ -44,19 +44,23 @@ package ocpp is
      post => (if found = true then index < Integer'Last);
    
    
-   procedure GetMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
+   procedure ParseMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
                             messagetypeid : out integer;-- eg. 2
                             index: in out Integer;
                             valid: out Boolean
                            );
 
-   procedure GetMessageId(msg:   in  NonSparkTypes.packet.Bounded_String;
-                            messagetypeid : out NonSparkTypes.messageid_t.Bounded_String;
+   procedure ParseMessageId(msg:   in  NonSparkTypes.packet.Bounded_String;
+                            messageid : out NonSparkTypes.messageid_t.Bounded_String;
                             index: in out Integer;
                             valid: out Boolean
                            );
 
-
+   procedure ParseAction(msg:   in  NonSparkTypes.packet.Bounded_String;
+                            msgindex: in out Integer;
+                            action : out NonSparkTypes.action_t.Bounded_String;
+                            valid: out Boolean
+                           );
 
 private
    
@@ -120,4 +124,5 @@ private
                               found : out Boolean;
                               foundString: in out string_t) 
      with  Global => null;
+
 end ocpp;
