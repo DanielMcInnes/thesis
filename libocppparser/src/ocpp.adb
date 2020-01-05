@@ -5,6 +5,60 @@ with ada.strings.maps;
 
 package body ocpp is
 
+   procedure findnextinteger(msg: in NonSparkTypes.packet.Bounded_String;
+                             index : in out Positive;
+                             foundInteger: out integer;
+                             found : out Boolean) 
+   is
+      temp : character;
+      last : integer;
+   begin
+      found := false;
+      foundInteger := 0;
+      if (index > NonSparkTypes.packet.Length(msg)) then
+         found := false;
+         NonSparkTypes.put("    20: index: "); NonSparkTypes.put_line("ERROR");
+         return;
+      end if;
+           
+      NonSparkTypes.packet.Find_Token(Source => msg,
+                                      Set => Ada.Strings.Maps.To_Set("0123456789"),
+                                      From => Integer(index),
+                                      First => Integer(index),
+                                      Test => Ada.Strings.Inside,
+                                      Last => last);
+      if (index > NonSparkTypes.packet.Length(msg) or index = 0)
+      then
+         found := false;
+         return;
+      end if;
+      
+      if (last > NonSparkTypes.packet.Length(msg)) then
+         found := false;
+         return;
+      end if;
+      
+      
+      temp := NonSparkTypes.packet.Element(msg, index);
+      
+      case temp is
+         when '0' => foundInteger := 0;
+         when '1' => foundInteger := 1;
+         when '2' => foundInteger := 2;
+         when '3' => foundInteger := 3;
+         when '4' => foundInteger := 4;
+         when '5' => foundInteger := 5;
+         when '6' => foundInteger := 6;
+         when '7' => foundInteger := 7;
+         when '8' => foundInteger := 8;
+         when '9' => foundInteger := 9;
+         when others => return;              
+      end case;
+      
+      found := true;
+      
+   end findnextinteger;
+   
    procedure Initialize(Self : out ModemType_t)
    is
    begin
@@ -20,6 +74,40 @@ package body ocpp is
       self.firmwareVersion := NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String("");
       Initialize(self.modem);
    end Initialize;
+
+   procedure GetMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
+                            messagetypeid : out integer;-- eg. 2
+                            index: in out Integer;
+                            valid: out Boolean
+                           )
+   is
+      tempPositive: integer;
+      retval: boolean;
+   begin
+      valid:= false;
+      messagetypeid := 0;
+      if (index >= NonSparkTypes.packet.Length(msg))
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
+         return;
+      end if;
+      if (index < 1)
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
+         return;
+      end if;
+      ocpp.move_index_past_token(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
+      
+      findnextinteger(msg, index, messagetypeid, retval); if (retval = false) then return; end if;
+      index := index + 1;
+      --NonSparkTypes.put ("ocpp: GetMessageType: messageTypeId: "); NonSparkTypes.put_line(request.messageTypeId'image); 
+      
+      NonSparkTypes.put("ocpp: GetMessageType: 171 index: "); NonSparkTypes.put_line(index'image);
+      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
+      if (retval = false) then return; end if;
+      valid := true;
+   end GetMessageType;
+   
 
    procedure find_token
      (msg : packet.Bounded_String;

@@ -1,5 +1,6 @@
 with ocpp;
 with ocpp.BootNotification;
+with ocpp.heartbeat;
 with ocpp.server;
 with NonSparkTypes; use NonSparkTypes;
 
@@ -373,6 +374,7 @@ package body unittests is
    is
       server: ocpp.server.Class;
       sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("B030001");
+      hbr: ocpp.heartbeat.Request;
       bnr: ocpp.BootNotification.Request := (
                                              messagetypeid => 2,
                                              messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
@@ -403,6 +405,7 @@ package body unittests is
                                                 & "}" & ASCII.LF
                                                 & "]");
    begin
+      ocpp.heartbeat.DefaultInitialize(hbr);
       ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);     
       ocpp.BootNotification.To_Bounded_String(bnr, packet);      
       
@@ -421,14 +424,10 @@ package body unittests is
          return;
       end if;
 
-
-      
-      
-      
-      
-      
-      
-      
+      ocpp.heartbeat.To_Bounded_String(hbr, packet);           
+      Put_line("Receiving:");
+      Put_Line(NonSparkTypes.packet.To_String(packet));
+      ocpp.server.handle(server.enrolledChargers, packet, response);
       
       
       

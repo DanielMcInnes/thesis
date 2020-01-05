@@ -95,62 +95,6 @@ package body ocpp.BootNotification is
                                                             To_Bounded_String =>  NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String
                                                            );
 
-   procedure findnextinteger(msg: in NonSparkTypes.packet.Bounded_String;
-                             index : in out Positive;
-                             foundInteger: out integer;
-                             found : out Boolean) 
-     with  Global => null,
-     post => (if found = true then index < Integer'Last)
-   is
-      temp : character;
-      last : integer;
-   begin
-      found := false;
-      foundInteger := 0;
-      if (index > NonSparkTypes.packet.Length(msg)) then
-         found := false;
-         NonSparkTypes.put("    20: index: "); NonSparkTypes.put_line("ERROR");
-         return;
-      end if;
-           
-      NonSparkTypes.packet.Find_Token(Source => msg,
-                                      Set => Ada.Strings.Maps.To_Set("0123456789"),
-                                      From => Integer(index),
-                                      First => Integer(index),
-                                      Test => Ada.Strings.Inside,
-                                      Last => last);
-      if (index > NonSparkTypes.packet.Length(msg) or index = 0)
-      then
-         found := false;
-         return;
-      end if;
-      
-      if (last > NonSparkTypes.packet.Length(msg)) then
-         found := false;
-         return;
-      end if;
-      
-      
-      temp := NonSparkTypes.packet.Element(msg, index);
-      
-      case temp is
-         when '0' => foundInteger := 0;
-         when '1' => foundInteger := 1;
-         when '2' => foundInteger := 2;
-         when '3' => foundInteger := 3;
-         when '4' => foundInteger := 4;
-         when '5' => foundInteger := 5;
-         when '6' => foundInteger := 6;
-         when '7' => foundInteger := 7;
-         when '8' => foundInteger := 8;
-         when '9' => foundInteger := 9;
-         when others => return;              
-      end case;
-      
-      found := true;
-      
-   end findnextinteger;
-   
    procedure validreason(thereason: in NonSparkTypes.BootReasonEnumType.Bounded_String;
                          valid: out Boolean)
    is
@@ -346,7 +290,7 @@ package body ocpp.BootNotification is
         retval := NonSparkTypes.packet.To_Bounded_String( ""
                                                         & "[2," & ASCII.LF
                                                         & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) &'"' & "," & ASCII.LF
-                                                        & '"' & "BootNotification" & '"' & "," & ASCII.LF
+                                                        & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                         & "{" & ASCII.LF
                                                         & "   " & '"' & "reason" & '"' & ": " & '"' & NonSparkTypes.BootReasonEnumType.To_String(Self.reason) & '"' & "," & ASCII.LF -- "PowerUp"
                                                         & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF

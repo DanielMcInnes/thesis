@@ -41,53 +41,61 @@ is
       valid : Boolean;
       bootNotificationRequest : ocpp.BootNotification.Request;
       bootNotificationResponse : ocpp.bootnotification.Response;
-   begin
+      messageTypeId : Integer;
+      index : Integer := 1;
+      begin
       
-      response := NonSparkTypes.packet.To_Bounded_String("");
+         response := NonSparkTypes.packet.To_Bounded_String("");
+      
+         ocpp.GetMessageType(request, messageTypeId, index, valid);
+         if (messageTypeId /= 2) then return; end if;
+         
 
-      ocpp.BootNotification.parse(request, bootNotificationRequest, valid);
+         ocpp.BootNotification.parse(request, bootNotificationRequest, valid);
       
       
-      --[3,
-      --"19223201",
-      --{
-      --"currentTime": "2013-02-01T20:53:32.486Z",
-      --"interval": 300,
-      --"status": "Accepted"
-      --}
-      --]      
+         --[3,
+         --"19223201",
+         --{
+         --"currentTime": "2013-02-01T20:53:32.486Z",
+         --"interval": 300,
+         --"status": "Accepted"
+         --}
+         --]      
       
-      if (valid = true) then
-         bootNotificationResponse.messagetypeid := 2;
-         bootNotificationResponse.messageid := bootNotificationRequest.messageid;
-         bootNotificationResponse.currentTime := NonSparkTypes.bootnotification_t.response.currentTime.To_Bounded_String("2013-02-01T20:53:32.486Z");
-         bootNotificationResponse.interval := NonSparkTypes.bootnotification_t.response.interval.To_Bounded_String("300");
+         if (valid = true) then
+            bootNotificationResponse.messagetypeid := 2;
+            bootNotificationResponse.messageid := bootNotificationRequest.messageid;
+            bootNotificationResponse.currentTime := NonSparkTypes.bootnotification_t.response.currentTime.To_Bounded_String("2013-02-01T20:53:32.486Z");
+            bootNotificationResponse.interval := NonSparkTypes.bootnotification_t.response.interval.To_Bounded_String("300");
          
-         isEnrolled(theList, bootNotificationRequest.chargingStation.serialNumber, valid);
+            isEnrolled(theList, bootNotificationRequest.chargingStation.serialNumber, valid);
          
-         if (valid) then
-            bootNotificationResponse.status := NonSparkTypes.bootnotification_t.response.status.To_Bounded_String("Accepted");
-         else
-            bootNotificationResponse.status := NonSparkTypes.bootnotification_t.response.status.To_Bounded_String("Rejected");
-         end if;
+            if (valid) then
+               bootNotificationResponse.status := NonSparkTypes.bootnotification_t.response.status.To_Bounded_String("Accepted");
+            else
+               bootNotificationResponse.status := NonSparkTypes.bootnotification_t.response.status.To_Bounded_String("Rejected");
+            end if;
            
-         toString(response, bootNotificationResponse);
-      end if;
+            toString(response, bootNotificationResponse);
+         else
+            NonSparkTypes.put_line("ocpp-server: 76: invalid packet");
+         end if;
       
-   end handle;
+      end handle;
    
-   procedure toString(msg: out NonSparkTypes.packet.Bounded_String;
-                      response: in ocpp.BootNotification.Response)
-   is
-   begin
-      msg := NonSparkTypes.packet.To_Bounded_String("[3," & ASCII.LF
-                                                    & '"'  &  NonSparkTypes.messageid_t.To_String(response.messageid)  & '"' & "," & ASCII.LF
-                                                    & "{" & ASCII.LF
-                                                    & "   " & '"' & "currentTime" & '"' & ": " & '"' & NonSparkTypes.bootnotification_t.response.currentTime.To_String(response.currentTime) & '"' & "," & ASCII.LF
-                                                    & "   " &  '"' & "interval" & '"' & ": " & NonSparkTypes.bootnotification_t.response.interval.To_String(response.interval) & "," & ASCII.LF
-                                                    & "   " & '"' & "status" & '"' & ": " & '"' & NonSparkTypes.bootnotification_t.response.status.To_String(response.status) & '"' & ASCII.LF
-                                                    & "}" & ASCII.LF
-                                                    & "]"
-                                                   );
-   end toString;
-end ocpp.server;
+      procedure toString(msg: out NonSparkTypes.packet.Bounded_String;
+                         response: in ocpp.BootNotification.Response)
+      is
+      begin
+         msg := NonSparkTypes.packet.To_Bounded_String("[3," & ASCII.LF
+                                                       & '"'  &  NonSparkTypes.messageid_t.To_String(response.messageid)  & '"' & "," & ASCII.LF
+                                                       & "{" & ASCII.LF
+                                                       & "   " & '"' & "currentTime" & '"' & ": " & '"' & NonSparkTypes.bootnotification_t.response.currentTime.To_String(response.currentTime) & '"' & "," & ASCII.LF
+                                                       & "   " &  '"' & "interval" & '"' & ": " & NonSparkTypes.bootnotification_t.response.interval.To_String(response.interval) & "," & ASCII.LF
+                                                       & "   " & '"' & "status" & '"' & ": " & '"' & NonSparkTypes.bootnotification_t.response.status.To_String(response.status) & '"' & ASCII.LF
+                                                       & "}" & ASCII.LF
+                                                       & "]"
+                                                      );
+      end toString;
+   end ocpp.server;

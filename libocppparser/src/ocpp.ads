@@ -33,7 +33,26 @@ package ocpp is
       modem: ModemType_t;
    end record;
    
+
    procedure Initialize(Self : out ChargingStation_t);
+
+   procedure findnextinteger(msg: in NonSparkTypes.packet.Bounded_String;
+                             index : in out Positive;
+                             foundInteger: out integer;
+                             found : out Boolean) 
+     with  Global => null,
+     post => (if found = true then index < Integer'Last);
+   
+   
+   procedure GetMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
+                            messagetypeid : out integer;-- eg. 2
+                            index: in out Integer;
+                            valid: out Boolean
+                           );
+
+
+
+private
    
    procedure move_index_past_token
      (msg : packet.Bounded_String;
