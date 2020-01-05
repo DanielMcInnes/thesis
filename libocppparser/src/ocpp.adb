@@ -75,40 +75,6 @@ package body ocpp is
       Initialize(self.modem);
    end Initialize;
 
-   procedure GetMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
-                            messagetypeid : out integer;-- eg. 2
-                            index: in out Integer;
-                            valid: out Boolean
-                           )
-   is
-      tempPositive: integer;
-      retval: boolean;
-   begin
-      valid:= false;
-      messagetypeid := 0;
-      if (index >= NonSparkTypes.packet.Length(msg))
-      then
-         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
-         return;
-      end if;
-      if (index < 1)
-      then
-         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
-         return;
-      end if;
-      ocpp.move_index_past_token(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
-      
-      findnextinteger(msg, index, messagetypeid, retval); if (retval = false) then return; end if;
-      index := index + 1;
-      --NonSparkTypes.put ("ocpp: GetMessageType: messageTypeId: "); NonSparkTypes.put_line(request.messageTypeId'image); 
-      
-      NonSparkTypes.put("ocpp: GetMessageType: 171 index: "); NonSparkTypes.put_line(index'image);
-      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
-      if (retval = false) then return; end if;
-      valid := true;
-   end GetMessageType;
-   
-
    procedure find_token
      (msg : packet.Bounded_String;
       token    : Character;
@@ -330,5 +296,77 @@ package body ocpp is
       
 
    end findquotedstring;
+
+   procedure findquotedstring_messageid is new findquotedstring(
+                                                                Max => NonSparkTypes.messageid_t.Max_Length, 
+                                                                string_t => NonSparkTypes.messageid_t.Bounded_String, 
+                                                                length => NonSparkTypes.messageid_t.Length,
+                                                                To_String => NonSparkTypes.messageid_t.to_string,
+                                                                To_Bounded_String =>  NonSparkTypes.messageid_t.To_Bounded_String
+                                                               );
+
+
+   procedure GetMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
+                            messagetypeid : out integer;-- eg. 2
+                            index: in out Integer;
+                            valid: out Boolean
+                           )
+   is
+      tempPositive: integer;
+      retval: boolean;
+   begin
+      valid:= false;
+      messagetypeid := 0;
+      if (index >= NonSparkTypes.packet.Length(msg))
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
+         return;
+      end if;
+      if (index < 1)
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
+         return;
+      end if;
+      ocpp.move_index_past_token(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
+      
+      findnextinteger(msg, index, messagetypeid, retval); if (retval = false) then return; end if;
+      index := index + 1;
+      --NonSparkTypes.put ("ocpp: GetMessageType: messageTypeId: "); NonSparkTypes.put_line(request.messageTypeId'image); 
+      
+      NonSparkTypes.put("ocpp: GetMessageType: 171 index: "); NonSparkTypes.put_line(index'image);
+      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
+      if (retval = false) then return; end if;
+      valid := true;
+   end GetMessageType;
+   
+   procedure GetMessageId(msg:   in  NonSparkTypes.packet.Bounded_String;
+                            messagetypeid : out NonSparkTypes.messageid_t.Bounded_String;
+                            index: in out Integer;
+                            valid: out Boolean
+                         )
+   is
+      tempPositive: integer;
+   begin
+      valid:= false;
+      messagetypeid := NonSparkTypes.messageid_t.To_Bounded_String("");
+      if (index >= NonSparkTypes.packet.Length(msg))
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
+         return;
+      end if;
+      if (index < 1)
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
+         return;
+      end if;
+
+      NonSparkTypes.put_line("ocpp: searching for messageId..."); 
+      findquotedstring_messageid(msg, index, valid, messagetypeid);
+      if (valid = false) then return; end if;      
+      if (NonSparkTypes.messageid_t.Length(messagetypeid) = 0) then return; end if;
+      NonSparkTypes.put("parse: messageId: "); NonSparkTypes.put_Line(NonSparkTypes.messageid_t.To_String(messagetypeid));
+      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
+   end GetMessageId;
+   
 
 end ocpp;

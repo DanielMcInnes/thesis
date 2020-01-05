@@ -119,8 +119,9 @@ package body ocpp.BootNotification is
    end DefaultInitialize;
 
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
-                   request: out ocpp.BootNotification.Request;
-                   valid: out Boolean)
+                   request: in out ocpp.BootNotification.Request;
+                   valid: out Boolean
+                  )
    is
       str : string := "reason";
       retval : boolean;
@@ -130,27 +131,16 @@ package body ocpp.BootNotification is
       indexStartOfOptionalParameters: Integer;
    begin
       valid:= false;
-      DefaultInitialize(request);
-      packetContainsString(msg, strBootNotification, retval);
+
+      if request.messagetypeid /= 2 then
+         return;
+      end if;
       
+      packetContainsString(msg, strBootNotification, retval);      
       if retval = false then
          return;
       end if;
       
-      ocpp.move_index_past_token(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
-      
-      NonSparkTypes.put("parse: 169 index: "); NonSparkTypes.put_line(index'image);
-
-      findnextinteger(msg, index, request.messageTypeId, retval); if (retval = false) then return; end if;
-      index := index + 1;
-      NonSparkTypes.put ("parse: messageTypeId: "); NonSparkTypes.put_line(request.messageTypeId'image); 
-      
-      NonSparkTypes.put("parse: 171 index: "); NonSparkTypes.put_line(index'image);
-      if (retval = false) then return; end if;
-      if (request.messageTypeId /= 2) then return; end if;
-
-      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
-
       NonSparkTypes.put_line("parse: searching for messageId..."); 
       findquotedstring_messageid(msg, index, retval, request.messageId);
       if (NonSparkTypes.messageid_t.Length(request.messageid) = 0) then return; end if;

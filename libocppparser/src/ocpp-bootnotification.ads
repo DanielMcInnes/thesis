@@ -26,30 +26,31 @@ is
 
    type BootReasons_t is array(1..9) of NonSparkTypes.BootReasonEnumType.Bounded_String;
    validreasons : constant BootReasons_t := (NonSparkTypes.BootReasonEnumType.To_Bounded_String("ApplicationReset"),
-                                               NonSparkTypes.BootReasonEnumType.To_Bounded_String("FirmwareUpdate"),
-                                               NonSparkTypes.BootReasonEnumType.To_Bounded_String("LocalReset"),
-                                               NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
-                                               NonSparkTypes.BootReasonEnumType.To_Bounded_String("RemoteReset"),
-                                               NonSparkTypes.BootReasonEnumType.To_Bounded_String("ScheduledReset"),
-                                               NonSparkTypes.BootReasonEnumType.To_Bounded_String("Triggered"),
-                                               NonSparkTypes.BootReasonEnumType.To_Bounded_String("Unknown"),
+                                             NonSparkTypes.BootReasonEnumType.To_Bounded_String("FirmwareUpdate"),
+                                             NonSparkTypes.BootReasonEnumType.To_Bounded_String("LocalReset"),
+                                             NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
+                                             NonSparkTypes.BootReasonEnumType.To_Bounded_String("RemoteReset"),
+                                             NonSparkTypes.BootReasonEnumType.To_Bounded_String("ScheduledReset"),
+                                             NonSparkTypes.BootReasonEnumType.To_Bounded_String("Triggered"),
+                                             NonSparkTypes.BootReasonEnumType.To_Bounded_String("Unknown"),
                                              NonSparkTypes.BootReasonEnumType.To_Bounded_String("Watchdog"));
 
    procedure DefaultInitialize(Self : out ocpp.BootNotification.Request);
 
    procedure validreason(thereason: in NonSparkTypes.BootReasonEnumType.Bounded_String;
-                        valid: out Boolean)
+                         valid: out Boolean)
      with  Global => null;
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
-                   request: out ocpp.BootNotification.Request;
-                   valid: out Boolean)
+                   request: in out ocpp.BootNotification.Request;
+                   valid: out Boolean
+                  )
      with
        Global => null,
-     Depends => (
-                 request => msg,
-                 valid => msg
-                ),
+       Depends => (
+                     request => (msg, request),
+                   valid => (msg, request)
+                  ),
      post => (if valid = true then
                 (request.messagetypeid = 2) and
                   (NonSparkTypes.messageid_t.Length(request.messageid) > 0) and

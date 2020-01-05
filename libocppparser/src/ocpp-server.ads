@@ -34,12 +34,12 @@ is
                   );
 
    procedure handle(theList: in out NonSparkTypes.vecChargers_t;
-                    request: in NonSparkTypes.packet.Bounded_String;
+                    msg: in NonSparkTypes.packet.Bounded_String;
                     response: out NonSparkTypes.packet.Bounded_String)
      with
        Depends => (
-                     response => (request, theList),
-                   theList => (request, theList)
+                     response => (msg, theList),
+                   theList => (msg, theList)
                   );
 
    procedure toString(msg: out NonSparkTypes.packet.Bounded_String;

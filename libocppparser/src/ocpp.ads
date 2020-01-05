@@ -50,6 +50,12 @@ package ocpp is
                             valid: out Boolean
                            );
 
+   procedure GetMessageId(msg:   in  NonSparkTypes.packet.Bounded_String;
+                            messagetypeid : out NonSparkTypes.messageid_t.Bounded_String;
+                            index: in out Integer;
+                            valid: out Boolean
+                           );
+
 
 
 private
