@@ -14,10 +14,9 @@ package body unittests is
    is
    begin
       B01(result);      if (result = false) then         return;      end if;
-      --B02
+      B02(result);      if (result = false) then         return;      end if;
       B03(result);      if (result = false) then         return;      end if;
       B04(result);      if (result = false) then         return;      end if;
-      
       
       --TODO:
       --B05
@@ -88,7 +87,7 @@ package body unittests is
       result := false;
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server.enrolledChargers, packet, response);
+      ocpp.server.handle(server, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -124,7 +123,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server.enrolledChargers, packet, response);
+      ocpp.server.handle(server, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -163,7 +162,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server.enrolledChargers, packet, response);
+      ocpp.server.handle(server, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -201,7 +200,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server.enrolledChargers, packet, response);
+      ocpp.server.handle(server, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -218,6 +217,100 @@ package body unittests is
       
    end B01;     
    
+   procedure B02(result: out Boolean)
+   is
+      server: ocpp.server.Class;
+      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("B030001");
+      hbr: ocpp.heartbeat.Request;
+      bnr: ocpp.BootNotification.Request := (
+                                             messagetypeid => 2,
+                                             messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                             action => action_t.To_Bounded_String("BootNotification"),
+                                             reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
+                                             chargingStation => (
+                                                                 serialNumber => sn,
+                                                                 model => NonSparkTypes.ChargingStationType.model.To_Bounded_String("SingleSocketCharger"),
+                                                                 vendorName => NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String("VendorX"),
+                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String("01.23456789"),
+                                                                 modem => (
+                                                                           iccid => ModemType.iccid_t.To_Bounded_String("01234567890123456789"),
+                                                                           imsi => ModemType.imsi_t.To_Bounded_String("01234567890123456789")
+                                                                          )
+                                                                )                                                 
+                                            );
+
+      packet: NonSparkTypes.packet.Bounded_String;
+      response: NonSparkTypes.packet.Bounded_String;
+      expectedresponse: NonSparkTypes.packet.Bounded_String :=
+        NonSparkTypes.packet.To_Bounded_String( ""
+                                                & "[3," & ASCII.LF
+                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
+                                                & "{" & ASCII.LF
+                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
+                                                & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
+                                                & "   " & '"' & "status" & '"' & ": " & '"' & "Pending" & '"' & ASCII.LF
+                                                & "}" & ASCII.LF
+                                                & "]");
+   begin
+      ocpp.heartbeat.DefaultInitialize(hbr);
+      server.isDeferringBootNotificationAccept := true;
+      ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);
+      ocpp.BootNotification.To_Bounded_String(bnr, packet);      
+      
+      Put_line("Receiving:");
+      Put_Line(NonSparkTypes.packet.To_String(packet));
+      ocpp.server.handle(server, packet, response);
+      Put_line("expected response:");
+      Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
+      Put_line("Sending:");
+      Put_Line(NonSparkTypes.packet.To_String(response));
+
+      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
+         Put_line("Success");
+      else
+         Put_line("Error: 81");
+         return;
+      end if;
+      
+      server.isDeferringBootNotificationAccept := false;
+      expectedresponse :=
+        NonSparkTypes.packet.To_Bounded_String( ""
+                                                & "[3," & ASCII.LF
+                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
+                                                & "{" & ASCII.LF
+                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
+                                                & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
+                                                & "   " & '"' & "status" & '"' & ": " & '"' & "Accepted" & '"' & ASCII.LF
+                                                & "}" & ASCII.LF
+                                                & "]");
+
+      ocpp.heartbeat.To_Bounded_String(hbr, packet);           
+      Put_line("Receiving:");
+      Put_Line(NonSparkTypes.packet.To_String(packet));
+      ocpp.server.handle(server, packet, response);
+      Put_line("expected response:");
+      expectedresponse:=
+        NonSparkTypes.packet.To_Bounded_String( ""
+                                                & "[3," & ASCII.LF
+--                                                & '"'  & "19223202"  &'"' & "," & ASCII.LF
+                                                & '"'  & NonSparkTypes.messageid_t.To_String(hbr.messageid)  &'"' & "," & ASCII.LF
+                                                & "{" & ASCII.LF
+                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
+                                                & "}" & ASCII.LF
+                                                & "]");
+      Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
+      Put_line("Sending:");
+      Put_Line(NonSparkTypes.packet.To_String(response));
+
+      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
+         Put_line("Success");
+      else
+         Put_line("Error: 438");
+         return;
+      end if;
+      
+      result := true;
+   end B02;
 
    procedure B03(result: out Boolean)
    is
@@ -253,7 +346,7 @@ package body unittests is
       result := false;
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server.enrolledChargers, packet, response);
+      ocpp.server.handle(server, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -284,7 +377,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server.enrolledChargers, packet, response);
+      ocpp.server.handle(server, packet, response);
       Put_line("257: expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -340,7 +433,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server.enrolledChargers, packet, response);
+      ocpp.server.handle(server, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -378,7 +471,7 @@ package body unittests is
 
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server.enrolledChargers, packet, response);
+      ocpp.server.handle(server, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -436,7 +529,7 @@ package body unittests is
       
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server.enrolledChargers, packet, response);
+      ocpp.server.handle(server, packet, response);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -452,7 +545,7 @@ package body unittests is
       ocpp.heartbeat.To_Bounded_String(hbr, packet);           
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.handle(server.enrolledChargers, packet, response);
+      ocpp.server.handle(server, packet, response);
       Put_line("expected response:");
       expectedresponse:=
         NonSparkTypes.packet.To_Bounded_String( ""

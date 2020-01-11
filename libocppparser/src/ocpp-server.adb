@@ -37,7 +37,7 @@ is
       NonSparkTypes.put("ocpp.server.isEnrolled: "); NonSparkTypes.put(serialNumber); NonSparkTypes.put(retval'Image); --NonSparkTypes.put_line(enrolledChargers.Length'Image);
    end isEnrolled;
    
-   procedure handle(theList: in out NonSparkTypes.vecChargers_t;
+   procedure handle(theServer: in out ocpp.server.Class;
                     msg: in NonSparkTypes.packet.Bounded_String;
                     response: out NonSparkTypes.packet.Bounded_String)
    is
@@ -64,17 +64,17 @@ is
 
       if (action = ocpp.BootNotification.action)
       then
-         handleBootNotification(theList, msg, index, valid, response, messageTypeId, messageId, action);
+         handleBootNotification(theServer, msg, index, valid, response, messageTypeId, messageId, action);
       elsif (action = ocpp.heartbeat.action)
       then
-         handleHeartbeat(theList, msg, index, valid, response, messageTypeId, messageId, action);
+         handleHeartbeat(theServer, msg, index, valid, response, messageTypeId, messageId, action);
       else
          NonSparkTypes.put_line("ocpp-server: ERROR: invalid action");
       end if;
       
    end handle;
    
-   procedure handleBootNotification(theList: in out NonSparkTypes.vecChargers_t;
+   procedure handleBootNotification(theServer: in out ocpp.server.Class;
                                     msg: in NonSparkTypes.packet.Bounded_String;
                                     index : in out Integer;
                                     valid: out Boolean;
@@ -96,10 +96,14 @@ is
          bootNotificationResponse.currentTime := NonSparkTypes.bootnotification_t.response.currentTime.To_Bounded_String("2013-02-01T20:53:32.486Z");
          bootNotificationResponse.interval := NonSparkTypes.bootnotification_t.response.interval.To_Bounded_String("300");
          
-         isEnrolled(theList, bootNotificationRequest.chargingStation.serialNumber, valid);
+         isEnrolled(theServer.enrolledChargers, bootNotificationRequest.chargingStation.serialNumber, valid);
          
          if (valid) then
-            bootNotificationResponse.status := NonSparkTypes.bootnotification_t.response.status.To_Bounded_String("Accepted");
+            if (theServer.isDeferringBootNotificationAccept) then
+               bootNotificationResponse.status := NonSparkTypes.bootnotification_t.response.status.To_Bounded_String("Pending");
+            else
+               bootNotificationResponse.status := NonSparkTypes.bootnotification_t.response.status.To_Bounded_String("Accepted");
+            end if;
          else
             bootNotificationResponse.status := NonSparkTypes.bootnotification_t.response.status.To_Bounded_String("Rejected");
          end if;
@@ -111,7 +115,7 @@ is
       
    end handleBootNotification;
    
-   procedure handleHeartbeat(theList: in out NonSparkTypes.vecChargers_t;
+   procedure handleHeartbeat(theServer: in out ocpp.server.Class;
                                     msg: in NonSparkTypes.packet.Bounded_String;
                                     index : in out Integer;
                                     valid: out Boolean;
@@ -138,8 +142,6 @@ is
       toString(response, heartbeatResponse);
       NonSparkTypes.put("ocpp-server: 137: response:"); NonSparkTypes.put_line(NonSparkTypes.packet.To_String( response));
    end handleHeartbeat;
-   
-   
    
    procedure toString(msg: out NonSparkTypes.packet.Bounded_String;
                       response: in ocpp.BootNotification.Response)
