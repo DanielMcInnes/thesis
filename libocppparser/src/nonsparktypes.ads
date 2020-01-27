@@ -68,9 +68,6 @@ package NonSparkTypes is
    
    procedure append(theList : in out vecChargers_t;
                     theValue: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String
-                   );
-   
-
-   
+                   );   
 
 end NonSparkTypes;

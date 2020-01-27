@@ -8,8 +8,13 @@ with NonSparkTypes; use NonSparkTypes;
 
 package ocpp is
    
+   --AttributeEnumType is used by: Common:VariableAttributeType , getVariables:GetVariablesRequest.GetVariableDataType ,
+   -- getVariables:GetVariablesResponse.GetVariableResultType , setVariables:SetVariablesRequest.SetVariableDataType ,
+   --setVariables:SetVariablesResponse.SetVariableResultType
+   type AttributeEnumType is (Actual, Target, MinSet, MaxSet); 
+
    type call is tagged record
-      messagetypeid : integer;-- eg. 2
+      messagetypeid : integer := 2;-- eg. 2
       messageid : messageid_t.Bounded_String; -- eg. 19223201
       action : action_t.Bounded_String;-- eg. BootNotification
    end record;

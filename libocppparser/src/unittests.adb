@@ -1,11 +1,14 @@
 with ocpp;
 with ocpp.BootNotification;
 with ocpp.heartbeat;
+with ocpp.setvariables;
 with ocpp.server;
 use ocpp.heartbeat;
 with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.messageid_t;
 with System; use System;
 with Ada.Strings; use Ada.Strings;
+with ComponentType; 
+with VariableType;
 
 package body unittests is
    
@@ -292,7 +295,7 @@ package body unittests is
       expectedresponse:=
         NonSparkTypes.packet.To_Bounded_String( ""
                                                 & "[3," & ASCII.LF
---                                                & '"'  & "19223202"  &'"' & "," & ASCII.LF
+                                                --                                                & '"'  & "19223202"  &'"' & "," & ASCII.LF
                                                 & '"'  & NonSparkTypes.messageid_t.To_String(hbr.messageid)  &'"' & "," & ASCII.LF
                                                 & "{" & ASCII.LF
                                                 & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
@@ -550,7 +553,7 @@ package body unittests is
       expectedresponse:=
         NonSparkTypes.packet.To_Bounded_String( ""
                                                 & "[3," & ASCII.LF
---                                                & '"'  & "19223202"  &'"' & "," & ASCII.LF
+                                                --                                                & '"'  & "19223202"  &'"' & "," & ASCII.LF
                                                 & '"'  & NonSparkTypes.messageid_t.To_String(hbr.messageid)  &'"' & "," & ASCII.LF
                                                 & "{" & ASCII.LF
                                                 & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
@@ -570,4 +573,76 @@ package body unittests is
       result := true;
    end B04;
    
+   procedure B05(result: out Boolean)
+   is
+      use ocpp.setvariables.Request.DataType;
+
+      server: ocpp.server.Class;
+      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("01234567890123456789");
+      bnr: ocpp.BootNotification.Request := (
+                                             messagetypeid => 2,
+                                             messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                             action => action_t.To_Bounded_String("BootNotification"),
+                                             reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
+                                             chargingStation => (
+                                                                 serialNumber => sn,
+                                                                 model => NonSparkTypes.ChargingStationType.model.To_Bounded_String("SingleSocketCharger"),
+                                                                 vendorName => NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String("VendorX"),
+                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String("01.23456789"),
+                                                                 modem => (
+                                                                           iccid => ModemType.iccid_t.To_Bounded_String("01234567890123456789"),
+                                                                           imsi => ModemType.imsi_t.To_Bounded_String("01234567890123456789")
+                                                                          )
+                                                                )                                                 
+                                            );
+
+      packet: NonSparkTypes.packet.Bounded_String;
+      response: NonSparkTypes.packet.Bounded_String;
+      expectedresponse: NonSparkTypes.packet.Bounded_String :=
+        NonSparkTypes.packet.To_Bounded_String( ""
+                                                & "[3," & ASCII.LF
+                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
+                                                & "{" & ASCII.LF
+                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
+                                                & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
+                                                & "   " & '"' & "status" & '"' & ": " & '"' & "Accepted" & '"' & ASCII.LF
+                                                & "}" & ASCII.LF
+                                                & "]");
+
+      --         type Class is tagged record
+      --            attributeType: AttributeEnumType;
+      --            attributeValue: attributeValue_t.Bounded_String;
+      --            component: ComponentType.Class;
+      --            variable: VariableType.Class;
+      --         end record;
+      
+      setVariablesRequest : ocpp.setvariables.Request.Class := (
+                                                                messagetypeid => 2,
+                                                                messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                                action => action_t.To_Bounded_String("SetVariables"),
+                                                                setVariableData => (
+                                                                                        attributeType => ocpp.Actual,
+                                                                                        attributeValue => ocpp.setvariables.Request.DataType.attributeValue_t.To_Bounded_String("Hello World!"),
+                                                                                        component => (
+                                                                                                      name => ComponentType.name.To_Bounded_String(""),
+                                                                                                      instance => ComponentType.instance.To_Bounded_String(""),
+                                                                                                      evse => (
+                                                                                                               id => 0,
+                                                                                                               connectorId => 0
+                                                                                                              )
+                                                                                                     ),
+                                                                                        variable => (
+                                                                                                     name => VariableType.name.To_Bounded_String(""),
+                                                                                                     instance => VariableType.instance.To_Bounded_String("")
+                                                                                                    )
+                                                                                       )
+                                                               );
+   begin
+      result := false;
+      ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);     
+      ocpp.BootNotification.To_Bounded_String(bnr, packet);      
+      
+      
+   end B05;
+     
 end unittests;

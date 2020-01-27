@@ -4,7 +4,6 @@ with Ada.Finalization;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Bounded; use Ada.Strings.Bounded;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Ada.Strings.Bounded; use Ada.Strings.Bounded;
 with Ada.Command_Line;
 
 with NonSparkTypes; use NonSparkTypes.action_t;

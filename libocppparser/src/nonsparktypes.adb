@@ -1,3 +1,5 @@
+with Ada.Strings; use Ada.Strings;
+
 package body NonSparkTypes is
    procedure put(msg : string)
    is
@@ -42,7 +44,6 @@ package body NonSparkTypes is
    begin
       NonSparkTypes.vector_chargers.Append(theList, theValue);
    end append;
-
 
 
 end NonSparkTypes;

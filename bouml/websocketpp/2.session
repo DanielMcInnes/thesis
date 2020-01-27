@@ -1,4 +1,4 @@
-window_sizes 1850 1016 316 1528 843 120
+window_sizes 1920 1016 316 1598 843 120
 cleanlooks_style
 diagrams
   classdiagram_ref 128002 // cd1
@@ -7,13 +7,15 @@ diagrams
     120 106 100 A4 0 0
   classdiagram_ref 141058 // cd2 libocpp
     1528 843 100 A4 0 0
-  active  classdiagram_ref 147586 // cd2 function deps
+  classdiagram_ref 147586 // cd2 function deps
     1528 843 80 A0 0 0
   sequencediagram_ref 154114 // sd1 boot not
     1528 843 200 A4 0 0
+  active  classdiagram_ref 160642 // cd3 SetVariables
+    1598 843 80 A0 108 0
 end
 show_stereotypes
-selected attribute_ref 170754 // action
+selected attribute_ref 178818 // instance
 open
   class_ref 150018 // connection
   class_ref 150146 // transport::asio::connection
@@ -23,6 +25,13 @@ open
   class_ref 190210 // ChargingStationType
   class_ref 190338 // ModemType
   class_ref 190466 // call
+  class_ref 197250 // ocpp.call
+  class_ref 197378 // ocpp.BootNotification.Request
+  class_ref 197506 // ChargingStation_t
+  class_ref 197762 // SetVariableDataType
+  class_ref 197890 // ComponentType
+  class_ref 198018 // EVSEType
+  class_ref 198146 // VariableType
   classview_ref 128770 // asio
   deploymentview_ref 128642 // asio
   class_ref 156930 // bootnotification
