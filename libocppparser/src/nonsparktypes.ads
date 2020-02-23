@@ -51,6 +51,13 @@ package NonSparkTypes is
       end response;
    end bootnotification_t;
    
+   package setvariables_t is
+      package request is
+         package attributeValue_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 1000);
+      end request;
+   end setvariables_t;
+   
+   
    package ModemType is
       package iccid_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 20);
       package imsi_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 20);
@@ -69,5 +76,8 @@ package NonSparkTypes is
    procedure append(theList : in out vecChargers_t;
                     theValue: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String
                    );   
+   
+   function Uncased_Equals (L, R : String) return Boolean;
+
 
 end NonSparkTypes;

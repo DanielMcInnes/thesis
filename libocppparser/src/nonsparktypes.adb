@@ -1,4 +1,6 @@
 with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings.Maps.Constants; use Ada.Strings.Maps.Constants;
 
 package body NonSparkTypes is
    procedure put(msg : string)
@@ -25,8 +27,6 @@ package body NonSparkTypes is
       ada.Text_IO.put_line(NonSparkTypes.ChargingStationType.serialNumber.To_String(msg));
    end;
 
-
-
    procedure contains(theList : in out vecChargers_t;
                       theValue: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
                       retval: out Boolean)
@@ -44,6 +44,14 @@ package body NonSparkTypes is
    begin
       NonSparkTypes.vector_chargers.Append(theList, theValue);
    end append;
+
+function Uncased_Equals (L, R : String) return Boolean
+is
+   use Ada.Strings.Fixed;
+   use Ada.Strings.Maps.Constants;
+begin
+   return Translate (L, Lower_Case_Map) = Translate (R, Lower_Case_Map);
+end Uncased_Equals;
 
 
 end NonSparkTypes;

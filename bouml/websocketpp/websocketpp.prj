@@ -1,6 +1,6 @@
 format 222
 "websocketpp"
-  revision 13
+  revision 14
   modified_by 2 "dmcinnes"
 
 
@@ -75,7 +75,7 @@ format 222
     end
 
     classdiagram 160642 "cd3 SetVariables"
-      classdiagramsettings show_members_full_definition yes member_max_width 0 end
+      classdiagramsettings show_members_full_definition yes show_members_multiplicity yes member_max_width 0 end
       size A0
     end
 
@@ -714,13 +714,13 @@ ${inlines}
 	  b parent class_ref 197250 // ocpp.call
       end
 
-      classrelation 164482 // <directional composition>
+      classrelation 164482 // setVariableData (<directional composition>)
 	relation 164482 *-->
-	  a role_name "" private
+	  a role_name "setVariableData" private
 	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
 "
-	    classrelation_ref 164482 // <directional composition>
-	  b parent class_ref 197762 // SetVariableDataType
+	    classrelation_ref 164482 // setVariableData (<directional composition>)
+	  b multiplicity "1..*" parent class_ref 197762 // SetVariableDataType
       end
     end
 
@@ -900,6 +900,133 @@ ${inlines}
 	idl_decl ""
 	mysql_decl ""
 	MysqlColumn
+      end
+    end
+
+    class 204674 "ocpp.callResponse"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 185602 "messagetypeid"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 185730 "messageid"
+	private explicit_type "messageid_t.BoundedString"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 204802 "ocpp.SetVariables.Response"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 171394 // <generalisation>
+	relation 171394 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 171394 // <generalisation>
+	  b parent class_ref 204674 // ocpp.callResponse
+      end
+
+      classrelation 171522 // setVariableResult (<directional composition>)
+	relation 171522 *-->
+	  a role_name "setVariableResult" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 171522 // setVariableResult (<directional composition>)
+	  b multiplicity "1..*" parent class_ref 204930 // SetVariableResultType
+      end
+    end
+
+    class 204930 "SetVariableResultType"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 185346 "attributeType"
+	private explicit_type "AttributeEnumType"
+	multiplicity "0..1"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 185474 "attributeStatus"
+	private explicit_type "SetVariableStatusEnumType"
+	multiplicity "1"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 171650 // component (<directional composition>)
+	relation 171650 *-->
+	  a role_name "component" multiplicity "1" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 171650 // component (<directional composition>)
+	  b parent class_ref 197890 // ComponentType
+      end
+
+      classrelation 171778 // variable (<directional composition>)
+	relation 171778 *-->
+	  a role_name "variable" multiplicity "1" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 171778 // variable (<directional composition>)
+	  b parent class_ref 198146 // VariableType
       end
     end
   end

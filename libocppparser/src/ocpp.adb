@@ -241,7 +241,7 @@ package body ocpp is
    procedure findquotedstring(msg: in NonSparkTypes.packet.Bounded_String;
                               index : in out Positive;
                               found : out Boolean;
-                              foundString: in out string_t)
+                              foundString: out string_t)
    is
       tempPositive : Integer;
       first : Integer;
@@ -249,7 +249,7 @@ package body ocpp is
       tempbs : NonSparkTypes.packet.Bounded_String;
 
    begin
-      --put("    117: index: "); put_line(index'image);
+      foundString := To_Bounded_String("");
       findnonwhitespace_packet(msg, index, found);
       if (found = false) then
          return;
@@ -278,7 +278,7 @@ package body ocpp is
       --put("max messageId length: "); put_line(ocpp.bootnotificationreason.Max_Length'Image);
       if (NonSparkTypes.packet.Length(tempbs) > Max ) then
          found := false;
-         put_line("ERROR: "); put(" source length:"); put(NonSparkTypes.packet.Length(tempbs)'Image) ;put(" dest length: ");put(Length(foundString)'Image);
+         put_line("ERROR: "); put(" source length:"); put(NonSparkTypes.packet.Length(tempbs)'Image) ;put(" dest length: ");
          return;
       end if;
       
@@ -297,6 +297,14 @@ package body ocpp is
 
    end findquotedstring;
 
+   procedure findquotedstring_packet is new findquotedstring(
+                                                             Max => NonSparkTypes.packet.Max_Length, 
+                                                             string_t => NonSparkTypes.packet.Bounded_String, 
+                                                             length => NonSparkTypes.packet.Length,
+                                                             To_String => NonSparkTypes.packet.to_string,
+                                                             To_Bounded_String =>  NonSparkTypes.packet.To_Bounded_String
+                                                            );
+   
    procedure findquotedstring_messageid is new findquotedstring(
                                                                 Max => NonSparkTypes.messageid_t.Max_Length, 
                                                                 string_t => NonSparkTypes.messageid_t.Bounded_String, 
@@ -313,11 +321,12 @@ package body ocpp is
                                                              To_Bounded_String =>  NonSparkTypes.action_t.To_Bounded_String
                                                             );
 
+
    procedure ParseMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
-                            messagetypeid : out integer;-- eg. 2
-                            index: in out Integer;
-                            valid: out Boolean
-                           )
+                              messagetypeid : out integer;-- eg. 2
+                              index: in out Integer;
+                              valid: out Boolean
+                             )
    is
       tempPositive: integer;
       retval: boolean;
@@ -350,7 +359,7 @@ package body ocpp is
                             messageid : out NonSparkTypes.messageid_t.Bounded_String;
                             index: in out Integer;
                             valid: out Boolean
-                         )
+                           )
    is
       tempPositive: integer;
    begin
@@ -383,9 +392,9 @@ package body ocpp is
    end ParseMessageId;
    
    procedure ParseAction(msg:   in  NonSparkTypes.packet.Bounded_String;
-                            msgindex: in out Integer;
-                            action : out NonSparkTypes.action_t.Bounded_String;
-                            valid: out Boolean
+                         msgindex: in out Integer;
+                         action : out NonSparkTypes.action_t.Bounded_String;
+                         valid: out Boolean
                         )
    is
    begin
@@ -413,7 +422,89 @@ package body ocpp is
       
    end ParseAction;
    
-     
 
+   package body AttributeEnumType is
+      
+      procedure StringToAttributeEnumType(str : in String;
+                                          attribute : out T;
+                                          valid : out Boolean)
+      is
+      begin
+         if (NonSparkTypes.Uncased_Equals(str, "Actual")) then 
+            attribute := ocpp.AttributeEnumType.Actual;
+         elsif (NonSparkTypes.Uncased_Equals(str, "Target")) then 
+            attribute := ocpp.AttributeEnumType.Target;
+         elsif (NonSparkTypes.Uncased_Equals(str, "MinSet")) then 
+            attribute := ocpp.AttributeEnumType.MinSet;
+         elsif (NonSparkTypes.Uncased_Equals(str, "MaxSet")) then 
+            attribute := ocpp.AttributeEnumType.MaxSet;
+         else
+            attribute := ocpp.AttributeEnumType.Invalid;
+            valid := false;
+            return;
+         end if;
+         valid := true;
+      end StringToAttributeEnumType;
+      
+   end AttributeEnumType;
+   
+   procedure findString(msg: in NonSparkTypes.packet.Bounded_String;
+                        msgIndex: in out Integer;
+                        valid: out Boolean;
+                        needle: string)
+   is
+         dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
+      use NonSparkTypes.packet;
+   begin
+      valid := false;
+      
+      if (msgIndex < 1) then
+         return;
+      end if;
+      
+      findquotedstring_packet(msg, msgindex, valid, dummybounded);
+      if (valid = false) then 
+         NonSparkTypes.put("parse: ERROR: looking for string: ");
+         return; 
+      end if;
+      NonSparkTypes.put("parse: found: "); NonSparkTypes.put_Line(NonSparkTypes.packet.To_String(dummybounded));
+      --if (NonSparkTypes.packet.To_String(dummybounded) /= "attributeType") then 
+      if (dummybounded /= needle) then 
+         NonSparkTypes.put("parse: 198: ERROR: looking for 'attributeType': ");
+         return; 
+      end if;
+
+   end findString;
+
+   procedure findKeyValue(msg: in NonSparkTypes.packet.Bounded_String;
+                          msgIndex: in out Integer;
+                          valid: out Boolean;
+                          key: in string;
+                          value: out NonSparkTypes.packet.Bounded_String)
+   is
+         dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
+         tempPositive: integer;
+      
+      use NonSparkTypes.packet;
+   begin
+      value := NonSparkTypes.packet.To_Bounded_String("");
+      findString(msg, msgIndex, valid, key);
+      if (valid = false) then
+         return;
+      end if;
+      
+      if (msgIndex < 1) then
+         valid := false;
+         return;
+      end if;
+      
+      ocpp.move_index_past_token(msg, ':', msgindex, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 233"); return; end if;
+         
+      
+      findquotedstring_packet(msg, msgIndex, valid, value);
+      
+   end findKeyValue;
+   
+                        
 
 end ocpp;
