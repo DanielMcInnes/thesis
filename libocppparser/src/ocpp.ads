@@ -7,12 +7,6 @@ with Ada.Text_IO;
 with NonSparkTypes; use NonSparkTypes;
 
 package ocpp is
-   
-   --AttributeEnumType is used by: Common:VariableAttributeType , getVariables:GetVariablesRequest.GetVariableDataType ,
-   -- getVariables:GetVariablesResponse.GetVariableResultType , setVariables:SetVariablesRequest.SetVariableDataType ,
-   --setVariables:SetVariablesResponse.SetVariableResultType
-   type AttributeEnumType is (Actual, Target, MinSet, MaxSet); 
-
    type call is tagged record
       messagetypeid : integer := 2;-- eg. 2
       messageid : messageid_t.Bounded_String; -- eg. 19223201
@@ -50,10 +44,10 @@ package ocpp is
    
    
    procedure ParseMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
-                            messagetypeid : out integer;-- eg. 2
-                            index: in out Integer;
-                            valid: out Boolean
-                           );
+                              messagetypeid : out integer;-- eg. 2
+                              index: in out Integer;
+                              valid: out Boolean
+                             );
 
    procedure ParseMessageId(msg:   in  NonSparkTypes.packet.Bounded_String;
                             messageid : out NonSparkTypes.messageid_t.Bounded_String;
@@ -62,23 +56,42 @@ package ocpp is
                            );
 
    procedure ParseAction(msg:   in  NonSparkTypes.packet.Bounded_String;
-                            msgindex: in out Integer;
-                            action : out NonSparkTypes.action_t.Bounded_String;
-                            valid: out Boolean
-                           );
+                         msgindex: in out Integer;
+                         action : out NonSparkTypes.action_t.Bounded_String;
+                         valid: out Boolean
+                        );
+
+   generic
+      Max: Positive;
+      type string_t (<>) is private;
+      with function to_string(msg : string_t) return string;      
+      with function To_Bounded_String(msg : string; Drop : Ada.Strings.Truncation := Ada.Strings.Error) return string_t;
+      with function length (msg : string_t) return integer;      
+   procedure findquotedstring(msg: in NonSparkTypes.packet.Bounded_String;
+                              msgindex : in out Integer;
+                              found : out Boolean;
+                              foundString: out string_t) 
+     with  Global => null;
+   
+
+   procedure ToString(attribute : in NonSparkTypes.AttributeEnumType.T;
+                                          str : out NonSparkTypes.AttributeEnumType.string_t.Bounded_String);
 
 private
    
    procedure move_index_past_token
      (msg : packet.Bounded_String;
       token    : Character;
-      index   : in out Positive;
+      index   : in out integer;
       Last   : out Natural)
      with
        Post => (Last <= NonSparkTypes.packet.Length(msg)) and 
        (Last < Integer'Last) and
-       (if Last /= 0 then (index <= NonSparkTypes.packet.Length(msg))),
-       Global => null;
+     (if Last /= 0 then 
+        (index <= NonSparkTypes.packet.Length(msg)) and
+          (index > 0)
+     ),
+     Global => null;
 
    procedure move_index_past_token
      (msg : packet.Bounded_String;
@@ -92,7 +105,7 @@ private
      (if Last /= 0 then 
         (First <= NonSparkTypes.packet.Length(msg)) and
           (index <= NonSparkTypes.packet.Length(msg))),
-     Global => null;
+       Global => null;
 
    procedure find_token
      (msg : packet.Bounded_String;
@@ -113,21 +126,43 @@ private
       with function element(msg : string_t; index: Positive) return character;
       with function to_string(msg : string_t) return string;        
    procedure findnonwhitespace(msg: in string_t;
-                               index: in out Positive;
+                               msgindex: in out Positive;
                                retval: out boolean);
+--   with
+--          Global => null,
+--          post => (if retval = true then
+--                     (msgindex > 0) and
+--                         (msgindex <= Length(msg))
+--                  );
    
-   generic
-      Max: Positive;
-      type string_t (<>) is private;
-      with function to_string(msg : string_t) return string;      
-      with function To_Bounded_String(msg : string;
-                                      Drop : Ada.Strings.Truncation := Ada.Strings.Error) return string_t;
-      with function length (msg : string_t) return integer;
-      
-   procedure findquotedstring(msg: in NonSparkTypes.packet.Bounded_String;
-                              index : in out Positive;
-                              found : out Boolean;
-                              foundString: in out string_t) 
-     with  Global => null;
+   procedure findString(msg: in NonSparkTypes.packet.Bounded_String;
+                        msgIndex: in out Integer;
+                        valid: out Boolean;
+                        needle: string);
+--   with
+--          Global => null,
+--          post => (if valid = true then
+--                     (msgindex > 0) and
+--                         (msgindex <= NonSparkTypes.packet.Length(msg))
+--                  );
+
+   procedure findQuotedKeyQuotedValue(msg: in NonSparkTypes.packet.Bounded_String;
+                                      msgIndex: in out Integer;
+                                      valid: out Boolean;
+                                      key: in string;
+                                      value: out NonSparkTypes.packet.Bounded_String);
+--        with
+--          Global => null,
+--          post => (if valid = true then
+--                     (msgIndex > 0)
+--                  );
+
+   procedure findQuotedKeyUnquotedValue(msg: in NonSparkTypes.packet.Bounded_String;
+                                        msgIndex: in out Integer;
+                                        valid: out Boolean;
+                                        key: in string;
+                                        value: out Integer);
+
+
 
 end ocpp;

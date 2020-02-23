@@ -87,6 +87,14 @@ package body ocpp.BootNotification is
                                                             To_Bounded_String =>  NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String
                                                            );
 
+   procedure findquotedstring_attributeType is new findquotedstring(
+                                                            Max => NonSparkTypes.ChargingStationType.firmwareVersion.Max_Length, 
+                                                            string_t => NonSparkTypes.ChargingStationType.firmwareVersion.Bounded_String,
+                                                            length => NonSparkTypes.ChargingStationType.firmwareVersion.Length,
+                                                            To_String => NonSparkTypes.ChargingStationType.firmwareVersion.to_string,
+                                                            To_Bounded_String =>  NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String
+                                                           );
+
    procedure validreason(thereason: in NonSparkTypes.BootReasonEnumType.Bounded_String;
                          valid: out Boolean)
    is

@@ -6,6 +6,8 @@ with NonSparkTypes; use NonSparkTypes.action_t;
 
 
 with ocpp.BootNotification;
+with ocpp.SetVariables;
+
 with ocpp.heartbeat;
 
 package body ocpp.server 
@@ -37,20 +39,45 @@ is
       NonSparkTypes.put("ocpp.server.isEnrolled: "); NonSparkTypes.put(serialNumber); NonSparkTypes.put(retval'Image); --NonSparkTypes.put_line(enrolledChargers.Length'Image);
    end isEnrolled;
    
-   procedure handle(theServer: in out ocpp.server.Class;
-                    msg: in NonSparkTypes.packet.Bounded_String;
-                    response: out NonSparkTypes.packet.Bounded_String)
+   procedure transmitPacket(theServer: in out ocpp.server.Class;
+                            msg: in NonSparkTypes.packet.Bounded_String)
    is
-      valid : Boolean;
-      index : Integer := 1;
+   begin
+      NonSparkTypes.put_line("transmitting packet: ");
+      NonSparkTypes.put_line(NonSparkTypes.packet.To_String(msg));
+   end transmitPacket;
+   
+   procedure receivePacket(theServer: in out ocpp.server.Class;
+                    msg: in NonSparkTypes.packet.Bounded_String;
+                           response: out NonSparkTypes.packet.Bounded_String;
+                          valid: out Boolean)
+   is
       messageTypeId : Integer;
+      index : Integer := 1;
+   begin     
+      valid := false;
+      response := NonSparkTypes.packet.To_Bounded_String("");
+      ocpp.ParseMessageType(msg, messageTypeId, index, valid);
+      if (messageTypeId = 2) 
+      then 
+         handleRequest(theServer, msg, response, valid);
+      elsif (messageTypeId = 3)
+      then
+         handleResponse(theServer, msg, valid);
+      end if;
+      
+   end receivePacket;
+   
+   procedure handleRequest(theServer: in out ocpp.server.Class;
+                    msg: in NonSparkTypes.packet.Bounded_String;
+                           response: out NonSparkTypes.packet.Bounded_String;
+                          valid: out Boolean)
+   is
+      
+      index : Integer := 1;
       messageId : NonSparkTypes.messageid_t.Bounded_String;
       action : NonSparkTypes.action_t.Bounded_String;
-   begin     
-      response := NonSparkTypes.packet.To_Bounded_String("");
-
-      ocpp.ParseMessageType(msg, messageTypeId, index, valid);
-      if (messageTypeId /= 2) then return; end if;
+   begin
       
       ocpp.ParseMessageId(msg, messageId, index, valid); -- eg. "19223201"
       if (valid = false) then
@@ -64,16 +91,62 @@ is
 
       if (action = ocpp.BootNotification.action)
       then
-         handleBootNotification(theServer, msg, index, valid, response, messageTypeId, messageId, action);
+         handleBootNotification(theServer, msg, index, valid, response, 2, messageId, action);
       elsif (action = ocpp.heartbeat.action)
       then
-         handleHeartbeat(theServer, msg, index, valid, response, messageTypeId, messageId, action);
+         handleHeartbeat(theServer, msg, index, valid, response, 2, messageId, action);
       else
          NonSparkTypes.put_line("ocpp-server: ERROR: invalid action");
       end if;
       
-   end handle;
+   end handleRequest;
    
+   procedure handleResponse(theServer: in out ocpp.server.Class;
+                    msg: in NonSparkTypes.packet.Bounded_String;
+                          valid: out Boolean)
+   is
+      
+      index : Integer := 1;
+      messageId : NonSparkTypes.messageid_t.Bounded_String;
+      action : NonSparkTypes.action_t.Bounded_String;
+   begin
+      ocpp.ParseMessageId(msg, messageId, index, valid); -- eg. "19223201"
+      if (valid = false) then
+         return;
+      end if;
+      
+      ocpp.ParseAction(msg, index, action, valid); -- eg. "BootNotification"
+      if (valid = false) then
+         return;
+      end if;
+      
+      if (action = SetVariables.Response.action)
+      then
+         handleSetVariablesResponse(theServer, msg, index, valid, messageId);
+      else
+         valid := false;
+      end if;
+   end handleResponse;
+   
+   procedure handleSetVariablesResponse(theServer: in out ocpp.server.Class;
+                                        msg: in NonSparkTypes.packet.Bounded_String;
+                                        index : in out Integer;
+                                        valid: out Boolean;
+                                        messageId : in NonSparkTypes.messageid_t.Bounded_String)
+   is
+      setVariableResponse : SetVariables.Response.Class;
+      
+   begin
+      setVariableResponse.messagetypeid := 3;
+      setVariableResponse.messageid := messageId;
+      ocpp.SetVariables.Response.parse(msg, index, setVariableResponse, valid);
+      if (valid = true)
+      then
+         theServer.setVariablesResponse := setVariableResponse;
+      end if;
+   end handleSetVariablesResponse;
+
+
    procedure handleBootNotification(theServer: in out ocpp.server.Class;
                                     msg: in NonSparkTypes.packet.Bounded_String;
                                     index : in out Integer;

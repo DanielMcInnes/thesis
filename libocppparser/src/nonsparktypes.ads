@@ -51,11 +51,23 @@ package NonSparkTypes is
       end response;
    end bootnotification_t;
    
+   package setvariables_t is
+      package request is
+         package attributeValue_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 1000);
+      end request;
+   end setvariables_t;
+   
+   
    package ModemType is
       package iccid_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 20);
       package imsi_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 20);
    end ModemType;
    
+   package VariableType_t is
+      package name is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50); 
+      package instance is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50);
+   end VariableType_t;
+      
    procedure put(msg : string);
    procedure put_line(msg : string);
 
@@ -69,5 +81,28 @@ package NonSparkTypes is
    procedure append(theList : in out vecChargers_t;
                     theValue: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String
                    );   
+   
+   function Uncased_Equals (L, R : String) return Boolean;
+
+   --AttributeEnumType is used by: Common:VariableAttributeType , getVariables:GetVariablesRequest.GetVariableDataType ,
+   -- getVariables:GetVariablesResponse.GetVariableResultType , setVariables:SetVariablesRequest.SetVariableDataType ,
+   --setVariables:SetVariablesResponse.SetVariableResultType
+   package AttributeEnumType is 
+      type T is (Invalid, 
+                 Actual, 
+                 Target, 
+                 MinSet, 
+                 MaxSet);
+      
+
+      procedure FromString(str : in String;
+                           attribute : out T;
+                           valid : out Boolean);
+
+      package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 7);
+      procedure ToString(attribute : in T;
+                         str : out string_t.Bounded_String);
+   end AttributeEnumType;
+   
 
 end NonSparkTypes;

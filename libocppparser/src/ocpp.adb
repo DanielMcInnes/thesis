@@ -5,6 +5,20 @@ with ada.strings.maps;
 
 package body ocpp is
 
+   procedure ToString(attribute : in NonSparkTypes.AttributeEnumType.T;
+                                          str : out NonSparkTypes.AttributeEnumType.string_t.Bounded_String)
+      is
+         use AttributeEnumType.string_t;
+      begin
+         case attribute is
+            when NonSparkTypes.AttributeEnumType.Invalid => str := To_Bounded_String("Invalid", Ada.Strings.Right);
+            when NonSparkTypes.AttributeEnumType.Actual => str := To_Bounded_String("Actual", Ada.Strings.Right);
+            when NonSparkTypes.AttributeEnumType.Target => str := To_Bounded_String("Target", Ada.Strings.Right);
+            when NonSparkTypes.AttributeEnumType.MinSet => str := To_Bounded_String("MinSet", Ada.Strings.Right);
+            when NonSparkTypes.AttributeEnumType.MaxSet => str := To_Bounded_String("MaxSet", Ada.Strings.Right);
+         end case;
+
+      end ToString;
    procedure findnextinteger(msg: in NonSparkTypes.packet.Bounded_String;
                              index : in out Positive;
                              foundInteger: out integer;
@@ -83,6 +97,9 @@ package body ocpp is
       last   : out Natural)
    is
    begin
+      first := 1;
+      if (index < 1) then last := 0; return; end if;
+      
       --put("    find_token: 22: index: "); put_line(index'image);
       --put("    find_token: 23: token: "); put_line(token'Image);
       NonSparkTypes.packet.Find_Token(Source => msg,
@@ -119,14 +136,14 @@ package body ocpp is
    procedure move_index_past_token
      (msg   : packet.Bounded_String;
       token : Character;
-      index : in out Positive;
+      index : in out integer;
       last  : out Natural)
    is
       first  : Positive;
    begin
-      last := 0;
-      if (index >= NonSparkTypes.packet.Length(msg))
+      if ((index < 1) or (index >= NonSparkTypes.packet.Length(msg)))
       then
+         last := 0;
          NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
          return;
       end if;
@@ -139,13 +156,14 @@ package body ocpp is
          return;
       end if;
       index := first + 1;
-      if (index >= NonSparkTypes.packet.Length(msg))
+      if ((index < 1) or (index > NonSparkTypes.packet.Length(msg)))
       then
          last := 0;
          NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
          return;
       end if;
-      pragma assert(index < NonSparkTypes.packet.Length(msg)); 
+      pragma assert(index <= NonSparkTypes.packet.Length(msg)); 
+      pragma assert(index > 0); 
    end move_index_past_token;
 
    procedure move_index_past_token
@@ -194,40 +212,48 @@ package body ocpp is
 
 
    procedure findnonwhitespace(msg: in string_t;
-                               index: in out Positive;
+                               msgindex: in out Positive;
                                retval: out boolean) is
       temp : character;
    begin
+      retval := false;
       --put("    findnonwhitespace 21: msg'size: "); put_line(msg'Size'Image);
-      if ((index <= 0) or (index > Length(msg))) then
-         retval := false;
+      if ((msgindex <= 0) or (msgindex > Length(msg))) then
          put("    findnonwhitespace 25: index: "); put_line("ERROR");
          return;
       end if;
+      
+      if (Length(msg) = 0) then return; end if;
            
-      temp :=  Element(msg, index); --put("    findnonwhitespace 27: index: "); put(index'Image); put(" temp: "); put_line(temp'image); 
+      temp :=  Element(msg, msgindex); --put("    findnonwhitespace 27: index: "); put(index'Image); put(" temp: "); put_line(temp'image); 
       --put("    findnonwhitespace 30: index: "); put_line(index'image);
       while ((temp = ASCII.LF) or (temp = ' ')) loop
          if (
-             (index = Integer'Last)  or 
-               (index >= Length(msg)) 
+             (msgindex = Integer'Last)  or 
+               (msgindex >= Length(msg)) 
             ) 
          then
             retval := false; put("    findnonwhitespace 34: ERROR"); put(" packet: "); Put_Line(To_String(msg));
             return;
          end if;
          
-         index := index + 1;
-         if (index >= Length(msg))
+         msgindex := msgindex + 1;
+         if (msgindex >= Length(msg))
          then
             retval := false; put("    findnonwhitespace 34: ERROR"); put(" packet: "); Put_Line(To_String(msg));
             return;
          end if;
          
-         temp :=  Element(msg, index); --put("    findnonwhitespace 41: index: "); put(index'Image); put(" temp: "); put_line(temp'image); 
+         temp :=  Element(msg, msgindex); --put("    findnonwhitespace 41: index: "); put(index'Image); put(" temp: "); put_line(temp'image); 
          --put("    13: index: "); put_line(index'image);
       end loop;      
       --put("    findnonwhitespace 51: index: "); put_line(index'image);
+      if ((msgindex <= 0) or (msgindex > Length(msg))) then
+         retval := false;
+         put("    findnonwhitespace 233: index: "); put_line("ERROR");
+         return;
+      end if;
+
       retval := true;
    end findnonwhitespace;
 
@@ -239,9 +265,9 @@ package body ocpp is
                                                               );
    
    procedure findquotedstring(msg: in NonSparkTypes.packet.Bounded_String;
-                              index : in out Positive;
+                              msgindex : in out Integer;
                               found : out Boolean;
-                              foundString: in out string_t)
+                              foundString: out string_t)
    is
       tempPositive : Integer;
       first : Integer;
@@ -249,21 +275,33 @@ package body ocpp is
       tempbs : NonSparkTypes.packet.Bounded_String;
 
    begin
-      --put("    117: index: "); put_line(index'image);
-      findnonwhitespace_packet(msg, index, found);
+      found := false;
+      foundString := To_Bounded_String("");
+      if ((msgindex < 1) or (msgindex > NonSparkTypes.packet.Length(msg))) then return; end if;
+      pragma assert((msgindex >= 1));
+      pragma assert (msgindex <= NonSparkTypes.packet.Length(msg));
+      
+      if (NonSparkTypes.packet.Length(msg) < 1) then return; end if;
+      pragma assert (NonSparkTypes.packet.Length(msg) > 0);
+      if ((msgindex < Integer'First) or (msgindex > Integer'Last)) then return; end if;
+      
+      findnonwhitespace_packet(msg, msgindex, found);
+      if (msgindex > NonSparkTypes.packet.Length(msg)) then return; end if;
       if (found = false) then
          return;
       end if;
       --put("    120: index: "); put_line(index'image);
 
-      if (index > NonSparkTypes.packet.Length(msg)) then return; end if;
-      ocpp.move_index_past_token(msg, '"', index, first, tempPositive);
+      if (msgindex > NonSparkTypes.packet.Length(msg)) then return; end if;
+      ocpp.move_index_past_token(msg, '"', msgindex, first, tempPositive);
+      if (msgindex > NonSparkTypes.packet.Length(msg)) then return; end if;
       if (tempPositive = 0) then found := false; return; end if;
 
       --put("    133: index: "); put_line(index'image);
 
-      if (index > NonSparkTypes.packet.Length(msg)) then return; end if;
-      ocpp.move_index_past_token(msg, '"', index, second, tempPositive);
+      if (msgindex > NonSparkTypes.packet.Length(msg)) then return; end if;
+      ocpp.move_index_past_token(msg, '"', msgindex, second, tempPositive);
+      if (msgindex > NonSparkTypes.packet.Length(msg)) then return; end if;
 
       if (tempPositive = 0) then
          put_line("138: ERROR");
@@ -278,7 +316,7 @@ package body ocpp is
       --put("max messageId length: "); put_line(ocpp.bootnotificationreason.Max_Length'Image);
       if (NonSparkTypes.packet.Length(tempbs) > Max ) then
          found := false;
-         put_line("ERROR: "); put(" source length:"); put(NonSparkTypes.packet.Length(tempbs)'Image) ;put(" dest length: ");put(Length(foundString)'Image);
+         put_line("ERROR: "); put(" source length:"); put(NonSparkTypes.packet.Length(tempbs)'Image) ;put(" dest length: ");
          return;
       end if;
       
@@ -291,12 +329,20 @@ package body ocpp is
 
       --put("    146: tempstring: first: "); put(first'Image); put(" second: "); put(second'image); put(" foundString: "); put_line(To_String(foundString));
       
+      msgindex := second + 1;
+      if ((msgindex < 1) or (msgindex > NonSparkTypes.packet.Length(msg))) then return; end if;
       found := true;
-      index := second + 1;
-      
 
    end findquotedstring;
 
+   procedure findquotedstring_packet is new findquotedstring(
+                                                             Max => NonSparkTypes.packet.Max_Length, 
+                                                             string_t => NonSparkTypes.packet.Bounded_String, 
+                                                             length => NonSparkTypes.packet.Length,
+                                                             To_String => NonSparkTypes.packet.to_string,
+                                                             To_Bounded_String =>  NonSparkTypes.packet.To_Bounded_String
+                                                            );
+   
    procedure findquotedstring_messageid is new findquotedstring(
                                                                 Max => NonSparkTypes.messageid_t.Max_Length, 
                                                                 string_t => NonSparkTypes.messageid_t.Bounded_String, 
@@ -313,11 +359,12 @@ package body ocpp is
                                                              To_Bounded_String =>  NonSparkTypes.action_t.To_Bounded_String
                                                             );
 
+
    procedure ParseMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
-                            messagetypeid : out integer;-- eg. 2
-                            index: in out Integer;
-                            valid: out Boolean
-                           )
+                              messagetypeid : out integer;-- eg. 2
+                              index: in out Integer;
+                              valid: out Boolean
+                             )
    is
       tempPositive: integer;
       retval: boolean;
@@ -336,6 +383,11 @@ package body ocpp is
       end if;
       ocpp.move_index_past_token(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
       
+      if (index < 1)
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
+         return;
+      end if;
       findnextinteger(msg, index, messagetypeid, retval); if (retval = false) then return; end if;
       index := index + 1;
       --NonSparkTypes.put ("ocpp: GetMessageType: messageTypeId: "); NonSparkTypes.put_line(request.messageTypeId'image); 
@@ -350,7 +402,7 @@ package body ocpp is
                             messageid : out NonSparkTypes.messageid_t.Bounded_String;
                             index: in out Integer;
                             valid: out Boolean
-                         )
+                           )
    is
       tempPositive: integer;
    begin
@@ -377,15 +429,20 @@ package body ocpp is
       end if;
       
       NonSparkTypes.put("parse: messageId: "); NonSparkTypes.put_Line(NonSparkTypes.messageid_t.To_String(messageid));
+      if (index < 1)
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
+         return;
+      end if;
       ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
 
       
    end ParseMessageId;
    
    procedure ParseAction(msg:   in  NonSparkTypes.packet.Bounded_String;
-                            msgindex: in out Integer;
-                            action : out NonSparkTypes.action_t.Bounded_String;
-                            valid: out Boolean
+                         msgindex: in out Integer;
+                         action : out NonSparkTypes.action_t.Bounded_String;
+                         valid: out Boolean
                         )
    is
    begin
@@ -413,7 +470,132 @@ package body ocpp is
       
    end ParseAction;
    
-     
 
+   
+   procedure findString(msg: in NonSparkTypes.packet.Bounded_String;
+                        msgIndex: in out Integer;
+                        valid: out Boolean;
+                        needle: string)
+   is
+      dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
+      use NonSparkTypes.packet;
+   begin
+      valid := false;
+      
+      if (msgIndex < 1) then
+         return;
+      end if;
+      
+      findquotedstring_packet(msg, msgindex, valid, dummybounded);
+      if (valid = false) then 
+         NonSparkTypes.put("parse: ERROR: looking for string: ");
+         return; 
+      end if;
+      NonSparkTypes.put("parse: found: "); NonSparkTypes.put_Line(NonSparkTypes.packet.To_String(dummybounded));
+      --if (NonSparkTypes.packet.To_String(dummybounded) /= "attributeType") then 
+      if (dummybounded /= needle) then 
+         NonSparkTypes.put("parse: 198: ERROR: looking for 'attributeType': ");
+         valid := false;
+         return; 
+      end if;
+
+      if ((msgIndex < 1) or (msgindex > NonSparkTypes.packet.Length(msg))) then valid := false; return; end if;
+      
+      valid := true;
+         
+         
+
+   end findString;
+
+   
+   procedure findQuotedKeyUnquotedValue(msg: in NonSparkTypes.packet.Bounded_String;
+                                        msgIndex: in out Integer;
+                                        valid: out Boolean;
+                                        key: in string;
+                                        value: out Integer)
+   is
+      dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
+      tempPositive: integer;
+      
+      use NonSparkTypes.packet;
+   begin
+      value := -1;
+      findString(msg, msgIndex, valid, key);
+      if (valid = false) then
+         return;
+      end if;
+      
+      if (msgIndex < 1) then
+         valid := false;
+         return;
+      end if;
+      
+      ocpp.move_index_past_token(msg, ':', msgindex, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 233"); return; end if;
+      if (msgIndex < 1) then
+         valid := false;
+         return;
+      end if;
+      
+      findnextinteger(msg, msgIndex, value, valid);
+   end findQuotedKeyUnquotedValue;
+
+   procedure findQuotedKeyQuotedValue(msg: in NonSparkTypes.packet.Bounded_String;
+                                      msgIndex: in out Integer;
+                                      valid: out Boolean;
+                                      key: in string;
+                                      value: out NonSparkTypes.packet.Bounded_String)
+   is
+      dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
+      tempPositive: integer;
+      
+      use NonSparkTypes.packet;
+   begin
+      value := NonSparkTypes.packet.To_Bounded_String("");
+
+      if ((msgIndex < 1) or (msgIndex > NonSparkTypes.packet.Max_Length))
+      then 
+         valid := false; 
+         pragma assert(valid = false); 
+         return; 
+      end if;
+      
+            
+      findString(msg, msgIndex, valid, key);
+      if (valid = false) then
+         return;
+      end if;
+      
+      if (msgIndex < 1) then
+         valid := false;
+         return;
+      end if;
+      
+      ocpp.move_index_past_token(msg, ':', msgindex, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 233"); return; end if;
+         
+      
+      findquotedstring_packet(msg, msgIndex, valid, value);
+      if (valid = false) then
+         return;
+      end if;
+            
+      if (NonSparkTypes.packet.Length(value) = 0)
+      then
+         valid := false;
+         return;
+      end if;
+      pragma assert(NonSparkTypes.packet.Length(value) /= 0);
+      
+      if ((msgIndex < 1) or (msgIndex > NonSparkTypes.packet.Max_Length))
+      then 
+         valid := false; 
+         pragma assert(valid = false); 
+         return; 
+      end if;
+
+      valid := true;
+      
+   end findQuotedKeyQuotedValue;
+   
+                        
 
 end ocpp;

@@ -3,6 +3,7 @@ pragma SPARK_Mode (On);
 with ocpp;
 with ocpp.BootNotification;
 with ocpp.heartbeat;
+with ocpp.SetVariables;
 
 with NonSparkTypes;
 
@@ -15,6 +16,7 @@ is
       enrolledChargers : vecChargers_t; -- := NonSparkTypes.vector_chargers.To_Vector(New_Item => NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String(""), Length => 0); 
       
       isDeferringBootNotificationAccept: Boolean := false;
+      setVariablesResponse: ocpp.SetVariables.Response.Class;
    end record;
 
    procedure enrolChargingStation(theList: in out NonSparkTypes.vecChargers_t;
@@ -35,14 +37,54 @@ is
                    theList => (serialNumber)
                   );
 
-   procedure handle(theServer: in out ocpp.server.Class;
+   procedure receivePacket(theServer: in out ocpp.server.Class;
                     msg: in NonSparkTypes.packet.Bounded_String;
-                    response: out NonSparkTypes.packet.Bounded_String)
+                           response: out NonSparkTypes.packet.Bounded_String;
+                          valid: out Boolean)
      with
        Depends => (
+                     valid => (msg, theServer),
                      response => (msg, theServer),
                    theServer => (msg, theServer)
                   );
+   
+   procedure handleRequest(theServer: in out ocpp.server.Class;
+                    msg: in NonSparkTypes.packet.Bounded_String;
+                           response: out NonSparkTypes.packet.Bounded_String;
+                          valid: out Boolean)
+     with
+       Depends => (
+                     valid => (msg, theServer),
+                     response => (msg, theServer),
+                   theServer => (msg, theServer)
+                  );
+   
+   procedure handleResponse(theServer: in out ocpp.server.Class;
+                    msg: in NonSparkTypes.packet.Bounded_String;
+                          valid: out Boolean)
+     with
+       Depends => (
+                     valid => (msg, theServer),
+                   theServer => (msg, theServer)
+                  );
+   
+   procedure handleSetVariablesResponse(theServer: in out ocpp.server.Class;
+                                    msg: in NonSparkTypes.packet.Bounded_String;
+                                    index : in out Integer;
+                                    valid: out Boolean;
+                                    messageId : in NonSparkTypes.messageid_t.Bounded_String
+                                   )
+     with
+       Depends => (
+                     index => (msg, index),
+                     valid => (msg, index,  messageId),
+                   theServer => (msg, theServer)
+                  );
+
+
+   procedure transmitPacket(theServer: in out ocpp.server.Class;
+                            msg: in NonSparkTypes.packet.Bounded_String
+                           );
 
    procedure handleBootNotification(theServer: in out ocpp.server.Class;
                                     msg: in NonSparkTypes.packet.Bounded_String;
