@@ -2,6 +2,7 @@ with ocpp; use ocpp;
 with ocpp.BootNotification;
 with ocpp.heartbeat;
 with ocpp.SetVariables;
+with ocpp.GetVariables;
 with ocpp.server;
 use ocpp.heartbeat;
 with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.messageid_t;
@@ -26,6 +27,7 @@ package body unittests is
       B03(result);      if (result = false) then         fail; return;      end if;
       B04(result);      if (result = false) then         fail; return;      end if;
       B05(result);      if (result = false) then         fail; return;      end if;
+      B06(result);      if (result = false) then         fail; return;      end if;
       
       --TODO:
       --B05
@@ -695,5 +697,84 @@ package body unittests is
       put_line(NonSparkTypes.packet.To_String(response));
       
    end B05;
+
+   procedure B06(result: out Boolean)
+   is
+      server: ocpp.server.Class;
+      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("01234567890123456789");
+      valid: Boolean;
+      bnr: ocpp.BootNotification.Request := (
+                                             messagetypeid => 2,
+                                             messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                             action => action_t.To_Bounded_String("BootNotification"),
+                                             reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
+                                             chargingStation => (
+                                                                 serialNumber => sn,
+                                                                 model => NonSparkTypes.ChargingStationType.model.To_Bounded_String("SingleSocketCharger"),
+                                                                 vendorName => NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String("VendorX"),
+                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String("01.23456789"),
+                                                                 modem => (
+                                                                           iccid => ModemType.iccid_t.To_Bounded_String("01234567890123456789"),
+                                                                           imsi => ModemType.imsi_t.To_Bounded_String("01234567890123456789")
+                                                                          )
+                                                                )                                                 
+                                            );
+
+      packet: NonSparkTypes.packet.Bounded_String;
+      response: NonSparkTypes.packet.Bounded_String;
+      expectedresponse: NonSparkTypes.packet.Bounded_String :=
+        NonSparkTypes.packet.To_Bounded_String( ""
+                                                & "[3," & ASCII.LF
+                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
+                                                & "{" & ASCII.LF
+                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
+                                                & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
+                                                & "   " & '"' & "status" & '"' & ": " & '"' & "Accepted" & '"' & ASCII.LF
+                                                & "}" & ASCII.LF
+                                                & "]");
+
+      getVariablesRequest : ocpp.GetVariables.Request.Class := (
+                                                                messagetypeid => 2,
+                                                                messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                                action => action_t.To_Bounded_String("GetVariables"),
+                                                                getVariableData => (
+                                                                                        attributeType => AttributeEnumType.Actual,
+                                                                                        component => (
+                                                                                                      name => ComponentType.name.To_Bounded_String("evse"),
+                                                                                                      instance => ComponentType.instance.To_Bounded_String("0"),
+                                                                                                      evse => (
+                                                                                                               id => 0,
+                                                                                                               connectorId => 0
+                                                                                                              )
+                                                                                                     ),
+                                                                                        variable => (
+                                                                                                     name => NonSparkTypes.VariableType_t.name.To_Bounded_String("loginPassword"),
+                                                                                                     instance => NonSparkTypes.VariableType_t.instance.To_Bounded_String("0")
+                                                                                                    )
+                                                                                       )
+                                                               );
+   begin
+      result := false;
+      ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);     
+
+      ocpp.BootNotification.To_Bounded_String(bnr, packet);      
+      ocpp.server.receivePacket(server, packet, response, valid);
+      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
+         Put_line("Success");
+      else
+         Put_line("Error: 765");
+         return;
+      end if;
+      
+
+      
+      
+      
+      ocpp.GetVariables.Request.To_Bounded_String(getVariablesRequest, packet);
+      NonSparkTypes.put_line(NonSparkTypes.packet.To_String(packet));
+      
+      result := true;
+   end B06;
+   
      
 end unittests;

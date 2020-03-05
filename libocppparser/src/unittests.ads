@@ -7,5 +7,6 @@ package unittests is
    procedure B03(result: out Boolean);
    procedure B04(result: out Boolean);
    procedure B05(result: out Boolean);
+   procedure B06(result: out Boolean);
 
 end unittests;
