@@ -4,6 +4,7 @@ with ocpp;
 with ocpp.BootNotification;
 with ocpp.heartbeat;
 with ocpp.SetVariables;
+with ocpp.GetVariables;
 
 with NonSparkTypes;
 
@@ -17,6 +18,7 @@ is
       
       isDeferringBootNotificationAccept: Boolean := false;
       setVariablesResponse: ocpp.SetVariables.Response.Class;
+      getVariablesResponse: ocpp.GetVariables.Response.Class;
    end record;
 
    procedure enrolChargingStation(theList: in out NonSparkTypes.vecChargers_t;
@@ -69,6 +71,19 @@ is
                   );
    
    procedure handleSetVariablesResponse(theServer: in out ocpp.server.Class;
+                                    msg: in NonSparkTypes.packet.Bounded_String;
+                                    index : in out Integer;
+                                    valid: out Boolean;
+                                    messageId : in NonSparkTypes.messageid_t.Bounded_String
+                                   )
+     with
+       Depends => (
+                     index => (msg, index),
+                     valid => (msg, index,  messageId),
+                   theServer => (msg, theServer)
+                  );
+
+   procedure handleGetVariablesResponse(theServer: in out ocpp.server.Class;
                                     msg: in NonSparkTypes.packet.Bounded_String;
                                     index : in out Integer;
                                     valid: out Boolean;

@@ -12,10 +12,10 @@ diagrams
   sequencediagram_ref 154114 // sd1 boot not
     1528 843 200 A4 0 0
   active  classdiagram_ref 160642 // cd3 SetVariables
-    1598 843 80 A0 119 0
+    1598 843 70 A0 0 103
 end
 show_stereotypes
-selected attribute_ref 185730 // messageid
+selected attribute_ref 199042 // attributeValue
 open
   class_ref 150018 // connection
   class_ref 150146 // transport::asio::connection
@@ -34,6 +34,8 @@ open
   class_ref 198146 // VariableType
   class_ref 204674 // ocpp.callResponse
   class_ref 204930 // SetVariableResultType
+  class_ref 211586 // GetVariableDataType
+  class_ref 218242 // GetVariableResultType
   classview_ref 128770 // asio
   deploymentview_ref 128642 // asio
   class_ref 156930 // bootnotification

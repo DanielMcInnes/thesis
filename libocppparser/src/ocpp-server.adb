@@ -123,6 +123,9 @@ is
       if (action = SetVariables.Response.action)
       then
          handleSetVariablesResponse(theServer, msg, index, valid, messageId);
+      elsif (action = GetVariables.Response.action) then
+         handleGetVariablesResponse(theServer, msg, index, valid, messageId);
+            
       else
          valid := false;
       end if;
@@ -145,6 +148,24 @@ is
          theServer.setVariablesResponse := setVariableResponse;
       end if;
    end handleSetVariablesResponse;
+
+   procedure handleGetVariablesResponse(theServer: in out ocpp.server.Class;
+                                        msg: in NonSparkTypes.packet.Bounded_String;
+                                        index : in out Integer;
+                                        valid: out Boolean;
+                                        messageId : in NonSparkTypes.messageid_t.Bounded_String)
+   is
+      getVariableResponse : GetVariables.Response.Class;
+      
+   begin
+      getVariableResponse.messagetypeid := 3;
+      getVariableResponse.messageid := messageId;
+      ocpp.GetVariables.Response.parse(msg, index, getVariableResponse, valid);
+      if (valid = true)
+      then
+         theServer.getVariablesResponse := getVariableResponse;
+      end if;
+   end handleGetVariablesResponse;
 
 
    procedure handleBootNotification(theServer: in out ocpp.server.Class;

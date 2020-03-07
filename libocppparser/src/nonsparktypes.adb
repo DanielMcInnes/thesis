@@ -38,26 +38,26 @@ package body NonSparkTypes is
    end contains;
 
    procedure append(theList : in out vecChargers_t;
-                      theValue: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String
-                      )
+                    theValue: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String
+                   )
    is
    begin
       NonSparkTypes.vector_chargers.Append(theList, theValue);
    end append;
 
-function Uncased_Equals (L, R : String) return Boolean
-is
-   use Ada.Strings.Fixed;
-   use Ada.Strings.Maps.Constants;
-begin
-   return Translate (L, Lower_Case_Map) = Translate (R, Lower_Case_Map);
-end Uncased_Equals;
+   function Uncased_Equals (L, R : String) return Boolean
+   is
+      use Ada.Strings.Fixed;
+      use Ada.Strings.Maps.Constants;
+   begin
+      return Translate (L, Lower_Case_Map) = Translate (R, Lower_Case_Map);
+   end Uncased_Equals;
 
    package body AttributeEnumType is
 
       procedure FromString(str : in String;
-                                          attribute : out T;
-                                          valid : out Boolean)
+                           attribute : out T;
+                           valid : out Boolean)
       is
       begin
          if (NonSparkTypes.Uncased_Equals(str, "Actual")) then
@@ -77,7 +77,7 @@ end Uncased_Equals;
       end FromString;
 
       procedure ToString(attribute : in T;
-                                          str : out AttributeEnumType.string_t.Bounded_String)
+                         str : out AttributeEnumType.string_t.Bounded_String)
       is
          use AttributeEnumType.string_t;
       begin
@@ -90,8 +90,62 @@ end Uncased_Equals;
          end case;
 
       end ToString;
-
-
    end AttributeEnumType;
+
+   package body attributeValue_t is
+      procedure FromString(attribute : in string;
+                           str : out string_t.Bounded_String)
+      is
+      begin
+         str := attributeValue_t.string_t.To_Bounded_String(attribute, Drop => Right);
+      end FromString;
+
+   end attributeValue_t;
+
+   package body GetVariableStatusEnumType
+   is
+      procedure FromString(str : in String;
+                           attribute : out T;
+                           valid : out Boolean)
+      is
+      begin
+--      type T is (Invalid,
+--                 Accepted,
+--                 Rejected,
+--                 UnknownComponent);
+
+
+
+         if (NonSparkTypes.Uncased_Equals(str, "Accepted")) then
+            attribute := Accepted;
+         elsif (NonSparkTypes.Uncased_Equals(str, "Rejected")) then
+            attribute := Rejected;
+         elsif (NonSparkTypes.Uncased_Equals(str, "UnknownComponent")) then
+            attribute := UnknownComponent;
+         else
+            attribute := Invalid;
+            valid := false;
+            return;
+         end if;
+         valid := true;
+      end FromString;
+
+      procedure ToString(attribute : in T;
+                         str : out string_t.Bounded_String)
+      is
+         use string_t;
+      begin
+         case attribute is
+            when Invalid => str := To_Bounded_String("Invalid");
+            when Accepted => str := To_Bounded_String("Accepted");
+            when Rejected => str := To_Bounded_String("Rejected");
+            when UnknownComponent => str := To_Bounded_String("UnknownComponent");
+         end case;
+
+      end ToString;
+
+   end GetVariableStatusEnumType;
+
+
 
 end NonSparkTypes;

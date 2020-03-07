@@ -50,7 +50,7 @@ package ocpp.SetVariables is
          --SetVariableDataType is used by: SetVariablesRequest
          type Class is tagged record
             attributeType: NonSparkTypes.AttributeEnumType.T; -- 0..1 Optional. Type of attribute: Actual, Target, MinSet, MaxSet. Default is Actual when omitted.
-            attributeValue: NonSparkTypes.setvariables_t.request.attributeValue_t.Bounded_String;
+            attributeValue: NonSparkTypes.attributeValue_t.string_t.Bounded_String;
             component: ComponentType.Class; -- 1..1 Required. The component for which result is returned.
             variable: VariableType.Class; -- 1..1 Required. The variable for which the result is returned.
          end record;
@@ -87,7 +87,9 @@ package ocpp.SetVariables is
    --      }
    --   }
    --]
-   package Response is
+   package Response
+   is
+      -- GetVariableResultType is used by: GetVariablesResponse
       action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("setVariableResult");
       package SetVariableResultType is
          -- SetVariableStatusEnumType is used by: setVariables:SetVariablesResponse.SetVariableResultType

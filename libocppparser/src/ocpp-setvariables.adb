@@ -22,7 +22,7 @@ package body ocpp.SetVariables is
       self.action := action;
 
       self.setVariableData.attributeType := NonSparkTypes.AttributeEnumType.Invalid;
-      self.setVariableData.attributeValue := NonSparkTypes.setvariables_t.request.attributeValue_t.To_Bounded_String("");
+      self.setVariableData.attributeValue := NonSparkTypes.attributeValue_t.string_t.To_Bounded_String("");
       
       self.setVariableData.component.name := ComponentType.name.To_Bounded_String("");
       self.setVariableData.component.instance := ComponentType.instance.To_Bounded_String("");
@@ -120,7 +120,7 @@ package body ocpp.SetVariables is
                                                            & "{" & ASCII.LF
                                                            & "   " & '"' & "setVariableData" & '"' & ": {" & ASCII.LF
                                                            & "   " & '"' & "attributeType" & '"' & ":" & '"' & string_t.To_String(attributeStr) & '"' & ASCII.LF
-                                                           & "      " & '"' & "attributeValue"  & '"' & ":" & '"' & NonSparkTypes.setvariables_t.request.attributeValue_t.To_String(Self.setVariableData.attributeValue) & '"' & "," & ASCII.LF
+                                                           & "      " & '"' & "attributeValue"  & '"' & ":" & '"' & NonSparkTypes.attributeValue_t.string_t.To_String(Self.setVariableData.attributeValue) & '"' & "," & ASCII.LF
                                                            & "      " & '"' & "component"  & '"' & ": {" & ASCII.LF
                                                            & "         " & '"' & "name" & '"' & ":" & " : " & '"' & ComponentType.name.To_String(Self.setVariableData.component.name) & '"' & "," & ASCII.LF
                                                            & "         " & '"' & "instance" & '"' & ":" & " : " & '"' & ComponentType.instance.To_String(Self.setVariableData.component.instance) & '"' & "," & ASCII.LF

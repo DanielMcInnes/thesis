@@ -51,9 +51,15 @@ package NonSparkTypes is
       end response;
    end bootnotification_t;
    
+   --package attributeValue_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 1000); -- used by setVariables, getVariables
+   package attributeValue_t is 
+      package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 1000);
+      procedure FromString(attribute : in string;
+                         str : out string_t.Bounded_String);
+   end attributeValue_t;
+   
    package setvariables_t is
       package request is
-         package attributeValue_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 1000);
       end request;
    end setvariables_t;
    
@@ -94,15 +100,32 @@ package NonSparkTypes is
                  MinSet, 
                  MaxSet);
       
+      package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 7);
 
       procedure FromString(str : in String;
                            attribute : out T;
                            valid : out Boolean);
 
-      package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 7);
       procedure ToString(attribute : in T;
                          str : out string_t.Bounded_String);
    end AttributeEnumType;
+
+   -- GetVariableStatusEnumType is used by: getVariables:GetVariablesResponse.GetVariableResultType
+   package GetVariableStatusEnumType is 
+      type T is (Invalid,
+                 Accepted, 
+                 Rejected, 
+                 UnknownComponent);
+      
+
+      package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 16);
+      procedure FromString(str : in String;
+                           attribute : out T;
+                           valid : out Boolean);
+
+      procedure ToString(attribute : in T;
+                         str : out string_t.Bounded_String);
+   end GetVariableStatusEnumType;
    
 
 end NonSparkTypes;
