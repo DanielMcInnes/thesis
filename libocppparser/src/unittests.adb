@@ -15,7 +15,9 @@ with ocpp.ResetEnumType;
 with ocpp.ReportBaseEnumType;
 with ocpp.GenericDeviceModelStatusEnumType;
 with ocpp.GetVariableStatusEnumType;
-        with ocpp.AttributeEnumType;
+with ocpp.AttributeEnumType;
+with ocpp.TransactionEventEnumType;
+with ocpp.TriggerReasonEnumType;
 
 package body unittests is
    
