@@ -74,9 +74,6 @@ package ocpp is
      with  Global => null;
    
 
-   procedure ToString(attribute : in NonSparkTypes.AttributeEnumType.T;
-                                          str : out NonSparkTypes.AttributeEnumType.string_t.Bounded_String);
-
 private
    
    procedure move_index_past_token

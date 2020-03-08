@@ -5,20 +5,6 @@ with ada.strings.maps;
 
 package body ocpp is
 
-   procedure ToString(attribute : in NonSparkTypes.AttributeEnumType.T;
-                                          str : out NonSparkTypes.AttributeEnumType.string_t.Bounded_String)
-      is
-         use AttributeEnumType.string_t;
-      begin
-         case attribute is
-            when NonSparkTypes.AttributeEnumType.Invalid => str := To_Bounded_String("Invalid", Ada.Strings.Right);
-            when NonSparkTypes.AttributeEnumType.Actual => str := To_Bounded_String("Actual", Ada.Strings.Right);
-            when NonSparkTypes.AttributeEnumType.Target => str := To_Bounded_String("Target", Ada.Strings.Right);
-            when NonSparkTypes.AttributeEnumType.MinSet => str := To_Bounded_String("MinSet", Ada.Strings.Right);
-            when NonSparkTypes.AttributeEnumType.MaxSet => str := To_Bounded_String("MaxSet", Ada.Strings.Right);
-         end case;
-
-      end ToString;
    procedure findnextinteger(msg: in NonSparkTypes.packet.Bounded_String;
                              index : in out Positive;
                              foundInteger: out integer;

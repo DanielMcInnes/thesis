@@ -1,15 +1,21 @@
 with ocpp; use ocpp;
-with ocpp.BootNotification;
-with ocpp.heartbeat;
-with ocpp.SetVariables;
-with ocpp.GetVariables;
-with ocpp.server;
-use ocpp.heartbeat;
+with ocpp.heartbeat; use ocpp.heartbeat;
 with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.messageid_t;
 with System; use System;
 with Ada.Strings; use Ada.Strings;
-with ComponentType; 
+
+with ocpp.BootNotification;
+with ocpp.SetVariables;
+with ocpp.GetVariables;
+with ocpp.server;
 with ocpp.VariableType;
+with ComponentType; 
+
+with ocpp.ResetEnumType;
+with ocpp.ReportBaseEnumType;
+with ocpp.GenericDeviceModelStatusEnumType;
+with ocpp.GetVariableStatusEnumType;
+        with ocpp.AttributeEnumType;
 
 package body unittests is
    
@@ -28,10 +34,9 @@ package body unittests is
       B04(result);      if (result = false) then         fail; return;      end if;
       B05(result);      if (result = false) then         fail; return;      end if;
       B06(result);      if (result = false) then         fail; return;      end if;
+      B07(result);      if (result = false) then         fail; return;      end if;
       
       --TODO:
-      --B05
-      --B06
       --B07 
       --B11
       --B12
@@ -759,7 +764,7 @@ package body unittests is
                                                                   messagetypeid => 3,
                                                                   messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
                                                                   getVariableResult => (
-                                                                                        attributeStatus => NonSparkTypes.GetVariableStatusEnumType.Accepted,
+                                                                                        attributeStatus => ocpp.GetVariableStatusEnumType.Accepted,
                                                                                         attributeType => AttributeEnumType.Actual,
                                                                                         attributeValue => NonSparkTypes.attributeValue_t.string_t.To_Bounded_String("p@ssw0rd"),
                                                                                     component => (
@@ -816,6 +821,16 @@ package body unittests is
       
       result := true;
    end B06;
+   
+   procedure B07(result: out Boolean)
+   is
+   begin
+      
+      NonSparkTypes.put_line("B07");
+      result := true;
+   end B07;
+   
+      
    
      
 end unittests;

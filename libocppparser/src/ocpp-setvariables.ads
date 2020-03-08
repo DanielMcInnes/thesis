@@ -3,7 +3,8 @@ pragma SPARK_Mode (On);
 --with Ada.Strings; use Ada.Strings;
 --with Ada.Strings.Bounded; use Ada.Strings.Bounded;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.action_t; use NonSparkTypes.AttributeEnumType;
+with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.action_t; 
+with ocpp.AttributeEnumType; use ocpp.AttributeEnumType;
 with ComponentType;
 with EVSEType;
 with ocpp.VariableType;
@@ -49,7 +50,7 @@ package ocpp.SetVariables is
       package DataType is 
          --SetVariableDataType is used by: SetVariablesRequest
          type Class is tagged record
-            attributeType: NonSparkTypes.AttributeEnumType.T; -- 0..1 Optional. Type of attribute: Actual, Target, MinSet, MaxSet. Default is Actual when omitted.
+            attributeType: ocpp.AttributeEnumType.T; -- 0..1 Optional. Type of attribute: Actual, Target, MinSet, MaxSet. Default is Actual when omitted.
             attributeValue: NonSparkTypes.attributeValue_t.string_t.Bounded_String;
             component: ComponentType.Class; -- 1..1 Required. The component for which result is returned.
             variable: VariableType.Class; -- 1..1 Required. The variable for which the result is returned.
@@ -135,7 +136,7 @@ package ocpp.SetVariables is
           post => (if valid = true then
                      (
                       (response.messagetypeid = 3) and
-                      (response.setVariableResult.attributeType /= NonSparkTypes.AttributeEnumType.Invalid) and
+                      (response.setVariableResult.attributeType /= ocpp.AttributeEnumType.Invalid) and
                       (response.setVariableResult.attributeStatus /= SetVariableResultType.Invalid)
                      )
                   );

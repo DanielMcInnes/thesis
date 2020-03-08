@@ -19,9 +19,9 @@ package body ocpp.GetVariables is
                                   retval: out NonSparkTypes.packet.Bounded_String)
       is
          use NonSparkTypes;
-         use NonSparkTypes.AttributeEnumType;
-         use NonSparkTypes.AttributeEnumType.string_t;
-         attributeStr : NonSparkTypes.AttributeEnumType.string_t.Bounded_String;
+         use ocpp.AttributeEnumType;
+         use ocpp.AttributeEnumType.string_t;
+         attributeStr : ocpp.AttributeEnumType.string_t.Bounded_String;
 
       begin
          ToString(Self.getVariableData.attributeType, attributeStr);
@@ -31,7 +31,7 @@ package body ocpp.GetVariables is
                                                            & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                            & "{" & ASCII.LF
                                                            & "   " & '"' & "getVariableData" & '"' & ": {" & ASCII.LF
-                                                           & "   " & '"' & "attributeType" & '"' & ":" & '"' & NonSparkTypes.AttributeEnumType.string_t.To_String(attributeStr) & '"' & ASCII.LF
+                                                           & "   " & '"' & "attributeType" & '"' & ":" & '"' & ocpp.AttributeEnumType.string_t.To_String(attributeStr) & '"' & ASCII.LF
                                                            & "      " & '"' & "component"  & '"' & ": {" & ASCII.LF
                                                            & "         " & '"' & "name" & '"' & ":" & " : " & '"' & ComponentType.name.To_String(Self.getVariableData.component.name) & '"' & "," & ASCII.LF
                                                            & "         " & '"' & "instance" & '"' & ":" & " : " & '"' & ComponentType.instance.To_String(Self.getVariableData.component.instance) & '"' & "," & ASCII.LF
@@ -108,7 +108,7 @@ package body ocpp.GetVariables is
             end if;
          else
             NonSparkTypes.put_line("parse: not found");
-            response.getVariableResult.attributeType := NonSparkTypes.AttributeEnumType.Actual; -- default to 'Actual' if unspecified
+            response.getVariableResult.attributeType := ocpp.AttributeEnumType.Actual; -- default to 'Actual' if unspecified
          end if;
 
          NonSparkTypes.put("parse: checking attribute type...");
@@ -140,7 +140,7 @@ package body ocpp.GetVariables is
             end if;
          else
             NonSparkTypes.put_line("parse: not found");
-            response.getVariableResult.attributeType := NonSparkTypes.AttributeEnumType.Actual; -- default to 'Actual' if unspecified
+            response.getVariableResult.attributeType := ocpp.AttributeEnumType.Actual; -- default to 'Actual' if unspecified
          end if;
          
 
@@ -233,16 +233,16 @@ package body ocpp.GetVariables is
                                   retval: out NonSparkTypes.packet.Bounded_String)
       is
          use NonSparkTypes;
-         use NonSparkTypes.AttributeEnumType;
-         use NonSparkTypes.AttributeEnumType.string_t;
+         use ocpp.AttributeEnumType;
+         use ocpp.AttributeEnumType.string_t;
 
-         use NonSparkTypes.GetVariableStatusEnumType;
-         use NonSparkTypes.GetVariableStatusEnumType.string_t;
+         use ocpp.GetVariableStatusEnumType;
+         use ocpp.GetVariableStatusEnumType.string_t;
          
          use NonSparkTypes.attributeValue_t;
          
-         attributeStatusStr : NonSparkTypes.GetVariableStatusEnumType.string_t.Bounded_String;
-         attributeTypeStr : NonSparkTypes.AttributeEnumType.string_t.Bounded_String;
+         attributeStatusStr : ocpp.GetVariableStatusEnumType.string_t.Bounded_String;
+         attributeTypeStr : ocpp.AttributeEnumType.string_t.Bounded_String;
          
       begin
          ToString(Self.getVariableResult.attributeStatus, attributeStatusStr);
