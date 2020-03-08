@@ -66,9 +66,7 @@ package ocpp.GetVariables is
                      ),
           post => (if valid = true then
                      (
-                      (response.messagetypeid = 3) and
-                      (response.getVariableResult.attributeType /= ocpp.AttributeEnumType.Invalid) and
-                      (response.getVariableResult.attributeStatus /= ocpp.GetVariableStatusEnumType.Invalid)
+                      (response.messagetypeid = 3)
                      )
                   );
 

@@ -33,6 +33,52 @@ with ocpp.reasonenumtype;
 with ocpp.signaturemethodenumtype;
 with ocpp.transactioneventenumtype;
 with ocpp.triggerreasonenumtype;
+with ocpp.A15118evcertificatestatusenumtype;
+with ocpp.apnauthenticationenumtype;
+with ocpp.authorizationstatusenumtype;
+with ocpp.bootreasonenumtype;
+with ocpp.charginglimitsourceenumtype;
+with ocpp.chargingprofilekindenumtype;
+with ocpp.chargingprofilepurposeenumtype;
+with ocpp.chargingrateunitenumtype;
+with ocpp.chargingstateenumtype;
+with ocpp.clearmonitoringstatusenumtype;
+with ocpp.componentcriterionenumtype;
+with ocpp.connectorenumtype;
+with ocpp.costkindenumtype;
+with ocpp.dataenumtype;
+with ocpp.encodingmethodenumtype;
+with ocpp.energytransfermodeenumtype;
+with ocpp.eventtriggerenumtype;
+with ocpp.getcompositeschedulestatusenumtype;
+with ocpp.getinstalledcertificatestatusenumtype;
+with ocpp.getvariablestatusenumtype;
+with ocpp.hashalgorithmenumtype;
+with ocpp.idtokenenumtype;
+with ocpp.locationenumtype;
+with ocpp.logenumtype;
+with ocpp.measurandenumtype;
+with ocpp.messageformatenumtype;
+with ocpp.messagepriorityenumtype;
+with ocpp.messagestateenumtype;
+with ocpp.messagetriggerenumtype;
+with ocpp.monitorenumtype;
+with ocpp.monitoringcriterionenumtype;
+with ocpp.mutabilityenumtype;
+with ocpp.ocppinterfaceenumtype;
+with ocpp.ocpptransportenumtype;
+with ocpp.ocppversionenumtype;
+with ocpp.phaseenumtype;
+with ocpp.readingcontextenumtype;
+with ocpp.reasonenumtype;
+with ocpp.recurrencykindenumtype;
+with ocpp.setmonitoringstatusenumtype;
+with ocpp.setvariablestatusenumtype;
+with ocpp.signaturemethodenumtype;
+with ocpp.transactioneventenumtype;
+with ocpp.triggerreasonenumtype;
+with ocpp.updateenumtype;
+with ocpp.vpnenumtype;
 
 
 package body unittests is
@@ -47,12 +93,12 @@ package body unittests is
    is
    begin
       B01(result);      if (result = false) then         fail; return;      end if;
-      B02(result);      if (result = false) then         fail; return;      end if;
-      B03(result);      if (result = false) then         fail; return;      end if;
-      B04(result);      if (result = false) then         fail; return;      end if;
-      B05(result);      if (result = false) then         fail; return;      end if;
-      B06(result);      if (result = false) then         fail; return;      end if;
-      B07(result);      if (result = false) then         fail; return;      end if;
+      --B02(result);      if (result = false) then         fail; return;      end if;
+      --B03(result);      if (result = false) then         fail; return;      end if;
+      --B04(result);      if (result = false) then         fail; return;      end if;
+      --B05(result);      if (result = false) then         fail; return;      end if;
+      --B06(result);      if (result = false) then         fail; return;      end if;
+      --B07(result);      if (result = false) then         fail; return;      end if;
       
       --TODO:
       --B07 
@@ -842,8 +888,7 @@ package body unittests is
    
    procedure B07(result: out Boolean)
    is
-   begin
-      
+   begin      
       NonSparkTypes.put_line("B07");
       result := true;
    end B07;

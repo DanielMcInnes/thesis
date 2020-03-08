@@ -136,7 +136,6 @@ package ocpp.SetVariables is
           post => (if valid = true then
                      (
                       (response.messagetypeid = 3) and
-                      (response.setVariableResult.attributeType /= ocpp.AttributeEnumType.Invalid) and
                       (response.setVariableResult.attributeStatus /= SetVariableResultType.Invalid)
                      )
                   );

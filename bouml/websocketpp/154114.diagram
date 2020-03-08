@@ -1,7 +1,7 @@
 format 222
 
 classinstance 128002 class_ref 183426 // server
-  name ""   xyz 135.2 4.2 2005 life_line_z 2000
+  name ""   xyz 136.2 4.2 2005 life_line_z 2000
 classinstance 128130 class_ref 156802 // main
   name ""   xyz 32.2 4 2005 life_line_z 2000
 classinstance 128642 class_ref 156930 // bootnotification
@@ -10,10 +10,10 @@ durationcanvas 128258 classinstance_ref 128130 // :main
   xyzwh 51 90 2010 11 41
 end
 durationcanvas 128386 classinstance_ref 128002 // :server
-  xyzwh 157 93 2010 11 126
+  xyzwh 158 93 2010 11 126
 end
 durationcanvas 129026 classinstance_ref 128642 // :bootnotification
-  xyzwh 278 210 2010 11 25
+  xyzwh 282 210 2010 11 25
 end
 msg 128514 synchronous
   from durationcanvas_ref 128258
