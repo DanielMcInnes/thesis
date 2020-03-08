@@ -10,10 +10,24 @@ function clean(f) {
    const regexbody = /body/gi;
    const regexperiod = /\./gi;
    const regexhyphen = /-/g;
+   const regex15118 = /15118/g;
+   const regexdelta = /delta/gi;
+   const regexstring = /string/gi;
+   const regexboolean = /boolean/gi;
    var retval = f.replace(regex, '_');
    retval = retval.replace(regexbody, 'ABody');
    retval = retval.replace(regexperiod, '_');
    retval = retval.replace(regexhyphen, '_');
+   retval = retval.replace(regex15118, 'a15118');
+   retval = retval.replace(regexdelta, 'zzzDelta');
+   retval = retval.replace(regexstring, 'zzzstring');
+   retval = retval.replace(regexboolean, 'zzzboolean');
+   return retval;
+}
+
+function cleanfilename(f) {
+   const regex15118 = /15118/g;
+   var retval = f.replace(regex15118, 'a15118');
    return retval;
 }
 
@@ -29,7 +43,7 @@ function parseJsonFile(f) {
 
          buffer = '-- start ocpp' + i + '.ads\n';
          buffer += ('with Ada.Strings.Bounded;\n\n')
-         buffer += 'package ocpp.' + i + ' is\n';
+         buffer += 'package ocpp.' + clean(i) + ' is\n';
          buffer += '   type T is (\n';
          var maxlen = 0;
          for (var j in _definitions[i].enum) {
@@ -52,21 +66,20 @@ function parseJsonFile(f) {
          buffer += ('                        valid : out Boolean);\n');
          buffer += ('   procedure ToString(attribute : in T;\n');
          buffer += ('                      str : out string_t.Bounded_String);\n');
-         buffer += ('end ocpp.' + i + ';\n');
-         buffer += ('-- end ocpp-' + i + '.ads\n');
+         buffer += ('end ocpp.' + clean(i) + ';\n');
+         buffer += ('-- end ocpp-' + clean(i) + '.ads\n');
 
          var outfile = 'ocpp-' + i.toLowerCase() + '.ads';
-         fs.writeFile(outfile, buffer, function (err, file) {
+         fs.writeFile(cleanfilename(outfile), buffer, function (err, file) {
             if (err) throw err;
             console.log('Saved %s', outfile);
          });
 
-
-
          buffer =  ('-- ocpp-' + i + '.adb\n\n');
-         buffer += ('with ocpp.' + i + '; use ocpp.' + i + ';\n');
+         var temp = cleanfilename(i);
+         buffer += ('with ocpp.' + temp + '; use ocpp.' + temp + ';\n');
          buffer += ('with NonSparkTypes;\n\n');
-         buffer += ('package body ocpp.' + i + ' is\n');
+         buffer += ('package body ocpp.' + clean(i) + ' is\n');
          buffer += ('   procedure FromString(str : in String;\n');
          buffer += ('                        attribute : out T;\n');
          buffer += ('                        valid : out Boolean)\n');
@@ -103,10 +116,10 @@ function parseJsonFile(f) {
 
 
          buffer +=('   end ToString;\n');
-         buffer +=('end ocpp.' + i + ';\n');
+         buffer +=('end ocpp.' + clean(i) + ';\n');
 
-         var outfile = 'ocpp-' + i.toLowerCase() + '.adb';
-         fs.writeFile(outfile, buffer, function (err, file) {
+         var outfile = 'ocpp-' + clean(i).toLowerCase() + '.adb';
+         fs.writeFile((outfile), buffer, function (err, file) {
             if (err) throw err;
             console.log('Saved %s', outfile);
          });
@@ -123,7 +136,7 @@ if (process.argv.length <= 2) {
 }
 
 
-parseJsonFile('./TransactionEventRequest_v1p0.json')
+//parseJsonFile('./TransactionEventRequest_v1p0.json')
 /*
  
 //var _values = _enum.split(
@@ -134,7 +147,7 @@ console.log('*** enum[0]: ', _enum[0]);
 for (var i in _enum) {
    console.log(i, _enum[i]);
 }
-
+*/
 
  
 var path = process.argv[2];
@@ -144,9 +157,11 @@ fs.readdir(path, function(err, items) {
  
    for (var i=0; i<items.length; i++) {
       if (items[i].endsWith('json')) {	  
-         //console.log(items[i]);
+         var filename = "./" + items[i];
+         console.log("parsing: ", filename);
+         parseJsonFile(filename);
       }
    }
 }
 );
-*/
+

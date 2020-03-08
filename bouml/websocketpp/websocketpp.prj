@@ -1,6 +1,6 @@
 format 222
 "websocketpp"
-  revision 16
+  revision 17
   modified_by 2 "dmcinnes"
 
 
@@ -76,6 +76,11 @@ format 222
 
     classdiagram 160642 "cd3 SetVariables"
       classdiagramsettings show_members_full_definition yes show_members_multiplicity yes member_max_width 0 end
+      size A0
+    end
+
+    classdiagram 167170 "cd4 getbasereport"
+      classdiagramsettings show_members_full_definition yes show_members_multiplicity yes show_members_initialization yes member_max_width 0 end
       size A0
     end
 
@@ -1205,6 +1210,263 @@ ${inlines}
 "
 	    classrelation_ref 185602 // variable (<directional composition>)
 	  b parent class_ref 198146 // VariableType
+      end
+    end
+
+    class 224770 "GetBaseReportRequest"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 192130 // <generalisation>
+	relation 192130 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 192130 // <generalisation>
+	  b parent class_ref 197250 // ocpp.call
+      end
+
+      attribute 205570 "requestId"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 205698 "reportBase"
+	private explicit_type "ReportBaseEnumType"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 224898 "GetBaseReportResponse"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 192258 // <generalisation>
+	relation 192258 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 192258 // <generalisation>
+	  b parent class_ref 204674 // ocpp.callResponse
+      end
+
+      attribute 205826 "status"
+	private explicit_type "GenericDeviceModelStatusEnumType"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 225026 "ocpp.ResetRequest"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 205954 "type"
+	private explicit_type "ResetEnumType"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 192386 // <generalisation>
+	relation 192386 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 192386 // <generalisation>
+	  b parent class_ref 197250 // ocpp.call
+      end
+    end
+
+    class 225154 "ocpp.ResetResponse"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 206082 "status"
+	private explicit_type "ResetStatusEnumType"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 192514 // <generalisation>
+	relation 192514 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 192514 // <generalisation>
+	  b parent class_ref 204674 // ocpp.callResponse
+      end
+    end
+
+    class 225282 "TransactionEventRequest"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 206210 "eventType"
+	private explicit_type "TransactionEventEnumType"
+	multiplicity "1"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 206338 "timestamp"
+	private explicit_type "DateTime"
+	multiplicity "1"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 206466 "triggerReason"
+	private explicit_type "TriggerReasonEnumType"
+	multiplicity "1"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 192770 // <generalisation>
+	relation 192770 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 192770 // <generalisation>
+	  b parent class_ref 197250 // ocpp.call
+      end
+    end
+
+    class 225410 "StatusNotificationRequest"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 192642 // <generalisation>
+	relation 192642 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 192642 // <generalisation>
+	  b parent class_ref 197250 // ocpp.call
+      end
+
+      attribute 206594 "timestamp"
+	private explicit_type "DateTime"
+	multiplicity "1"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 206722 "connectorStatus"
+	private explicit_type "ConnectorStatusEnumType"
+	multiplicity "1"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
       end
     end
   end

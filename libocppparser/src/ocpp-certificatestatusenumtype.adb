@@ -1,3 +1,5 @@
+-- ocpp-CertificateStatusEnumType.adb
+
 with ocpp.CertificateStatusEnumType; use ocpp.CertificateStatusEnumType;
 with NonSparkTypes;
 
@@ -6,10 +8,8 @@ package body ocpp.CertificateStatusEnumType is
                         attribute : out T;
                         valid : out Boolean)
    is
-   begin      
-      if (NonSparkTypes.Uncased_Equals(str, "Invalid")) then
-         attribute := Invalid;
-      elsif (NonSparkTypes.Uncased_Equals(str, "Accepted")) then
+   begin
+      if (NonSparkTypes.Uncased_Equals(str, "Accepted")) then
          attribute := Accepted;
       elsif (NonSparkTypes.Uncased_Equals(str, "SignatureError")) then
          attribute := SignatureError;
@@ -24,7 +24,6 @@ package body ocpp.CertificateStatusEnumType is
       elsif (NonSparkTypes.Uncased_Equals(str, "ContractCancelled")) then
          attribute := ContractCancelled;
       else
-         attribute := Invalid;
          valid := false;
          return;
       end if;
@@ -37,7 +36,6 @@ package body ocpp.CertificateStatusEnumType is
       use string_t;
    begin
       case attribute is
-         when Invalid => str := To_Bounded_String("Invalid");
          when Accepted => str := To_Bounded_String("Accepted");
          when SignatureError => str := To_Bounded_String("SignatureError");
          when CertificateExpired => str := To_Bounded_String("CertificateExpired");
@@ -46,7 +44,5 @@ package body ocpp.CertificateStatusEnumType is
          when CertChainError => str := To_Bounded_String("CertChainError");
          when ContractCancelled => str := To_Bounded_String("ContractCancelled");
       end case;
-
    end ToString;
-
 end ocpp.CertificateStatusEnumType;

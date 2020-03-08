@@ -21,7 +21,7 @@ package body ocpp.SetVariables is
       self.messageid := messageid_t.To_Bounded_String("19223201");
       self.action := action;
 
-      self.setVariableData.attributeType := ocpp.AttributeEnumType.Invalid;
+      self.setVariableData.attributeType := ocpp.AttributeEnumType.Actual;
       self.setVariableData.attributeValue := NonSparkTypes.attributeValue_t.string_t.To_Bounded_String("");
       
       self.setVariableData.component.name := ComponentType.name.To_Bounded_String("");
@@ -200,13 +200,6 @@ package body ocpp.SetVariables is
          else
             response.setVariableResult.attributeType := ocpp.AttributeEnumType.Actual; -- default to 'Actual' if unspecified
          end if;
-
-         if (response.setVariableResult.attributeType = AttributeEnumType.Invalid)
-         then
-            valid := false;
-            return;
-         end if;
-         pragma assert(response.setVariableResult.attributeType /= AttributeEnumType.Invalid);
 
          findQuotedKeyQuotedValue(msg, msgindex, valid, "attributeStatus", dummybounded);
          if (valid = false) then

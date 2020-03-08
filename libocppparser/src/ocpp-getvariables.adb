@@ -86,12 +86,6 @@ package body ocpp.GetVariables is
          FromString(NonSparkTypes.packet.To_String(dummybounded), response.getVariableResult.attributeStatus, valid);
          if (valid = false) then return; end if;
          
-         if (response.getVariableResult.attributeStatus = Invalid)
-         then
-            NonSparkTypes.put("parse: ERROR 215: invalid 'attributeStatus' value");
-            valid := false;
-            return;
-         end if;
          NonSparkTypes.put("parse: found: "); NonSparkTypes.put_Line(NonSparkTypes.packet.To_String(dummybounded));
 
 
@@ -111,14 +105,6 @@ package body ocpp.GetVariables is
             response.getVariableResult.attributeType := ocpp.AttributeEnumType.Actual; -- default to 'Actual' if unspecified
          end if;
 
-         NonSparkTypes.put("parse: checking attribute type...");
-         if (response.getVariableResult.attributeType = AttributeEnumType.Invalid)
-         then
-            valid := false;
-            return;
-         end if;
-         pragma assert(response.getVariableResult.attributeType /= AttributeEnumType.Invalid);
-         NonSparkTypes.put_line("parse: OK");
 
          NonSparkTypes.put_line("parse: looking for optional attributeValue...");
          tempmsgindex := msgindex;

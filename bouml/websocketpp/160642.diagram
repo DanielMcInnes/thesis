@@ -2,51 +2,51 @@ format 222
 
 classcanvas 128002 class_ref 197250 // ocpp.call
   classdiagramsettings member_max_width 0 end
-  xyz 775.4 79 2000
+  xyz 776.3 78 2000
 end
 classcanvas 128386 class_ref 197506 // ChargingStation_t
   classdiagramsettings member_max_width 0 end
-  xyz 2089.1 262.5 2000
+  xyz 2088.2 261.1 2000
 end
 classcanvas 128514 class_ref 197634 // ocpp.SetVariables.Request
   classdiagramsettings member_max_width 0 end
-  xyz 611.2 441.2 2000
+  xyz 610.9 440.1 2000
 end
 classcanvas 128770 class_ref 197762 // SetVariableDataType
   classdiagramsettings member_max_width 0 end
-  xyz 595 569.7 2000
+  xyz 594.7 570.9 2000
 end
 classcanvas 129026 class_ref 197890 // ComponentType
   classdiagramsettings member_max_width 0 end
-  xyz 1159.7 976.6 2000
+  xyz 1160.1 976.6 2000
 end
 classcanvas 129666 class_ref 198018 // EVSEType
   classdiagramsettings member_max_width 0 end
-  xyz 1178 1172.3 2000
+  xyz 1179 1174 2000
 end
 classcanvas 129922 class_ref 198146 // VariableType
   classdiagramsettings member_max_width 0 end
-  xyz 1555.9 996 2000
+  xyz 1556.7 996 2000
 end
 classcanvas 130178 class_ref 204674 // ocpp.callResponse
   classdiagramsettings member_max_width 0 end
-  xyz 1407.6 259.3 2000
+  xyz 1409 259.8 2000
 end
 classcanvas 130306 class_ref 204802 // ocpp.SetVariables.Response
   classdiagramsettings member_max_width 0 end
-  xyz 1442.4 405.8 2000
+  xyz 1443.2 407.3 2000
 end
 classcanvas 130562 class_ref 204930 // SetVariableResultType
   classdiagramsettings member_max_width 0 end
-  xyz 1388.5 532.2 2000
+  xyz 1388.5 533.9 2000
 end
 classcanvas 131074 class_ref 211458 // ocpp.GetVariables.Request
   classdiagramsettings member_max_width 0 end
-  xyz 1062.8 442 2000
+  xyz 1063 441 2000
 end
 classcanvas 131330 class_ref 211586 // GetVariableDataType
   classdiagramsettings member_max_width 0 end
-  xyz 1029.2 558.8 2006
+  xyz 1028.1 558.8 2006
 end
 classcanvas 131842 class_ref 218114 // ocpp.GetVariables.Response
   classdiagramsettings member_max_width 0 end
@@ -54,7 +54,7 @@ classcanvas 131842 class_ref 218114 // ocpp.GetVariables.Response
 end
 classcanvas 132098 class_ref 218242 // GetVariableResultType
   classdiagramsettings member_max_width 0 end
-  xyz 1758 545 2000
+  xyz 1757.7 544.7 2000
 end
 relationcanvas 128642 relation_ref 164354 // <generalisation>
   from ref 128514 z 2001 to ref 128002
@@ -63,8 +63,8 @@ relationcanvas 128642 relation_ref 164354 // <generalisation>
 end
 relationcanvas 128898 relation_ref 164482 // <directional composition>
   from ref 128514 z 2001 to ref 128770
-  role_a_pos 725 539 3000 no_role_b
-  no_multiplicity_a multiplicity_b_pos 676 497 3000
+  role_a_pos 724 539 3000 no_role_b
+  no_multiplicity_a multiplicity_b_pos 675 497 3000
 end
 relationcanvas 129538 relation_ref 164610 // <directional composition>
   from ref 128770 z 2001 to ref 129026
@@ -74,7 +74,7 @@ end
 relationcanvas 129794 relation_ref 164738 // <directional composition>
   from ref 129026 z 2001 to ref 129666
   no_role_a no_role_b
-  multiplicity_a_pos 1192 1134 3000 no_multiplicity_b
+  multiplicity_a_pos 1197 1141 3000 no_multiplicity_b
 end
 relationcanvas 130050 relation_ref 164866 // <directional composition>
   from ref 128770 z 2001 to ref 129922
@@ -88,18 +88,18 @@ relationcanvas 130434 relation_ref 171394 // <generalisation>
 end
 relationcanvas 130690 relation_ref 171522 // <directional composition>
   from ref 130306 z 2001 to ref 130562
-  role_a_pos 1559 503 3000 no_role_b
-  no_multiplicity_a multiplicity_b_pos 1515 461 3000
+  role_a_pos 1564 501 3000 no_role_b
+  no_multiplicity_a multiplicity_b_pos 1515 463 3000
 end
 relationcanvas 130818 relation_ref 171650 // <directional composition>
   from ref 130562 z 2001 to ref 129026
-  role_a_pos 1294 938 3000 no_role_b
-  multiplicity_a_pos 1246 938 3000 no_multiplicity_b
+  role_a_pos 1288 946 3000 no_role_b
+  multiplicity_a_pos 1250 946 3000 no_multiplicity_b
 end
 relationcanvas 130946 relation_ref 171778 // <directional composition>
   from ref 130562 z 2001 to ref 129922
-  role_a_pos 1686 952 3000 no_role_b
-  multiplicity_a_pos 1686 990 3000 no_multiplicity_b
+  role_a_pos 1634 966 3000 no_role_b
+  multiplicity_a_pos 1597 966 3000 no_multiplicity_b
 end
 relationcanvas 131202 relation_ref 178306 // <generalisation>
   from ref 131074 z 2001 to ref 128002
@@ -113,13 +113,13 @@ relationcanvas 131458 relation_ref 178434 // <directional composition>
 end
 relationcanvas 131586 relation_ref 178562 // <directional composition>
   from ref 131330 z 2007 to ref 129026
-  role_a_pos 1244 938 3000 no_role_b
-  multiplicity_a_pos 1196 938 3000 no_multiplicity_b
+  role_a_pos 1241 946 3000 no_role_b
+  multiplicity_a_pos 1203 946 3000 no_multiplicity_b
 end
 relationcanvas 131714 relation_ref 178690 // <directional composition>
   from ref 131330 z 2007 to ref 129922
-  role_a_pos 1636 964 3000 no_role_b
-  multiplicity_a_pos 1600 964 3000 no_multiplicity_b
+  role_a_pos 1517 979 3000 no_role_b
+  multiplicity_a_pos 1560 1017 3000 no_multiplicity_b
 end
 relationcanvas 131970 relation_ref 185218 // <generalisation>
   from ref 131842 z 2006 to ref 130178
@@ -128,17 +128,17 @@ relationcanvas 131970 relation_ref 185218 // <generalisation>
 end
 relationcanvas 132226 relation_ref 185346 // <directional composition>
   from ref 131842 z 2006 to ref 132098
-  role_a_pos 1941 506 3000 no_role_b
-  multiplicity_a_pos 1877 506 3000 no_multiplicity_b
+  role_a_pos 1934 514 3000 no_role_b
+  multiplicity_a_pos 1885 514 3000 no_multiplicity_b
 end
 relationcanvas 132354 relation_ref 185474 // <directional composition>
   from ref 132098 z 2001 to ref 129026
-  role_a_pos 1330 926 3000 no_role_b
-  multiplicity_a_pos 1330 970 3000 no_multiplicity_b
+  role_a_pos 1321 937 3000 no_role_b
+  multiplicity_a_pos 1320 976 3000 no_multiplicity_b
 end
 relationcanvas 132482 relation_ref 185602 // <directional composition>
   from ref 132098 z 2001 to ref 129922
-  role_a_pos 1688 958 3000 no_role_b
-  multiplicity_a_pos 1640 958 3000 no_multiplicity_b
+  role_a_pos 1677 966 3000 no_role_b
+  multiplicity_a_pos 1640 966 3000 no_multiplicity_b
 end
 end
