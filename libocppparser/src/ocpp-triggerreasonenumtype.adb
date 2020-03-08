@@ -1,4 +1,5 @@
 -- ocpp-TriggerReasonEnumType.adb
+
 with ocpp.TriggerReasonEnumType; use ocpp.TriggerReasonEnumType;
 with NonSparkTypes;
 
@@ -44,7 +45,7 @@ package body ocpp.TriggerReasonEnumType is
          attribute := RemoteStop;
       elsif (NonSparkTypes.Uncased_Equals(str, "RemoteStart")) then
          attribute := RemoteStart;
-      else 
+      else
          valid := false;
          return;
       end if;
@@ -78,4 +79,3 @@ package body ocpp.TriggerReasonEnumType is
       end case;
    end ToString;
 end ocpp.TriggerReasonEnumType;
--- end ocpp-TriggerReasonEnumType.adb

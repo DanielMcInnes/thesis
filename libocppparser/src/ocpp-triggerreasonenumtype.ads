@@ -1,25 +1,26 @@
--- start ocpp-TriggerReasonEnumType.ads
+-- start ocppTriggerReasonEnumType.ads
 with Ada.Strings.Bounded;
+
 package ocpp.TriggerReasonEnumType is
    type T is (
-     Authorized,
-     CablePluggedIn,
-     ChargingRateChanged,
-     ChargingStateChanged,
-     Deauthorized,
-     EnergyLimitReached,
-     EVCommunicationLost,
-     EVConnectTimeout,
-     MeterValueClock,
-     MeterValuePeriodic,
-     TimeLimitReached,
-     Trigger,
-     UnlockCommand,
-     StopAuthorized,
-     EVDeparted,
-     EVDetected,
-     RemoteStop,
-     RemoteStart
+      Authorized,
+      CablePluggedIn,
+      ChargingRateChanged,
+      ChargingStateChanged,
+      Deauthorized,
+      EnergyLimitReached,
+      EVCommunicationLost,
+      EVConnectTimeout,
+      MeterValueClock,
+      MeterValuePeriodic,
+      TimeLimitReached,
+      Trigger,
+      UnlockCommand,
+      StopAuthorized,
+      EVDeparted,
+      EVDetected,
+      RemoteStop,
+      RemoteStart
    );
 
    package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 20);
