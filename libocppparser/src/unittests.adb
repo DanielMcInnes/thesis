@@ -20,6 +20,7 @@ with ocpp.TransactionEventEnumType;
 with ocpp.TriggerReasonEnumType;
 with ocpp.CertificateStatusEnumType;
 with ocpp.ConnectorStatusEnumType;
+with ocpp.TriggerReasonEnumType;
 
 package body unittests is
    
