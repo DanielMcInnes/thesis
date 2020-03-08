@@ -1,7 +1,9 @@
 pragma SPARK_Mode (On);
 
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.action_t; use NonSparkTypes.AttributeEnumType; use NonSparkTypes.GetVariableStatusEnumType;
+with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.action_t; 
+with ocpp.AttributeEnumType; use ocpp.AttributeEnumType;
+with ocpp.GetVariableStatusEnumType; use ocpp.GetVariableStatusEnumType;
 with ComponentType;
 with EVSEType;
 with ocpp.VariableType;
@@ -14,7 +16,7 @@ package ocpp.GetVariables is
       package DataType is 
          --SetVariableDataType is used by: SetVariablesRequest
          type Class is tagged record
-            attributeType: NonSparkTypes.AttributeEnumType.T; -- 0..1 Optional. Type of attribute: Actual, Target, MinSet, MaxSet. Default is Actual when omitted.
+            attributeType: ocpp.AttributeEnumType.T; -- 0..1 Optional. Type of attribute: Actual, Target, MinSet, MaxSet. Default is Actual when omitted.
             component: ComponentType.Class; -- 1..1 Required. The component for which result is returned.
             variable: VariableType.Class; -- 1..1 Required. The variable for which the result is returned.
          end record;      
@@ -33,8 +35,8 @@ package ocpp.GetVariables is
       action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("getVariableResult");
       package GetVariableResultType is -- GetVariableResultType is used by: GetVariablesResponse
          type Class is tagged record
-            attributeStatus: NonSparkTypes.GetVariableStatusEnumType.T; -- 1..1 Required. Result status of getting the variable.
-            attributeType: NonSparkTypes.AttributeEnumType.T; -- 0..1 Optional. Type of attribute: Actual, Target, MinSet, MaxSet. Default is Actual when omitted.
+            attributeStatus: ocpp.GetVariableStatusEnumType.T; -- 1..1 Required. Result status of getting the variable.
+            attributeType: ocpp.AttributeEnumType.T; -- 0..1 Optional. Type of attribute: Actual, Target, MinSet, MaxSet. Default is Actual when omitted.
             attributeValue: NonSparkTypes.attributeValue_t.string_t.Bounded_String; -- 0..1 Optional. Value of requested attribute type of component-variable. 
                                                                            -- This field can only be empty when the given status is NOT accepted.
                                                                            --The Configuration Variable ValueSize can be used to limit the VariableCharacteristicsType.ValueList and all
@@ -65,8 +67,8 @@ package ocpp.GetVariables is
           post => (if valid = true then
                      (
                       (response.messagetypeid = 3) and
-                      (response.getVariableResult.attributeType /= NonSparkTypes.AttributeEnumType.Invalid) and
-                      (response.getVariableResult.attributeStatus /= NonSparkTypes.GetVariableStatusEnumType.Invalid)
+                      (response.getVariableResult.attributeType /= ocpp.AttributeEnumType.Invalid) and
+                      (response.getVariableResult.attributeStatus /= ocpp.GetVariableStatusEnumType.Invalid)
                      )
                   );
 

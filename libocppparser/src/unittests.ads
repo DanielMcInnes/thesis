@@ -8,5 +8,6 @@ package unittests is
    procedure B04(result: out Boolean);
    procedure B05(result: out Boolean);
    procedure B06(result: out Boolean);
+   procedure B07(result: out Boolean);
 
 end unittests;

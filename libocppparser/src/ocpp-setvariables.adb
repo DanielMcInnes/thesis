@@ -21,7 +21,7 @@ package body ocpp.SetVariables is
       self.messageid := messageid_t.To_Bounded_String("19223201");
       self.action := action;
 
-      self.setVariableData.attributeType := NonSparkTypes.AttributeEnumType.Invalid;
+      self.setVariableData.attributeType := ocpp.AttributeEnumType.Invalid;
       self.setVariableData.attributeValue := NonSparkTypes.attributeValue_t.string_t.To_Bounded_String("");
       
       self.setVariableData.component.name := ComponentType.name.To_Bounded_String("");
@@ -107,8 +107,8 @@ package body ocpp.SetVariables is
                                   retval: out NonSparkTypes.packet.Bounded_String)
       is
          use NonSparkTypes;
-         use NonSparkTypes.AttributeEnumType;
-         use NonSparkTypes.AttributeEnumType.string_t;
+         use ocpp.AttributeEnumType;
+         use ocpp.AttributeEnumType.string_t;
          attributeStr : string_t.Bounded_String;
 
       begin
@@ -198,7 +198,7 @@ package body ocpp.SetVariables is
                return;
             end if;
          else
-            response.setVariableResult.attributeType := NonSparkTypes.AttributeEnumType.Actual; -- default to 'Actual' if unspecified
+            response.setVariableResult.attributeType := ocpp.AttributeEnumType.Actual; -- default to 'Actual' if unspecified
          end if;
 
          if (response.setVariableResult.attributeType = AttributeEnumType.Invalid)
