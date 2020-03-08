@@ -21,6 +21,7 @@ with ocpp.TriggerReasonEnumType;
 with ocpp.CertificateStatusEnumType;
 with ocpp.ConnectorStatusEnumType;
 with ocpp.TriggerReasonEnumType;
+with ocpp.SignatureMethodEnumType;
 
 package body unittests is
    

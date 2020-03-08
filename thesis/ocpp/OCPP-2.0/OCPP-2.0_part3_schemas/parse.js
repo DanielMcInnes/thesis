@@ -1,4 +1,10 @@
 var fs = require('fs');
+/*
+function error(err) {
+  if (err) throw err;
+  console.log('Saved!');
+}
+*/
 
 function parseJsonFile(f) {
    var _datafile = require(f);
@@ -9,81 +15,92 @@ function parseJsonFile(f) {
 
    for (var i in _definitions) {
       if (i.endsWith('EnumType')) {
-         console.log('-- start ocpp-%s.ads', i);
-         console.log('with Ada.Strings.Bounded;')
-         console.log('package ocpp.%s', i, 'is');
-         console.log('   type T is (');
+
+         buffer = '-- start ocpp' + i + '.ads\n';
+         buffer += ('with Ada.Strings.Bounded;\n\n')
+         buffer += 'package ocpp.' + i + ' is\n';
+         buffer += '   type T is (\n';
          var maxlen = 0;
          for (var j in _definitions[i].enum) {
             if (_definitions[i].enum[j].length > maxlen) {
                maxlen = _definitions[i].enum[j].length;
             }
 
-            var enumElement = _definitions[i].enum;
-            console.log('     %s%s', _definitions[i].enum[j], (j == (_definitions[i].enum.length - 1)) ? '' : ','); // don't put a comma after the last enum
+            var enumElement = _definitions[i].enum[j];
+            //console.log('      %s%s', _definitions[i].enum[j], (j == (_definitions[i].enum.length - 1)) ? '' : ','); // don't put a comma after the last enum
+            buffer += '      ' + enumElement;
+            if (j == (_definitions[i].enum.length - 1)) {
+               buffer += '\n';// don't put a comma after the last enum
+            } else {
+               buffer += ',\n';
+            }
 		   }
-         console.log('   );')
-         console.log();
-         console.log('   package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => %s);', maxlen);
-         console.log('   procedure FromString(str : in String;');
-         console.log('                        attribute : out T;');
-         console.log('                        valid : out Boolean);');
-         console.log('   procedure ToString(attribute : in T;');
-         console.log('                      str : out string_t.Bounded_String);');
-         console.log('end ocpp.%s;', i);
-         console.log('-- end ocpp-%s.ads', i);
-		   console.log();
+         buffer += ('   );\n\n')
+         buffer += ('   package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => ' + maxlen + ');\n');
+         buffer += ('   procedure FromString(str : in String;\n');
+         buffer += ('                        attribute : out T;\n');
+         buffer += ('                        valid : out Boolean);\n');
+         buffer += ('   procedure ToString(attribute : in T;\n');
+         buffer += ('                      str : out string_t.Bounded_String);\n');
+         buffer += ('end ocpp.' + i + ';\n');
+         buffer += ('-- end ocpp-' + i + '.ads\n');
+
+         var outfile = 'ocpp-' + i.toLowerCase() + '.ads';
+         fs.writeFile(outfile, buffer, function (err, file) {
+            if (err) throw err;
+            console.log('Saved %s', outfile);
+         });
 
 
 
-         console.log('-- ocpp-%s.adb', i);
-         console.log('with ocpp.%s; use ocpp.%s;', i, i);
-         console.log('with NonSparkTypes;');
-         console.log();
-         console.log('package body ocpp.%s is', i);
-         console.log('   procedure FromString(str : in String;');
-         console.log('                        attribute : out T;');
-         console.log('                        valid : out Boolean)');
-         console.log('   is');
-         console.log('   begin');
+         buffer =  ('-- ocpp-' + i + '.adb\n\n');
+         buffer += ('with ocpp.' + i + '; use ocpp.' + i + ';\n');
+         buffer += ('with NonSparkTypes;\n\n');
+         buffer += ('package body ocpp.' + i + ' is\n');
+         buffer += ('   procedure FromString(str : in String;\n');
+         buffer += ('                        attribute : out T;\n');
+         buffer += ('                        valid : out Boolean)\n');
+         buffer += ('   is\n');
+         buffer += ('   begin\n');
          for (var j in _definitions[i].enum) {
             var str = _definitions[i].enum[j];
-            console.log('      %s (NonSparkTypes.Uncased_Equals(str, "%s")) then', (j == 0 ? 'if' : 'elsif'), str);
-            console.log('         attribute := %s;', str);
-            var enumElement = _definitions[i].enum;
+            buffer +=('      ' + (j == 0 ? 'if' : 'elsif') + ' (NonSparkTypes.Uncased_Equals(str, "' + str + '")) then\n' );
+            buffer +=('         attribute := ' + str + ';\n');
          }
 
 
-         console.log('      else ');
-         console.log('         valid := false;');
-         console.log('         return;');
-         console.log('      end if;');
-         console.log('      valid := true;');
+         buffer +=('      else\n');
+         buffer +=('         valid := false;\n');
+         buffer +=('         return;\n');
+         buffer +=('      end if;\n');
+         buffer +=('      valid := true;\n');
 
 
 
-         console.log('   end FromString;');
-         console.log();
+         buffer +=('   end FromString;\n\n');
 
-         console.log('   procedure ToString(attribute : in T;');
-         console.log('                      str : out string_t.Bounded_String)');
-         console.log('   is');
-         console.log('      use string_t;');
-         console.log('   begin');
-         console.log('      case attribute is');
+         buffer +=('   procedure ToString(attribute : in T;\n');
+         buffer +=('                      str : out string_t.Bounded_String)\n');
+         buffer +=('   is\n');
+         buffer +=('      use string_t;\n');
+         buffer +=('   begin\n');
+         buffer +=('      case attribute is\n');
          for (var j in _definitions[i].enum) {
             var str = _definitions[i].enum[j];
-            console.log('         when %s => str := To_Bounded_String("%s");', str, str);
+            buffer +=('         when ' + str + ' => str := To_Bounded_String("' + str + '");\n');
          }
-         console.log('      end case;');
+         buffer +=('      end case;\n');
 
 
-         console.log('   end ToString;');
-         console.log('end ocpp.%s;', i);
-         console.log('-- end ocpp-%s.adb', i);
+         buffer +=('   end ToString;\n');
+         buffer +=('end ocpp.' + i + ';\n');
 
+         var outfile = 'ocpp-' + i.toLowerCase() + '.adb';
+         fs.writeFile(outfile, buffer, function (err, file) {
+            if (err) throw err;
+            console.log('Saved %s', outfile);
+         });
 
-         console.log();
          //console.log('buffer:', buffer);
 
       }
