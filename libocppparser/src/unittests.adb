@@ -18,6 +18,7 @@ with ocpp.GetVariableStatusEnumType;
 with ocpp.AttributeEnumType;
 with ocpp.TransactionEventEnumType;
 with ocpp.TriggerReasonEnumType;
+with ocpp.CertificateStatusEnumType;
 
 package body unittests is
    
