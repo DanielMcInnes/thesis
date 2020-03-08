@@ -1,4 +1,5 @@
-with ocpp.ResetEnumType; use ocpp.ResetEnumType;
+-- ocpp-TriggerReasonEnumType.adb
+with ocpp.TriggerReasonEnumType; use ocpp.TriggerReasonEnumType;
 with NonSparkTypes;
 
 package body ocpp.TriggerReasonEnumType is
@@ -6,10 +7,8 @@ package body ocpp.TriggerReasonEnumType is
                         attribute : out T;
                         valid : out Boolean)
    is
-   begin      
-      if (NonSparkTypes.Uncased_Equals(str, "Invalid")) then
-         attribute := Invalid;
-      elsif (NonSparkTypes.Uncased_Equals(str, "Authorized")) then
+   begin
+      if (NonSparkTypes.Uncased_Equals(str, "Authorized")) then
          attribute := Authorized;
       elsif (NonSparkTypes.Uncased_Equals(str, "CablePluggedIn")) then
          attribute := CablePluggedIn;
@@ -45,8 +44,7 @@ package body ocpp.TriggerReasonEnumType is
          attribute := RemoteStop;
       elsif (NonSparkTypes.Uncased_Equals(str, "RemoteStart")) then
          attribute := RemoteStart;
-      else
-         attribute := Invalid;
+      else 
          valid := false;
          return;
       end if;
@@ -59,7 +57,6 @@ package body ocpp.TriggerReasonEnumType is
       use string_t;
    begin
       case attribute is
-         when Invalid => str := To_Bounded_String("Invalid");
          when Authorized => str := To_Bounded_String("Authorized");
          when CablePluggedIn => str := To_Bounded_String("CablePluggedIn");
          when ChargingRateChanged => str := To_Bounded_String("ChargingRateChanged");
@@ -79,7 +76,6 @@ package body ocpp.TriggerReasonEnumType is
          when RemoteStop => str := To_Bounded_String("RemoteStop");
          when RemoteStart => str := To_Bounded_String("RemoteStart");
       end case;
-
    end ToString;
-
 end ocpp.TriggerReasonEnumType;
+-- end ocpp-TriggerReasonEnumType.adb
