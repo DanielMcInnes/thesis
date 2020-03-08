@@ -5,13 +5,23 @@ function error(err) {
   console.log('Saved!');
 }
 */
+function clean(f) {
+   const regex = / /g;
+   const regexbody = /body/gi;
+   const regexperiod = /\./gi;
+   const regexhyphen = /-/g;
+   var retval = f.replace(regex, '_');
+   retval = retval.replace(regexbody, 'ABody');
+   retval = retval.replace(regexperiod, '_');
+   retval = retval.replace(regexhyphen, '_');
+   return retval;
+}
 
 function parseJsonFile(f) {
    var _datafile = require(f);
    console.log('parseJsonFile: _datafile:', _datafile.type);
    var _definitions = _datafile.definitions;
    var buffer ="";
-   const regex = / /g;
 
 
    for (var i in _definitions) {
@@ -28,7 +38,7 @@ function parseJsonFile(f) {
             }
 
             var enumElement = _definitions[i].enum[j];
-            buffer += '      ' + enumElement.replace(regex, '_'); 
+            buffer += '      ' + clean(enumElement); 
             if (j == (_definitions[i].enum.length - 1)) {
                buffer += '\n';// don't put a comma after the last enum
             } else {
@@ -65,7 +75,7 @@ function parseJsonFile(f) {
          for (var j in _definitions[i].enum) {
             var str = _definitions[i].enum[j];
             buffer +=('      ' + (j == 0 ? 'if' : 'elsif') + ' (NonSparkTypes.Uncased_Equals(str, "' + str + '")) then\n' );
-            buffer +=('         attribute := ' + str.replace(regex, '_') + ';\n');
+            buffer +=('         attribute := ' + clean(str) + ';\n');
          }
 
 
@@ -87,7 +97,7 @@ function parseJsonFile(f) {
          buffer +=('      case attribute is\n');
          for (var j in _definitions[i].enum) {
             var str = _definitions[i].enum[j];
-            buffer +=('         when ' + str.replace(regex, '_') + ' => str := To_Bounded_String("' + str + '");\n'); 
+            buffer +=('         when ' + clean(str) + ' => str := To_Bounded_String("' + str + '");\n'); 
          }
          buffer +=('      end case;\n');
 

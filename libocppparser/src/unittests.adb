@@ -23,7 +23,17 @@ with ocpp.ConnectorStatusEnumType;
 with ocpp.TriggerReasonEnumType;
 with ocpp.SignatureMethodEnumType;
 with ocpp.ChargingStateEnumType;
-with ocpp.encodingmethodenumtype;
+with ocpp.EncodingMethodEnumType;
+with ocpp.idtokenenumtype;
+with ocpp.locationenumtype;
+with ocpp.measurandenumtype;
+with ocpp.phaseenumtype;
+with ocpp.readingcontextenumtype;
+with ocpp.reasonenumtype;
+with ocpp.signaturemethodenumtype;
+with ocpp.transactioneventenumtype;
+with ocpp.triggerreasonenumtype;
+
 
 package body unittests is
    
