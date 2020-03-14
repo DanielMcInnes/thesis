@@ -13,6 +13,7 @@ function clean(f) {
    const regexstring = /string/gi;
    const regexboolean = /boolean/gi;
    const regexdotjson = /\.json/gi;
+   const regex_json = /_json/g;
    var retval = f.replace(regex, '_');
    retval = retval.replace(regexdotslash, '');
    retval = retval.replace(regexbody, 'ABody');
@@ -23,12 +24,15 @@ function clean(f) {
    retval = retval.replace(regexstring, 'zzzstring');
    retval = retval.replace(regexboolean, 'zzzboolean');
    retval = retval.replace(regexdotjson, '');
+   retval = retval.replace(regex_json, '');
    return retval;
 }
 
 function cleanfilename(f) {
    const regex15118 = /15118/g;
+   const regex_json = /_json/g;
    var retval = f.replace(regex15118, 'a15118');
+   retval = retval.replace(regex_json, '');
    return retval;
 }
 
@@ -36,8 +40,8 @@ module.exports.parse = function (_filename) {
    var _datafile = require(_filename);
    var _package = clean(_filename);
    console.log('parseObjectType: ', _filename);
-   var outfile = 'ocpp-' + _package + '.ads';
-   console.log('parseObjectType: outfile: ', outfile);
+   var _outfile = cleanfilename('ocpp-' + _package + '.ads');
+   console.log('parseObjectType: _outfile: ', _outfile);
    var _buffer ="pragma SPARK_mode (on); \n\n";
    
    _buffer += ('with Ada.Strings.Bounded;\n\n')

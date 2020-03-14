@@ -61,20 +61,24 @@ if (process.argv.length <= 2) {
    process.exit(-1);
 }
 
-//parseJsonFile('./GetBaseReportRequest.json')
+parseJsonFile('./GetBaseReportRequest.json')
 //parseJsonFile('./BootNotificationRequest.json')
 
 var path = process.argv[2];
 
+/*
 fs.readdir(path, function(err, items) {
     //console.log(items);
  
-   for (var i=0; i<items.length; i++) {
-      if (items[i].endsWith('json')) {	  
-         var filename = "./" + items[i];
-         console.log("parsing: ", filename);
-         parseJsonFile(filename);
+   if (!!items.length) {
+      for (var i=0; i<items.length; i++) {
+         if (items[i].endsWith('json')) {	  
+            var filename = "./" + items[i];
+            console.log("parsing: ", filename);
+            parseJsonFile(filename);
+         }
       }
    }
 }
 );
+*/

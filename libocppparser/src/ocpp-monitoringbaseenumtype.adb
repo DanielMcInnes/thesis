@@ -10,7 +10,7 @@ package body ocpp.MonitoringBaseEnumType is
    is
    begin
       if (NonSparkTypes.Uncased_Equals(str, "All")) then
-         attribute := All;
+         attribute := zzzAll;
       elsif (NonSparkTypes.Uncased_Equals(str, "FactoryDefault")) then
          attribute := FactoryDefault;
       elsif (NonSparkTypes.Uncased_Equals(str, "HardWiredOnly")) then
@@ -28,7 +28,7 @@ package body ocpp.MonitoringBaseEnumType is
       use string_t;
    begin
       case attribute is
-         when All => str := To_Bounded_String("All");
+         when zzzAll => str := To_Bounded_String("All");
          when FactoryDefault => str := To_Bounded_String("FactoryDefault");
          when HardWiredOnly => str := To_Bounded_String("HardWiredOnly");
       end case;

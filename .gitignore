@@ -8,3 +8,5 @@
 ocppserver
 
 obj/*
+
+*.swp
