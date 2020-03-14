@@ -34,24 +34,24 @@ function cleanfilename(f) {
 function parseEnumType(_definitions, i) {
    var buffer ="";
 
-         buffer = '-- start ocpp' + i + '.ads\n';
-         buffer += ('with Ada.Strings.Bounded;\n\n')
-         buffer += 'package ocpp.' + clean(i) + ' is\n';
-         buffer += '   type T is (\n';
-         var maxlen = 0;
-         for (var j in _definitions[i].enum) {
-            if (_definitions[i].enum[j].length > maxlen) {
-               maxlen = _definitions[i].enum[j].length;
-            }
+   buffer = '-- start ocpp' + i + '.ads\n';
+   buffer += ('with Ada.Strings.Bounded;\n\n')
+   buffer += 'package ocpp.' + clean(i) + ' is\n';
+   buffer += '   type T is (\n';
+   var maxlen = 0;
+   for (var j in _definitions[i].enum) {
+      if (_definitions[i].enum[j].length > maxlen) {
+         maxlen = _definitions[i].enum[j].length;
+      }
 
-            var enumElement = _definitions[i].enum[j];
-            buffer += '      ' + clean(enumElement); 
-            if (j == (_definitions[i].enum.length - 1)) {
-               buffer += '\n';// don't put a comma after the last enum
-            } else {
-               buffer += ',\n';
-            }
-		   }
+      var enumElement = _definitions[i].enum[j];
+      buffer += '      ' + clean(enumElement); 
+      if (j == (_definitions[i].enum.length - 1)) {
+         buffer += '\n';// don't put a comma after the last enum
+      } else {
+         buffer += ',\n';
+      }
+   }
          buffer += ('   );\n\n')
          buffer += ('   package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => ' + maxlen + ');\n');
          buffer += ('   procedure FromString(str : in String;\n');
