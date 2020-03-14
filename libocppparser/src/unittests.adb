@@ -93,12 +93,12 @@ package body unittests is
    is
    begin
       B01(result);      if (result = false) then         fail; return;      end if;
-      B02(result);      if (result = false) then         fail; return;      end if;
-      B03(result);      if (result = false) then         fail; return;      end if;
-      B04(result);      if (result = false) then         fail; return;      end if;
-      B05(result);      if (result = false) then         fail; return;      end if;
-      B06(result);      if (result = false) then         fail; return;      end if;
-      B07(result);      if (result = false) then         fail; return;      end if;
+      --B02(result);      if (result = false) then         fail; return;      end if;
+      --B03(result);      if (result = false) then         fail; return;      end if;
+      --B04(result);      if (result = false) then         fail; return;      end if;
+      --B05(result);      if (result = false) then         fail; return;      end if;
+      --B06(result);      if (result = false) then         fail; return;      end if;
+      --B07(result);      if (result = false) then         fail; return;      end if;
       
       --TODO:
       --B07 
@@ -888,8 +888,7 @@ package body unittests is
    
    procedure B07(result: out Boolean)
    is
-   begin
-      
+   begin      
       NonSparkTypes.put_line("B07");
       result := true;
    end B07;

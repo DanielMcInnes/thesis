@@ -31,15 +31,8 @@ function cleanfilename(f) {
    return retval;
 }
 
-function parseJsonFile(f) {
-   var _datafile = require(f);
-   console.log('parseJsonFile: _datafile:', _datafile.type);
-   var _definitions = _datafile.definitions;
+function parseEnumType(_definitions, i) {
    var buffer ="";
-
-
-   for (var i in _definitions) {
-      if (i.endsWith('EnumType')) {
 
          buffer = '-- start ocpp' + i + '.ads\n';
          buffer += ('with Ada.Strings.Bounded;\n\n')
@@ -126,6 +119,17 @@ function parseJsonFile(f) {
 
          //console.log('buffer:', buffer);
 
+}
+
+function parseJsonFile(f) {
+   var _datafile = require(f);
+   console.log('parseJsonFile: _datafile:', _datafile.type);
+   var _definitions = _datafile.definitions;
+
+
+   for (var i in _definitions) {
+      if (i.endsWith('EnumType')) {
+         parseEnumType(_definitions, i);
       }
    }
 }

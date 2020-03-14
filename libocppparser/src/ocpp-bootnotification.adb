@@ -315,6 +315,8 @@ package body ocpp.BootNotification is
                                                         & "      " & '"' & "modem"  & '"' & ":" & "{" & ASCII.LF
                                                         & "         " & '"' & "iccid" & '"' & ": " & '"' & NonSparkTypes.ModemType.iccid_t.To_String(Self.chargingStation.modem.iccid) & '"' & ASCII.LF
                                                         & "         " & '"' & "imsi" & '"' & ": " & '"' & NonSparkTypes.ModemType.imsi_t.To_String(Self.chargingStation.modem.imsi) & '"' & ASCII.LF
+                                                        & "         }" & ASCII.LF
+                                                        & "      }" & ASCII.LF
                                                         & "   }" & ASCII.LF
                                                         & "}" & ASCII.LF
                                                         & "]");
