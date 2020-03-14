@@ -3,7 +3,7 @@ with Ada.Strings.Bounded;
 
 package ocpp.MonitoringBaseEnumType is
    type T is (
-      All,
+      zzzAll,
       FactoryDefault,
       HardWiredOnly
    );

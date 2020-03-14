@@ -22,6 +22,10 @@ function clean(f) {
    retval = retval.replace(regexstring, 'zzzstring');
    retval = retval.replace(regexboolean, 'zzzboolean');
    retval = retval.replace(regexdotjson, '');
+
+   if (retval === 'All') {
+      retval = 'zzzAll';
+   }
    return retval;
 }
 
