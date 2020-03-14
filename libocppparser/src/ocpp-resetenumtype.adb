@@ -1,3 +1,5 @@
+-- ocpp-ResetEnumType.adb
+
 with ocpp.ResetEnumType; use ocpp.ResetEnumType;
 with NonSparkTypes;
 
@@ -6,15 +8,12 @@ package body ocpp.ResetEnumType is
                         attribute : out T;
                         valid : out Boolean)
    is
-   begin      
-      if (NonSparkTypes.Uncased_Equals(str, "Invalid")) then
-         attribute := Invalid;
-      elsif (NonSparkTypes.Uncased_Equals(str, "Immediate")) then
+   begin
+      if (NonSparkTypes.Uncased_Equals(str, "Immediate")) then
          attribute := Immediate;
       elsif (NonSparkTypes.Uncased_Equals(str, "OnIdle")) then
          attribute := OnIdle;
       else
-         attribute := Invalid;
          valid := false;
          return;
       end if;
@@ -27,11 +26,8 @@ package body ocpp.ResetEnumType is
       use string_t;
    begin
       case attribute is
-         when Invalid => str := To_Bounded_String("Invalid");
          when Immediate => str := To_Bounded_String("Immediate");
          when OnIdle => str := To_Bounded_String("OnIdle");
       end case;
-
    end ToString;
-
 end ocpp.ResetEnumType;

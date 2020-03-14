@@ -1,3 +1,5 @@
+-- ocpp-ConnectorStatusEnumType.adb
+
 with ocpp.ConnectorStatusEnumType; use ocpp.ConnectorStatusEnumType;
 with NonSparkTypes;
 
@@ -6,11 +8,8 @@ package body ocpp.ConnectorStatusEnumType is
                         attribute : out T;
                         valid : out Boolean)
    is
-   begin      
-      if (NonSparkTypes.Uncased_Equals(str, "Invalid")) then
-         attribute := Invalid;
-         valid := false;
-      elsif (NonSparkTypes.Uncased_Equals(str, "Available")) then
+   begin
+      if (NonSparkTypes.Uncased_Equals(str, "Available")) then
          attribute := Available;
       elsif (NonSparkTypes.Uncased_Equals(str, "Occupied")) then
          attribute := Occupied;
@@ -21,7 +20,6 @@ package body ocpp.ConnectorStatusEnumType is
       elsif (NonSparkTypes.Uncased_Equals(str, "Faulted")) then
          attribute := Faulted;
       else
-         attribute := Invalid;
          valid := false;
          return;
       end if;
@@ -34,7 +32,6 @@ package body ocpp.ConnectorStatusEnumType is
       use string_t;
    begin
       case attribute is
-         when Invalid => str := To_Bounded_String("Invalid");
          when Available => str := To_Bounded_String("Available");
          when Occupied => str := To_Bounded_String("Occupied");
          when Reserved => str := To_Bounded_String("Reserved");

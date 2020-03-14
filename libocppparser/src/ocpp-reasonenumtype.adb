@@ -47,8 +47,6 @@ package body ocpp.ReasonEnumType is
          attribute := TimeLimitReached;
       elsif (NonSparkTypes.Uncased_Equals(str, "Timeout")) then
          attribute := Timeout;
-      elsif (NonSparkTypes.Uncased_Equals(str, "UnlockCommand")) then
-         attribute := UnlockCommand;
       else
          valid := false;
          return;
@@ -81,7 +79,6 @@ package body ocpp.ReasonEnumType is
          when StoppedByEV => str := To_Bounded_String("StoppedByEV");
          when TimeLimitReached => str := To_Bounded_String("TimeLimitReached");
          when Timeout => str := To_Bounded_String("Timeout");
-         when UnlockCommand => str := To_Bounded_String("UnlockCommand");
       end case;
    end ToString;
 end ocpp.ReasonEnumType;

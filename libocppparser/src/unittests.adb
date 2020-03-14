@@ -11,6 +11,8 @@ with ocpp.server;
 with ocpp.VariableType;
 with ComponentType; 
 
+with ocpp.authorizecertificatestatusenumtype;
+with ocpp.CancelReservationStatusEnumType;
 with ocpp.ResetEnumType;
 with ocpp.ReportBaseEnumType;
 with ocpp.GenericDeviceModelStatusEnumType;

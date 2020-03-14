@@ -4,9 +4,10 @@ with Ada.Strings.Bounded;
 package ocpp.ChargingStateEnumType is
    type T is (
       Charging,
-      EVDetected,
+      EVConnected,
       SuspendedEV,
-      SuspendedEVSE
+      SuspendedEVSE,
+      Idle
    );
 
    package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 13);

@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$id": "urn:OCPP:Cp:2:2019:12:ClearVariableMonitoringResponse",
+  "comment": "Errata sheet - release candidate",
+  "definitions": {
+    "CustomDataType": {
+      "description": "This class does not get 'AdditionalProperties = false' in the schema generation, so it can be extended with arbitrary JSON properties to allow adding custom data.",
+      "javaType": "CustomData",
+      "type": "object",
+      "properties": {
+        "vendorId": {
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "required": [
+        "vendorId"
+      ]
+    },
+    "ClearMonitoringStatusEnumType": {
+      "description": "Result of the clear request for this monitor, identified by its Id.\r\n",
+      "javaType": "ClearMonitoringStatusEnum",
+      "type": "string",
+      "additionalProperties": false,
+      "enum": [
+        "Accepted",
+        "Rejected",
+        "NotFound"
+      ]
+    },
+    "ClearMonitoringResultType": {
+      "description": "Class to hold result of ClearVariableMonitoring request.\r\n",
+      "javaType": "ClearMonitoringResult",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "customData": {
+          "$ref": "#/definitions/CustomDataType"
+        },
+        "id": {
+          "description": "Id of the monitor of which a clear was requested.\r\n",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/definitions/ClearMonitoringStatusEnumType"
+        }
+      },
+      "required": [
+        "id",
+        "status"
+      ]
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "customData": {
+      "$ref": "#/definitions/CustomDataType"
+    },
+    "clearMonitoringResult": {
+      "type": "array",
+      "additionalItems": false,
+      "items": {
+        "$ref": "#/definitions/ClearMonitoringResultType"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "clearMonitoringResult"
+  ]
+}

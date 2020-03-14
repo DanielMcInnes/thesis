@@ -3,15 +3,13 @@ with Ada.Strings.Bounded;
 
 package ocpp.EnergyTransferModeEnumType is
    type T is (
-      AC_single_phase_core,
-      AC_three_phase_core,
-      DC_combo_core,
-      DC_core,
-      DC_extended,
-      DC_unique
+      DC,
+      AC_single_phase,
+      AC_two_phase,
+      AC_three_phase
    );
 
-   package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 20);
+   package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 15);
    procedure FromString(str : in String;
                         attribute : out T;
                         valid : out Boolean);

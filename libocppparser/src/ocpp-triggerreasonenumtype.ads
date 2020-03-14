@@ -20,7 +20,10 @@ package ocpp.TriggerReasonEnumType is
       EVDeparted,
       EVDetected,
       RemoteStop,
-      RemoteStart
+      RemoteStart,
+      AbnormalCondition,
+      SignedDataReceived,
+      ResetCommand
    );
 
    package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 20);

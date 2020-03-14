@@ -45,6 +45,12 @@ package body ocpp.TriggerReasonEnumType is
          attribute := RemoteStop;
       elsif (NonSparkTypes.Uncased_Equals(str, "RemoteStart")) then
          attribute := RemoteStart;
+      elsif (NonSparkTypes.Uncased_Equals(str, "AbnormalCondition")) then
+         attribute := AbnormalCondition;
+      elsif (NonSparkTypes.Uncased_Equals(str, "SignedDataReceived")) then
+         attribute := SignedDataReceived;
+      elsif (NonSparkTypes.Uncased_Equals(str, "ResetCommand")) then
+         attribute := ResetCommand;
       else
          valid := false;
          return;
@@ -76,6 +82,9 @@ package body ocpp.TriggerReasonEnumType is
          when EVDetected => str := To_Bounded_String("EVDetected");
          when RemoteStop => str := To_Bounded_String("RemoteStop");
          when RemoteStart => str := To_Bounded_String("RemoteStart");
+         when AbnormalCondition => str := To_Bounded_String("AbnormalCondition");
+         when SignedDataReceived => str := To_Bounded_String("SignedDataReceived");
+         when ResetCommand => str := To_Bounded_String("ResetCommand");
       end case;
    end ToString;
 end ocpp.TriggerReasonEnumType;
