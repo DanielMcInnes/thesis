@@ -7,6 +7,7 @@ function error(err) {
 */
 function clean(f) {
    const regex = / /g;
+   const regexdotslash = /\.\//g;
    const regexbody = /body/gi;
    const regexperiod = /\./gi;
    const regexhyphen = /-/g;
@@ -14,7 +15,9 @@ function clean(f) {
    const regexdelta = /delta/gi;
    const regexstring = /string/gi;
    const regexboolean = /boolean/gi;
+   const regexdotjson = /\.json/gi;
    var retval = f.replace(regex, '_');
+   retval = retval.replace(regexdotslash, '');
    retval = retval.replace(regexbody, 'ABody');
    retval = retval.replace(regexperiod, '_');
    retval = retval.replace(regexhyphen, '_');
@@ -22,6 +25,7 @@ function clean(f) {
    retval = retval.replace(regexdelta, 'zzzDelta');
    retval = retval.replace(regexstring, 'zzzstring');
    retval = retval.replace(regexboolean, 'zzzboolean');
+   retval = retval.replace(regexdotjson, '');
    return retval;
 }
 
@@ -33,6 +37,7 @@ function cleanfilename(f) {
 
 function parseEnumType(_definitions, i) {
    var buffer ="";
+   var package = clean(i);
 
    buffer = '-- start ocpp' + i + '.ads\n';
    buffer += ('with Ada.Strings.Bounded;\n\n')
@@ -52,84 +57,103 @@ function parseEnumType(_definitions, i) {
          buffer += ',\n';
       }
    }
-         buffer += ('   );\n\n')
-         buffer += ('   package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => ' + maxlen + ');\n');
-         buffer += ('   procedure FromString(str : in String;\n');
-         buffer += ('                        attribute : out T;\n');
-         buffer += ('                        valid : out Boolean);\n');
-         buffer += ('   procedure ToString(attribute : in T;\n');
-         buffer += ('                      str : out string_t.Bounded_String);\n');
-         buffer += ('end ocpp.' + clean(i) + ';\n');
-         buffer += ('-- end ocpp-' + clean(i) + '.ads\n');
+   buffer += ('   );\n\n')
+   buffer += ('   package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => ' + maxlen + ');\n');
+   buffer += ('   procedure FromString(str : in String;\n');
+   buffer += ('                        attribute : out T;\n');
+   buffer += ('                        valid : out Boolean);\n');
+   buffer += ('   procedure ToString(attribute : in T;\n');
+   buffer += ('                      str : out string_t.Bounded_String);\n');
+   buffer += ('end ocpp.' + clean(i) + ';\n');
+   buffer += ('-- end ocpp-' + clean(i) + '.ads\n');
 
-         var outfile = 'ocpp-' + i.toLowerCase() + '.ads';
-         fs.writeFile(cleanfilename(outfile), buffer, function (err, file) {
-            if (err) throw err;
-            console.log('Saved %s', outfile);
-         });
+   var outfile = 'ocpp-' + i.toLowerCase() + '.ads';
+   fs.writeFile(cleanfilename(outfile), buffer, function (err, file) {
+      if (err) throw err;
+      console.log('Saved %s', outfile);
+   });
 
-         buffer =  ('-- ocpp-' + i + '.adb\n\n');
-         var temp = cleanfilename(i);
-         buffer += ('with ocpp.' + temp + '; use ocpp.' + temp + ';\n');
-         buffer += ('with NonSparkTypes;\n\n');
-         buffer += ('package body ocpp.' + clean(i) + ' is\n');
-         buffer += ('   procedure FromString(str : in String;\n');
-         buffer += ('                        attribute : out T;\n');
-         buffer += ('                        valid : out Boolean)\n');
-         buffer += ('   is\n');
-         buffer += ('   begin\n');
-         for (var j in _definitions[i].enum) {
-            var str = _definitions[i].enum[j];
-            buffer +=('      ' + (j == 0 ? 'if' : 'elsif') + ' (NonSparkTypes.Uncased_Equals(str, "' + str + '")) then\n' );
-            buffer +=('         attribute := ' + clean(str) + ';\n');
-         }
-
-
-         buffer +=('      else\n');
-         buffer +=('         valid := false;\n');
-         buffer +=('         return;\n');
-         buffer +=('      end if;\n');
-         buffer +=('      valid := true;\n');
+   buffer =  ('-- ocpp-' + i + '.adb\n\n');
+   var temp = cleanfilename(i);
+   buffer += ('with ocpp.' + temp + '; use ocpp.' + temp + ';\n');
+   buffer += ('with NonSparkTypes;\n\n');
+   buffer += ('package body ocpp.' + clean(i) + ' is\n');
+   buffer += ('   procedure FromString(str : in String;\n');
+   buffer += ('                        attribute : out T;\n');
+   buffer += ('                        valid : out Boolean)\n');
+   buffer += ('   is\n');
+   buffer += ('   begin\n');
+   for (var j in _definitions[i].enum) {
+      var str = _definitions[i].enum[j];
+      buffer +=('      ' + (j == 0 ? 'if' : 'elsif') + ' (NonSparkTypes.Uncased_Equals(str, "' + str + '")) then\n' );
+      buffer +=('         attribute := ' + clean(str) + ';\n');
+   }
 
 
-
-         buffer +=('   end FromString;\n\n');
-
-         buffer +=('   procedure ToString(attribute : in T;\n');
-         buffer +=('                      str : out string_t.Bounded_String)\n');
-         buffer +=('   is\n');
-         buffer +=('      use string_t;\n');
-         buffer +=('   begin\n');
-         buffer +=('      case attribute is\n');
-         for (var j in _definitions[i].enum) {
-            var str = _definitions[i].enum[j];
-            buffer +=('         when ' + clean(str) + ' => str := To_Bounded_String("' + str + '");\n'); 
-         }
-         buffer +=('      end case;\n');
+   buffer +=('      else\n');
+   buffer +=('         valid := false;\n');
+   buffer +=('         return;\n');
+   buffer +=('      end if;\n');
+   buffer +=('      valid := true;\n');
 
 
-         buffer +=('   end ToString;\n');
-         buffer +=('end ocpp.' + clean(i) + ';\n');
 
-         var outfile = 'ocpp-' + clean(i).toLowerCase() + '.adb';
-         fs.writeFile((outfile), buffer, function (err, file) {
-            if (err) throw err;
-            console.log('Saved %s', outfile);
-         });
+   buffer +=('   end FromString;\n\n');
 
-         //console.log('buffer:', buffer);
+   buffer +=('   procedure ToString(attribute : in T;\n');
+   buffer +=('                      str : out string_t.Bounded_String)\n');
+   buffer +=('   is\n');
+   buffer +=('      use string_t;\n');
+   buffer +=('   begin\n');
+   buffer +=('      case attribute is\n');
+   for (var j in _definitions[i].enum) {
+      var str = _definitions[i].enum[j];
+      buffer +=('         when ' + clean(str) + ' => str := To_Bounded_String("' + str + '");\n'); 
+   }
+   buffer +=('      end case;\n');
 
+
+   buffer +=('   end ToString;\n');
+   buffer +=('end ocpp.' + clean(i) + ';\n');
+
+   var outfile = 'ocpp-' + clean(i).toLowerCase() + '.adb';
+   fs.writeFile((outfile), buffer, function (err, file) {
+      if (err) throw err;
+      console.log('Saved %s', outfile);
+   });
+
+   //console.log('buffer:', buffer);
+}
+
+function parseObjectType(_filename) {
+   var _datafile = require(_filename);
+   var _package = clean(_filename);
+   console.log('parseObjectType: ', _filename);
+   var outfile = 'ocpp-' + _package + '.ads';
+   console.log('parseObjectType: outfile: ', outfile);
+   var _buffer ="";
+   _buffer += ('with Ada.Strings.Bounded;\n\n')
+   _buffer += 'package ocpp.' + _package + ' is\n';
+
+   _buffer += 'end ' + _package + ';';
+   console.log('buffer: ', _buffer);
 }
 
 function parseJsonFile(f) {
    var _datafile = require(f);
-   console.log('parseJsonFile: _datafile:', _datafile.type);
    var _definitions = _datafile.definitions;
 
+   if (_datafile.type === 'object') {
+      parseObjectType(f);
+   }
 
    for (var i in _definitions) {
+      //console.log(i);
       if (i.endsWith('EnumType')) {
-         parseEnumType(_definitions, i);
+         //parseEnumType(_definitions, i);
+      }
+      if (i.type === ('object')) {
+         parseObjectTypeType(f);
       }
    }
 }
@@ -139,21 +163,10 @@ if (process.argv.length <= 2) {
    process.exit(-1);
 }
 
+parseJsonFile('./GetBaseReportRequest_v1p0.json')
+//parseJsonFile('./BootNotificationRequest_v1p0.json')
 
-//parseJsonFile('./TransactionEventRequest_v1p0.json')
 /*
- 
-//var _values = _enum.split(
-console.log('*** enum: ', _enum);
-console.log('*** enum[0]: ', _enum[0]);
-
-
-for (var i in _enum) {
-   console.log(i, _enum[i]);
-}
-*/
-
- 
 var path = process.argv[2];
 
 fs.readdir(path, function(err, items) {
@@ -168,4 +181,4 @@ fs.readdir(path, function(err, items) {
    }
 }
 );
-
+*/

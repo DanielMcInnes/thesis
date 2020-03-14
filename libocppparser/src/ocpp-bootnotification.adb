@@ -319,7 +319,7 @@ package body ocpp.BootNotification is
                                                         & "      }" & ASCII.LF
                                                         & "   }" & ASCII.LF
                                                         & "}" & ASCII.LF
-                                                        & "]");
+                                                        & "]", Drop => Right);
    end To_Bounded_String;
    
 
