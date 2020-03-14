@@ -48,7 +48,7 @@ function parseJsonFile(f) {
    for (var i in _definitions) {
       //console.log(i);
       if (i.endsWith('EnumType')) {
-         //EnumType.parse(_definitions, i);
+         EnumType.parse(_definitions, i);
       }
       if (i.type === ('object')) {
          ObjectType.parse(f);
@@ -66,7 +66,6 @@ parseJsonFile('./GetBaseReportRequest_v1p0.json')
 
 var path = process.argv[2];
 
-/*
 fs.readdir(path, function(err, items) {
     //console.log(items);
  
@@ -79,4 +78,3 @@ fs.readdir(path, function(err, items) {
    }
 }
 );
-*/

@@ -49,8 +49,7 @@ module.exports.parse = function (_filename) {
    var _properties = _datafile.properties;
    for (var i in _properties) {
       var _type = i.type;
-      _buffer += '   ' + i + ' : ' + _properties[i].type;
-      _buffer += '\n';
+      _buffer += '   ' + i + ' : ' + _properties[i].type + ';\n';
    }
 
 
