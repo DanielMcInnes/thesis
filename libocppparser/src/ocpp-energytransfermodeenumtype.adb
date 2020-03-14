@@ -9,18 +9,14 @@ package body ocpp.EnergyTransferModeEnumType is
                         valid : out Boolean)
    is
    begin
-      if (NonSparkTypes.Uncased_Equals(str, "AC_single_phase_core")) then
-         attribute := AC_single_phase_core;
-      elsif (NonSparkTypes.Uncased_Equals(str, "AC_three_phase_core")) then
-         attribute := AC_three_phase_core;
-      elsif (NonSparkTypes.Uncased_Equals(str, "DC_combo_core")) then
-         attribute := DC_combo_core;
-      elsif (NonSparkTypes.Uncased_Equals(str, "DC_core")) then
-         attribute := DC_core;
-      elsif (NonSparkTypes.Uncased_Equals(str, "DC_extended")) then
-         attribute := DC_extended;
-      elsif (NonSparkTypes.Uncased_Equals(str, "DC_unique")) then
-         attribute := DC_unique;
+      if (NonSparkTypes.Uncased_Equals(str, "DC")) then
+         attribute := DC;
+      elsif (NonSparkTypes.Uncased_Equals(str, "AC_single_phase")) then
+         attribute := AC_single_phase;
+      elsif (NonSparkTypes.Uncased_Equals(str, "AC_two_phase")) then
+         attribute := AC_two_phase;
+      elsif (NonSparkTypes.Uncased_Equals(str, "AC_three_phase")) then
+         attribute := AC_three_phase;
       else
          valid := false;
          return;
@@ -34,12 +30,10 @@ package body ocpp.EnergyTransferModeEnumType is
       use string_t;
    begin
       case attribute is
-         when AC_single_phase_core => str := To_Bounded_String("AC_single_phase_core");
-         when AC_three_phase_core => str := To_Bounded_String("AC_three_phase_core");
-         when DC_combo_core => str := To_Bounded_String("DC_combo_core");
-         when DC_core => str := To_Bounded_String("DC_core");
-         when DC_extended => str := To_Bounded_String("DC_extended");
-         when DC_unique => str := To_Bounded_String("DC_unique");
+         when DC => str := To_Bounded_String("DC");
+         when AC_single_phase => str := To_Bounded_String("AC_single_phase");
+         when AC_two_phase => str := To_Bounded_String("AC_two_phase");
+         when AC_three_phase => str := To_Bounded_String("AC_three_phase");
       end case;
    end ToString;
 end ocpp.EnergyTransferModeEnumType;

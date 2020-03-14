@@ -27,6 +27,10 @@ package body ocpp.MessageTriggerEnumType is
          attribute := StatusNotification;
       elsif (NonSparkTypes.Uncased_Equals(str, "TransactionEvent")) then
          attribute := TransactionEvent;
+      elsif (NonSparkTypes.Uncased_Equals(str, "SignCombinedCertificate")) then
+         attribute := SignCombinedCertificate;
+      elsif (NonSparkTypes.Uncased_Equals(str, "PublishFirmwareStatusNotification")) then
+         attribute := PublishFirmwareStatusNotification;
       else
          valid := false;
          return;
@@ -49,6 +53,8 @@ package body ocpp.MessageTriggerEnumType is
          when SignV2GCertificate => str := To_Bounded_String("SignV2GCertificate");
          when StatusNotification => str := To_Bounded_String("StatusNotification");
          when TransactionEvent => str := To_Bounded_String("TransactionEvent");
+         when SignCombinedCertificate => str := To_Bounded_String("SignCombinedCertificate");
+         when PublishFirmwareStatusNotification => str := To_Bounded_String("PublishFirmwareStatusNotification");
       end case;
    end ToString;
 end ocpp.MessageTriggerEnumType;

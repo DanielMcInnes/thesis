@@ -11,12 +11,14 @@ package body ocpp.ChargingStateEnumType is
    begin
       if (NonSparkTypes.Uncased_Equals(str, "Charging")) then
          attribute := Charging;
-      elsif (NonSparkTypes.Uncased_Equals(str, "EVDetected")) then
-         attribute := EVDetected;
+      elsif (NonSparkTypes.Uncased_Equals(str, "EVConnected")) then
+         attribute := EVConnected;
       elsif (NonSparkTypes.Uncased_Equals(str, "SuspendedEV")) then
          attribute := SuspendedEV;
       elsif (NonSparkTypes.Uncased_Equals(str, "SuspendedEVSE")) then
          attribute := SuspendedEVSE;
+      elsif (NonSparkTypes.Uncased_Equals(str, "Idle")) then
+         attribute := Idle;
       else
          valid := false;
          return;
@@ -31,9 +33,10 @@ package body ocpp.ChargingStateEnumType is
    begin
       case attribute is
          when Charging => str := To_Bounded_String("Charging");
-         when EVDetected => str := To_Bounded_String("EVDetected");
+         when EVConnected => str := To_Bounded_String("EVConnected");
          when SuspendedEV => str := To_Bounded_String("SuspendedEV");
          when SuspendedEVSE => str := To_Bounded_String("SuspendedEVSE");
+         when Idle => str := To_Bounded_String("Idle");
       end case;
    end ToString;
 end ocpp.ChargingStateEnumType;

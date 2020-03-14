@@ -11,10 +11,12 @@ package ocpp.MessageTriggerEnumType is
       SignChargingStationCertificate,
       SignV2GCertificate,
       StatusNotification,
-      TransactionEvent
+      TransactionEvent,
+      SignCombinedCertificate,
+      PublishFirmwareStatusNotification
    );
 
-   package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 30);
+   package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 33);
    procedure FromString(str : in String;
                         attribute : out T;
                         valid : out Boolean);
