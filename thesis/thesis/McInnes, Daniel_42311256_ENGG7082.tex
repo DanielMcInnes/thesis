@@ -180,20 +180,19 @@
 \cleardoublepage
 
 \begin{flushright}
-	15 Blackthorn St\\
-	Brisbane, 4077\\
-	Tel.\ 0415208480\\
+	Daniel McInnes\\
+	s4231125@student.uq.edu.au\\
 	\medskip
 	\today
 \end{flushright}
 \begin{flushleft}
-  Prof Michael Brünig\\
-  Head of School\\
+  Prof Amin Abbosh\\
+  Acting Head of School\\
   School of Information Technology and Electrical Engineering\\
   The University of Queensland\\
   St Lucia, Q 4072\\
   \bigskip\bigskip
-  Dear Professor Brünig,
+  Dear Professor Abbosh,
 \end{flushleft}
 
 In accordance with the requirements of the degree of Master of
@@ -263,6 +262,10 @@ Currently, networks of publicly available electric vehicle fast chargers communi
 
 The International Energy Agency \cite{ieaglobalevoutlook} reports that the number of publicly available fast chargers ($>$ 22kW) increased from 107\,650 in 2017 to 143\,502 in 2018.\\
 
+\begin{figure}[htbp]
+\caption{Publicly available fast chargers}
+
+
 \begin{tikzpicture}
 	\begin{axis}
 	[
@@ -293,6 +296,7 @@ The International Energy Agency \cite{ieaglobalevoutlook} reports that the numbe
 	};
 \end{axis}
 \end{tikzpicture}
+\end{figure}
 
 
 The Open Charge Alliance \cite{ocaappraisal} reports that more than 10\,000 charging stations\footnote{Note that a ``charging station'' may consist of multiple fast chargers, thus the disparity between 143\,502 ``fast chargers'' and ``more than 10\,000 charging stations''} in over 50 countries are managed using the OCPP protocol.
@@ -324,12 +328,12 @@ Vogels claims VeriFast is to be sound. However,
 Verifast guarantees (modulo bugs in the tool) the absence of illegal memory accesses such as null pointer dereferences, accesses of uninitialized memory, accessing outside of the bounds of an array, data race conditions, violations of the user specified function contracts.
 
 
-"Why3 is a platform for deductive program verification. It provides a rich language for
+``Why3 is a platform for deductive program verification. It provides a rich language for
 specification and programming, called WhyML, and relies on external theorem provers,
-both automated and interactive, to discharge verification conditions."\\
-"A user can write WhyML programs directly and get correct-by-construction
+both automated and interactive, to discharge verification conditions.''\\
+``A user can write WhyML programs directly and get correct-by-construction
 OCaml programs through an automated extraction mechanism. WhyML is also used as
-an intermediate language for the verification of C, Java, or Ada programs."
+an intermediate language for the verification of C, Java, or Ada programs.''
 
 
 You will need to review previous work in the field, which may include
@@ -367,11 +371,6 @@ the mathematical formatting features of \LaTeX\ to be used in
 diagrams; but the \texttt{picture} files, unlike PostScript files,
 usually require manual editing.
 
-\begin{figure}[htbp]
-\caption{Experimental two-way active crossover (op-amp version)}
-\label{flr1}
-\end{figure}
-
 
 \chapter{Results and discussion \ldots}
 
@@ -382,39 +381,6 @@ In any case, you will probably need to include tabulated results.
 include a computer printout (plain text file) in a document.  The
 \texttt{verbatim} environment, which encloses the formatted text, is
 also useful for program listings.
-
-\begin{table}\renewcommand{\baselinestretch}{1.0}
-\caption{\sl Fraction of air volume involved in heat exchange for
-second mode (right column) vs.\ filling factor (left column).  The
-plain-text headings represent $f$, $m$, $\mu_2$ and $f_2$.}
-\label{tf2}
-
-\begin{center}
-\begin{minipage}[c]{2.85in}\small\normalsize
-\begin{verbatim}
-
- f(%)     m         mu2     f2(%)
-
- 0.016   80.00    0.05400   4.874
- 0.031   56.57    0.07732   5.438
- 0.062   40.00    0.11103   6.125
- 0.125   28.28    0.16001   6.970
- 0.250   20.00    0.23175   8.020
- 0.500   14.14    0.33799   9.329
- 1.000   10.00    0.49789  10.967
- 2.000    7.07    0.74444  13.008
- 4.000    5.00    1.13919  15.525
- 8.000    3.54    1.81095  18.568
-
-19.237    2.28    3.61958  23.174
-37.180    1.64    7.28635  27.094
-57.392    1.32   14.63631  29.813
-74.316    1.16   29.35160  31.453
-85.734    1.08   58.79364  32.360
-\end{verbatim}
-\end{minipage}
-\end{center}
-\end{table}
 
 \chapter{Conclusions}
 
@@ -464,12 +430,7 @@ Some initial explanatory notes may precede the listing.
 
 \chapter{Companion disk}
 
-If you wish to make some computer files available to your examiners,
-you can list and describe the files here.  The files can be supplied
-on a disk and inserted in a pocket fixed to the inside back cover.
-
-The disk will not be needed if you can specify a URL from which the
-files can be downloaded.
+See https://github.com/DanielMcInnes/thesis.git .
 
 \cleardoublepage
 

@@ -5,6 +5,36 @@ with ada.strings.maps;
 
 package body ocpp is
 
+   procedure checkValid(msg: in NonSparkTypes.packet.Bounded_String;
+                   msgindex: in out Integer;
+                   request: in out ocpp.call;
+                   valid: out Boolean
+                  )
+   is
+   begin
+      valid:= false;
+      
+      if request.messagetypeid /= 2 then
+         NonSparkTypes.put_line("parse: Error: 142"); 
+         return;
+      end if;
+      
+      if (msgindex >= NonSparkTypes.packet.Length(msg))
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(msgindex'Image);
+         return;
+      end if;
+      if (msgindex < 1)
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(msgindex'Image);
+         return;
+      end if;
+      
+      if (NonSparkTypes.messageid_t.Length(request.messageid) <= 0) then return; end if;      
+      valid := true;      
+   end checkValid;
+   
+
    procedure findnextinteger(msg: in NonSparkTypes.packet.Bounded_String;
                              index : in out Positive;
                              foundInteger: out integer;

@@ -1,12 +1,8 @@
 var fs = require('fs');
+var utils = require('./utils');
 var EnumType = require('./EnumType');
 var ObjectType = require('./ObjectType');
-/*
-function error(err) {
-  if (err) throw err;
-  console.log('Saved!');
-}
-*/
+
 function clean(f) {
    const regex = / /g;
    const regexdotslash = /\.\//g;

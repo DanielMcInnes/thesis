@@ -112,6 +112,7 @@ with ocpp.UpdateStatusEnumType;
 with ocpp.UploadLogStatusEnumType;
 with ocpp.vpnenumtype;
 
+with ocpp.GetBaseReportRequest;
 
 package body unittests is
    
