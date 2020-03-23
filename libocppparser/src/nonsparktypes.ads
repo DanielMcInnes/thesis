@@ -9,6 +9,7 @@ package NonSparkTypes is
    package messageid_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    package action_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    package BootReasonEnumType is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 16);         
+   
    --ApplicationReset - The Charging Station rebooted due to an application error.
    --FirmwareUpdate - The Charging Station rebooted due to a firmware update.
    --LocalReset - The Charging Station rebooted due to a local reset command.

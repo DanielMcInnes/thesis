@@ -12,7 +12,23 @@ package ocpp is
       messageid : messageid_t.Bounded_String; -- eg. 19223201
       action : action_t.Bounded_String;-- eg. BootNotification
    end record;
-   
+   procedure checkValid(msg: in NonSparkTypes.packet.Bounded_String;
+                   msgindex: in out Integer;
+                   request: in out ocpp.call;
+                   valid: out Boolean
+                  )
+     with
+       Global => null,
+       Depends => (
+                     msgindex => (msg, msgindex, request),
+                   request => (msg, msgindex, request),
+                   valid => (msg, msgindex, request)
+                  ),
+       post => (if valid = true then
+                  (request.messagetypeid = 2) and
+                  (NonSparkTypes.messageid_t.Length(request.messageid) > 0)
+               );
+
    type callresult is tagged record
       messagetypeid : integer;-- eg. 3
       messageid : messageid_t.Bounded_String; -- eg. 19223201
@@ -125,34 +141,34 @@ private
    procedure findnonwhitespace(msg: in string_t;
                                msgindex: in out Positive;
                                retval: out boolean);
---   with
---          Global => null,
---          post => (if retval = true then
---                     (msgindex > 0) and
---                         (msgindex <= Length(msg))
---                  );
+   --   with
+   --          Global => null,
+   --          post => (if retval = true then
+   --                     (msgindex > 0) and
+   --                         (msgindex <= Length(msg))
+   --                  );
    
    procedure findString(msg: in NonSparkTypes.packet.Bounded_String;
                         msgIndex: in out Integer;
                         valid: out Boolean;
                         needle: string);
---   with
---          Global => null,
---          post => (if valid = true then
---                     (msgindex > 0) and
---                         (msgindex <= NonSparkTypes.packet.Length(msg))
---                  );
+   --   with
+   --          Global => null,
+   --          post => (if valid = true then
+   --                     (msgindex > 0) and
+   --                         (msgindex <= NonSparkTypes.packet.Length(msg))
+   --                  );
 
    procedure findQuotedKeyQuotedValue(msg: in NonSparkTypes.packet.Bounded_String;
                                       msgIndex: in out Integer;
                                       valid: out Boolean;
                                       key: in string;
                                       value: out NonSparkTypes.packet.Bounded_String);
---        with
---          Global => null,
---          post => (if valid = true then
---                     (msgIndex > 0)
---                  );
+   --        with
+   --          Global => null,
+   --          post => (if valid = true then
+   --                     (msgIndex > 0)
+   --                  );
 
    procedure findQuotedKeyUnquotedValue(msg: in NonSparkTypes.packet.Bounded_String;
                                         msgIndex: in out Integer;
