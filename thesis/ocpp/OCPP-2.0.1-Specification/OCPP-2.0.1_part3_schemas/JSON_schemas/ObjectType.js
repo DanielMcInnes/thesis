@@ -67,15 +67,13 @@ module.exports.parse = function (_filename) {
 
    _buffer += '\n';
    _buffer += '   procedure parse(msg: in NonSparkTypes.packet.Bounded_String;\n'
-   _buffer += '                msgindex: in out Integer;\n'
-   _buffer += '                packet: in out ocpp.' + _package + '.T;\n'
+   _buffer += '                msgindex: in Integer;\n'
+   _buffer += '                packet: in ocpp.' + _package + '.T;\n'
    _buffer += '                valid: out Boolean\n'
    _buffer += '               )\n'
    _buffer += '   with\n'
    _buffer += '    Global => null,\n'
    _buffer += '    Depends => (\n'
-   _buffer += '                  msgindex => (msg, msgindex, packet),\n'
-   _buffer += '                packet => (msg, msgindex, packet),\n'
    _buffer += '                valid => (msg, msgindex, packet)\n'
    _buffer += '               ),\n'
    _buffer += '    post => (if valid = true then\n'
@@ -100,8 +98,8 @@ module.exports.parse = function (_filename) {
    _buffer += 'package body ocpp.' + _package + ' is \n';
 
    _buffer += '   procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;\n';
-   _buffer += '                   msgindex: in out Integer;\n';
-   _buffer += '                   packet: in out ocpp.' + _package + '.T;\n';
+   _buffer += '                   msgindex: in Integer;\n';
+   _buffer += '                   packet: in ocpp.' + _package + '.T;\n';
    _buffer += '                   valid: out Boolean\n';
    _buffer += '                  )\n';
    _buffer += '   is\n';

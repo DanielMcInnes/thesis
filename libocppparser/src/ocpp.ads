@@ -13,16 +13,14 @@ package ocpp is
       action : action_t.Bounded_String;-- eg. BootNotification
    end record;
    procedure checkValid(msg: in NonSparkTypes.packet.Bounded_String;
-                   msgindex: in out Integer;
-                   request: in out ocpp.call;
+                   msgindex: in Integer;
+                   request: in ocpp.call;
                    valid: out Boolean
                   )
      with
        Global => null,
        Depends => (
-                     msgindex => (msg, msgindex, request),
-                   request => (msg, msgindex, request),
-                   valid => (msg, msgindex, request)
+                     valid => (msg, msgindex, request)
                   ),
        post => (if valid = true then
                   (request.messagetypeid = 2) and
