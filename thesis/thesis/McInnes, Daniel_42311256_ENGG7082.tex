@@ -3,7 +3,7 @@
 \usepackage{graphicx}
 \usepackage[colorlinks,allcolors=blue]{hyperref, xcolor} % must be bfore pgfplots
 \usepackage{pgfplots} % must be after xcolor
-
+\usepackage{colortbl}
 % If you use a macro file called macros.tex :
 % \input{macros}
 % Note: The present document has its macros built in.
@@ -306,6 +306,7 @@ The Open Charge Alliance \cite{ocaappraisal} reports that more than 10\,000 char
 In this paper I investigate and compare the features of several different software verifiation tools and choose one to partially implement an OCPP server. The tools include VeriFast, VCC, OpenJML, KeY, Spec\#, Daphney, Whiley, and AdaSPARK.
 
 The tools vary in what guarantees they provide. Desirable guarantees that I was interested in are: 
+\label{criteria}
 \begin{itemize}
 	\item the absence of memory leaks
 	\item the program should never access uninitialized memory (for example, should never read past the end of an array)
@@ -319,15 +320,43 @@ The tools vary in what guarantees they provide. Desirable guarantees that I was 
 \end{itemize}
 
 \chapter{Literature review / prior art}
-VeriFast performs modular formal verification ofcorrectness properties of single and multithreaded C and Java programs. \\
 
-%(Vogels et al, p1. ``VeriFast is a sound modular formal verification approach for single-threaded and multithreaded imperative programs being developed at KU Leuven''.) 
+------------------------------------------------------------------
+Background (20\%): Background material for the thesis should likely include reviews, analyses and
+discussions of the literature in the area of the thesis and about methods applicable to achieving
+the thesis goals. This background should not only help the reader understand the rest of the document,
+but should illustrate to the reader a clear mastery of the material in the topic area and an
+ability to synthesize and abstract knowledge from other sources.
 
+You will need to review previous work in the field, which may include books and
+papers (“literature”), patents and commercial products (“prior art”), and earlier
+work in your Department. This information is usually (but not always) collected in
+a single chapter, whose title should preferably be more specific and interesting than
+the one above.
+
+------------------------------------------------------------------
+
+10 different verification tools were evaluated to determine which fulfilled the criteria \ref{criteria}.
+
+\section {Dafny}
+
+
+
+\section {JML}
+\section {KeY}
+\section {SPARK Ada}
+\section {Spec\#}
+\section {Verifast}
 Vogels claims VeriFast is to be sound. However, 
 
 Verifast guarantees (modulo bugs in the tool) the absence of illegal memory accesses such as null pointer dereferences, accesses of uninitialized memory, accessing outside of the bounds of an array, data race conditions, violations of the user specified function contracts.
+VeriFast performs modular formal verification ofcorrectness properties of single and multithreaded C and Java programs. \\
 
-
+%(Vogels et al, p1. ``VeriFast is a sound modular formal verification approach for single-threaded and multithreaded imperative programs being developed at KU Leuven''.) 
+\section {VCC}
+\section {Viper}
+\section {Whiley}
+\section {Why3}
 ``Why3 is a platform for deductive program verification. It provides a rich language for
 specification and programming, called WhyML, and relies on external theorem provers,
 both automated and interactive, to discharge verification conditions.''\\
@@ -336,12 +365,55 @@ OCaml programs through an automated extraction mechanism. WhyML is also used as
 an intermediate language for the verification of C, Java, or Ada programs.''
 
 
+
 You will need to review previous work in the field, which may include
 books and papers (``literature''), patents and commercial products
 (``prior art''), and earlier work in your Department.  This
 information is usually (but not always) collected in a single chapter,
 whose title should preferably be more specific and interesting than
 the one above.
+
+\section{Summary of Verification Tool Features}
+
+\begin{tabular}{ |p{1.3cm}||p{1.5cm}|p{1.5cm}|p{1.5cm}| p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1cm}|p{1cm}| p{1cm}| }
+ \hline
+ \multicolumn{9}{|c|}{Features} \\
+ \hline
+Tool & 
+No memory leaks & 
+Never accesses uninitialized memory & 
+Never crashes / exits unexpectedly &
+Bounded
+RAM &
+Never hang &
+Prove correct &
+No undefined &
+No data leak 
+\\
+ \hline
+Dafny 		& \cellcolor{red} \ref{unproven} & \cellcolor{red} \ref{unproven} & \cellcolor{red} \ref{dafnybug1} & \cellcolor{red} & \cellcolor{green} & \cellcolor{green} & ? & \cellcolor{red} \ref{dafnybug2} \\
+ \hline
+JML   		& ? & ? & ?& ?& ?& ?& ?& ?\\
+ \hline
+KeY 		& ? & ? & ?& ?& ?& ?& ?& ?\\
+ \hline
+SPARK		& ? & ? & ?& ?& ?& ?& ?& ?\\
+ \hline
+Spec \#		& ? & ? & ?& ?& ?& ?& ?& ?\\
+ \hline
+Verifast& ? & ? & ?& ?& ?& ?& ?& ?\\
+ \hline
+VCC& ? & ? & ?& ?& ?& ?& ?& ?\\
+ \hline
+Viper& ? & ? & ?& ?& ?& ?& ?& ?\\
+ \hline
+Whiley& ? & ? & ?& ?& ?& ?& ?& ?\\
+ \hline
+Why3& ? & ? & ?& ?& ?& ?& ?& ?\\
+ \hline
+\end{tabular}
+
+\label{unproven} Internet searches failed to find evidence that this is supported.
 
 \chapter{Theory}
 
@@ -407,6 +479,91 @@ also useful for program listings.
 % \include appendix chapters here.
 
 \chapter{Dummy appendix}
+
+\section{Dafny}
+
+
+\label {dafnybug1}
+
+\begin{verbatim}
+
+https://github.com/dafny-lang/dafny/issues/532
+Simulated type set crashes at run-time \#532
+An attempt to do a dynamic type test causes a crash when the compiled program is run. This should either be disallowed statically or should compile to good code.
+
+Repro: Here is the output on the program below:
+
+\$ dafny /compile:3 test.dfy
+Dafny 2.3.0.10506
+test.dfy(17,19): Warning: /!\ No terms found to trigger on.
+
+Dafny program verifier finished with 2 verified, 0 errors
+Running...
+
+t.x=5  The given Tr is a C, and c.y=6
+t.x=100  Error: Execution resulted in exception: Exception has been thrown by the target of an invocation.
+System.InvalidCastException: Specified cast is not valid.
+%  at _module.__default+<M>c__AnonStorey0.<>m__0 () [0x00023] in <73b9bd36ee6e47fba3617ec618048be5>:0
+%  at _module.__default.M (_module.Tr t) [0x0003b] in <73b9bd36ee6e47fba3617ec618048be5>:0
+%  at _module.__default.Main () [0x00058] in <73b9bd36ee6e47fba3617ec618048be5>:0
+%  at (wrapper managed-to-native) System.Reflection.MonoMethod.InternalInvoke(System.Reflection.MonoMethod,object,object[],System.Exception&)
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00032] in <bb7b695b8c6246b3ac1646577aea7650>:0
+
+
+
+And here is the program:
+
+trait Tr {
+  var x: int
+}
+
+class C extends Tr {
+  var y: int
+}
+
+class D extends Tr {
+  var z: int
+}
+
+method M(t: Tr)
+  modifies t
+{
+  print "t.x=", t.x, "  ";
+  var s: set<C> := set c: C | c == t;  // this line crashes for the call M(d)
+  if s == {} {
+%    print "The given Tr is not a C\n";
+  } else {
+    var c :| c in s;
+%    print "The given Tr is a C, and c.y=", c.y, "\n";
+    c.y := c.y + 10;
+  }
+}
+
+method Main() {
+  var c := new C;
+  var d := new D;
+  c.x, c.y := 5, 6;
+  d.x, d.z := 100, 102;
+
+  M(c);
+  M(d);
+  M(c);
+}
+
+\end{verbatim}
+
+\label{dafnybug2}
+\begin{verbatim}
+https://gitter.im/dafny-lang/community?at=5d90c402086a72719e848f24
+Bryan Parno
+@parno
+Mar 14 05:41
+We use reference counting via shared_ptr Which means it is possible to create memory leaks if you try hard enough (e.g., via a doubly-linked list). For the latter case, I've been thinking about adding an annotation that a developer could add that would give the compiler a hint that it should use a weak_ptr to break up such cycles, but I haven't gotten around to it yet
+\end{verbatim}
+
+
+
+
 
 Appendices are useful for supplying necessary details or explanations
 which do not seem to fit into the main text, perhaps because they are
