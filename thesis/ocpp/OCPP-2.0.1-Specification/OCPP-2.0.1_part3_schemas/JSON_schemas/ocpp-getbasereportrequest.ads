@@ -26,8 +26,7 @@ package ocpp.GetBaseReportRequest is
     post => (if valid = true then
                (packet.messagetypeid = 2) and
                (NonSparkTypes.messageid_t.Length(packet.messageid) > 0) and
-               (packet.action = action) and
-               (Index(NonSparkTypes.packet.To_String(msg), NonSparkTypes.action_t.To_String(action)) /= 0) -- prove that the original packet contains the corresponding "action"
+               (packet.action = action) -- prove that the original packet contains the corresponding "action"
             );
 
    procedure To_Bounded_String(Self: in T;

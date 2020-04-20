@@ -4,7 +4,7 @@ with Ada.Finalization;
 with Ada.Strings; 
 with Ada.Strings.Bounded;
 with Ada.Text_IO;
-with NonSparkTypes; use NonSparkTypes;
+with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.action_t;
 
 package ocpp is
    type call is tagged record
@@ -14,17 +14,19 @@ package ocpp is
    end record;
    procedure checkValid(msg: in NonSparkTypes.packet.Bounded_String;
                    msgindex: in Integer;
-                   request: in ocpp.call;
+                        request: in ocpp.call;
+                        expectedAction: in action_t.Bounded_String;
                    valid: out Boolean
                   )
      with
        Global => null,
        Depends => (
-                     valid => (msg, msgindex, request)
+                     valid => (msg, msgindex, request, expectedAction)
                   ),
        post => (if valid = true then
                   (request.messagetypeid = 2) and
-                  (NonSparkTypes.messageid_t.Length(request.messageid) > 0)
+                  (NonSparkTypes.messageid_t.Length(request.messageid) > 0) and
+                  (request.action = expectedAction)
                );
 
    type callresult is tagged record

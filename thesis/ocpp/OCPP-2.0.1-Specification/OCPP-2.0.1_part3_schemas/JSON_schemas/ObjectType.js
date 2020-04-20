@@ -79,8 +79,7 @@ module.exports.parse = function (_filename) {
    _buffer += '    post => (if valid = true then\n'
    _buffer += '               (packet.messagetypeid = 2) and\n'
    _buffer += '               (NonSparkTypes.messageid_t.Length(packet.messageid) > 0) and\n'
-   _buffer += '               (packet.action = action) and\n'
-   _buffer += '               (Index(NonSparkTypes.packet.To_String(msg), NonSparkTypes.action_t.To_String(action)) /= 0) -- prove that the original packet contains the corresponding "action"\n'
+   _buffer += '               (packet.action = action) -- prove that the original packet contains the corresponding "action"\n'
    _buffer += '            );\n\n'
    _buffer += '   procedure To_Bounded_String(Self: in T;\n'
    _buffer += '                               retval: out NonSparkTypes.packet.Bounded_String);\n'
@@ -104,7 +103,7 @@ module.exports.parse = function (_filename) {
    _buffer += '                  )\n';
    _buffer += '   is\n';
    _buffer += '   begin\n';
-   _buffer += '      checkValid(msg, msgindex, packet, valid);\n'
+   _buffer += '      checkValid(msg, msgindex, packet, action, valid);\n'
    
 
    var _required = _datafile.required;

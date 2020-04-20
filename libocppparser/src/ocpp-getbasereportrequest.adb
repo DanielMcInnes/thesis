@@ -9,7 +9,7 @@ package body ocpp.GetBaseReportRequest is
                   )
    is
    begin
-      checkValid(msg, msgindex, packet, valid);
+      checkValid(msg, msgindex, packet, action, valid);
    end parse;
    procedure To_Bounded_String(Self: in T;
                                retval: out NonSparkTypes.packet.Bounded_String)
