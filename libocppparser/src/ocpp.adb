@@ -6,8 +6,8 @@ with ada.strings.maps;
 package body ocpp is
 
    procedure checkValid(msg: in NonSparkTypes.packet.Bounded_String;
-                   msgindex: in out Integer;
-                   request: in out ocpp.call;
+                   msgindex: in Integer;
+                   request: in ocpp.call;
                    valid: out Boolean
                   )
    is

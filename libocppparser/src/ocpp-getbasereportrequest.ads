@@ -14,15 +14,13 @@ package ocpp.GetBaseReportRequest is
       reportBase : ReportBaseEnumType.T;
    end record;
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
-                msgindex: in out Integer;
-                packet: in out ocpp.GetBaseReportRequest.T;
+                msgindex: in Integer;
+                packet: in ocpp.GetBaseReportRequest.T;
                 valid: out Boolean
                )
    with
     Global => null,
     Depends => (
-                  msgindex => (msg, msgindex, packet),
-                packet => (msg, msgindex, packet),
                 valid => (msg, msgindex, packet)
                ),
     post => (if valid = true then

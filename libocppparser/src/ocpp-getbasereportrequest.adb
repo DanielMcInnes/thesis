@@ -3,8 +3,8 @@ pragma SPARK_mode (on);
 with ocpp.GetBaseReportRequest;
 package body ocpp.GetBaseReportRequest is 
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
-                   msgindex: in out Integer;
-                   packet: in out ocpp.GetBaseReportRequest.T;
+                   msgindex: in Integer;
+                   packet: in ocpp.GetBaseReportRequest.T;
                    valid: out Boolean
                   )
    is
