@@ -5,6 +5,7 @@ with System; use System;
 with Ada.Strings; use Ada.Strings;
 
 with ocpp.BootNotification;
+with ocpp.CustomDataType;
 with ocpp.SetVariables;
 with ocpp.GetVariables;
 with ocpp.server;
@@ -131,7 +132,7 @@ package body unittests is
       --B04(result);      if (result = false) then         fail; return;      end if;
       --B05(result);      if (result = false) then         fail; return;      end if;
       --B06(result);      if (result = false) then         fail; return;      end if;
-      --B07(result);      if (result = false) then         fail; return;      end if;
+      B07(result);      if (result = false) then         fail; return;      end if; -- GetBaseReportRequest
       
       --TODO:
       --B07 
@@ -921,8 +922,20 @@ package body unittests is
    
    procedure B07(result: out Boolean)
    is
+      dummystring: NonSparkTypes.packet.Bounded_String;
+      getBaseReportRequest: ocpp.GetBaseReportRequest.T := (
+                                                            messagetypeid => 2,
+                                                            messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                            action => ocpp.GetBaseReportRequest.action,
+                                                            requestId => 1,
+                                                            reportBase => ReportBaseEnumType.ConfigurationInventory
+                                                           );
    begin      
       NonSparkTypes.put_line("B07");
+      getBaseReportRequest.To_Bounded_String(dummystring);
+      NonSparkTypes.put_line(NonSparkTypes.packet.To_String(dummystring));
+      
+      
       result := true;
    end B07;
    

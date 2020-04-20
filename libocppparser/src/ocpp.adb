@@ -6,10 +6,11 @@ with ada.strings.maps;
 package body ocpp is
 
    procedure checkValid(msg: in NonSparkTypes.packet.Bounded_String;
-                   msgindex: in Integer;
-                   request: in ocpp.call;
-                   valid: out Boolean
-                  )
+                        msgindex: in Integer;
+                        request: in ocpp.call;
+                        expectedAction: in action_t.Bounded_String;
+                        valid: out Boolean
+                       )
    is
    begin
       valid:= false;
@@ -18,6 +19,12 @@ package body ocpp is
          NonSparkTypes.put_line("parse: Error: 142"); 
          return;
       end if;
+      
+      if (request.action /= expectedAction)
+      then
+         NonSparkTypes.put_line("parse: Error: invalid action"); 
+         return;
+      end if;      
       
       if (msgindex >= NonSparkTypes.packet.Length(msg))
       then
