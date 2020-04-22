@@ -927,9 +927,6 @@ package body unittests is
                                                             messagetypeid => 2,
                                                             messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
                                                             action => ocpp.GetBaseReportRequest.action,
-                                                            customData => (
-                                                                           vendorId => CustomDataType.vendorId_t.To_Bounded_String("")
-                                                                           ),
                                                             requestId => 1,
                                                             reportBase => ReportBaseEnumType.ConfigurationInventory
                                                            );

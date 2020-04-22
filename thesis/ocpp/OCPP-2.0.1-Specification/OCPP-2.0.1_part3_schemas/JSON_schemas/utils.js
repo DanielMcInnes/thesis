@@ -16,14 +16,15 @@ module.exports.parseType = function (_property) {
 }());
 
 (function() {
-module.exports.parseIncludes = function (_datafile) {
+module.exports.parseIncludes = function (schema) {
    const regex = /#\/definitions\//;
    var retval = '';
-   for (var i in _datafile.properties) {
-      var type = _datafile.properties[i]['$ref'];
+   for (var i in schema.properties) {
+      console.log("i:", i, schema.properties[i]);
+      var type = schema.properties[i]['javaType'];
 
-      if (!!type) {
-         retval += 'with ocpp.' + type.replace(regex, '') + '; use ocpp.' + type.replace(regex, '') + ';\n';
+      if (!!type && type !== 'CustomData') {
+         retval += 'with ocpp.' + type.replace(regex, '') + 'Type; use ocpp.' + type.replace(regex, '') + 'Type;\n';
       }
 
    }

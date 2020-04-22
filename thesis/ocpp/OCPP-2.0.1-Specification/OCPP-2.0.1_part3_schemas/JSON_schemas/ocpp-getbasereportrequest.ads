@@ -3,13 +3,11 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
-with ocpp.CustomDataType; use ocpp.CustomDataType;
 with ocpp.ReportBaseEnumType; use ocpp.ReportBaseEnumType;
 
 package ocpp.GetBaseReportRequest is
    action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("GetBaseReport"); 
    type T is new call with record
-      customData : CustomDataType.T;
       requestId : integer;
       reportBase : ReportBaseEnumType.T;
    end record;
