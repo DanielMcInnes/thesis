@@ -21,9 +21,9 @@ package body ocpp.GetBaseReportRequest is
                                                       & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
                                                       & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"'  & "customData" & '"' & ":" & ASCII.LF
-                                                      & "    " & '"'  & "requestId" & '"' & ":" & ASCII.LF
-                                                      & "    " & '"'  & "reportBase" & '"' & ":" & ASCII.LF
+                                                      & "    " & '"' & "customData" & '"' & ":" & ASCII.LF
+                                                      & "    " & '"' & "requestId" & '"' & ":" & ASCII.LF
+                                                      & "    " & '"' & "reportBase" & '"' & ":" & ASCII.LF
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;

@@ -157,7 +157,7 @@ module.exports.parse = function (_filename) {
    for (var i in _properties) {
       var j = _properties[i];
       console.log('   properties: ', i, j);
-      _buffer +=    '                                                      & ' + '"    " & ' + '\'"\'' + '  & "' + i + '"' + ' & ' + '\'"\''  + ' & \"' + ':' + '\"' + ' & ASCII.LF\n';
+      _buffer +=    '                                                      & "    " & \'"\' & "' + i + '" & \'"\' & \":\" & ASCII.LF\n';
    }
  
    _buffer +=    '                                                      & "}" & ASCII.LF\n';
