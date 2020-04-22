@@ -3,6 +3,7 @@
 var fs = require('fs');
 var utils = require('./utils.js');
 function clean(f) {
+   // Some of the names in the json files are invalid SPARK. replace them with something that isn't.
    const regex = / /g;
    const regexdotslash = /\.\//g;
    const regexbody = /body/gi;
@@ -94,8 +95,8 @@ module.exports.parse = function (_filename) {
    // source file
    _buffer = "pragma SPARK_mode (on); \n\n";
    _buffer += 'with ocpp.' + _package + ';\n';
+   _buffer += 'with Ada.Strings; use Ada.Strings;\n';
    _buffer += 'package body ocpp.' + _package + ' is \n';
-
    _buffer += '   procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;\n';
    _buffer += '                   msgindex: in Integer;\n';
    _buffer += '                   packet: in ocpp.' + _package + '.T;\n';
@@ -106,11 +107,6 @@ module.exports.parse = function (_filename) {
    _buffer += '      checkValid(msg, msgindex, packet, action, valid);\n'
    
 
-   var _required = _datafile.required;
-   for (var i in _required) {
-      var j = _required[i];
-      console.log('   required: ', j);
-   }
     /*
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: in out Integer;
@@ -134,7 +130,42 @@ module.exports.parse = function (_filename) {
    _buffer += '                               retval: out NonSparkTypes.packet.Bounded_String)\n';
    _buffer += '   is\n';
    _buffer += '   begin\n';
-   _buffer += '      retval := NonSparkTypes.packet.To_Bounded_String("blah");\n';
+   _buffer +=    '      retval := NonSparkTypes.packet.To_Bounded_String(""\n';
+   if (_package.includes('Request') ) {
+      _buffer += '                                                      & "[2," & ASCII.LF\n';
+   }
+   else {
+      _buffer += '                                                      & "[3," & ASCII.LF\n';
+   }
+   
+   _buffer +=    '                                                      & \'"\'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & \'"\' & "," & ASCII.LF\n';
+   if (_package.includes('Request') ) {
+      _buffer += '                                                      & \'"\' & NonSparkTypes.action_t.To_String(Self.action) & \'"\' & "," & ASCII.LF\n';
+      
+   }
+   _buffer +=    '                                                      & "{" & ASCII.LF\n';
+   //_buffer +=    '                                                      &     "requestId":';
+   /*
+   var _required = _datafile.required;
+   for (var i in _required) {
+      var j = _required[i];
+      console.log('   required: ', j);
+   }
+   */
+
+   var _properties = _datafile.properties;
+   for (var i in _properties) {
+      var j = _properties[i];
+      console.log('   properties: ', i, j);
+      _buffer +=    '                                                      & ' + '"    " & ' + '\'"\'' + '  & "' + i + '"' + ' & ' + '\'"\''  + ' & \"' + ':' + '\"' + ' & ASCII.LF\n';
+   }
+ 
+   _buffer +=    '                                                      & "}" & ASCII.LF\n';
+
+
+   _buffer += '                                                      & "]", Drop => Right);\n';
+
+
    _buffer += '   end To_Bounded_String;\n';
    
 
