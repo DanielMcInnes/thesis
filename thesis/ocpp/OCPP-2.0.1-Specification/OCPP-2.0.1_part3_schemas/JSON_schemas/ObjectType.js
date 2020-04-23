@@ -117,7 +117,7 @@ module.exports.parse = function (_filename) {
          // source file
          _buffer = "pragma SPARK_mode (on); \n\n";
          _buffer += 'with ocpp.' + _package + ';\n';
-         _buffer += 'with Ada.Strings; use Ada.Strings;\n';
+         _buffer += 'with Ada.Strings; use Ada.Strings;\n\n';
          _buffer += 'package body ocpp.' + _package + ' is \n';
          _buffer += '   procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;\n';
          _buffer += '                   msgindex: in Integer;\n';
@@ -127,11 +127,35 @@ module.exports.parse = function (_filename) {
          _buffer += '   is\n';
          _buffer += '   begin\n';
          _buffer += '      checkValid(msg, msgindex, packet, action, valid);\n'
-         _buffer += '   end parse;\n';
+         _buffer += '   end parse;\n\n';
          _buffer += '   procedure To_Bounded_String(Self: in T;\n';
          _buffer += '                               retval: out NonSparkTypes.packet.Bounded_String)\n';
          _buffer += '   is\n';
+
+         // for every string type member variable, add a string buffer
+         for (var property in schema.properties) {
+            if (property === 'customData') {
+               continue;
+            }
+            var type = schema.properties[property]["type"];   // int, string
+            if (!!type && type === "string") {
+               _buffer += '      str' + property + ' : ' + schema.properties[property]["javaType"] + 'Type.string_t.Bounded_string;\n';
+            }
+         }
+
          _buffer += '   begin\n';
+
+         // for every enum type member variable, convert to string
+         for (var property in schema.properties) {
+            if (property === 'customData') {
+               continue;
+            }
+            var type = schema.properties[property]["type"];   // int, string
+            if (!!type && type === "string") {
+               _buffer += '      ' + schema.properties[property]["javaType"] + 'Type.ToString(Self.' + property + ', str' + property + ');\n';
+            }
+         }
+
          _buffer +=    '      retval := NonSparkTypes.packet.To_Bounded_String(""\n';
          if (_package.includes('Request') ) {
             _buffer += '                                                      & "[2," & ASCII.LF\n';
@@ -146,21 +170,29 @@ module.exports.parse = function (_filename) {
             
          }
          _buffer +=    '                                                      & "{" & ASCII.LF\n';
-         //_buffer +=    '                                                      &     "requestId":';
-         /*
-         var _required = _datafile.required;
-         for (var i in _required) {
-            var j = _required[i];
-            console.log('   required: ', j);
-         }
-         */
 
          console.log("schema.properties:", schema.properties);
          for (var property in schema.properties) {
             if (property === 'customData') {
                continue;
             }
-            _buffer +=    '                                                      & "    "' + property + ' & ASCII.LF\n';
+            var type = schema.properties[property]["javaType"];   // int, string
+            if (!!type) {
+               type += 'Type';
+            } else {
+               type = schema.properties[property]["type"];   // int, string
+            }
+            switch (type) {
+               case 'integer':
+                  _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' +
+                                                                                       ' & ' + 'Self.' + property + '\'Image & ASCII.LF\n';
+                  break;
+               default:
+                  _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' + 
+                                                                                       ' & \'"\' & ' + schema.properties[property]["javaType"] + 'Type.string_t.To_String(str' + property + ') & \'"\' & ASCII.LF\n'; 
+                  // & "    " & ReportBaseEnumType.string_t.To_String(strreportBase) & ASCII.LF
+                  break;
+            }
          }
       
          _buffer +=    '                                                      & "}" & ASCII.LF\n';
