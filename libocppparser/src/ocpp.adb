@@ -527,6 +527,11 @@ package body ocpp is
       --if (NonSparkTypes.packet.To_String(dummybounded) /= "attributeType") then 
       if (dummybounded /= needle) then 
          NonSparkTypes.put("parse: 198: ERROR: looking for 'attributeType': ");
+         NonSparkTypes.put(" dummybounded: ");
+         NonSparkTypes.put(NonSparkTypes.packet.To_String(dummybounded));
+         NonSparkTypes.put(", needle: ");
+         NonSparkTypes.put_line(needle);
+         
          valid := false;
          return; 
       end if;

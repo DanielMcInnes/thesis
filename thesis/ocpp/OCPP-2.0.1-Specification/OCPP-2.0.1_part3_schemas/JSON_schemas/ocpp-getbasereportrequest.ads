@@ -12,19 +12,21 @@ package ocpp.GetBaseReportRequest is
       reportBase : ReportBaseEnumType.T;
    end record;
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
-                msgindex: in Integer;
-                packet: in ocpp.GetBaseReportRequest.T;
+                msgindex: in out Integer;
+                self: in out ocpp.GetBaseReportRequest.T;
                 valid: out Boolean
                )
    with
     Global => null,
     Depends => (
-                valid => (msg, msgindex, packet)
+                valid => (msg, msgindex, self),
+                msgindex => (msg, msgIndex, self),
+                self  => (msg, msgindex, self)
                ),
     post => (if valid = true then
-               (packet.messagetypeid = 2) and
-               (NonSparkTypes.messageid_t.Length(packet.messageid) > 0) and
-               (packet.action = action) -- prove that the original packet contains the corresponding "action"
+               (self.messagetypeid = 2) and
+               (NonSparkTypes.messageid_t.Length(self.messageid) > 0) and
+               (self.action = action) -- prove that the original packet contains the corresponding "action"
             );
 
    procedure To_Bounded_String(Self: in T;

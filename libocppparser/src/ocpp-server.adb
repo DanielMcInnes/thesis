@@ -255,7 +255,7 @@ is
    begin
       getBaseReportRequest.messageid := messageId;
       getBaseReportRequest.action := action;
-      ocpp.GetBaseReportRequest.parse(msg, index,getBaseReportRequest, valid);
+      ocpp.GetBaseReportRequest.parse(msg, index, getBaseReportRequest, valid);
       
       if (valid = false) then
          NonSparkTypes.put_line("ocpp-server: 258: invalid GetBaseReportRequest");
