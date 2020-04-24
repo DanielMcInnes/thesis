@@ -34,6 +34,21 @@ package ocpp is
       messageid : messageid_t.Bounded_String; -- eg. 19223201
    end record;
    
+   procedure checkValid(msg: in NonSparkTypes.packet.Bounded_String;
+                   msgindex: in Integer;
+                   request: in ocpp.callresult;
+                   valid: out Boolean
+                  )
+     with
+       Global => null,
+       Depends => (
+                     valid => (msg, msgindex, request)
+                  ),
+       post => (if valid = true then
+                  (request.messagetypeid = 3) and
+                  (NonSparkTypes.messageid_t.Length(request.messageid) > 0)
+               );
+
    type ModemType_t is tagged record
       iccid: ModemType.iccid_t.Bounded_String;
       imsi: ModemType.imsi_t.Bounded_String;
