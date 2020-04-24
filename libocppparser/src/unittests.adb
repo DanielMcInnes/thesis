@@ -1,6 +1,6 @@
 with ocpp; use ocpp;
 with ocpp.heartbeat; use ocpp.heartbeat;
-with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.messageid_t;
+with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.messageid_t; use NonSparkTypes.packet;
 with System; use System;
 with Ada.Strings; use Ada.Strings;
 
@@ -952,25 +952,22 @@ package body unittests is
 
       packet: NonSparkTypes.packet.Bounded_String;
       response: NonSparkTypes.packet.Bounded_String;
-      expectedresponse: NonSparkTypes.packet.Bounded_String :=
-        NonSparkTypes.packet.To_Bounded_String( ""
-                                                & "[3," & ASCII.LF
-                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
-                                                & "{" & ASCII.LF
-                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
-                                                & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
-                                                & "   " & '"' & "status" & '"' & ": " & '"' & "Accepted" & '"' & ASCII.LF
-                                                & "}" & ASCII.LF
-                                                & "]");
+      expectedresponse: NonSparkTypes.packet.Bounded_String;
+      
    begin      
       NonSparkTypes.put_line("B07");
+      result := false;
+      getBaseReportRequest.To_Bounded_String(expectedresponse);
       getBaseReportRequest.To_Bounded_String(dummystring);
       NonSparkTypes.put_line(NonSparkTypes.packet.To_String(dummystring));
       
-      ocpp.server.receivePacket(server, dummystring, response, valid);
+      ocpp.server.receivePacket(server, dummystring, response, valid); 
+      if (dummystring = expectedresponse) 
+      then
+         NonSparkTypes.put_line("B07 passed.");
+         result := true;
+      end if;
       
-      
-      result := true;
    end B07;
    
       

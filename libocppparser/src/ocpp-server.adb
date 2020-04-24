@@ -252,6 +252,7 @@ is
                                    )
    is
       getBaseReportRequest : ocpp.GetBaseReportRequest.T;
+      dummyBounded : NonSparkTypes.packet.Bounded_String;
    begin
       getBaseReportRequest.messageid := messageId;
       getBaseReportRequest.action := action;
@@ -263,8 +264,9 @@ is
       end if;
       
       NonSparkTypes.put_line("I am a server, I should be sending this packet, not receiving it!");
-      response := NonSparkTypes.packet.To_Bounded_String("");
-      valid := true;
+      GetBaseReportRequest.To_Bounded_String(dummyBounded);
+      response := dummyBounded;
+      valid := false;
       
    end handleGetBaseReportRequest;
    
