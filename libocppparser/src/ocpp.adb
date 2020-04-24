@@ -50,6 +50,38 @@ package body ocpp is
       valid := true;      
    end checkValid;
    
+   procedure checkValid(msg: in NonSparkTypes.packet.Bounded_String;
+                        msgindex: in Integer;
+                        request: in ocpp.callresult;
+                        valid: out Boolean
+                       )
+   is
+   begin
+      valid:= false;
+      
+      if request.messagetypeid /= 3 then
+         NonSparkTypes.put_line("ocpp.adb: 64: invalid messagetypeid"); 
+         return;
+      end if;
+      
+      if (msgindex >= NonSparkTypes.packet.Length(msg))
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(msgindex'Image);
+         return;
+      end if;
+      if (msgindex < 1)
+      then
+         NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(msgindex'Image);
+         return;
+      end if;
+      
+      if (NonSparkTypes.messageid_t.Length(request.messageid) <= 0) 
+      then 
+         NonSparkTypes.put_line("ocpp.checkValid: 47: Error: invalid messageId"); 
+         return; 
+      end if;      
+      valid := true;      
+   end checkValid;
 
    procedure findnextinteger(msg: in NonSparkTypes.packet.Bounded_String;
                              index : in out Positive;

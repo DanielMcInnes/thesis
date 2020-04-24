@@ -58,6 +58,7 @@ if (process.argv.length <= 2) {
 }
 
 parseJsonFile('./GetBaseReportRequest.json')
+parseJsonFile('./GetBaseReportResponse.json')
 //parseJsonFile('./BootNotificationRequest.json')
 
 var path = process.argv[2];

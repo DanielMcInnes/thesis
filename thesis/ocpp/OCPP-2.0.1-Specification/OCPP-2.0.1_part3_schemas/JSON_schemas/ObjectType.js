@@ -102,9 +102,13 @@ module.exports.parse = function (_filename) {
          _buffer += '                self  => (msg, msgindex, self)\n'
          _buffer += '               ),\n'
          _buffer += '    post => (if valid = true then\n'
-         _buffer += '               (self.messagetypeid = 2) and\n'
-         _buffer += '               (NonSparkTypes.messageid_t.Length(self.messageid) > 0) and\n'
-         _buffer += '               (self.action = action) -- prove that the original packet contains the corresponding "action"\n'
+         _buffer += '               (self.messagetypeid = ' + (_package.endsWith('Request') ? '2' : '3') + ') and\n'
+         _buffer += '               (NonSparkTypes.messageid_t.Length(self.messageid) > 0)';
+         if (_package.includes('Request') ) {
+            _buffer += ' and\n';
+            _buffer += '               (self.action = action) -- prove that the original packet contains the corresponding "action"\n'
+
+         }
          _buffer += '            );\n\n'
          _buffer += '   procedure To_Bounded_String(Self: in T;\n'
          _buffer += '                               retval: out NonSparkTypes.packet.Bounded_String);\n'
@@ -149,7 +153,7 @@ module.exports.parse = function (_filename) {
 
 
          _buffer += '   begin\n';
-         _buffer += '      checkValid(msg, msgindex, self, action, valid);\n'
+         _buffer += '      checkValid(msg, msgindex, self, ' + (_package.includes('Request') ? 'action, ' : '') + 'valid);\n'
          _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + _package + '"); return; end if;\n\n'
 
          // parse each property
