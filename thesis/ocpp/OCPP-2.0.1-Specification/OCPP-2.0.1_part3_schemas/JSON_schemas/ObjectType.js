@@ -171,8 +171,10 @@ module.exports.parse = function (_filename) {
          }
          _buffer +=    '                                                      & "{" & ASCII.LF\n';
 
-         console.log("schema.properties:", schema.properties);
+         console.log("schema.properties:", schema.properties, Object.keys(schema.properties).length);
+         var propertyCounter = 0
          for (var property in schema.properties) {
+            propertyCounter++
             if (property === 'customData') {
                continue;
             }
@@ -185,14 +187,19 @@ module.exports.parse = function (_filename) {
             switch (type) {
                case 'integer':
                   _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' +
-                                                                                       ' & ' + 'Self.' + property + '\'Image & ASCII.LF\n';
+                                                                                       ' & ' + 'Self.' + property + '\'Image' +
+                                                                                       ((propertyCounter === (Object.keys(schema.properties).length)) ? '' : ' & ","') + // append a comma to all but the last property
+                                                                                       ' & ASCII.LF\n';
                   break;
                default:
                   _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' + 
-                                                                                       ' & \'"\' & ' + schema.properties[property]["javaType"] + 'Type.string_t.To_String(str' + property + ') & \'"\' & ASCII.LF\n'; 
+                                                                                       ' & \'"\' & ' + schema.properties[property]["javaType"] + 'Type.string_t.To_String(str' + property + ') & \'"\'' +
+                                                                                       ((propertyCounter === (Object.keys(schema.properties).length)) ? '' : ' & ","') + // append a comma to all but the last property
+                                                                                       ' & ASCII.LF\n'; 
                   // & "    " & ReportBaseEnumType.string_t.To_String(strreportBase) & ASCII.LF
                   break;
             }
+
          }
       
          _buffer +=    '                                                      & "}" & ASCII.LF\n';
