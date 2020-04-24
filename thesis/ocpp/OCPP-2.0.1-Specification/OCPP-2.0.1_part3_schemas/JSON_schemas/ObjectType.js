@@ -125,8 +125,57 @@ module.exports.parse = function (_filename) {
          _buffer += '                   valid: out Boolean\n';
          _buffer += '                  )\n';
          _buffer += '   is\n';
+
+         /*
+         // parse each property
+         for (var property in schema.properties) {
+            if (property === 'customData') {
+               continue;
+            }
+
+            var type = schema.properties[property]["type"];   // int, string
+            if (!!type && type === "string") {
+               _buffer += '      str' + property + ' : ' + schema.properties[property]["javaType"] + 'Type.string_t.Bounded_string;\n';
+            }
+            switch (type) {
+               case 'integer':
+                  //_buffer += '      packet.' + property + ' := '
+                  break;
+               default:
+                  break;
+            }
+            _buffer += '\n';
+
+         }
+         */
          _buffer += '   begin\n';
          _buffer += '      checkValid(msg, msgindex, packet, action, valid);\n'
+
+         // parse each property
+         for (var property in schema.properties) {
+            if (property === 'customData') {
+               continue;
+            }
+
+            var type = schema.properties[property]["type"];   // int, string
+            if (!!type && type === "string") {
+               //_buffer += '      str' + property + ' : ' + schema.properties[property]["javaType"] + 'Type.string_t.Bounded_string;\n';
+            }
+            switch (type) {
+               case 'integer':
+                  //_buffer += '      packet.' + property + ' := '
+                  break;
+               default:
+                  break;
+            }
+            _buffer += '\n';
+
+         }
+         _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + _package + '"); return; end if;\n'
+
+
+
+         _buffer += '      valid := true;\n'
          _buffer += '   end parse;\n\n';
          _buffer += '   procedure To_Bounded_String(Self: in T;\n';
          _buffer += '                               retval: out NonSparkTypes.packet.Bounded_String)\n';

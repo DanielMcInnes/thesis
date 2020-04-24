@@ -22,7 +22,12 @@ package body ocpp is
       
       if (request.action /= expectedAction)
       then
-         NonSparkTypes.put_line("parse: Error: invalid action"); 
+         NonSparkTypes.put_line("ocpp.checkValid: Error: invalid action"); 
+         NonSparkTypes.put("request.action: "); 
+         NonSparkTypes.put(action_t.To_String(request.action));
+         NonSparkTypes.put(" expectedAction: ");
+         NonSparkTypes.put(action_t.To_String(expectedAction));
+         
          return;
       end if;      
       
@@ -37,7 +42,11 @@ package body ocpp is
          return;
       end if;
       
-      if (NonSparkTypes.messageid_t.Length(request.messageid) <= 0) then return; end if;      
+      if (NonSparkTypes.messageid_t.Length(request.messageid) <= 0) 
+      then 
+         NonSparkTypes.put_line("ocpp.checkValid: 47: Error: invalid messageId"); 
+         return; 
+      end if;      
       valid := true;      
    end checkValid;
    

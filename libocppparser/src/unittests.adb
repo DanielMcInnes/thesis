@@ -930,10 +930,44 @@ package body unittests is
                                                             requestId => 1,
                                                             reportBase => ReportBaseEnumType.ConfigurationInventory
                                                            );
+      server: ocpp.server.Class;
+      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("01234567890123456789");
+      valid: Boolean;
+      bnr: ocpp.BootNotification.Request := (
+                                             messagetypeid => 2,
+                                             messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                             action => action_t.To_Bounded_String("BootNotification"),
+                                             reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
+                                             chargingStation => (
+                                                                 serialNumber => sn,
+                                                                 model => NonSparkTypes.ChargingStationType.model.To_Bounded_String("SingleSocketCharger"),
+                                                                 vendorName => NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String("VendorX"),
+                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String("01.23456789"),
+                                                                 modem => (
+                                                                           iccid => ModemType.iccid_t.To_Bounded_String("01234567890123456789"),
+                                                                           imsi => ModemType.imsi_t.To_Bounded_String("01234567890123456789")
+                                                                          )
+                                                                )                                                 
+                                            );
+
+      packet: NonSparkTypes.packet.Bounded_String;
+      response: NonSparkTypes.packet.Bounded_String;
+      expectedresponse: NonSparkTypes.packet.Bounded_String :=
+        NonSparkTypes.packet.To_Bounded_String( ""
+                                                & "[3," & ASCII.LF
+                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
+                                                & "{" & ASCII.LF
+                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
+                                                & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
+                                                & "   " & '"' & "status" & '"' & ": " & '"' & "Accepted" & '"' & ASCII.LF
+                                                & "}" & ASCII.LF
+                                                & "]");
    begin      
       NonSparkTypes.put_line("B07");
       getBaseReportRequest.To_Bounded_String(dummystring);
       NonSparkTypes.put_line(NonSparkTypes.packet.To_String(dummystring));
+      
+      ocpp.server.receivePacket(server, dummystring, response, valid);
       
       
       result := true;

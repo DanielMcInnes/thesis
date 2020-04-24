@@ -12,6 +12,10 @@ package body ocpp.GetBaseReportRequest is
    is
    begin
       checkValid(msg, msgindex, packet, action, valid);
+
+
+      if (valid = false) then NonSparkTypes.put_line("Invalid GetBaseReportRequest"); return; end if;
+      valid := true;
    end parse;
 
    procedure To_Bounded_String(Self: in T;
