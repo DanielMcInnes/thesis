@@ -6,6 +6,7 @@ with NonSparkTypes; use NonSparkTypes.action_t;
 
 
 with ocpp.BootNotification;
+with ocpp.GetBaseReportRequest;
 with ocpp.SetVariables;
 
 with ocpp.heartbeat;
@@ -95,8 +96,11 @@ is
       elsif (action = ocpp.heartbeat.action)
       then
          handleHeartbeat(theServer, msg, index, valid, response, 2, messageId, action);
+      elsif (action = ocpp.GetBaseReportRequest.action)
+      then
+         handleGetBaseReportRequest(theServer, msg, index, valid, response, 2, messageId, action);
       else
-         NonSparkTypes.put_line("ocpp-server: ERROR: invalid action");
+         NonSparkTypes.put_line("ocpp-server: 103: ERROR: invalid action");
       end if;
       
    end handleRequest;
@@ -236,6 +240,35 @@ is
       toString(response, heartbeatResponse);
       NonSparkTypes.put("ocpp-server: 137: response:"); NonSparkTypes.put_line(NonSparkTypes.packet.To_String( response));
    end handleHeartbeat;
+   
+   procedure handleGetBaseReportRequest(theServer: in out ocpp.server.Class;
+                                    msg: in NonSparkTypes.packet.Bounded_String;
+                                    index : in out Integer;
+                                    valid: out Boolean;
+                                    response: out NonSparkTypes.packet.Bounded_String;
+                                    messageTypeId : in Integer;
+                                    messageId : in NonSparkTypes.messageid_t.Bounded_String;
+                                    action : in NonSparkTypes.action_t.Bounded_String
+                                   )
+   is
+      getBaseReportRequest : ocpp.GetBaseReportRequest.T;
+      dummyBounded : NonSparkTypes.packet.Bounded_String;
+   begin
+      getBaseReportRequest.messageid := messageId;
+      getBaseReportRequest.action := action;
+      ocpp.GetBaseReportRequest.parse(msg, index, getBaseReportRequest, valid);
+      
+      if (valid = false) then
+         NonSparkTypes.put_line("ocpp-server: 258: invalid GetBaseReportRequest");
+         return;
+      end if;
+      
+      NonSparkTypes.put_line("I am a server, I should be sending this packet, not receiving it!");
+      GetBaseReportRequest.To_Bounded_String(dummyBounded);
+      response := dummyBounded;
+      valid := false;
+      
+   end handleGetBaseReportRequest;
    
    procedure toString(msg: out NonSparkTypes.packet.Bounded_String;
                       response: in ocpp.BootNotification.Response)

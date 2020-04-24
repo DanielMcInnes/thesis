@@ -90,6 +90,23 @@ package ocpp is
      with  Global => null;
    
 
+   procedure findQuotedKeyQuotedValue(msg: in NonSparkTypes.packet.Bounded_String;
+                                      msgIndex: in out Integer;
+                                      valid: out Boolean;
+                                      key: in string;
+                                      value: out NonSparkTypes.packet.Bounded_String);
+   --        with
+   --          Global => null,
+   --          post => (if valid = true then
+   --                     (msgIndex > 0)
+   --                  );
+
+   procedure findQuotedKeyUnquotedValue(msg: in NonSparkTypes.packet.Bounded_String;
+                                        msgIndex: in out Integer;
+                                        valid: out Boolean;
+                                        key: in string;
+                                        value: out Integer);
+
 private
    
    procedure move_index_past_token
@@ -158,24 +175,5 @@ private
    --                     (msgindex > 0) and
    --                         (msgindex <= NonSparkTypes.packet.Length(msg))
    --                  );
-
-   procedure findQuotedKeyQuotedValue(msg: in NonSparkTypes.packet.Bounded_String;
-                                      msgIndex: in out Integer;
-                                      valid: out Boolean;
-                                      key: in string;
-                                      value: out NonSparkTypes.packet.Bounded_String);
-   --        with
-   --          Global => null,
-   --          post => (if valid = true then
-   --                     (msgIndex > 0)
-   --                  );
-
-   procedure findQuotedKeyUnquotedValue(msg: in NonSparkTypes.packet.Bounded_String;
-                                        msgIndex: in out Integer;
-                                        valid: out Boolean;
-                                        key: in string;
-                                        value: out Integer);
-
-
 
 end ocpp;

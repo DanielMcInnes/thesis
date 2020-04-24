@@ -90,19 +90,21 @@ module.exports.parse = function (_filename) {
       
          _buffer += '\n';
          _buffer += '   procedure parse(msg: in NonSparkTypes.packet.Bounded_String;\n'
-         _buffer += '                msgindex: in Integer;\n'
-         _buffer += '                packet: in ocpp.' + _package + '.T;\n'
+         _buffer += '                msgindex: in out Integer;\n'
+         _buffer += '                self: in out ocpp.' + _package + '.T;\n'
          _buffer += '                valid: out Boolean\n'
          _buffer += '               )\n'
          _buffer += '   with\n'
          _buffer += '    Global => null,\n'
          _buffer += '    Depends => (\n'
-         _buffer += '                valid => (msg, msgindex, packet)\n'
+         _buffer += '                valid => (msg, msgindex, self),\n'
+         _buffer += '                msgindex => (msg, msgIndex, self),\n'
+         _buffer += '                self  => (msg, msgindex, self)\n'
          _buffer += '               ),\n'
          _buffer += '    post => (if valid = true then\n'
-         _buffer += '               (packet.messagetypeid = 2) and\n'
-         _buffer += '               (NonSparkTypes.messageid_t.Length(packet.messageid) > 0) and\n'
-         _buffer += '               (packet.action = action) -- prove that the original packet contains the corresponding "action"\n'
+         _buffer += '               (self.messagetypeid = 2) and\n'
+         _buffer += '               (NonSparkTypes.messageid_t.Length(self.messageid) > 0) and\n'
+         _buffer += '               (self.action = action) -- prove that the original packet contains the corresponding "action"\n'
          _buffer += '            );\n\n'
          _buffer += '   procedure To_Bounded_String(Self: in T;\n'
          _buffer += '                               retval: out NonSparkTypes.packet.Bounded_String);\n'
@@ -116,21 +118,74 @@ module.exports.parse = function (_filename) {
       
          // source file
          _buffer = "pragma SPARK_mode (on); \n\n";
+         _buffer += 'with ocpp;\n';
          _buffer += 'with ocpp.' + _package + ';\n';
          _buffer += 'with Ada.Strings; use Ada.Strings;\n\n';
-         _buffer += 'package body ocpp.' + _package + ' is \n';
+         _buffer += 'package body ocpp.' + _package + ' is \n\n';
+         _buffer += 'procedure findquotedstring_packet is new findquotedstring(\n'
+         _buffer += '                                                             Max => NonSparkTypes.packet.Max_Length, \n'
+         _buffer += '                                                             string_t => NonSparkTypes.packet.Bounded_String, \n'
+         _buffer += '                                                             length => NonSparkTypes.packet.Length,\n'
+         _buffer += '                                                             To_String => NonSparkTypes.packet.to_string,\n'
+         _buffer += '                                                             To_Bounded_String =>  NonSparkTypes.packet.To_Bounded_String\n'
+         _buffer += '                                                            );\n\n'
          _buffer += '   procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;\n';
-         _buffer += '                   msgindex: in Integer;\n';
-         _buffer += '                   packet: in ocpp.' + _package + '.T;\n';
+         _buffer += '                   msgindex: in out Integer;\n';
+         _buffer += '                   self: in out ocpp.' + _package + '.T;\n';
          _buffer += '                   valid: out Boolean\n';
          _buffer += '                  )\n';
          _buffer += '   is\n';
+
+         /*
+         for (var property in schema.properties) {
+            if (property === 'customData') {
+               continue;
+            }
+            _buffer += '      str' + property + ' : ' + schema.properties[property]["javaType"] + 'Type.string_t.Bounded_string;\n';
+         }*/
+
+         _buffer += '      dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");\n';
+         _buffer += '      dummyInt: integer;\n';
+
+
          _buffer += '   begin\n';
-         _buffer += '      checkValid(msg, msgindex, packet, action, valid);\n'
+         _buffer += '      checkValid(msg, msgindex, self, action, valid);\n'
+         _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + _package + '"); return; end if;\n\n'
+
+         // parse each property
+         for (var property in schema.properties) {
+            if (property === 'customData') {
+               continue;
+            }
+
+            var type = schema.properties[property]["type"];   // int, string
+                  //findquotedstring_packet(msg, msgindex, retval, dummybounded);
+
+            switch (type) {
+               case 'integer':
+                  _buffer += '      ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "' + property + '", dummyInt);\n';
+                  _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + _package + '"); return; end if;\n'
+                  _buffer += '      self.' + property + ' := dummyInt;\n';
+                  break;
+               default:
+                  _buffer += '      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "' + property + '", dummybounded);\n';
+                  _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + _package + '"); return; end if;\n\n'
+                  _buffer += '      ' + schema.properties[property]["javaType"] + 'Type.FromString(NonSparkTypes.packet.To_String(dummybounded), self.' + property + ', valid);\n';
+                  break;
+            }
+            _buffer += '\n';
+
+         }
+         _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + _package + '"); return; end if;\n'
+
+
+
+         _buffer += '      valid := true;\n'
          _buffer += '   end parse;\n\n';
          _buffer += '   procedure To_Bounded_String(Self: in T;\n';
          _buffer += '                               retval: out NonSparkTypes.packet.Bounded_String)\n';
          _buffer += '   is\n';
+         _buffer += '      dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); \n';
 
          // for every string type member variable, add a string buffer
          for (var property in schema.properties) {
@@ -171,8 +226,10 @@ module.exports.parse = function (_filename) {
          }
          _buffer +=    '                                                      & "{" & ASCII.LF\n';
 
-         console.log("schema.properties:", schema.properties);
+         console.log("schema.properties:", schema.properties, Object.keys(schema.properties).length);
+         var propertyCounter = 0
          for (var property in schema.properties) {
+            propertyCounter++
             if (property === 'customData') {
                continue;
             }
@@ -185,14 +242,19 @@ module.exports.parse = function (_filename) {
             switch (type) {
                case 'integer':
                   _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' +
-                                                                                       ' & ' + 'Self.' + property + '\'Image & ASCII.LF\n';
+                                                                                       ' & ' + 'Self.' + property + '\'Image' +
+                                                                                       ((propertyCounter === (Object.keys(schema.properties).length)) ? '' : ' & ","') + // append a comma to all but the last property
+                                                                                       ' & ASCII.LF\n';
                   break;
                default:
                   _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' + 
-                                                                                       ' & \'"\' & ' + schema.properties[property]["javaType"] + 'Type.string_t.To_String(str' + property + ') & \'"\' & ASCII.LF\n'; 
+                                                                                       ' & \'"\' & ' + schema.properties[property]["javaType"] + 'Type.string_t.To_String(str' + property + ') & \'"\'' +
+                                                                                       ((propertyCounter === (Object.keys(schema.properties).length)) ? '' : ' & ","') + // append a comma to all but the last property
+                                                                                       ' & ASCII.LF\n'; 
                   // & "    " & ReportBaseEnumType.string_t.To_String(strreportBase) & ASCII.LF
                   break;
             }
+
          }
       
          _buffer +=    '                                                      & "}" & ASCII.LF\n';

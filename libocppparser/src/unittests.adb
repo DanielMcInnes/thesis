@@ -1,6 +1,6 @@
 with ocpp; use ocpp;
 with ocpp.heartbeat; use ocpp.heartbeat;
-with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.messageid_t;
+with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.messageid_t; use NonSparkTypes.packet;
 with System; use System;
 with Ada.Strings; use Ada.Strings;
 
@@ -930,13 +930,44 @@ package body unittests is
                                                             requestId => 1,
                                                             reportBase => ReportBaseEnumType.ConfigurationInventory
                                                            );
+      server: ocpp.server.Class;
+      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("01234567890123456789");
+      valid: Boolean;
+      bnr: ocpp.BootNotification.Request := (
+                                             messagetypeid => 2,
+                                             messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                             action => action_t.To_Bounded_String("BootNotification"),
+                                             reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
+                                             chargingStation => (
+                                                                 serialNumber => sn,
+                                                                 model => NonSparkTypes.ChargingStationType.model.To_Bounded_String("SingleSocketCharger"),
+                                                                 vendorName => NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String("VendorX"),
+                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String("01.23456789"),
+                                                                 modem => (
+                                                                           iccid => ModemType.iccid_t.To_Bounded_String("01234567890123456789"),
+                                                                           imsi => ModemType.imsi_t.To_Bounded_String("01234567890123456789")
+                                                                          )
+                                                                )                                                 
+                                            );
+
+      packet: NonSparkTypes.packet.Bounded_String;
+      response: NonSparkTypes.packet.Bounded_String;
+      expectedresponse: NonSparkTypes.packet.Bounded_String;
+      
    begin      
       NonSparkTypes.put_line("B07");
+      result := false;
+      getBaseReportRequest.To_Bounded_String(expectedresponse);
       getBaseReportRequest.To_Bounded_String(dummystring);
       NonSparkTypes.put_line(NonSparkTypes.packet.To_String(dummystring));
       
+      ocpp.server.receivePacket(server, dummystring, response, valid); 
+      if (dummystring = expectedresponse) 
+      then
+         NonSparkTypes.put_line("B07 passed.");
+         result := true;
+      end if;
       
-      result := true;
    end B07;
    
       

@@ -22,7 +22,12 @@ package body ocpp is
       
       if (request.action /= expectedAction)
       then
-         NonSparkTypes.put_line("parse: Error: invalid action"); 
+         NonSparkTypes.put_line("ocpp.checkValid: Error: invalid action"); 
+         NonSparkTypes.put("request.action: "); 
+         NonSparkTypes.put(action_t.To_String(request.action));
+         NonSparkTypes.put(" expectedAction: ");
+         NonSparkTypes.put(action_t.To_String(expectedAction));
+         
          return;
       end if;      
       
@@ -37,7 +42,11 @@ package body ocpp is
          return;
       end if;
       
-      if (NonSparkTypes.messageid_t.Length(request.messageid) <= 0) then return; end if;      
+      if (NonSparkTypes.messageid_t.Length(request.messageid) <= 0) 
+      then 
+         NonSparkTypes.put_line("ocpp.checkValid: 47: Error: invalid messageId"); 
+         return; 
+      end if;      
       valid := true;      
    end checkValid;
    
@@ -518,6 +527,11 @@ package body ocpp is
       --if (NonSparkTypes.packet.To_String(dummybounded) /= "attributeType") then 
       if (dummybounded /= needle) then 
          NonSparkTypes.put("parse: 198: ERROR: looking for 'attributeType': ");
+         NonSparkTypes.put(" dummybounded: ");
+         NonSparkTypes.put(NonSparkTypes.packet.To_String(dummybounded));
+         NonSparkTypes.put(", needle: ");
+         NonSparkTypes.put_line(needle);
+         
          valid := false;
          return; 
       end if;
