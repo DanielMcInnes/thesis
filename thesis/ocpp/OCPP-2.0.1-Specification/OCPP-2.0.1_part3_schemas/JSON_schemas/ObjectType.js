@@ -184,10 +184,12 @@ module.exports.parse = function (_filename) {
             }
             switch (type) {
                case 'integer':
-                  _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' + ' & ' + 'Self.' + property + '\'Image & ASCII.LF\n';
+                  _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' +
+                                                                                       ' & ' + 'Self.' + property + '\'Image & ASCII.LF\n';
                   break;
                default:
-                  _buffer +=    '                                                      & "    " & ' + schema.properties[property]["javaType"] + 'Type.string_t.To_String(str' + property + ') & ASCII.LF\n'; 
+                  _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' + 
+                                                                                       ' & \'"\' & ' + schema.properties[property]["javaType"] + 'Type.string_t.To_String(str' + property + ') & \'"\' & ASCII.LF\n'; 
                   // & "    " & ReportBaseEnumType.string_t.To_String(strreportBase) & ASCII.LF
                   break;
             }

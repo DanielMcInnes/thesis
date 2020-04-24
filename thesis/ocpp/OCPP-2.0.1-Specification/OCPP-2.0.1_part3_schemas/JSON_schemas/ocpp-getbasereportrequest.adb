@@ -26,7 +26,7 @@ package body ocpp.GetBaseReportRequest is
                                                       & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
                                                       & "    " & '"' & "requestId" & '"' & ": " & Self.requestId'Image & ASCII.LF
-                                                      & "    " & ReportBaseEnumType.string_t.To_String(strreportBase) & ASCII.LF
+                                                      & "    " & '"' & "reportBase" & '"' & ": " & '"' & ReportBaseEnumType.string_t.To_String(strreportBase) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;
