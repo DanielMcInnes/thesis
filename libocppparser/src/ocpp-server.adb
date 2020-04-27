@@ -7,6 +7,7 @@ with NonSparkTypes; use NonSparkTypes.action_t;
 
 with ocpp.BootNotification;
 with ocpp.GetBaseReportRequest;
+with ocpp.GetBaseReportResponse;
 with ocpp.SetVariables;
 
 with ocpp.heartbeat;
@@ -40,13 +41,13 @@ is
       NonSparkTypes.put("ocpp.server.isEnrolled: "); NonSparkTypes.put(serialNumber); NonSparkTypes.put(retval'Image); --NonSparkTypes.put_line(enrolledChargers.Length'Image);
    end isEnrolled;
    
-   procedure transmitPacket(theServer: in out ocpp.server.Class;
-                            msg: in NonSparkTypes.packet.Bounded_String)
+   procedure sendRequest(theServer: in out ocpp.server.Class;
+                            msg: in call'Class)
    is
    begin
       NonSparkTypes.put_line("transmitting packet: ");
-      NonSparkTypes.put_line(NonSparkTypes.packet.To_String(msg));
-   end transmitPacket;
+      theServer.call := msg.action;
+   end sendRequest;
    
    procedure receivePacket(theServer: in out ocpp.server.Class;
                     msg: in NonSparkTypes.packet.Bounded_String;
@@ -119,18 +120,19 @@ is
          return;
       end if;
       
-      ocpp.ParseAction(msg, index, action, valid); -- eg. "BootNotification"
-      if (valid = false) then
-         return;
-      end if;
-      
-      if (action = SetVariables.Response.action)
+      if (theServer.call = ocpp.SetVariables.action)
       then
          handleSetVariablesResponse(theServer, msg, index, valid, messageId);
-      elsif (action = GetVariables.Response.action) then
+      elsif (theServer.call = ocpp.GetVariablesRequest.action)
+      then
          handleGetVariablesResponse(theServer, msg, index, valid, messageId);
-            
+      elsif (theServer.call = ocpp.GetBaseReportRequest.action)
+      then
+         handleGetBaseReportResponse(theServer, msg, index, valid, messageId);
       else
+         NonSparkTypes.put_line("ocpp-server.adb: 134: unknown response"); valid := false;
+         NonSparkTypes.put("theServer.call: "); NonSparkTypes.put_line(NonSparkTypes.action_t.To_String(theServer.call)); 
+         
          valid := false;
       end if;
    end handleResponse;
@@ -153,18 +155,38 @@ is
       end if;
    end handleSetVariablesResponse;
 
+   procedure handleGetBaseReportResponse(theServer: in out ocpp.server.Class;
+                                        msg: in NonSparkTypes.packet.Bounded_String;
+                                        index : in out Integer;
+                                        valid: out Boolean;
+                                        messageId : in NonSparkTypes.messageid_t.Bounded_String)
+   is
+      getBaseReportResponse : ocpp.GetBaseReportResponse.T;
+      
+   begin
+      getBaseReportResponse.messagetypeid := 3;
+      getBaseReportResponse.messageid := messageId;
+      ocpp.GetBaseReportResponse.parse(msg, index, getBaseReportResponse, valid);
+      if (valid = true)
+      then
+         theServer.getBaseReportResponse := getBaseReportResponse;
+      else
+         valid := false;
+      end if;
+   end handleGetBaseReportResponse;
+
    procedure handleGetVariablesResponse(theServer: in out ocpp.server.Class;
                                         msg: in NonSparkTypes.packet.Bounded_String;
                                         index : in out Integer;
                                         valid: out Boolean;
                                         messageId : in NonSparkTypes.messageid_t.Bounded_String)
    is
-      getVariableResponse : GetVariables.Response.Class;
+      getVariableResponse : GetVariablesResponse.T;
       
    begin
       getVariableResponse.messagetypeid := 3;
       getVariableResponse.messageid := messageId;
-      ocpp.GetVariables.Response.parse(msg, index, getVariableResponse, valid);
+      ocpp.GetVariablesResponse.parse(msg, index, getVariableResponse, valid);
       if (valid = true)
       then
          theServer.getVariablesResponse := getVariableResponse;

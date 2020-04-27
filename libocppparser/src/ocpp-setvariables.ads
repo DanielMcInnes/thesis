@@ -5,7 +5,7 @@ pragma SPARK_Mode (On);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp.AttributeEnumType; use ocpp.AttributeEnumType;
-with ComponentType;
+with ocpp.ComponentType;
 with EVSEType;
 with ocpp.VariableType;
 
@@ -52,8 +52,8 @@ package ocpp.SetVariables is
          type Class is tagged record
             attributeType: ocpp.AttributeEnumType.T; -- 0..1 Optional. Type of attribute: Actual, Target, MinSet, MaxSet. Default is Actual when omitted.
             attributeValue: NonSparkTypes.attributeValue_t.string_t.Bounded_String;
-            component: ComponentType.Class; -- 1..1 Required. The component for which result is returned.
-            variable: VariableType.Class; -- 1..1 Required. The variable for which the result is returned.
+            component: ComponentType.T; -- 1..1 Required. The component for which result is returned.
+            variable: VariableType.T; -- 1..1 Required. The variable for which the result is returned.
          end record;
       
       end DataType;
@@ -111,8 +111,8 @@ package ocpp.SetVariables is
          type Class is tagged record
             attributeType: AttributeEnumType.T; -- 0..1 Optional. Type of attribute: Actual, Target, MinSet, MaxSet. Default is Actual when omitted.
             attributeStatus: SetVariableStatusEnumType; -- 1..1 Required. Result status of setting the variable.
-            component: ComponentType.Class; -- 1..1 Required. The component for which result is returned.
-            variable: VariableType.Class; -- 1..1 Required. The variable for which the result is returned.
+            component: ComponentType.T; -- 1..1 Required. The component for which result is returned.
+            variable: VariableType.T; -- 1..1 Required. The variable for which the result is returned.
          end record;
       end SetVariableResultType;
       

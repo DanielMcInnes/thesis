@@ -12,7 +12,7 @@ diagrams
   sequencediagram_ref 154114 // sd1 boot not
     1528 843 200 A4 0 0
   classdiagram_ref 160642 // cd3 SetVariables
-    1598 843 70 A0 78 351
+    1598 843 70 A0 0 351
   active  classdiagram_ref 167170 // cd4 getbasereport
     1598 843 90 A0 0 0
 end

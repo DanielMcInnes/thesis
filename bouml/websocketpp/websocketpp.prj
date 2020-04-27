@@ -1,6 +1,6 @@
 format 222
 "websocketpp"
-  revision 17
+  revision 18
   modified_by 2 "dmcinnes"
 
 
@@ -800,6 +800,7 @@ ${inlines}
       
       attribute 178178 "name"
 	private explicit_type "string[0..50]"
+	multiplicity "1"
 	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
@@ -812,7 +813,8 @@ ${inlines}
 
       attribute 178306 "instance"
 	private explicit_type "string[0..50]"
-	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+	multiplicity "0..1"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
 	java_decl ""
 	php_decl ""
@@ -1035,7 +1037,7 @@ ${inlines}
       end
     end
 
-    class 211458 "ocpp.GetVariables.Request"
+    class 211458 "ocpp.GetVariablesRequest"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -1111,7 +1113,7 @@ ${inlines}
       end
     end
 
-    class 218114 "ocpp.GetVariables.Response"
+    class 218114 "ocpp.GetVariablesResponse"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
