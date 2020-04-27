@@ -24,18 +24,18 @@ procedure findquotedstring_packet is new findquotedstring(
       dummyInt: integer;
    begin
       checkValid(msg, msgindex, self, action, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid GetBaseReportRequest"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
       ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "requestId", dummyInt);
-      if (valid = false) then NonSparkTypes.put_line("Invalid GetBaseReportRequest"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
       self.requestId := dummyInt;
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "reportBase", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("Invalid GetBaseReportRequest"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
       ReportBaseEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.reportBase, valid);
 
-      if (valid = false) then NonSparkTypes.put_line("Invalid GetBaseReportRequest"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
       valid := true;
    end parse;
 

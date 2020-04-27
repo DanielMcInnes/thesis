@@ -3,17 +3,18 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
-with ocpp.ReportBaseEnumType; use ocpp.ReportBaseEnumType;
+with ocpp.ChargingStationType; use ocpp.ChargingStationType;
+with ocpp.BootReasonEnumType; use ocpp.BootReasonEnumType;
 
-package ocpp.GetBaseReportRequest is
-   action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("GetBaseReport"); 
+package ocpp.BootNotificationRequest is
+   action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("BootNotification"); 
    type T is new call with record
-      requestId : integer;
-      reportBase : string;
+      chargingStation : object;
+      reason : string;
    end record;
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex: in out Integer;
-                self: in out ocpp.GetBaseReportRequest.T;
+                self: in out ocpp.BootNotificationRequest.T;
                 valid: out Boolean
                )
    with
@@ -31,4 +32,4 @@ package ocpp.GetBaseReportRequest is
 
    procedure To_Bounded_String(Self: in T;
                                retval: out NonSparkTypes.packet.Bounded_String);
-end ocpp.GetBaseReportRequest;
+end ocpp.BootNotificationRequest;

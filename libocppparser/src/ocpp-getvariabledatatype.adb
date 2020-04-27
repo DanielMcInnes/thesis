@@ -1,10 +1,10 @@
 pragma SPARK_mode (on); 
 
 with ocpp;
-with ocpp.GetBaseReportRequest;
+with ocpp.GetVariableDataType;
 with Ada.Strings; use Ada.Strings;
 
-package body ocpp.GetBaseReportRequest is 
+package body ocpp.GetVariableDataType is 
 
 procedure findquotedstring_packet is new findquotedstring(
                                                              Max => NonSparkTypes.packet.Max_Length, 
@@ -16,24 +16,30 @@ procedure findquotedstring_packet is new findquotedstring(
 
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: in out Integer;
-                   self: in out ocpp.GetBaseReportRequest.T;
+                   self: in out ocpp.GetVariableDataType.T;
                    valid: out Boolean
                   )
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
-      checkValid(msg, msgindex, self, action, valid);
+      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "attributeType", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
-      ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "requestId", dummyInt);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-      self.requestId := dummyInt;
+      AttributeEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.attributeType, valid);
+     if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
-      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "reportBase", dummybounded);
+      
+      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "component", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
-      stringType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.reportBase, valid);
+      ComponentType.parse(msg, msgindex, self.component, valid);
+     if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+
+      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "variable", dummybounded);
+      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+
+      VariableType.parse(msg, msgindex, self.variable, valid);
 
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
       valid := true;
@@ -43,17 +49,19 @@ procedure findquotedstring_packet is new findquotedstring(
                                retval: out NonSparkTypes.packet.Bounded_String)
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
-      strreportBase : ReportBaseEnumType.string_t.Bounded_string;
+      strattributeType : AttributeEnumType.string_t.Bounded_string;
+      strcomponent: NonSparkTypes.packet.Bounded_String; 
+      strvariable: NonSparkTypes.packet.Bounded_String; 
    begin
-      ReportBaseEnumType.ToString(Self.reportBase, strreportBase);
+      AttributeEnumType.ToString(Self.attributeType, strattributeType);
+      ComponentType.To_Bounded_String(self.component, strcomponent);
+      VariableType.To_Bounded_String(self.variable, strvariable);
+      
       retval := NonSparkTypes.packet.To_Bounded_String(""
-                                                      & "[2," & ASCII.LF
-                                                      & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
-                                                      & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "requestId" & '"' & ": " & Self.requestId'Image & "," & ASCII.LF
-                                                      & "    " & '"' & "reportBase" & '"' & ": " & '"' & ReportBaseEnumType.string_t.To_String(strreportBase) & '"' & ASCII.LF
-                                                      & "}" & ASCII.LF
-                                                      & "]", Drop => Right);
+                                                      & "    " & '"' & "attributeType" & '"' & ": " & '"' & AttributeEnumType.string_t.To_String(strattributeType) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "component" & '"' & ": " & '"' & NonSparkTypes.packet.To_String(strComponent) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "variable" & '"' & ": " & '"' & NonSparkTypes.packet.To_String(strvariable) & '"' & ASCII.LF
+                                                      & "}" & ASCII.LF, Drop => Right);
    end To_Bounded_String;
-end ocpp.[object Object];
+end ocpp.GetVariableDataType;

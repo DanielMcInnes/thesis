@@ -1,10 +1,10 @@
 pragma SPARK_mode (on); 
 
 with ocpp;
-with ocpp.GetBaseReportRequest;
+with ocpp.ComponentType;
 with Ada.Strings; use Ada.Strings;
 
-package body ocpp.GetBaseReportRequest is 
+package body ocpp.ComponentType is 
 
 procedure findquotedstring_packet is new findquotedstring(
                                                              Max => NonSparkTypes.packet.Max_Length, 
@@ -16,24 +16,28 @@ procedure findquotedstring_packet is new findquotedstring(
 
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: in out Integer;
-                   self: in out ocpp.GetBaseReportRequest.T;
+                   self: in out ocpp.ComponentType.T;
                    valid: out Boolean
                   )
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
-      checkValid(msg, msgindex, self, action, valid);
+      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "evse", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
-      ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "requestId", dummyInt);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-      self.requestId := dummyInt;
-
-      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "reportBase", dummybounded);
+      EVSEType.parse(msg, msgindex, self.evse, valid);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
-      stringType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.reportBase, valid);
+      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "name", dummybounded);
+      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+
+      self.name := NonSparkTypes.ComponentType.strname.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded),Drop => Right);
+
+      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "instance", dummybounded);
+      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+
+      self.instance := NonSparkTypes.ComponentType.strinstance.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
       valid := true;
@@ -43,17 +47,16 @@ procedure findquotedstring_packet is new findquotedstring(
                                retval: out NonSparkTypes.packet.Bounded_String)
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
-      strreportBase : ReportBaseEnumType.string_t.Bounded_string;
+      strevsetype : NonSparkTypes.packet.Bounded_String; 
    begin
-      ReportBaseEnumType.ToString(Self.reportBase, strreportBase);
+      EVSEType.To_Bounded_String(Self.evse, strevsetype);
+
       retval := NonSparkTypes.packet.To_Bounded_String(""
-                                                      & "[2," & ASCII.LF
-                                                      & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
-                                                      & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "requestId" & '"' & ": " & Self.requestId'Image & "," & ASCII.LF
-                                                      & "    " & '"' & "reportBase" & '"' & ": " & '"' & ReportBaseEnumType.string_t.To_String(strreportBase) & '"' & ASCII.LF
+                                                      & "    " & '"' & "name" & '"' & ": " & NonSparkTypes.ComponentType.strname.To_String(Self.name) & ASCII.LF
+                                                       & "    " & '"' & "instance" & '"' & ": " & NonSparkTypes.ComponentType.strinstance.To_String(Self.instance) & ASCII.LF
+                                                       & "    " & '"' & "evse" & '"' & ": " & '"' &  NonSparkTypes.packet.To_String(strevsetype) & '"'
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;
-end ocpp.[object Object];
+end ocpp.ComponentType;

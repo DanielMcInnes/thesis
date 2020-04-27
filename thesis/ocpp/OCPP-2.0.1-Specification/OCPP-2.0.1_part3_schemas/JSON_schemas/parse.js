@@ -35,21 +35,31 @@ function cleanfilename(f) {
 
 function parseJsonFile(f) {
    var _datafile = require(f);
-   var _definitions = _datafile.definitions;
-
-   if (_datafile.type === 'object') {
-      ObjectType.parse(f);
-   }
-
-   for (var i in _definitions) {
-      //console.log(i);
-      if (i.endsWith('EnumType')) {
-         EnumType.parse(_definitions, i);
+   const $RefParser = require("@apidevtools/json-schema-ref-parser");
+   $RefParser.dereference(_datafile, (err, schema) => {
+      if (err) {
+         console.error(err);
+         return;
       }
-      if (i.type === ('object')) {
-         ObjectType.parse(f);
+      else {
+         // `schema` is just a normal JavaScript object that contains your entire JSON Schema,
+         // including referenced files, combined into a single object
+         if (schema.type === 'object') {
+            ObjectType.parse(f, schema);
+         }
+
+         for (var i in schema.definitions) {
+            console.log('parseJsonFile: i:', i, 'schema.definitions[i].type:', schema.definitions[i].type)
+            if (i.endsWith('EnumType')) {
+               EnumType.parse(schema.definitions, i);
+            }
+            if (schema.definitions[i].type === ('object') && i != 'CustomDataType') {
+               console.log('parseJsonFile: found object.', i )
+               ObjectType.parse(i, schema.definitions[i]);
+            }
+         }
       }
-   }
+   })
 }
 
 if (process.argv.length <= 2) {
@@ -57,9 +67,12 @@ if (process.argv.length <= 2) {
    process.exit(-1);
 }
 
+parseJsonFile('./GetVariablesRequest.json')
+parseJsonFile('./GetVariablesResponse.json')
+
 parseJsonFile('./GetBaseReportRequest.json')
 parseJsonFile('./GetBaseReportResponse.json')
-//parseJsonFile('./BootNotificationRequest.json')
+parseJsonFile('./BootNotificationRequest.json')
 
 var path = process.argv[2];
 

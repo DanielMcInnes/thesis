@@ -4,15 +4,14 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
 
-package ocpp.VariableType is
-
+package ocpp.EVSEType is
    type T is record
-      name : NonSparkTypes.VariableType.strname_t.Bounded_String;
-      instance : NonSparkTypes.VariableType.strinstance_t.Bounded_String;
+      id : integer;
+      connectorId : integer;
    end record;
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex: in out Integer;
-                self: in out ocpp.VariableType.T;
+                self: in out ocpp.EVSEType.T;
                 valid: out Boolean
                )
    with
@@ -25,4 +24,4 @@ package ocpp.VariableType is
    
    procedure To_Bounded_String(Self: in T;
                                retval: out NonSparkTypes.packet.Bounded_String);
-end ocpp.VariableType;
+end ocpp.EVSEType;

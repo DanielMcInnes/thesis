@@ -2,7 +2,7 @@ pragma SPARK_Mode (On);
 
 with ocpp.SetVariables;
 with utils;
-with ComponentType;
+with ocpp.ComponentType;
 with NonSparkTypes;
 
 package body ocpp.SetVariables is
@@ -24,14 +24,14 @@ package body ocpp.SetVariables is
       self.setVariableData.attributeType := ocpp.AttributeEnumType.Actual;
       self.setVariableData.attributeValue := NonSparkTypes.attributeValue_t.string_t.To_Bounded_String("");
       
-      self.setVariableData.component.name := ComponentType.name.To_Bounded_String("");
-      self.setVariableData.component.instance := ComponentType.instance.To_Bounded_String("");
+      self.setVariableData.component.name := NonSparkTypes.ComponentType.strname.To_Bounded_String("");
+      self.setVariableData.component.instance := NonSparkTypes.ComponentType.strinstance.To_Bounded_String("");
 
       self.setVariableData.component.evse.id := 0;
       self.setVariableData.component.evse.connectorId := 0;
       
-      self.setVariableData.variable.name := NonSparkTypes.VariableType_t.name.To_Bounded_String("");
-      self.setVariableData.variable.instance := NonSparkTypes.VariableType_t.instance.To_Bounded_String("");
+      self.setVariableData.variable.name := NonSparkTypes.VariableType.strname_t.To_Bounded_String("");
+      self.setVariableData.variable.instance := NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("");
       
       
    end DefaultInitialize;
@@ -122,16 +122,16 @@ package body ocpp.SetVariables is
                                                            & "   " & '"' & "attributeType" & '"' & ":" & '"' & string_t.To_String(attributeStr) & '"' & ASCII.LF
                                                            & "      " & '"' & "attributeValue"  & '"' & ":" & '"' & NonSparkTypes.attributeValue_t.string_t.To_String(Self.setVariableData.attributeValue) & '"' & "," & ASCII.LF
                                                            & "      " & '"' & "component"  & '"' & ": {" & ASCII.LF
-                                                           & "         " & '"' & "name" & '"' & ":" & " : " & '"' & ComponentType.name.To_String(Self.setVariableData.component.name) & '"' & "," & ASCII.LF
-                                                           & "         " & '"' & "instance" & '"' & ":" & " : " & '"' & ComponentType.instance.To_String(Self.setVariableData.component.instance) & '"' & "," & ASCII.LF
+                                                           & "         " & '"' & "name" & '"' & ":" & " : " & '"' & NonSparkTypes.ComponentType.strname.To_String(Self.setVariableData.component.name) & '"' & "," & ASCII.LF
+                                                           & "         " & '"' & "instance" & '"' & ":" & " : " & '"' & NonSparkTypes.ComponentType.strinstance.To_String(Self.setVariableData.component.instance) & '"' & "," & ASCII.LF
                                                            & "         " & '"' & "evse" & '"' & ": {" & ASCII.LF
                                                            & "            " & '"' & "id" & '"' & " : " & Integer'Image(Self.setVariableData.component.evse.id) & ASCII.LF
                                                            & "            " & '"' & "connectorId" & '"' & " : " & Integer'Image(Self.setVariableData.component.evse.connectorId) & ASCII.LF
                                                            & "         }" & ASCII.LF
                                                            & "      }" & ASCII.LF
                                                            & "      " & '"' & "variable"  & '"' & ": {" & ASCII.LF
-                                                           & "         " & '"' & "name" & '"' & ":" & " : " & '"' & NonSparkTypes.VariableType_t.name.To_String(Self.setVariableData.variable.name) & '"' & "," & ASCII.LF
-                                                           & "         " & '"' & "instance" & '"' & ":" & " : " & '"' & NonSparkTypes.VariableType_t.instance.To_String(Self.setVariableData.variable.instance) & '"' & "," & ASCII.LF
+                                                           & "         " & '"' & "name" & '"' & ":" & " : " & '"' & NonSparkTypes.VariableType.strname_t.To_String(Self.setVariableData.variable.name) & '"' & "," & ASCII.LF
+                                                           & "         " & '"' & "instance" & '"' & ":" & " : " & '"' & NonSparkTypes.VariableType.strinstance_t.To_String(Self.setVariableData.variable.instance) & '"' & "," & ASCII.LF
                                                            & "      }" & ASCII.LF
                                                            & "   }" & ASCII.LF
                                                            & "]",Drop => Ada.Strings.Right);
@@ -151,16 +151,16 @@ package body ocpp.SetVariables is
                                                            & "      " & '"' & "attributeType" & '"' & ":" & '"' & Self.setVariableResult.attributeType'Image & '"' & ASCII.LF
                                                            & "      " & '"' & "attributeStatus" & '"' & ":" & '"' & Self.setVariableResult.attributeStatus'Image & '"' & ASCII.LF
                                                            & "      " & '"' & "component"  & '"' & ": {" & ASCII.LF
-                                                           & "         " & '"' & "name" & '"' & ":" & " : " & '"' & ComponentType.name.To_String(Self.setVariableResult.component.name) & '"' & "," & ASCII.LF
-                                                           & "         " & '"' & "instance" & '"' & ":" & " : " & '"' & ComponentType.instance.To_String(Self.setVariableResult.component.instance) & '"' & "," & ASCII.LF
+                                                           & "         " & '"' & "name" & '"' & ":" & " : " & '"' & NonSparkTypes.ComponentType.strname.To_String(Self.setVariableResult.component.name) & '"' & "," & ASCII.LF
+                                                           & "         " & '"' & "instance" & '"' & ":" & " : " & '"' & NonSparkTypes.ComponentType.strinstance.To_String(Self.setVariableResult.component.instance) & '"' & "," & ASCII.LF
                                                            & "         " & '"' & "evse" & '"' & ": {" & ASCII.LF
                                                            & "            " & '"' & "id" & '"' & " : " & Integer'Image(Self.setVariableResult.component.evse.id) & ASCII.LF
                                                            & "            " & '"' & "connectorId" & '"' & " : " & Integer'Image(Self.setVariableResult.component.evse.connectorId) & ASCII.LF
                                                            & "         }" & ASCII.LF
                                                            & "      }" & ASCII.LF
                                                            & "      " & '"' & "variable"  & '"' & ": {" & ASCII.LF
-                                                           & "         " & '"' & "name" & '"' & ":" & " : " & '"' & NonSparkTypes.VariableType_t.name.To_String(Self.setVariableResult.variable.name) & '"' & "," & ASCII.LF
-                                                           & "         " & '"' & "instance" & '"' & ":" & " : " & '"' & NonSparkTypes.VariableType_t.instance.To_String(Self.setVariableResult.variable.instance) & '"' & "," & ASCII.LF
+                                                           & "         " & '"' & "name" & '"' & ":" & " : " & '"' & NonSparkTypes.VariableType.strname_t.To_String(Self.setVariableResult.variable.name) & '"' & "," & ASCII.LF
+                                                           & "         " & '"' & "instance" & '"' & ":" & " : " & '"' & NonSparkTypes.VariableType.strinstance_t.To_String(Self.setVariableResult.variable.instance) & '"' & "," & ASCII.LF
                                                            & "      }" & ASCII.LF
                                                            & "   }" & ASCII.LF
                                                            & "]",Drop => Ada.Strings.Right);
@@ -228,7 +228,7 @@ package body ocpp.SetVariables is
             NonSparkTypes.put("parse: ERROR 202: invalid component");
             return;
          end if;
-         response.setVariableResult.component.name := ComponentType.name.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded) ,Drop => Ada.Strings.Right);
+         response.setVariableResult.component.name := NonSparkTypes.ComponentType.strname.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded) ,Drop => Ada.Strings.Right);
        
          -- find optional items
          tempmsgindex := msgindex;
@@ -240,7 +240,7 @@ package body ocpp.SetVariables is
                valid := false;
                return;
             end if;
-            response.setVariableResult.component.instance := ComponentType.instance.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Ada.Strings.Right);
+            response.setVariableResult.component.instance := NonSparkTypes.ComponentType.strinstance.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Ada.Strings.Right);
          end if;
          
          tempmsgindex := msgindex;

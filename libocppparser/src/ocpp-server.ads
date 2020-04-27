@@ -2,9 +2,11 @@ pragma SPARK_Mode (On);
 
 with ocpp;
 with ocpp.BootNotification;
+with ocpp.GetBaseReportResponse;
 with ocpp.heartbeat;
 with ocpp.SetVariables;
-with ocpp.GetVariables;
+with ocpp.GetVariablesRequest;
+with ocpp.GetVariablesResponse;
 
 with NonSparkTypes;
 
@@ -15,10 +17,12 @@ is
 
       -- the server maintains a list of charger ids that are allowed to connect
       enrolledChargers : vecChargers_t; -- := NonSparkTypes.vector_chargers.To_Vector(New_Item => NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String(""), Length => 0); 
-      
+
+      getBaseReportResponse: ocpp.GetBaseReportResponse.T;
+      getVariablesResponse: ocpp.GetVariablesResponse.T;
       isDeferringBootNotificationAccept: Boolean := false;
       setVariablesResponse: ocpp.SetVariables.Response.Class;
-      getVariablesResponse: ocpp.GetVariables.Response.Class;
+      call: NonSparkTypes.action_t.Bounded_String;
    end record;
 
    procedure enrolChargingStation(theList: in out NonSparkTypes.vecChargers_t;
@@ -83,6 +87,19 @@ is
                    theServer => (msg, theServer)
                   );
 
+   procedure handleGetBaseReportResponse(theServer: in out ocpp.server.Class;
+                                    msg: in NonSparkTypes.packet.Bounded_String;
+                                    index : in out Integer;
+                                    valid: out Boolean;
+                                    messageId : in NonSparkTypes.messageid_t.Bounded_String
+                                   )
+     with
+       Depends => (
+                     index => (msg, index),
+                     valid => (msg, index,  messageId),
+                   theServer => (msg, theServer)
+                  );
+
    procedure handleGetVariablesResponse(theServer: in out ocpp.server.Class;
                                     msg: in NonSparkTypes.packet.Bounded_String;
                                     index : in out Integer;
@@ -97,8 +114,8 @@ is
                   );
 
 
-   procedure transmitPacket(theServer: in out ocpp.server.Class;
-                            msg: in NonSparkTypes.packet.Bounded_String
+   procedure sendRequest(theServer: in out ocpp.server.Class;
+                            msg: in call'Class
                            );
 
    procedure handleBootNotification(theServer: in out ocpp.server.Class;

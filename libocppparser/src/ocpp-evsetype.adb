@@ -1,10 +1,10 @@
 pragma SPARK_mode (on); 
 
 with ocpp;
-with ocpp.GetBaseReportRequest;
+with ocpp.EVSEType;
 with Ada.Strings; use Ada.Strings;
 
-package body ocpp.GetBaseReportRequest is 
+package body ocpp.EVSEType is 
 
 procedure findquotedstring_packet is new findquotedstring(
                                                              Max => NonSparkTypes.packet.Max_Length, 
@@ -16,24 +16,23 @@ procedure findquotedstring_packet is new findquotedstring(
 
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: in out Integer;
-                   self: in out ocpp.GetBaseReportRequest.T;
+                   self: in out ocpp.EVSEType.T;
                    valid: out Boolean
                   )
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
-      checkValid(msg, msgindex, self, action, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      --checkValid(msg, msgindex, self, valid);
+      --if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
-      ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "requestId", dummyInt);
+      ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "id", dummyInt);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-      self.requestId := dummyInt;
+      self.id := dummyInt;
 
-      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "reportBase", dummybounded);
+      ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "connectorId", dummyInt);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-
-      stringType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.reportBase, valid);
+      self.connectorId := dummyInt;
 
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
       valid := true;
@@ -43,17 +42,13 @@ procedure findquotedstring_packet is new findquotedstring(
                                retval: out NonSparkTypes.packet.Bounded_String)
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
-      strreportBase : ReportBaseEnumType.string_t.Bounded_string;
    begin
-      ReportBaseEnumType.ToString(Self.reportBase, strreportBase);
       retval := NonSparkTypes.packet.To_Bounded_String(""
-                                                      & "[2," & ASCII.LF
-                                                      & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
-                                                      & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
+                                                      --& "[3," & ASCII.LF
+                                                      --& '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "requestId" & '"' & ": " & Self.requestId'Image & "," & ASCII.LF
-                                                      & "    " & '"' & "reportBase" & '"' & ": " & '"' & ReportBaseEnumType.string_t.To_String(strreportBase) & '"' & ASCII.LF
-                                                      & "}" & ASCII.LF
-                                                      & "]", Drop => Right);
+                                                      & "    " & '"' & "id" & '"' & ": " & Self.id'Image & "," & ASCII.LF
+                                                      & "    " & '"' & "connectorId" & '"' & ": " & Self.connectorId'Image & ASCII.LF
+                                                      & "}" & ASCII.LF, Drop => Right);
    end To_Bounded_String;
-end ocpp.[object Object];
+end ocpp.EVSEType; -- TODO

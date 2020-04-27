@@ -3,17 +3,18 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
-with ocpp.ReportBaseEnumType; use ocpp.ReportBaseEnumType;
+with ocpp.GetVariableDataType;
+with ocpp.GetVariableDataTypeArray;
 
-package ocpp.GetBaseReportRequest is
-   action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("GetBaseReport"); 
+package ocpp.GetVariablesRequest is
+   action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("GetVariables"); 
+
    type T is new call with record
-      requestId : integer;
-      reportBase : string;
+      getVariableData : GetVariableDataTypeArray.T; -- TODO
    end record;
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex: in out Integer;
-                self: in out ocpp.GetBaseReportRequest.T;
+                self: in out ocpp.GetVariablesRequest.T;
                 valid: out Boolean
                )
    with
@@ -31,4 +32,4 @@ package ocpp.GetBaseReportRequest is
 
    procedure To_Bounded_String(Self: in T;
                                retval: out NonSparkTypes.packet.Bounded_String);
-end ocpp.GetBaseReportRequest;
+end ocpp.GetVariablesRequest;
