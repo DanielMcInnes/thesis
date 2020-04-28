@@ -12,7 +12,8 @@ with ocpp.GetVariablesRequest; use ocpp.GetVariablesRequest;
 with ocpp.GetVariablesResponse;
 with ocpp.GetVariableResultType;
 with ocpp.server;
-with ocpp.SetVariables;
+with ocpp.SetVariablesRequest;
+with ocpp.SetVariablesResponse;
 with ocpp.VariableType;
 
 with ocpp.A15118evcertificatestatusenumtype;
@@ -130,13 +131,13 @@ package body unittests is
    procedure testall(result: out Boolean)
    is
    begin
---      B01(result);      if (result = false) then         fail; return;      end if;
---      B02(result);      if (result = false) then         fail; return;      end if;
---      B03(result);      if (result = false) then         fail; return;      end if;
---      B04(result);      if (result = false) then         fail; return;      end if;
---      B05(result);      if (result = false) then         fail; return;      end if;
+      --      B01(result);      if (result = false) then         fail; return;      end if;
+      --      B02(result);      if (result = false) then         fail; return;      end if;
+      --      B03(result);      if (result = false) then         fail; return;      end if;
+      --      B04(result);      if (result = false) then         fail; return;      end if;
+      --      B05(result);      if (result = false) then         fail; return;      end if;
       B06(result);      if (result = false) then         fail; return;      end if;
---      B07(result);      if (result = false) then         fail; return;      end if; -- GetBaseReportRequest
+      --      B07(result);      if (result = false) then         fail; return;      end if; -- GetBaseReportRequest
       
       --TODO:
       --B07 
@@ -694,8 +695,8 @@ package body unittests is
    
    procedure B05(result: out Boolean)
    is
-      use ocpp.SetVariables.Response;
-      use ocpp.SetVariables.Request.DataType;
+      use ocpp.SetVariablesResponse;
+      --use ocpp.SetVariablesRequest.DataType;
 
       server: ocpp.server.Class;
       sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("01234567890123456789");
@@ -730,16 +731,16 @@ package body unittests is
                                                 & "}" & ASCII.LF
                                                 & "]");
 
-      setVariablesRequest : ocpp.SetVariables.Request.Class := (
+      setVariablesRequest : ocpp.SetVariablesRequest.T := (
                                                                 messagetypeid => 2,
                                                                 messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
                                                                 action => action_t.To_Bounded_String("SetVariables"),
-                                                                setVariableData => (
+                                                                setVariableData => ( content => ( others => (
                                                                                     attributeType => AttributeEnumType.Actual,
-                                                                                    attributeValue => NonSparkTypes.attributeValue_t.string_t.To_Bounded_String("p@ssw0rd"),
+                                                                                    attributeValue => NonSparkTypes.SetVariableDataType.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
                                                                                     component => (
-                                                                                                  name => NonSparkTypes.ComponentType.strname.To_Bounded_String("evse"),
-                                                                                                  instance => NonSparkTypes.ComponentType.strinstance.To_Bounded_String("0"),
+                                                                                                  name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("evse"),
+                                                                                                  instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
                                                                                                   evse => (
                                                                                                            id => 0,
                                                                                                            connectorId => 0
@@ -749,18 +750,18 @@ package body unittests is
                                                                                                  name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
                                                                                                  instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
                                                                                                 )
-                                                                                   )
-                                                               );
+                                                                                   ))
+                                                               ));
       
-      setVariablesResponse : ocpp.SetVariables.Response.Class := (
+      setVariablesResponse : ocpp.SetVariablesResponse.T := (
                                                                   messagetypeid => 3,
                                                                   messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                                                  setVariableResult => (
+                                                                  setVariableResult => ( content => ( others => (
                                                                                         attributeType => AttributeEnumType.Actual,
-                                                                                        attributeStatus => ocpp.SetVariables.Response.SetVariableResultType.Accepted,
+                                                                                        attributeStatus => ocpp.SetVariableStatusEnumType.Accepted,
                                                                                         component => (
-                                                                                                      name => NonSparkTypes.ComponentType.strname.To_Bounded_String("name001"),
-                                                                                                      instance => NonSparkTypes.ComponentType.strinstance.To_Bounded_String("instance001"),
+                                                                                                      name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("name001"),
+                                                                                                      instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("instance001"),
                                                                                                       evse => (
                                                                                                                id => 0,
                                                                                                                connectorId => 0
@@ -772,7 +773,7 @@ package body unittests is
                                                                                                     )
                                                                                        )
                                                                   
-                                                                 );
+                                                                 )));
    begin
       result := false;
       ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);     
@@ -786,10 +787,10 @@ package body unittests is
          return;
       end if;
       
-      ocpp.setvariables.Request.To_Bounded_String(setVariablesRequest, packet);
+      ocpp.setvariablesRequest.To_Bounded_String(setVariablesRequest, packet);
       put_line(NonSparkTypes.packet.To_String(packet));
       
-      ocpp.SetVariables.Response.To_Bounded_String(setVariablesResponse, packet);
+      ocpp.SetVariablesResponse.To_Bounded_String(setVariablesResponse, packet);
       put_line(NonSparkTypes.packet.To_String(packet));
       ocpp.server.receivePacket(server, packet, response, result);
 
@@ -800,7 +801,7 @@ package body unittests is
          result := false;
       end if;
       
-      ocpp.SetVariables.Response.To_Bounded_String(server.setVariablesResponse, response);
+      ocpp.SetVariablesResponse.To_Bounded_String(server.setVariablesResponse, response);
       put_line(NonSparkTypes.packet.To_String(response));
       
    end B05;
@@ -848,44 +849,45 @@ package body unittests is
                                                            action => action_t.To_Bounded_String("GetVariables"),
                                                            getVariableData => ( 
                                                                                 content => ( others => (
-                                                                                            attributeType => AttributeEnumType.Actual,
-                                                                                            component => (
-                                                                                                          name => NonSparkTypes.ComponentType.strname.To_Bounded_String ("evse", Drop => Right),
-                                                                                                          instance => NonSparkTypes.ComponentType.strinstance.To_Bounded_String("0"),
-                                                                                                          evse => (
-                                                                                                                   id => 0,
-                                                                                                                   connectorId => 0
-                                                                                                                  )
-                                                                                                         ),
-                                                                                            variable => (
-                                                                                                         name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
-                                                                                                         instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
-                                                                                                        )
-                                                                                           ))
+                                                                                                        attributeType => AttributeEnumType.Actual,
+                                                                                                        component => (
+                                                                                                                      name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String ("evse", Drop => Right),
+                                                                                                                      instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
+                                                                                                                      evse => (
+                                                                                                                               id => 0,
+                                                                                                                               connectorId => 0
+                                                                                                                              )
+                                                                                                                     ),
+                                                                                                        variable => (
+                                                                                                                     name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
+                                                                                                                     instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
+                                                                                                                    )
+                                                                                                       ))
                                                                                )
                                                           );
       getVariablesResponse : ocpp.GetVariablesResponse.T := (
-                                                                  messagetypeid => 3,
-                                                                  messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                                                  getVariableResult => (
-                                                                                        attributeStatus => ocpp.GetVariableStatusEnumType.Accepted,
-                                                                                        attributeType => AttributeEnumType.Actual,
-                                                                                        attributeValue => NonSparkTypes.GetVariableResultType.strattributeValue.To_Bounded_String("p@ssw0rd"),
-                                                                                        component => (
-                                                                                                      name => NonSparkTypes.ComponentType.strname.To_Bounded_String("evse"),
-                                                                                                      instance => NonSparkTypes.ComponentType.strinstance.To_Bounded_String("0"),
-                                                                                                      evse => (
-                                                                                                               id => 0,
-                                                                                                               connectorId => 0
-                                                                                                              )
-                                                                                                     ),
-                                                                                        variable => (
-                                                                                                     name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
-                                                                                                     instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
-                                                                                                    )
-                                                                                       )
+                                                             messagetypeid => 3,
+                                                             messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                             getVariableResult => ( content => ( others => (
+                                                                                                
+                                                                                                attributeStatus => ocpp.GetVariableStatusEnumType.Accepted,
+                                                                                                attributeType => AttributeEnumType.Actual,
+                                                                                                attributeValue => NonSparkTypes.GetVariableResultType.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
+                                                                                                component => (
+                                                                                                              name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("evse"),
+                                                                                                              instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
+                                                                                                              evse => (
+                                                                                                                       id => 0,
+                                                                                                                       connectorId => 0
+                                                                                                                      )
+                                                                                                             ),
+                                                                                                variable => (
+                                                                                                             name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
+                                                                                                             instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
+                                                                                                            )
+                                                                                               )))
                                                                   
-                                                                 );
+                                                            );
    begin
       result := false;
       ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);     

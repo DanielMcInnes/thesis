@@ -1,10 +1,10 @@
 pragma SPARK_mode (on); 
 
 with ocpp;
-with ocpp.GetBaseReportResponse;
+with ocpp.SetVariablesRequest;
 with Ada.Strings; use Ada.Strings;
 
-package body ocpp.GetBaseReportResponse is 
+package body ocpp.SetVariablesRequest is 
 
 procedure findquotedstring_packet is new findquotedstring(
                                                              Max => NonSparkTypes.packet.Max_Length, 
@@ -16,17 +16,21 @@ procedure findquotedstring_packet is new findquotedstring(
 
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: in out Integer;
-                   self: in out ocpp.GetBaseReportResponse.T;
+                   self: in out ocpp.SetVariablesRequest.T;
                    valid: out Boolean
                   )
    is
+      strsetVariableData: NonSparkTypes.packet.Bounded_String;
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
-      checkValid(msg, msgindex, self, valid);
+      checkValid(msg, msgindex, self, action, valid);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
-      ocpp.GenericDeviceModelStatusEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.status, valid);
+      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "setVariableData", dummybounded);
+      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+
+      SetVariableDataTypeArray.ToString(strsetVariableData, self.setVariableData);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
@@ -37,15 +41,16 @@ procedure findquotedstring_packet is new findquotedstring(
                                retval: out NonSparkTypes.packet.Bounded_String)
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
-      strstatus : GenericDeviceModelStatusEnumType.string_t.Bounded_String;
+      strsetVariableData: NonSparkTypes.packet.Bounded_String;
    begin
-      GenericDeviceModelStatusEnumType.ToString(Self.status, strstatus);
+      SetVariableDataTypeArray.ToString(strsetVariableData, self.setVariableData);
       retval := NonSparkTypes.packet.To_Bounded_String(""
-                                                      & "[3," & ASCII.LF
+                                                      & "[2," & ASCII.LF
                                                       & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
+                                                      & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "status" & '"' & ":" & GenericDeviceModelStatusEnumType.string_t.To_String(strstatus)
+                                                      & "    " & '"' & NonSparkTypes.packet.To_String(strsetVariableData) & '"' & ": "
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;
-end ocpp.GetBaseReportResponse;
+end ocpp.SetVariablesRequest;

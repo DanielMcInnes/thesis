@@ -23,9 +23,6 @@ procedure findquotedstring_packet is new findquotedstring(
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
-      --checkValid(msg, msgindex, self, valid);
-      --if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-
       ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "id", dummyInt);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
       self.id := dummyInt;
@@ -44,11 +41,10 @@ procedure findquotedstring_packet is new findquotedstring(
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
    begin
       retval := NonSparkTypes.packet.To_Bounded_String(""
-                                                      --& "[3," & ASCII.LF
-                                                      --& '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
                                                       & "    " & '"' & "id" & '"' & ": " & Self.id'Image & "," & ASCII.LF
                                                       & "    " & '"' & "connectorId" & '"' & ": " & Self.connectorId'Image & ASCII.LF
-                                                      & "}" & ASCII.LF, Drop => Right);
+                                                      & "}" & ASCII.LF
+                                                      & "]", Drop => Right);
    end To_Bounded_String;
-end ocpp.EVSEType; -- TODO
+end ocpp.EVSEType;

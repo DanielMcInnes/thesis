@@ -6,8 +6,8 @@ with ocpp; use ocpp;
 
 package ocpp.ModemType is
    type T is record
-      iccid : string;
-      imsi : string;
+      iccid : NonSparkTypes.ModemType.striccid_t.Bounded_String;
+      imsi : NonSparkTypes.ModemType.strimsi_t.Bounded_String;
    end record;
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex: in out Integer;
@@ -20,10 +20,7 @@ package ocpp.ModemType is
                 valid => (msg, msgindex, self),
                 msgindex => (msg, msgIndex, self),
                 self  => (msg, msgindex, self)
-               ),
-    post => (if valid = true then
-               (self.messagetypeid = 3) and
-               (NonSparkTypes.messageid_t.Length(self.messageid) > 0)            );
+            );
 
    procedure To_Bounded_String(Self: in T;
                                retval: out NonSparkTypes.packet.Bounded_String);

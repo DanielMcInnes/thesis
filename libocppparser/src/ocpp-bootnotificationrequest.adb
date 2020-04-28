@@ -29,12 +29,11 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "chargingStation", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
-      objectType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.chargingStation, valid);
-
-      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "reason", dummybounded);
+      ChargingStationType.parse(msg, msgindex, self.chargingStation, valid);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
-      stringType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.reason, valid);
+      ocpp.BootReasonEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.reason, valid);
+      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
       valid := true;
@@ -44,17 +43,19 @@ procedure findquotedstring_packet is new findquotedstring(
                                retval: out NonSparkTypes.packet.Bounded_String)
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
-      strreason : BootReasonEnumType.string_t.Bounded_string;
+      strchargingStation : NonSparkTypes.packet.Bounded_String;
+      strreason : BootReasonEnumType.string_t.Bounded_String;
    begin
+      ChargingStationType.To_Bounded_String(Self.chargingStation, strchargingStation);
       BootReasonEnumType.ToString(Self.reason, strreason);
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "[2," & ASCII.LF
                                                       & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
                                                       & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "chargingStation" & '"' & ": " & '"' & ChargingStationType.string_t.To_String(strchargingStation) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "reason" & '"' & ": " & '"' & BootReasonEnumType.string_t.To_String(strreason) & '"' & ASCII.LF
+                                                      & "    " & '"' & NonSparkTypes.packet.To_String(strchargingStation) & '"' & ": "
+                                                      & "    " & '"' & "reason" & '"' & ":" & BootReasonEnumType.string_t.To_String(strreason)
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;
-end ocpp.[object Object];
+end ocpp.BootNotificationRequest;

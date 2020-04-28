@@ -23,18 +23,13 @@ procedure findquotedstring_packet is new findquotedstring(
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
-      checkValid(msg, msgindex, self, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "iccid", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-
-      stringType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.iccid, valid);
+      self.iccid := NonSparkTypes.ModemType.striccid_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "imsi", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-
-      stringType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.imsi, valid);
+      self.imsi := NonSparkTypes.ModemType.strimsi_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
       valid := true;
@@ -44,18 +39,12 @@ procedure findquotedstring_packet is new findquotedstring(
                                retval: out NonSparkTypes.packet.Bounded_String)
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
-      striccid : undefinedType.string_t.Bounded_string;
-      strimsi : undefinedType.string_t.Bounded_string;
    begin
-      undefinedType.ToString(Self.iccid, striccid);
-      undefinedType.ToString(Self.imsi, strimsi);
       retval := NonSparkTypes.packet.To_Bounded_String(""
-                                                      & "[3," & ASCII.LF
-                                                      & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "iccid" & '"' & ": " & '"' & undefinedType.string_t.To_String(striccid) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "imsi" & '"' & ": " & '"' & undefinedType.string_t.To_String(strimsi) & '"' & ASCII.LF
+                                                      & "    " & '"' & NonSparkTypes.ModemType.striccid_t.To_String(Self.iccid) & '"' & ": "
+                                                      & "    " & '"' & NonSparkTypes.ModemType.strimsi_t.To_String(Self.imsi) & '"' & ": "
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;
-end ocpp.[object Object];
+end ocpp.ModemType;

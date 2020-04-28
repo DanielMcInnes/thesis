@@ -30,10 +30,8 @@ procedure findquotedstring_packet is new findquotedstring(
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
       self.requestId := dummyInt;
 
-      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "reportBase", dummybounded);
+      ocpp.ReportBaseEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.reportBase, valid);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-
-      ReportBaseEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.reportBase, valid);
 
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
       valid := true;
@@ -43,7 +41,7 @@ procedure findquotedstring_packet is new findquotedstring(
                                retval: out NonSparkTypes.packet.Bounded_String)
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
-      strreportBase : ReportBaseEnumType.string_t.Bounded_string;
+      strreportBase : ReportBaseEnumType.string_t.Bounded_String;
    begin
       ReportBaseEnumType.ToString(Self.reportBase, strreportBase);
       retval := NonSparkTypes.packet.To_Bounded_String(""
@@ -52,7 +50,7 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
                                                       & "    " & '"' & "requestId" & '"' & ": " & Self.requestId'Image & "," & ASCII.LF
-                                                      & "    " & '"' & "reportBase" & '"' & ": " & '"' & ReportBaseEnumType.string_t.To_String(strreportBase) & '"' & ASCII.LF
+                                                      & "    " & '"' & "reportBase" & '"' & ":" & ReportBaseEnumType.string_t.To_String(strreportBase)
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;

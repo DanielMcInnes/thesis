@@ -11,8 +11,12 @@ package NonSparkTypes is
    package BootReasonEnumType is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 16);
    
    package GetVariableResultType is
-      package strattributeValue is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 2500);
+      package strattributeValue_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 2500);
    end GetVariableResultType;
+
+   package SetVariableDataType is
+      package strattributeValue_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 2500);
+   end SetVariableDataType;
 
    package VariableType is
       package strname_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50);
@@ -20,8 +24,8 @@ package NonSparkTypes is
    end VariableType;
       
    package ComponentType is
-      package strname is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50); -- TODO string;
-      package strinstance is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50); -- TODO string;
+      package strname_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50); -- TODO string;
+      package strinstance_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50); -- TODO string;
    end ComponentType;
    --ApplicationReset - The Charging Station rebooted due to an application error.
    --FirmwareUpdate - The Charging Station rebooted due to a firmware update.

@@ -9,11 +9,10 @@ with ocpp.ComponentType; use ocpp.ComponentType;
 with ocpp.VariableType; use ocpp.VariableType;
 
 package ocpp.GetVariableResultType is
-
    type T is record
-      attributeStatus : ocpp.GetVariableStatusEnumType.T;
-      attributeType : ocpp.AttributeEnumType.T;
-      attributeValue : NonSparkTypes.GetVariableResultType.strattributeValue.Bounded_String;
+      attributeStatus : GetVariableStatusEnumType.T;
+      attributeType : AttributeEnumType.T;
+      attributeValue : NonSparkTypes.GetVariableResultType.strattributeValue_t.Bounded_String;
       component : ComponentType.T;
       variable : VariableType.T;
    end record;
@@ -28,7 +27,7 @@ package ocpp.GetVariableResultType is
                 valid => (msg, msgindex, self),
                 msgindex => (msg, msgIndex, self),
                 self  => (msg, msgindex, self)
-               );
+            );
 
    procedure To_Bounded_String(Self: in T;
                                retval: out NonSparkTypes.packet.Bounded_String);

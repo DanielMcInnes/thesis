@@ -3,17 +3,16 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
-with ocpp.ReportBaseEnumType; use ocpp.ReportBaseEnumType;
+with ocpp.setVariableDataTypeArray;
 
-package ocpp.GetBaseReportRequest is
-   action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("GetBaseReport"); 
+package ocpp.SetVariablesRequest is
+   action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("SetVariables"); 
    type T is new call with record
-      requestId : integer;
-      reportBase : string;
+      setVariableData : setVariableDataTypeArray.T;
    end record;
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex: in out Integer;
-                self: in out ocpp.GetBaseReportRequest.T;
+                self: in out ocpp.SetVariablesRequest.T;
                 valid: out Boolean
                )
    with
@@ -22,7 +21,7 @@ package ocpp.GetBaseReportRequest is
                 valid => (msg, msgindex, self),
                 msgindex => (msg, msgIndex, self),
                 self  => (msg, msgindex, self)
-               ),
+),
     post => (if valid = true then
                (self.messagetypeid = 2) and
                (NonSparkTypes.messageid_t.Length(self.messageid) > 0) and
@@ -31,4 +30,4 @@ package ocpp.GetBaseReportRequest is
 
    procedure To_Bounded_String(Self: in T;
                                retval: out NonSparkTypes.packet.Bounded_String);
-end ocpp.GetBaseReportRequest;
+end ocpp.SetVariablesRequest;
