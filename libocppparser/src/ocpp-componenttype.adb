@@ -50,10 +50,10 @@ procedure findquotedstring_packet is new findquotedstring(
       EVSEType.To_Bounded_String(Self.evse, strevse);
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & NonSparkTypes.packet.To_String(strevse) & '"' & ": "
-                                                      & "    " & '"' & NonSparkTypes.ComponentType.strname_t.To_String(Self.name) & '"' & ": "
-                                                      & "    " & '"' & NonSparkTypes.ComponentType.strinstance_t.To_String(Self.instance) & '"' & ": "
+                                                      & "    " & '"' & "evse" & '"' & ":" & NonSparkTypes.packet.To_String(strevse) & "," & ASCII.LF
+                                                      & "    " & '"' & "name" & '"' & ": " & '"' & NonSparkTypes.ComponentType.strname_t.To_String(Self.name) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "instance" & '"' & ": " & '"' & NonSparkTypes.ComponentType.strinstance_t.To_String(Self.instance) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
-                                                      & "]", Drop => Right);
+, Drop => Right);
    end To_Bounded_String;
 end ocpp.ComponentType;

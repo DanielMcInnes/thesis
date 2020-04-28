@@ -59,11 +59,11 @@ procedure findquotedstring_packet is new findquotedstring(
       VariableType.To_Bounded_String(Self.variable, strvariable);
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "attributeType" & '"' & ":" & AttributeEnumType.string_t.To_String(strattributeType)
-                                                      & "    " & '"' & NonSparkTypes.SetVariableDataType.strattributeValue_t.To_String(Self.attributeValue) & '"' & ": "
-                                                      & "    " & '"' & NonSparkTypes.packet.To_String(strcomponent) & '"' & ": "
-                                                      & "    " & '"' & NonSparkTypes.packet.To_String(strvariable) & '"' & ": "
+                                                      & "       " & '"' & "attributeType" & '"' & ":"  & '"' & AttributeEnumType.string_t.To_String(strattributeType) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "attributeValue" & '"' & ": " & '"' & NonSparkTypes.SetVariableDataType.strattributeValue_t.To_String(Self.attributeValue) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "component" & '"' & ":" & NonSparkTypes.packet.To_String(strcomponent) & "," & ASCII.LF
+                                                      & "    " & '"' & "variable" & '"' & ":" & NonSparkTypes.packet.To_String(strvariable) & ASCII.LF
                                                       & "}" & ASCII.LF
-                                                      & "]", Drop => Right);
+, Drop => Right);
    end To_Bounded_String;
 end ocpp.SetVariableDataType;

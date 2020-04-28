@@ -1,13 +1,13 @@
 pragma SPARK_mode (on); 
 
 with NonSparkTypes;
-with ocpp.GetVariableResultType;
+with ocpp.SetVariableDataType;
 
-package ocpp.GetVariableResultTypeArray is
+package ocpp.SetVariableDataTypeArray is
 type Index is range 1 .. 100;
-type array_GetVariableResultType is array (Index) of ocpp.GetVariableResultType.T;
+type array_SetVariableDataType is array (Index) of ocpp.SetVariableDataType.T;
 type T is record
-   content : array_GetVariableResultType;
+   content : array_SetVariableDataType;
 end record;
 procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;
                      msgindex: in out Integer;
@@ -17,4 +17,4 @@ procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;
 procedure To_Bounded_String(msg: out NonSparkTypes.packet.Bounded_String;
                    self: in T);
 
-end ocpp.GetVariableResultTypeArray;
+end ocpp.SetVariableDataTypeArray;

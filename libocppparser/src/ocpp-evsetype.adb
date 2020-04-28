@@ -45,6 +45,6 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & "    " & '"' & "id" & '"' & ": " & Self.id'Image & "," & ASCII.LF
                                                       & "    " & '"' & "connectorId" & '"' & ": " & Self.connectorId'Image & ASCII.LF
                                                       & "}" & ASCII.LF
-                                                      & "]", Drop => Right);
+, Drop => Right);
    end To_Bounded_String;
 end ocpp.EVSEType;

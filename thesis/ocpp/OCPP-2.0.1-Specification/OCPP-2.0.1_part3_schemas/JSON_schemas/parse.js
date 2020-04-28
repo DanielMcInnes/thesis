@@ -49,12 +49,12 @@ function parseJsonFile(f) {
          }
 
          for (var i in schema.definitions) {
-            console.log('parseJsonFile: i:', i, 'schema.definitions[i].type:', schema.definitions[i].type)
+            //console.log('parseJsonFile: i:', i, 'schema.definitions[i].type:', schema.definitions[i].type)
             if (i.endsWith('EnumType')) {
                EnumType.parse(schema.definitions, i);
             }
             if (schema.definitions[i].type === ('object') && i != 'CustomDataType') {
-               console.log('parseJsonFile: found object.', i )
+               //console.log('parseJsonFile: found object.', i )
                ObjectType.parse(i, schema.definitions[i]);
             }
          }

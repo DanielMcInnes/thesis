@@ -10,6 +10,7 @@ with ocpp.VariableType; use ocpp.VariableType;
 
 package ocpp.GetVariableResultType is
    type T is record
+       zzzArrayElementInitialized : Boolean := False;
       attributeStatus : GetVariableStatusEnumType.T;
       attributeType : AttributeEnumType.T;
       attributeValue : NonSparkTypes.GetVariableResultType.strattributeValue_t.Bounded_String;

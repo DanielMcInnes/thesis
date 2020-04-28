@@ -1,25 +1,24 @@
-with ocpp.GetVariableDataTypeArray;
+with Ada.Strings; use Ada.Strings;
 
 package body ocpp.GetVariableResultTypeArray is
+procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;
+                     msgindex: in out Integer;
+                     self: out T;
+                     valid: out Boolean)
+is
+begin
+   NonSparkTypes.put_line("GetVariableResultTypeArray.FromString");
+end FromString;
 
-
-   procedure FromString(msg: in string;
-                        self: out T;
-                        valid: out Boolean)
-   is
-   begin
-      NonSparkTypes.put_line("GetVariableResponseTypeArray.FromString");
-   end FromString;
-   
-   procedure ToString(msg: out NonSparkTypes.packet.Bounded_String;
-                        self: in T)
-   is
-   begin
-      NonSparkTypes.put_line("GetVariableResponseTypeArray.ToString");
-   end ToString;
-   
-
-   
-   
+procedure To_Bounded_String(msg: out NonSparkTypes.packet.Bounded_String;
+                   self: in T)
+is
+   dummybounded: NonSparkTypes.packet.Bounded_String;
+begin
+   for i in Index loop
+      GetVariableResultType.To_Bounded_String(self.content(1), dummybounded);
+      NonSparkTypes.packet.Append(Source => msg, New_Item => dummybounded,Drop => Right);
+   end loop;
+end To_Bounded_String;
 
 end ocpp.GetVariableResultTypeArray;
