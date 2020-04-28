@@ -30,7 +30,7 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "setVariableData", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
-      SetVariableDataTypeArray.ToString(strsetVariableData, self.setVariableData);
+      SetVariableDataTypeArray.FromString(msg, msgindex, self.setVariableData, valid);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
@@ -43,7 +43,7 @@ procedure findquotedstring_packet is new findquotedstring(
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
       strsetVariableData: NonSparkTypes.packet.Bounded_String;
    begin
-      SetVariableDataTypeArray.ToString(strsetVariableData, self.setVariableData);
+      SetVariableDataTypeArray.To_Bounded_String(strsetVariableData, self.setVariableData);
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "[2," & ASCII.LF
                                                       & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF

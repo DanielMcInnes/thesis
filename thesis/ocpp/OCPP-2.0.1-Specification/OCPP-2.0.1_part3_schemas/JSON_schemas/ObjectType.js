@@ -58,11 +58,12 @@ function createArrayType(name, schema) {
    _buffer += ('   content : array_' + schema.items.javaType + 'Type;\n')
    _buffer += ('end record;\n')
 
-   _buffer += ('procedure FromString(msg: in string;\n')
+   _buffer += ('procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;\n')
+   _buffer += ('                     msgindex: in out Integer;\n')
    _buffer += ('                     self: out T;\n')
-   _buffer += ('                    valid: out Boolean);\n\n')
+   _buffer += ('                     valid: out Boolean);\n\n')
 
-   _buffer += ('procedure ToString(msg: out NonSparkTypes.packet.Bounded_String;\n')
+   _buffer += ('procedure To_Bounded_String(msg: out NonSparkTypes.packet.Bounded_String;\n')
    _buffer += ('                   self: in T);\n\n')
 
    _buffer += ('end ocpp.' + schema.items.javaType + 'TypeArray;\n')
@@ -81,20 +82,21 @@ function createArrayType(name, schema) {
    _buffer ="pragma SPARK_mode (on); \n\n";
 
    _buffer += ('package body ocpp.' + schema.items.javaType + 'TypeArray is\n');
-   _buffer += ('procedure FromString(msg: in string;\n')
+   _buffer += ('procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;\n')
+   _buffer += ('                     msgindex: in out Integer;\n')
    _buffer += ('                     self: out T;\n')
-   _buffer += ('                    valid: out Boolean)\n')
+   _buffer += ('                     valid: out Boolean)\n')
    _buffer += ('is\n')
    _buffer += ('begin\n')
    _buffer += ('   NonSparkTypes.put_line("' + schema.items.javaType + 'TypeArray.FromString");\n')
    _buffer += ('end FromString;\n\n')
 
-   _buffer += ('procedure ToString(msg: out NonSparkTypes.packet.Bounded_String;\n')
+   _buffer += ('procedure To_Bounded_String(msg: out NonSparkTypes.packet.Bounded_String;\n')
    _buffer += ('                   self: in T)\n')
    _buffer += ('is\n')
    _buffer += ('begin\n')
-   _buffer += ('   NonSparkTypes.put_line("' + schema.items.javaType + 'TypeArray.ToString");\n')
-   _buffer += ('end ToString;\n\n')
+   _buffer += ('   NonSparkTypes.put_line("' + schema.items.javaType + 'TypeArray.To_Bounded_String");\n')
+   _buffer += ('end To_Bounded_String;\n\n')
 
    _buffer += ('end ocpp.' + schema.items.javaType + 'TypeArray;\n')
 
@@ -295,7 +297,7 @@ module.exports.parse = function (name, schema) {
          case 'array':
             _buffer += '      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "' + property + '", dummybounded);\n';
             _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n\n'
-            _buffer += '      ' + schema.properties[property]["items"]["javaType"] + 'TypeArray.ToString(str' + property + ', self.' + property + ');\n';
+            _buffer += '      ' + schema.properties[property]["items"]["javaType"] + 'TypeArray.FromString(msg, msgindex, self.' + property + ', valid);\n';
             _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n'
             break;
          default:
@@ -374,7 +376,7 @@ module.exports.parse = function (name, schema) {
             }
             break;
          case "array":
-            _buffer += '      ' + schema.properties[property]["items"]["javaType"] + 'TypeArray.ToString(str' + property + ', self.' + property + ');\n';
+            _buffer += '      ' + schema.properties[property]["items"]["javaType"] + 'TypeArray.To_Bounded_String(str' + property + ', self.' + property + ');\n';
             break;
          default:
             break;
