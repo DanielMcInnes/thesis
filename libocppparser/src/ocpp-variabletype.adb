@@ -42,8 +42,8 @@ procedure findquotedstring_packet is new findquotedstring(
    begin
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "name" & '"' & ": " & '"' & NonSparkTypes.VariableType.strname_t.To_String(Self.name) & '"' & ": " & "," & ASCII.LF
-                                                      & "    " & '"' & "instance" & '"' & ": " & '"' & NonSparkTypes.VariableType.strinstance_t.To_String(Self.instance) & '"' & ": " & ASCII.LF
+                                                      & "    " & '"' & "name" & '"' & ": " & '"' & NonSparkTypes.VariableType.strname_t.To_String(Self.name) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "instance" & '"' & ": " & '"' & NonSparkTypes.VariableType.strinstance_t.To_String(Self.instance) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
 , Drop => Right);
    end To_Bounded_String;

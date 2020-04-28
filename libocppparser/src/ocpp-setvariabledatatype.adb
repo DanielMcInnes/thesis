@@ -60,7 +60,7 @@ procedure findquotedstring_packet is new findquotedstring(
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
                                                       & "       " & '"' & "attributeType" & '"' & ":"  & '"' & AttributeEnumType.string_t.To_String(strattributeType) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "attributeValue" & '"' & ": " & '"' & NonSparkTypes.SetVariableDataType.strattributeValue_t.To_String(Self.attributeValue) & '"' & ": " & "," & ASCII.LF
+                                                      & "    " & '"' & "attributeValue" & '"' & ": " & '"' & NonSparkTypes.SetVariableDataType.strattributeValue_t.To_String(Self.attributeValue) & '"' & "," & ASCII.LF
                                                       & "    " & '"' & "component" & '"' & ":" & NonSparkTypes.packet.To_String(strcomponent) & "," & ASCII.LF
                                                       & "    " & '"' & "variable" & '"' & ":" & NonSparkTypes.packet.To_String(strvariable) & ASCII.LF
                                                       & "}" & ASCII.LF
