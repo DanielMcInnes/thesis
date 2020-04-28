@@ -427,7 +427,7 @@ module.exports.parse = function (name, schema) {
                _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & NonSparkTypes.packet.To_String(str' + property + ')' 
             break;
          case 'string':
-               _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & \'"\' & NonSparkTypes.' + name + '.str' + property + '_t.To_String(Self.' + property + ') & \'"\' & ": "' 
+               _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & \'"\' & NonSparkTypes.' + name + '.str' + property + '_t.To_String(Self.' + property + ') & \'"\'' 
             break;
          default:
             if (type.endsWith('EnumType')) {
