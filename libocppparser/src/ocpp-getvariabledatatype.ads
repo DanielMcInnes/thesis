@@ -9,7 +9,7 @@ with ocpp.VariableType; use ocpp.VariableType;
 
 package ocpp.GetVariableDataType is
    type T is record
-       zzzArrayElementInitialized : Boolean := False;
+      zzzArrayElementInitialized : Boolean := True;
       attributeType : AttributeEnumType.T;
       component : ComponentType.T;
       variable : VariableType.T;

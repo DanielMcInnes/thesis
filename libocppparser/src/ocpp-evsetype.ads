@@ -6,7 +6,7 @@ with ocpp; use ocpp;
 
 package ocpp.EVSEType is
    type T is record
-       zzzArrayElementInitialized : Boolean := False;
+      zzzArrayElementInitialized : Boolean := True;
       id : integer;
       connectorId : integer;
    end record;

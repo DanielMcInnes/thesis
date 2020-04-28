@@ -7,7 +7,7 @@ with ocpp.EVSEType; use ocpp.EVSEType;
 
 package ocpp.ComponentType is
    type T is record
-       zzzArrayElementInitialized : Boolean := False;
+      zzzArrayElementInitialized : Boolean := True;
       evse : EVSEType.T;
       name : NonSparkTypes.ComponentType.strname_t.Bounded_String;
       instance : NonSparkTypes.ComponentType.strinstance_t.Bounded_String;
