@@ -64,11 +64,13 @@ procedure findquotedstring_packet is new findquotedstring(
       VariableType.To_Bounded_String(Self.variable, strvariable);
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "attributeStatus" & '"' & ":" & GetVariableStatusEnumType.string_t.To_String(strattributeStatus)
-                                                      & "    " & '"' & "attributeType" & '"' & ":" & AttributeEnumType.string_t.To_String(strattributeType)
-                                                      & "    " & '"' & NonSparkTypes.GetVariableResultType.strattributeValue_t.To_String(Self.attributeValue) & '"' & ": " & ASCII.LF
+                                                      & "       " & '"' & "attributeStatus" & '"' & ":"  & '"' & GetVariableStatusEnumType.string_t.To_String(strattributeStatus) & '"' & "," & ASCII.LF
+                                                      & "       " & '"' & "attributeType" & '"' & ":"  & '"' & AttributeEnumType.string_t.To_String(strattributeType) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & NonSparkTypes.GetVariableResultType.strattributeValue_t.To_String(Self.attributeValue) & '"' & ": " & "," & ASCII.LF
                                                       & "    " & '"' & NonSparkTypes.packet.To_String(strcomponent) & '"' & ": "
+ & "," & ASCII.LF
                                                       & "    " & '"' & NonSparkTypes.packet.To_String(strvariable) & '"' & ": "
+ & ASCII.LF
                                                       & "}" & ASCII.LF
 , Drop => Right);
    end To_Bounded_String;

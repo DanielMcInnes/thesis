@@ -43,7 +43,9 @@ procedure findquotedstring_packet is new findquotedstring(
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
                                                       & "    " & '"' & "id" & '"' & ": " & Self.id'Image & "," & ASCII.LF
+ & "," & ASCII.LF
                                                       & "    " & '"' & "connectorId" & '"' & ": " & Self.connectorId'Image & ASCII.LF
+ & ASCII.LF
                                                       & "}" & ASCII.LF
 , Drop => Right);
    end To_Bounded_String;

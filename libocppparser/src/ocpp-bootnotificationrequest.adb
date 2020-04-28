@@ -54,7 +54,8 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
                                                       & "    " & '"' & NonSparkTypes.packet.To_String(strchargingStation) & '"' & ": "
-                                                      & "    " & '"' & "reason" & '"' & ":" & BootReasonEnumType.string_t.To_String(strreason)
+ & "," & ASCII.LF
+                                                      & "       " & '"' & "reason" & '"' & ":"  & '"' & BootReasonEnumType.string_t.To_String(strreason) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;
