@@ -16,8 +16,10 @@ is
    dummybounded: NonSparkTypes.packet.Bounded_String;
 begin
    for i in Index loop
-      GetVariableResultType.To_Bounded_String(self.content(1), dummybounded);
-      NonSparkTypes.packet.Append(Source => msg, New_Item => dummybounded,Drop => Right);
+      if (self.content(i).zzzArrayElementInitialized = True) then
+         GetVariableResultType.To_Bounded_String(self.content(1), dummybounded);
+         NonSparkTypes.packet.Append(Source => msg, New_Item => dummybounded,Drop => Right);
+      end if;
    end loop;
 end To_Bounded_String;
 

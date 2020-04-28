@@ -6,7 +6,7 @@ with ocpp; use ocpp;
 
 package ocpp.VariableType is
    type T is record
-       zzzArrayElementInitialized : Boolean := False;
+      zzzArrayElementInitialized : Boolean := True;
       name : NonSparkTypes.VariableType.strname_t.Bounded_String;
       instance : NonSparkTypes.VariableType.strinstance_t.Bounded_String;
    end record;

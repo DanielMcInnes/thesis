@@ -105,8 +105,10 @@ function createArrayType(name, schema) {
       */
 
    _buffer += ('   for i in Index loop\n')
-   _buffer += ('      ' + schema.items.javaType + 'Type.To_Bounded_String(self.content(1), dummybounded);\n')
-   _buffer += ('      NonSparkTypes.packet.Append(Source => msg, New_Item => dummybounded,Drop => Right);\n')
+   _buffer += ('      if (self.content(i).zzzArrayElementInitialized = True) then\n')
+   _buffer += ('         ' + schema.items.javaType + 'Type.To_Bounded_String(self.content(1), dummybounded);\n')
+   _buffer += ('         NonSparkTypes.packet.Append(Source => msg, New_Item => dummybounded,Drop => Right);\n')
+   _buffer += ('      end if;\n')
    _buffer += ('   end loop;\n')
 
    _buffer += ('end To_Bounded_String;\n\n')
@@ -165,7 +167,7 @@ module.exports.parse = function (name, schema) {
    }
    else {
       _buffer += '   type T is record\n';
-      _buffer += '      zzzArrayElementInitialized : Boolean := False;\n';
+      _buffer += '      zzzArrayElementInitialized : Boolean := True;\n';
    }
 
    for (var property in schema.properties) {
