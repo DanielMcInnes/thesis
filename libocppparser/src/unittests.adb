@@ -732,48 +732,56 @@ package body unittests is
                                                 & "]");
 
       setVariablesRequest : ocpp.SetVariablesRequest.T := (
-                                                                messagetypeid => 2,
-                                                                messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                                                action => action_t.To_Bounded_String("SetVariables"),
-                                                                setVariableData => ( content => ( others => (
-                                                                                    attributeType => AttributeEnumType.Actual,
-                                                                                    attributeValue => NonSparkTypes.SetVariableDataType.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
-                                                                                    component => (
-                                                                                                  name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("evse"),
-                                                                                                  instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
-                                                                                                  evse => (
-                                                                                                           id => 0,
-                                                                                                           connectorId => 0
-                                                                                                          )
-                                                                                                 ),
-                                                                                    variable => (
-                                                                                                 name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
-                                                                                                 instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
-                                                                                                )
-                                                                                   ))
-                                                               ));
+                                                           messagetypeid => 2,
+                                                           messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                           action => action_t.To_Bounded_String("SetVariables"),
+                                                           setVariableData => ( content => ( others => (
+                                                                                                        zzzArrayElementInitialized => False,
+                                                                                                        attributeType => AttributeEnumType.Actual,
+                                                                                                        attributeValue => NonSparkTypes.SetVariableDataType.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
+                                                                                                        component => (
+                                                                                                                      zzzArrayElementInitialized => False,
+                                                                                                                      name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("evse"),
+                                                                                                                      instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
+                                                                                                                      evse => (
+                                                                                                                               zzzArrayElementInitialized => False,
+                                                                                                                               id => 0,
+                                                                                                                               connectorId => 0
+                                                                                                                              )
+                                                                                                                     ),
+                                                                                                        variable => (
+                                                                                                                     zzzArrayElementInitialized => False,
+                                                                                                                     name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
+                                                                                                                     instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
+                                                                                                                    )
+                                                                                                       ))
+                                                                               ));
       
       setVariablesResponse : ocpp.SetVariablesResponse.T := (
-                                                                  messagetypeid => 3,
-                                                                  messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                                                  setVariableResult => ( content => ( others => (
-                                                                                        attributeType => AttributeEnumType.Actual,
-                                                                                        attributeStatus => ocpp.SetVariableStatusEnumType.Accepted,
-                                                                                        component => (
-                                                                                                      name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("name001"),
-                                                                                                      instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("instance001"),
-                                                                                                      evse => (
-                                                                                                               id => 0,
-                                                                                                               connectorId => 0
-                                                                                                              )
-                                                                                                     ),
-                                                                                        variable => (
-                                                                                                     name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
-                                                                                                     instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
-                                                                                                    )
-                                                                                       )
+                                                             messagetypeid => 3,
+                                                             messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                             setVariableResult => ( content => ( others => (
+                                                                                                            zzzArrayElementInitialized => False,
+                                                                                                            attributeType => AttributeEnumType.Actual,
+                                                                                                            attributeStatus => ocpp.SetVariableStatusEnumType.Accepted,
+                                                                                                            component => (
+                                                                                                                          zzzArrayElementInitialized => False,
+                                                                                                                          name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("name001"),
+                                                                                                                          instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("instance001"),
+                                                                                                                          evse => (
+                                                                                                                                   zzzArrayElementInitialized => False,
+                                                                                                                                   id => 0,
+                                                                                                                                   connectorId => 0
+                                                                                                                                  )
+                                                                                                                         ),
+                                                                                                            variable => (
+                                                                                                                         zzzArrayElementInitialized => False,
+                                                                                                                         name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
+                                                                                                                         instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
+                                                                                                                        )
+                                                                                                           )
                                                                   
-                                                                 )));
+                                                                                                )));
    begin
       result := false;
       ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);     
@@ -848,44 +856,72 @@ package body unittests is
                                                            messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
                                                            action => action_t.To_Bounded_String("GetVariables"),
                                                            getVariableData => ( 
-                                                                                content => ( others => (
+                                                                                content => (
+                                                                                            1 => (
+                                                                                                        zzzArrayElementInitialized => True,
                                                                                                         attributeType => AttributeEnumType.Actual,
                                                                                                         component => (
+                                                                                                                      zzzArrayElementInitialized => False,
                                                                                                                       name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String ("evse", Drop => Right),
                                                                                                                       instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
                                                                                                                       evse => (
+                                                                                                                               zzzArrayElementInitialized => False,
                                                                                                                                id => 0,
                                                                                                                                connectorId => 0
                                                                                                                               )
                                                                                                                      ),
                                                                                                         variable => (
+                                                                                                                     zzzArrayElementInitialized => False,
                                                                                                                      name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
                                                                                                                      instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
                                                                                                                     )
-                                                                                                       ))
+                                                                                                      ),
+                                                                                            others => (
+                                                                                                        zzzArrayElementInitialized => False,
+                                                                                                        attributeType => AttributeEnumType.Actual,
+                                                                                                        component => (
+                                                                                                                      zzzArrayElementInitialized => False,
+                                                                                                                      name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String ("", Drop => Right),
+                                                                                                                      instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String(""),
+                                                                                                                      evse => (
+                                                                                                                               zzzArrayElementInitialized => False,
+                                                                                                                               id => 0,
+                                                                                                                               connectorId => 0
+                                                                                                                              )
+                                                                                                                     ),
+                                                                                                        variable => (
+                                                                                                                     zzzArrayElementInitialized => False,
+                                                                                                                     name => NonSparkTypes.VariableType.strname_t.To_Bounded_String(""),
+                                                                                                                     instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("")
+                                                                                                                    )
+                                                                                                      )
+                                                                                           )
                                                                                )
                                                           );
       getVariablesResponse : ocpp.GetVariablesResponse.T := (
                                                              messagetypeid => 3,
                                                              messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
                                                              getVariableResult => ( content => ( others => (
-                                                                                                
-                                                                                                attributeStatus => ocpp.GetVariableStatusEnumType.Accepted,
-                                                                                                attributeType => AttributeEnumType.Actual,
-                                                                                                attributeValue => NonSparkTypes.GetVariableResultType.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
-                                                                                                component => (
-                                                                                                              name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("evse"),
-                                                                                                              instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
-                                                                                                              evse => (
-                                                                                                                       id => 0,
-                                                                                                                       connectorId => 0
-                                                                                                                      )
-                                                                                                             ),
-                                                                                                variable => (
-                                                                                                             name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
-                                                                                                             instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
-                                                                                                            )
-                                                                                               )))
+                                                                                                            zzzArrayElementInitialized => False,
+                                                                                                            attributeStatus => ocpp.GetVariableStatusEnumType.Accepted,
+                                                                                                            attributeType => AttributeEnumType.Actual,
+                                                                                                            attributeValue => NonSparkTypes.GetVariableResultType.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
+                                                                                                            component => (
+                                                                                                                          zzzArrayElementInitialized => False,
+                                                                                                                          name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("evse"),
+                                                                                                                          instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
+                                                                                                                          evse => (
+                                                                                                                                   zzzArrayElementInitialized => False,
+                                                                                                                                   id => 0,
+                                                                                                                                   connectorId => 0
+                                                                                                                                  )
+                                                                                                                         ),
+                                                                                                            variable => (
+                                                                                                                         zzzArrayElementInitialized => False,
+                                                                                                                         name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
+                                                                                                                         instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
+                                                                                                                        )
+                                                                                                           )))
                                                                   
                                                             );
    begin

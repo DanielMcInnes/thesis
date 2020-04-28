@@ -15,8 +15,10 @@ procedure To_Bounded_String(msg: out NonSparkTypes.packet.Bounded_String;
 is
    dummybounded: NonSparkTypes.packet.Bounded_String;
 begin
-   SetVariableDataType.To_Bounded_String(self.content(1), dummybounded);
-   NonSparkTypes.packet.Append(Source => msg, New_Item => dummybounded,Drop => Right);
+   for i in Index loop
+      SetVariableDataType.To_Bounded_String(self.content(1), dummybounded);
+      NonSparkTypes.packet.Append(Source => msg, New_Item => dummybounded,Drop => Right);
+   end loop;
 end To_Bounded_String;
 
 end ocpp.SetVariableDataTypeArray;

@@ -6,6 +6,7 @@ with ocpp; use ocpp;
 
 package ocpp.ModemType is
    type T is record
+       zzzArrayElementInitialized : Boolean := False;
       iccid : NonSparkTypes.ModemType.striccid_t.Bounded_String;
       imsi : NonSparkTypes.ModemType.strimsi_t.Bounded_String;
    end record;

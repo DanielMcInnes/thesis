@@ -97,8 +97,18 @@ function createArrayType(name, schema) {
    _buffer += ('is\n')
    _buffer += ('   dummybounded: NonSparkTypes.packet.Bounded_String;\n')
    _buffer += ('begin\n')
-   _buffer += ('   ' + schema.items.javaType + 'Type.To_Bounded_String(self.content(1), dummybounded);\n')
-   _buffer += ('   NonSparkTypes.packet.Append(Source => msg, New_Item => dummybounded,Drop => Right);\n')
+   /*
+      for i in Index loop
+         GetVariableDataType.To_Bounded_String(self.content(i), dummybounded);
+         NonSparkTypes.packet.Append(Source => msg, New_Item => dummybounded,Drop => Right);
+      end loop;
+      */
+
+   _buffer += ('   for i in Index loop\n')
+   _buffer += ('      ' + schema.items.javaType + 'Type.To_Bounded_String(self.content(1), dummybounded);\n')
+   _buffer += ('      NonSparkTypes.packet.Append(Source => msg, New_Item => dummybounded,Drop => Right);\n')
+   _buffer += ('   end loop;\n')
+
    _buffer += ('end To_Bounded_String;\n\n')
 
    _buffer += ('end ocpp.' + schema.items.javaType + 'TypeArray;\n')
@@ -155,6 +165,7 @@ module.exports.parse = function (name, schema) {
    }
    else {
       _buffer += '   type T is record\n';
+      _buffer += '      zzzArrayElementInitialized : Boolean := False;\n';
    }
 
    for (var property in schema.properties) {

@@ -7,6 +7,7 @@ with ocpp.ModemType; use ocpp.ModemType;
 
 package ocpp.ChargingStationType is
    type T is record
+       zzzArrayElementInitialized : Boolean := False;
       serialNumber : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
       model : NonSparkTypes.ChargingStationType.strmodel_t.Bounded_String;
       modem : ModemType.T;

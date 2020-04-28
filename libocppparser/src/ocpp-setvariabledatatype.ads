@@ -9,6 +9,7 @@ with ocpp.VariableType; use ocpp.VariableType;
 
 package ocpp.SetVariableDataType is
    type T is record
+       zzzArrayElementInitialized : Boolean := False;
       attributeType : AttributeEnumType.T;
       attributeValue : NonSparkTypes.SetVariableDataType.strattributeValue_t.Bounded_String;
       component : ComponentType.T;
