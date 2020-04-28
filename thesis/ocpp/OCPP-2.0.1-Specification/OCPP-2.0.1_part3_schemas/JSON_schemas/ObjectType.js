@@ -421,13 +421,13 @@ module.exports.parse = function (name, schema) {
                                                                                  ' & ASCII.LF\n';
             break;
          case 'object':
-            _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' 
+            _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & ASCII.LF' 
             break;
          case 'array':
-               _buffer +=    '                                                      & "    " & \'"\' & NonSparkTypes.packet.To_String(str' + property + ') & \'"\' & ": "\n' 
+               _buffer +=    '                                                      & "    " & \'"\' & NonSparkTypes.packet.To_String(str' + property + ') & \'"\' & ": " & ASCII.LF\n' 
             break;
          case 'string':
-               _buffer +=    '                                                      & "    " & \'"\' & NonSparkTypes.' + name + '.str' + property + '_t.To_String(Self.' + property + ') & \'"\' & ": "\n' 
+               _buffer +=    '                                                      & "    " & \'"\' & NonSparkTypes.' + name + '.str' + property + '_t.To_String(Self.' + property + ') & \'"\' & ": " & ASCII.LF\n' 
             break;
          default:
             if (type.endsWith('EnumType')) {
@@ -449,9 +449,11 @@ module.exports.parse = function (name, schema) {
    _buffer +=    '                                                      & "}" & ASCII.LF\n';
 
 
-   _buffer += '                                                      & "]", Drop => Right);\n';
+   if (name.endsWith('Request') || name.endsWith('Response')) {
+      _buffer += '                                                      & "]"';
+   }
 
-
+   _buffer += ', Drop => Right);\n'
    _buffer += '   end To_Bounded_String;\n';
    
 

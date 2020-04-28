@@ -42,9 +42,9 @@ procedure findquotedstring_packet is new findquotedstring(
    begin
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & NonSparkTypes.VariableType.strname_t.To_String(Self.name) & '"' & ": "
-                                                      & "    " & '"' & NonSparkTypes.VariableType.strinstance_t.To_String(Self.instance) & '"' & ": "
+                                                      & "    " & '"' & NonSparkTypes.VariableType.strname_t.To_String(Self.name) & '"' & ": " & ASCII.LF
+                                                      & "    " & '"' & NonSparkTypes.VariableType.strinstance_t.To_String(Self.instance) & '"' & ": " & ASCII.LF
                                                       & "}" & ASCII.LF
-                                                      & "]", Drop => Right);
+, Drop => Right);
    end To_Bounded_String;
 end ocpp.VariableType;

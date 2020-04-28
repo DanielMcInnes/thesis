@@ -58,12 +58,12 @@ procedure findquotedstring_packet is new findquotedstring(
       ModemType.To_Bounded_String(Self.modem, strmodem);
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(Self.serialNumber) & '"' & ": "
-                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strmodel_t.To_String(Self.model) & '"' & ": "
+                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(Self.serialNumber) & '"' & ": " & ASCII.LF
+                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strmodel_t.To_String(Self.model) & '"' & ": " & ASCII.LF
                                                       & "    " & '"' & NonSparkTypes.packet.To_String(strmodem) & '"' & ": "
-                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strvendorName_t.To_String(Self.vendorName) & '"' & ": "
-                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_String(Self.firmwareVersion) & '"' & ": "
+                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strvendorName_t.To_String(Self.vendorName) & '"' & ": " & ASCII.LF
+                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_String(Self.firmwareVersion) & '"' & ": " & ASCII.LF
                                                       & "}" & ASCII.LF
-                                                      & "]", Drop => Right);
+, Drop => Right);
    end To_Bounded_String;
 end ocpp.ChargingStationType;

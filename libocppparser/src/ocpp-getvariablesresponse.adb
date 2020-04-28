@@ -48,7 +48,7 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & "[3," & ASCII.LF
                                                       & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & NonSparkTypes.packet.To_String(strgetVariableResult) & '"' & ": "
+                                                      & "    " & '"' & NonSparkTypes.packet.To_String(strgetVariableResult) & '"' & ": " & ASCII.LF
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;

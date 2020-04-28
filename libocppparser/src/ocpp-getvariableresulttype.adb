@@ -66,10 +66,10 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & "{" & ASCII.LF
                                                       & "    " & '"' & "attributeStatus" & '"' & ":" & GetVariableStatusEnumType.string_t.To_String(strattributeStatus)
                                                       & "    " & '"' & "attributeType" & '"' & ":" & AttributeEnumType.string_t.To_String(strattributeType)
-                                                      & "    " & '"' & NonSparkTypes.GetVariableResultType.strattributeValue_t.To_String(Self.attributeValue) & '"' & ": "
+                                                      & "    " & '"' & NonSparkTypes.GetVariableResultType.strattributeValue_t.To_String(Self.attributeValue) & '"' & ": " & ASCII.LF
                                                       & "    " & '"' & NonSparkTypes.packet.To_String(strcomponent) & '"' & ": "
                                                       & "    " & '"' & NonSparkTypes.packet.To_String(strvariable) & '"' & ": "
                                                       & "}" & ASCII.LF
-                                                      & "]", Drop => Right);
+, Drop => Right);
    end To_Bounded_String;
 end ocpp.GetVariableResultType;

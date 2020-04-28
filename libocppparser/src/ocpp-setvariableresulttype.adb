@@ -65,6 +65,6 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & "    " & '"' & NonSparkTypes.packet.To_String(strcomponent) & '"' & ": "
                                                       & "    " & '"' & NonSparkTypes.packet.To_String(strvariable) & '"' & ": "
                                                       & "}" & ASCII.LF
-                                                      & "]", Drop => Right);
+, Drop => Right);
    end To_Bounded_String;
 end ocpp.SetVariableResultType;
