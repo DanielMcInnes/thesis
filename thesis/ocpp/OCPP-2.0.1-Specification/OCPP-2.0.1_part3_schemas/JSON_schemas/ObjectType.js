@@ -424,7 +424,7 @@ module.exports.parse = function (name, schema) {
             _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & ASCII.LF' 
             break;
          case 'array':
-               _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & NonSparkTypes.packet.To_String(str' + property + ') & ": "' 
+               _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & NonSparkTypes.packet.To_String(str' + property + ')' 
             break;
          case 'string':
                _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & \'"\' & NonSparkTypes.' + name + '.str' + property + '_t.To_String(Self.' + property + ') & \'"\' & ": "' 
@@ -433,7 +433,7 @@ module.exports.parse = function (name, schema) {
             if (type.endsWith('EnumType')) {
                _buffer +=    '                                                      & "       " & \'"\' & "' + property + '" & \'"\' & ":"  & \'"\' & ' + type + '.string_t.To_String(str' + property + ') & \'"\'' 
             } else if (type.endsWith('Type')) {
-               _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ":" & NonSparkTypes.packet.To_String(str' + property + ') & ": "\n' 
+               _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ":" & NonSparkTypes.packet.To_String(str' + property + ')' 
             } else {
                _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' + 
                                                                                     ' & \'"\' & ' + schema.properties[property]["javaType"] + 'Type.string_t.To_String(str' + property + ') & \'"\'';
