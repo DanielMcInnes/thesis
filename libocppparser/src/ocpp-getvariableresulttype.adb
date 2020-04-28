@@ -66,10 +66,10 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & "{" & ASCII.LF
                                                       & "       " & '"' & "attributeStatus" & '"' & ":"  & '"' & GetVariableStatusEnumType.string_t.To_String(strattributeStatus) & '"' & "," & ASCII.LF
                                                       & "       " & '"' & "attributeType" & '"' & ":"  & '"' & AttributeEnumType.string_t.To_String(strattributeType) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & NonSparkTypes.GetVariableResultType.strattributeValue_t.To_String(Self.attributeValue) & '"' & ": " & "," & ASCII.LF
-                                                      & "    " & '"' & "component" & '"' & ":" & '"' & NonSparkTypes.packet.To_String(strcomponent) & '"' & ": "
+                                                      & "    " & '"' & "attributeValue" & '"' & ": " & '"' & NonSparkTypes.GetVariableResultType.strattributeValue_t.To_String(Self.attributeValue) & '"' & ": " & "," & ASCII.LF
+                                                      & "    " & '"' & "component" & '"' & ":" & NonSparkTypes.packet.To_String(strcomponent) & ": "
  & "," & ASCII.LF
-                                                      & "    " & '"' & "variable" & '"' & ":" & '"' & NonSparkTypes.packet.To_String(strvariable) & '"' & ": "
+                                                      & "    " & '"' & "variable" & '"' & ":" & NonSparkTypes.packet.To_String(strvariable) & ": "
  & ASCII.LF
                                                       & "}" & ASCII.LF
 , Drop => Right);

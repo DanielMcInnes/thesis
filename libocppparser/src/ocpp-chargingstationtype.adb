@@ -58,12 +58,12 @@ procedure findquotedstring_packet is new findquotedstring(
       ModemType.To_Bounded_String(Self.modem, strmodem);
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(Self.serialNumber) & '"' & ": " & "," & ASCII.LF
-                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strmodel_t.To_String(Self.model) & '"' & ": " & "," & ASCII.LF
-                                                      & "    " & '"' & "modem" & '"' & ":" & '"' & NonSparkTypes.packet.To_String(strmodem) & '"' & ": "
+                                                      & "    " & '"' & "serialNumber" & '"' & ": " & '"' & NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(Self.serialNumber) & '"' & ": " & "," & ASCII.LF
+                                                      & "    " & '"' & "model" & '"' & ": " & '"' & NonSparkTypes.ChargingStationType.strmodel_t.To_String(Self.model) & '"' & ": " & "," & ASCII.LF
+                                                      & "    " & '"' & "modem" & '"' & ":" & NonSparkTypes.packet.To_String(strmodem) & ": "
  & "," & ASCII.LF
-                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strvendorName_t.To_String(Self.vendorName) & '"' & ": " & "," & ASCII.LF
-                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_String(Self.firmwareVersion) & '"' & ": " & ASCII.LF
+                                                      & "    " & '"' & "vendorName" & '"' & ": " & '"' & NonSparkTypes.ChargingStationType.strvendorName_t.To_String(Self.vendorName) & '"' & ": " & "," & ASCII.LF
+                                                      & "    " & '"' & "firmwareVersion" & '"' & ": " & '"' & NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_String(Self.firmwareVersion) & '"' & ": " & ASCII.LF
                                                       & "}" & ASCII.LF
 , Drop => Right);
    end To_Bounded_String;

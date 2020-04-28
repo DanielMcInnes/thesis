@@ -50,7 +50,6 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
                                                       & "    " & '"' & "requestId" & '"' & ": " & Self.requestId'Image & "," & ASCII.LF
- & "," & ASCII.LF
                                                       & "       " & '"' & "reportBase" & '"' & ":"  & '"' & ReportBaseEnumType.string_t.To_String(strreportBase) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);

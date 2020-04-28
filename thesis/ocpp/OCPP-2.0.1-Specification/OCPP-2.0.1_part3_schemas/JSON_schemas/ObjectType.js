@@ -418,9 +418,7 @@ module.exports.parse = function (name, schema) {
       switch (type) {
          case 'integer':
             _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' +
-                                                                                 ' & ' + 'Self.' + property + '\'Image' +
-                                                                                 ((propertyCounter === (Object.keys(schema.properties).length)) ? '' : ' & ","') + // append a comma to all but the last property
-                                                                                 ' & ASCII.LF\n';
+                                                                                 ' & ' + 'Self.' + property + '\'Image';
             break;
          case 'object':
             _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & ASCII.LF' 
@@ -429,13 +427,13 @@ module.exports.parse = function (name, schema) {
                _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & NonSparkTypes.packet.To_String(str' + property + ') & ": "' 
             break;
          case 'string':
-               _buffer +=    '                                                      & "    " & \'"\' & NonSparkTypes.' + name + '.str' + property + '_t.To_String(Self.' + property + ') & \'"\' & ": "' 
+               _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & \'"\' & NonSparkTypes.' + name + '.str' + property + '_t.To_String(Self.' + property + ') & \'"\' & ": "' 
             break;
          default:
             if (type.endsWith('EnumType')) {
                _buffer +=    '                                                      & "       " & \'"\' & "' + property + '" & \'"\' & ":"  & \'"\' & ' + type + '.string_t.To_String(str' + property + ') & \'"\'' 
             } else if (type.endsWith('Type')) {
-               _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ":" & \'"\' & NonSparkTypes.packet.To_String(str' + property + ') & \'"\' & ": "\n' 
+               _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ":" & NonSparkTypes.packet.To_String(str' + property + ') & ": "\n' 
             } else {
                _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' + 
                                                                                     ' & \'"\' & ' + schema.properties[property]["javaType"] + 'Type.string_t.To_String(str' + property + ') & \'"\'';
