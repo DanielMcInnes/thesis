@@ -45,13 +45,33 @@ module.exports.parse = function (name, schema) {
 
          name = cleanfilename(name);
          console.log('parseObjectType: ', name);
-         var _outfile = cleanfilename('ocpp-' + name + '.ads');
-         console.log('parseObjectType: _outfile: ', _outfile);
+         var _outfile
+         if (name.endsWith('Request') || name.endsWith('Response')) {
+            _outfile = cleanfilename('ocpp-' + name + '.ads');
+         } else {
+            _outfile = cleanfilename('ocpp-' + name + 'Type.ads');
+         }
+         //console.log('parseObjectType: _outfile: ', _outfile);
          var _buffer ="pragma SPARK_mode (on); \n\n";
          
          _buffer += ('with Ada.Strings.Fixed; use Ada.Strings.Fixed;\n')
          _buffer += ('with NonSparkTypes; use NonSparkTypes.action_t; \n')
          _buffer += ('with ocpp; use ocpp;\n')
+
+
+         // include definitions for any types we need
+         for (var property in schema.properties) {
+            console.log('property:', property, schema.properties[property]['type']);
+            if (property === 'customData') {
+               continue;
+            }
+            
+            
+            if (!!schema.properties[property]['type'] && schema.properties[property]['type'] === 'array') {
+               _buffer += ('with ocpp.' + property + 'TypeArray;\n')
+            }
+         }
+
          _buffer += utils.parseIncludes(schema);
          _buffer += '\n';
       
@@ -71,10 +91,30 @@ module.exports.parse = function (name, schema) {
             if (property === 'customData') {
                continue;
             }
+
+            /*
             console.log("schema.properties[property]:", schema.properties[property] );
             console.log("Object.keys(schema.properties[property]):", Object.keys(schema.properties[property] ));
             console.log('Object.keys(schema.properties[property]["type"]):', schema.properties[property]["type"]);
-            var _type = utils.parseType(schema.properties[property]) 
+            */
+            var _type = schema.properties[property]['type'] 
+            var _javaType = schema.properties[property]['javaType'] 
+
+            switch (_type) {
+               case 'array':
+                  _type = property + 'TypeArray.T';
+                  break;
+               case 'string':
+                  if (!!_javaType && _javaType.endsWith('Enum') ) {
+                     _type = _javaType + 'Type.T';
+                  } else {
+                     _type = 'NonSparkTypes.' + name + '.str' + property + '_t.Bounded_String';
+                  }
+                  break;
+               case 'object':
+                  _type = schema.properties[property]['javaType'] + 'Type.T';
+                  break;
+            }
             _buffer += '      ' + property + ' : ' + _type + ';\n'; 
          }
          _buffer += '   end record;';
@@ -91,20 +131,21 @@ module.exports.parse = function (name, schema) {
          _buffer += '                valid => (msg, msgindex, self),\n'
          _buffer += '                msgindex => (msg, msgIndex, self),\n'
          _buffer += '                self  => (msg, msgindex, self)\n'
-         _buffer += '               ),\n'
-         _buffer += '    post => (if valid = true then\n'
-         _buffer += '               (self.messagetypeid = ' + (name.endsWith('Request') ? '2' : '3') + ') and\n'
-         _buffer += '               (NonSparkTypes.messageid_t.Length(self.messageid) > 0)';
-         if (name.endsWith('Request') ) {
-            _buffer += ' and\n';
-            _buffer += '               (self.action = action) -- prove that the original packet contains the corresponding "action"\n'
-
+         if (name.endsWith('Request') || name.endsWith('Result')) {
+            _buffer += '),\n'
+            _buffer += '    post => (if valid = true then\n'
+            _buffer += '               (self.messagetypeid = ' + (name.endsWith('Request') ? '2' : '3') + ') and\n'
+            _buffer += '               (NonSparkTypes.messageid_t.Length(self.messageid) > 0)';
+            if (name.endsWith('Request') ) {
+               _buffer += ' and\n';
+               _buffer += '               (self.action = action) -- prove that the original packet contains the corresponding "action"\n'
+            }
          }
          _buffer += '            );\n\n'
          _buffer += '   procedure To_Bounded_String(Self: in T;\n'
          _buffer += '                               retval: out NonSparkTypes.packet.Bounded_String);\n'
          _buffer += 'end ocpp.' + name + ';';
-         console.log('\n\n\nbuffer:\n', _buffer, '\n\n');
+         //console.log('\n\n\nbuffer:\n', _buffer, '\n\n');
          var outfile = 'ocpp-' + clean(name).toLowerCase() + '.ads';
          fs.writeFile((outfile), _buffer, function (err, file) {
             if (err) throw err;
@@ -131,21 +172,32 @@ module.exports.parse = function (name, schema) {
          _buffer += '                  )\n';
          _buffer += '   is\n';
 
-         /*
          for (var property in schema.properties) {
             if (property === 'customData') {
                continue;
             }
-            _buffer += '      str' + property + ' : ' + schema.properties[property]["javaType"] + 'Type.string_t.Bounded_string;\n';
-         }*/
+            var type = schema.properties[property]["type"];   // int, string
+            var _javaType = schema.properties[property]['javaType'] 
+
+            switch (type) {
+               case "array":
+                  _buffer += '      str' + property + ': NonSparkTypes.packet.Bounded_String;\n';
+                  break;
+               default:
+                  break;
+            }
+         }
 
          _buffer += '      dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");\n';
          _buffer += '      dummyInt: integer;\n';
 
 
          _buffer += '   begin\n';
-         _buffer += '      checkValid(msg, msgindex, self, ' + (name.endsWith('Request') ? 'action, ' : '') + 'valid);\n'
-         _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n\n'
+
+         if (name.endsWith('Request') || name.endsWith('Response')) {
+            _buffer += '      checkValid(msg, msgindex, self, ' + (name.endsWith('Request') ? 'action, ' : '') + 'valid);\n'
+            _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n\n'
+         }
 
          // parse each property
          for (var property in schema.properties) {
@@ -154,7 +206,7 @@ module.exports.parse = function (name, schema) {
             }
 
             var type = schema.properties[property]["type"];   // int, string
-                  //findquotedstring_packet(msg, msgindex, retval, dummybounded);
+            var _javaType = schema.properties[property]['javaType'] 
 
             switch (type) {
                case 'integer':
@@ -162,11 +214,37 @@ module.exports.parse = function (name, schema) {
                   _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n'
                   _buffer += '      self.' + property + ' := dummyInt;\n';
                   break;
-               default:
+               case 'string':
+                  if (!!_javaType && _javaType.endsWith('Enum')) { // eg: getBaseReportRequest.reportBase : ocpp.ReportBaseEnum
+                     _buffer += '      ocpp.' + _javaType + 'Type.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.' + property + ', valid);\n';
+                     _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n'// + property + schema.properties[property] + name
+                } else
+                  {
+                     _buffer += '      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "' + property + '", dummybounded);\n';
+                     _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n'// + property + schema.properties[property] + name
+                     _buffer += '      self.' + property + ' := NonSparkTypes.' + name + '.str' + property + '_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);\n';
+                     //self.name := NonSparkTypes.ComponentType.strname.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded));
+                  }
+                  
+                  break;
+               case 'array':
                   _buffer += '      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "' + property + '", dummybounded);\n';
                   _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n\n'
-                  _buffer += '      ' + utils.parseType(schema.properties[property]) + 'Type.FromString(NonSparkTypes.packet.To_String(dummybounded), self.' + property + ', valid);\n';
+                  _buffer += '      ' + schema.properties[property]["items"]["javaType"] + 'TypeArray.ToString(str' + property + ', self.' + property + ');\n';
+                  _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n'
                   break;
+               default:
+                  switch (_javaType) {
+                     default: 
+                        if (!!_javaType && _javaType.endsWith('Enum')) {
+                        } else {
+                           _buffer += '      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "' + property + '", dummybounded);\n';
+                           _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n\n'
+                           _buffer += '      ' + utils.parseType(schema.properties[property]) + 'Type.parse(msg, msgindex, self.' + property + ', valid);\n';
+                           _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n'
+                        }
+                        break;
+                     }
             }
             _buffer += '\n';
 
@@ -188,33 +266,67 @@ module.exports.parse = function (name, schema) {
                continue;
             }
             var type = schema.properties[property]["type"];   // int, string
-            if (!!type && type === "string") {
-               _buffer += '      str' + property + ' : ' + schema.properties[property]["javaType"] + 'Type.string_t.Bounded_string;\n';
+            var _javaType = schema.properties[property]['javaType'] 
+
+            switch (type) {
+               case 'integer':
+                  break;
+               case 'string':
+                  if (!!_javaType && _javaType.endsWith('Enum')) {
+                     _buffer += '      str' + property + ' : ' + _javaType + 'Type.string_t.Bounded_String;\n';
+                  }
+                  break;
+               case "array":
+                  _buffer += '      str' + property + ': NonSparkTypes.packet.Bounded_String;\n';
+                  break;
+               default:
+                  if (!!type) {
+                     _buffer += '      str' + property + ' : NonSparkTypes.packet.Bounded_String;\n';
+                  }
+                  break;
             }
          }
 
          _buffer += '   begin\n';
-
-         // for every enum type member variable, convert to string
          for (var property in schema.properties) {
             if (property === 'customData') {
                continue;
             }
             var type = schema.properties[property]["type"];   // int, string
-            if (!!type && type === "string") {
-               _buffer += '      ' + schema.properties[property]["javaType"] + 'Type.ToString(Self.' + property + ', str' + property + ');\n';
+            var _javaType = schema.properties[property]['javaType'] 
+
+            switch (type) {
+               case 'integer':
+                  break;
+               case 'string':
+                  if (!!_javaType && _javaType.endsWith('Enum')) {
+                     _buffer += '      ' + _javaType + 'Type.ToString(Self.' + property + ', str' + property + ');\n';
+                  }
+                  break;
+               case 'object':
+                  if (!!_javaType) {
+                     _buffer += '      ' + _javaType + 'Type.To_Bounded_String(Self.' + property + ', str' + property + ');\n';
+                  }
+                  break;
+               case "array":
+                  _buffer += '      ' + schema.properties[property]["items"]["javaType"] + 'TypeArray.ToString(str' + property + ', self.' + property + ');\n';
+                  break;
+               default:
+                  break;
             }
          }
 
          _buffer +=    '      retval := NonSparkTypes.packet.To_Bounded_String(""\n';
+         
          if (name.endsWith('Request') ) {
             _buffer += '                                                      & "[2," & ASCII.LF\n';
+            _buffer +=    '                                                      & \'"\'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & \'"\' & "," & ASCII.LF\n';
          }
-         else {
+         else if (name.endsWith('Response')){
             _buffer += '                                                      & "[3," & ASCII.LF\n';
+            _buffer +=    '                                                      & \'"\'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & \'"\' & "," & ASCII.LF\n';
          }
          
-         _buffer +=    '                                                      & \'"\'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & \'"\' & "," & ASCII.LF\n';
          if (name.endsWith('Request') ) {
             _buffer += '                                                      & \'"\' & NonSparkTypes.action_t.To_String(Self.action) & \'"\' & "," & ASCII.LF\n';
             
@@ -241,12 +353,27 @@ module.exports.parse = function (name, schema) {
                                                                                        ((propertyCounter === (Object.keys(schema.properties).length)) ? '' : ' & ","') + // append a comma to all but the last property
                                                                                        ' & ASCII.LF\n';
                   break;
+               case 'object':
+                  _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' 
+                  break;
+               case 'array':
+                     _buffer +=    '                                                      & "    " & \'"\' & NonSparkTypes.packet.To_String(str' + property + ') & \'"\' & ": "\n' 
+                  break;
+               case 'string':
+                     _buffer +=    '                                                      & "    " & \'"\' & NonSparkTypes.' + name + '.str' + property + '_t.To_String(Self.' + property + ') & \'"\' & ": "\n' 
+                  break;
                default:
-                  _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' + 
-                                                                                       ' & \'"\' & ' + schema.properties[property]["javaType"] + 'Type.string_t.To_String(str' + property + ') & \'"\'' +
-                                                                                       ((propertyCounter === (Object.keys(schema.properties).length)) ? '' : ' & ","') + // append a comma to all but the last property
-                                                                                       ' & ASCII.LF\n'; 
-                  // & "    " & ReportBaseEnumType.string_t.To_String(strreportBase) & ASCII.LF
+                  if (type.endsWith('EnumType')) {
+                     _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ":" & ' + type + '.string_t.To_String(str' + property + ')\n' 
+                  } else if (type.endsWith('Type')) {
+                     _buffer +=    '                                                      & "    " & \'"\' & NonSparkTypes.packet.To_String(str' + property + ') & \'"\' & ": "\n' 
+                  } else {
+                     _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' + 
+                                                                                          ' & \'"\' & ' + schema.properties[property]["javaType"] + 'Type.string_t.To_String(str' + property + ') & \'"\'' +
+                                                                                          ((propertyCounter === (Object.keys(schema.properties).length)) ? '' : ' & ","') + // append a comma to all but the last property
+                                                                                          ' & ASCII.LF\n'; 
+                     // & "    " & ReportBaseEnumType.string_t.To_String(strreportBase) & ASCII.LF
+                  }
                   break;
             }
 
@@ -262,13 +389,13 @@ module.exports.parse = function (name, schema) {
          
       
       
-         _buffer += 'end ocpp.' + schema + ';\n';
+         _buffer += 'end ocpp.' + name + ';\n';
          outfile = 'ocpp-' + clean(name).toLowerCase() + '.adb';
          fs.writeFile((outfile), _buffer, function (err, file) {
             if (err) throw err;
             console.log('Saved %s', outfile);
          });
-         console.log('\n\n\nbuffer:\n', _buffer, '\n\n');
+         //console.log('\n\n\nbuffer:\n', _buffer, '\n\n');
       
       
       

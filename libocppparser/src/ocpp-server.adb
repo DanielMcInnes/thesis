@@ -8,7 +8,7 @@ with NonSparkTypes; use NonSparkTypes.action_t;
 with ocpp.BootNotification;
 with ocpp.GetBaseReportRequest;
 with ocpp.GetBaseReportResponse;
-with ocpp.SetVariables;
+with ocpp.SetVariablesRequest;
 
 with ocpp.heartbeat;
 
@@ -120,7 +120,7 @@ is
          return;
       end if;
       
-      if (theServer.call = ocpp.SetVariables.action)
+      if (theServer.call = ocpp.SetVariablesRequest.action)
       then
          handleSetVariablesResponse(theServer, msg, index, valid, messageId);
       elsif (theServer.call = ocpp.GetVariablesRequest.action)
@@ -143,12 +143,12 @@ is
                                         valid: out Boolean;
                                         messageId : in NonSparkTypes.messageid_t.Bounded_String)
    is
-      setVariableResponse : SetVariables.Response.Class;
+      setVariableResponse : SetVariablesResponse.T;
       
    begin
       setVariableResponse.messagetypeid := 3;
       setVariableResponse.messageid := messageId;
-      ocpp.SetVariables.Response.parse(msg, index, setVariableResponse, valid);
+      ocpp.SetVariablesResponse.parse(msg, index, setVariableResponse, valid);
       if (valid = true)
       then
          theServer.setVariablesResponse := setVariableResponse;

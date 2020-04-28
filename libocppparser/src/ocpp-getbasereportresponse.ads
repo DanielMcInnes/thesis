@@ -7,7 +7,7 @@ with ocpp.GenericDeviceModelStatusEnumType; use ocpp.GenericDeviceModelStatusEnu
 
 package ocpp.GetBaseReportResponse is
    type T is new callresult with record
-      status : ocpp.GenericDeviceModelStatusEnumType.T;
+      status : GenericDeviceModelStatusEnumType.T;
    end record;
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex: in out Integer;
@@ -20,10 +20,7 @@ package ocpp.GetBaseReportResponse is
                 valid => (msg, msgindex, self),
                 msgindex => (msg, msgIndex, self),
                 self  => (msg, msgindex, self)
-               ),
-    post => (if valid = true then
-               (self.messagetypeid = 3) and
-               (NonSparkTypes.messageid_t.Length(self.messageid) > 0)            );
+            );
 
    procedure To_Bounded_String(Self: in T;
                                retval: out NonSparkTypes.packet.Bounded_String);

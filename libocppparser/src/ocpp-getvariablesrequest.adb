@@ -1,8 +1,7 @@
 pragma SPARK_mode (on); 
 
 with ocpp;
-with ocpp.GetVariableDataTypeArray; -- TODO
-with ocpp.GetVariablesRequest; use ocpp.GetVariablesRequest;
+with ocpp.GetVariablesRequest;
 with Ada.Strings; use Ada.Strings;
 
 package body ocpp.GetVariablesRequest is 
@@ -21,6 +20,7 @@ procedure findquotedstring_packet is new findquotedstring(
                    valid: out Boolean
                   )
    is
+      strgetVariableData: NonSparkTypes.packet.Bounded_String;
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
@@ -30,7 +30,8 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "getVariableData", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
-      ocpp.GetVariableDataTypeArray.FromString(NonSparkTypes.packet.To_String(dummybounded), self.getVariableData, valid); -- TODO
+      GetVariableDataTypeArray.ToString(strgetVariableData, self.getVariableData);
+      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
       valid := true;
@@ -40,15 +41,15 @@ procedure findquotedstring_packet is new findquotedstring(
                                retval: out NonSparkTypes.packet.Bounded_String)
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
-      strgetVariableData: NonSparkTypes.packet.Bounded_String;  -- TODO
+      strgetVariableData: NonSparkTypes.packet.Bounded_String;
    begin
-      GetVariableDataTypeArray.ToString(strgetVariableData, self.getVariableData); -- TODO
+      GetVariableDataTypeArray.ToString(strgetVariableData, self.getVariableData);
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "[2," & ASCII.LF
                                                       & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
                                                       & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "getVariableData" & '"' & ": " & '"' & NonSparkTypes.packet.To_String(strgetVariableData) & '"' & ASCII.LF -- TODO
+                                                      & "    " & '"' & NonSparkTypes.packet.To_String(strgetVariableData) & '"' & ": "
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;

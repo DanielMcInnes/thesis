@@ -9,7 +9,7 @@ package ocpp.GetBaseReportRequest is
    action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("GetBaseReport"); 
    type T is new call with record
       requestId : integer;
-      reportBase : ocpp.ReportBaseEnumType.T;
+      reportBase : ReportBaseEnumType.T;
    end record;
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex: in out Integer;
@@ -22,7 +22,7 @@ package ocpp.GetBaseReportRequest is
                 valid => (msg, msgindex, self),
                 msgindex => (msg, msgIndex, self),
                 self  => (msg, msgindex, self)
-               ),
+),
     post => (if valid = true then
                (self.messagetypeid = 2) and
                (NonSparkTypes.messageid_t.Length(self.messageid) > 0) and

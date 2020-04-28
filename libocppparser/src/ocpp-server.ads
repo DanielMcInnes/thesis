@@ -4,7 +4,8 @@ with ocpp;
 with ocpp.BootNotification;
 with ocpp.GetBaseReportResponse;
 with ocpp.heartbeat;
-with ocpp.SetVariables;
+with ocpp.SetVariablesRequest;
+with ocpp.SetVariablesResponse;
 with ocpp.GetVariablesRequest;
 with ocpp.GetVariablesResponse;
 
@@ -21,7 +22,7 @@ is
       getBaseReportResponse: ocpp.GetBaseReportResponse.T;
       getVariablesResponse: ocpp.GetVariablesResponse.T;
       isDeferringBootNotificationAccept: Boolean := false;
-      setVariablesResponse: ocpp.SetVariables.Response.Class;
+      setVariablesResponse: ocpp.SetVariablesResponse.T;
       call: NonSparkTypes.action_t.Bounded_String;
    end record;
 

@@ -1,10 +1,10 @@
 pragma SPARK_mode (on); 
 
 with ocpp;
-with ocpp.GetVariableResultType;
+with ocpp.SetVariableResultType;
 with Ada.Strings; use Ada.Strings;
 
-package body ocpp.GetVariableResultType is 
+package body ocpp.SetVariableResultType is 
 
 procedure findquotedstring_packet is new findquotedstring(
                                                              Max => NonSparkTypes.packet.Max_Length, 
@@ -16,22 +16,18 @@ procedure findquotedstring_packet is new findquotedstring(
 
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: in out Integer;
-                   self: in out ocpp.GetVariableResultType.T;
+                   self: in out ocpp.SetVariableResultType.T;
                    valid: out Boolean
                   )
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
-      ocpp.GetVariableStatusEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.attributeStatus, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-
       ocpp.AttributeEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.attributeType, valid);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
-      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "attributeValue", dummybounded);
+      ocpp.SetVariableStatusEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.attributeStatus, valid);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-      self.attributeValue := NonSparkTypes.GetVariableResultType.strattributeValue_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "component", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
@@ -53,23 +49,22 @@ procedure findquotedstring_packet is new findquotedstring(
                                retval: out NonSparkTypes.packet.Bounded_String)
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
-      strattributeStatus : GetVariableStatusEnumType.string_t.Bounded_String;
       strattributeType : AttributeEnumType.string_t.Bounded_String;
+      strattributeStatus : SetVariableStatusEnumType.string_t.Bounded_String;
       strcomponent : NonSparkTypes.packet.Bounded_String;
       strvariable : NonSparkTypes.packet.Bounded_String;
    begin
-      GetVariableStatusEnumType.ToString(Self.attributeStatus, strattributeStatus);
       AttributeEnumType.ToString(Self.attributeType, strattributeType);
+      SetVariableStatusEnumType.ToString(Self.attributeStatus, strattributeStatus);
       ComponentType.To_Bounded_String(Self.component, strcomponent);
       VariableType.To_Bounded_String(Self.variable, strvariable);
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "attributeStatus" & '"' & ":" & GetVariableStatusEnumType.string_t.To_String(strattributeStatus)
                                                       & "    " & '"' & "attributeType" & '"' & ":" & AttributeEnumType.string_t.To_String(strattributeType)
-                                                      & "    " & '"' & NonSparkTypes.GetVariableResultType.strattributeValue_t.To_String(Self.attributeValue) & '"' & ": "
+                                                      & "    " & '"' & "attributeStatus" & '"' & ":" & SetVariableStatusEnumType.string_t.To_String(strattributeStatus)
                                                       & "    " & '"' & NonSparkTypes.packet.To_String(strcomponent) & '"' & ": "
                                                       & "    " & '"' & NonSparkTypes.packet.To_String(strvariable) & '"' & ": "
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;
-end ocpp.GetVariableResultType;
+end ocpp.SetVariableResultType;

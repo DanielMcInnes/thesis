@@ -23,33 +23,27 @@ procedure findquotedstring_packet is new findquotedstring(
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
-      checkValid(msg, msgindex, self, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "serialNumber", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-
-      stringType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.serialNumber, valid);
+      self.serialNumber := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "model", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-
-      stringType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.model, valid);
+      self.model := NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "modem", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
-      objectType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.modem, valid);
+      ModemType.parse(msg, msgindex, self.modem, valid);
+      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "vendorName", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-
-      stringType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.vendorName, valid);
+      self.vendorName := NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "firmwareVersion", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-
-      stringType.FromString(NonSparkTypes.packet.To_String(dummybounded), self.firmwareVersion, valid);
+      self.firmwareVersion := NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
       valid := true;
@@ -59,25 +53,17 @@ procedure findquotedstring_packet is new findquotedstring(
                                retval: out NonSparkTypes.packet.Bounded_String)
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
-      strserialNumber : undefinedType.string_t.Bounded_string;
-      strmodel : undefinedType.string_t.Bounded_string;
-      strvendorName : undefinedType.string_t.Bounded_string;
-      strfirmwareVersion : undefinedType.string_t.Bounded_string;
+      strmodem : NonSparkTypes.packet.Bounded_String;
    begin
-      undefinedType.ToString(Self.serialNumber, strserialNumber);
-      undefinedType.ToString(Self.model, strmodel);
-      undefinedType.ToString(Self.vendorName, strvendorName);
-      undefinedType.ToString(Self.firmwareVersion, strfirmwareVersion);
+      ModemType.To_Bounded_String(Self.modem, strmodem);
       retval := NonSparkTypes.packet.To_Bounded_String(""
-                                                      & "[3," & ASCII.LF
-                                                      & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "serialNumber" & '"' & ": " & '"' & undefinedType.string_t.To_String(strserialNumber) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "model" & '"' & ": " & '"' & undefinedType.string_t.To_String(strmodel) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "modem" & '"' & ": " & '"' & ModemType.string_t.To_String(strmodem) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "vendorName" & '"' & ": " & '"' & undefinedType.string_t.To_String(strvendorName) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "firmwareVersion" & '"' & ": " & '"' & undefinedType.string_t.To_String(strfirmwareVersion) & '"' & ASCII.LF
+                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(Self.serialNumber) & '"' & ": "
+                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strmodel_t.To_String(Self.model) & '"' & ": "
+                                                      & "    " & '"' & NonSparkTypes.packet.To_String(strmodem) & '"' & ": "
+                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strvendorName_t.To_String(Self.vendorName) & '"' & ": "
+                                                      & "    " & '"' & NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_String(Self.firmwareVersion) & '"' & ": "
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;
-end ocpp.[object Object];
+end ocpp.ChargingStationType;

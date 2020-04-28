@@ -1,6 +1,6 @@
 format 222
 "websocketpp"
-  revision 18
+  revision 19
   modified_by 2 "dmcinnes"
 
 
@@ -698,7 +698,7 @@ ${inlines}
       end
     end
 
-    class 197634 "ocpp.SetVariables.Request"
+    class 197634 "ocpp.SetVariablesRequest"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -755,7 +755,7 @@ ${inlines}
       end
 
       attribute 178050 "attributeValue"
-	private explicit_type "string[0..1000]"
+	private explicit_type "string[0..2500]"
 	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
@@ -948,7 +948,7 @@ ${inlines}
       end
     end
 
-    class 204802 "ocpp.SetVariables.Response"
+    class 204802 "ocpp.SetVariablesResponse"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};

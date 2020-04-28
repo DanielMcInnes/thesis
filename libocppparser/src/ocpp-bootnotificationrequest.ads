@@ -9,8 +9,8 @@ with ocpp.BootReasonEnumType; use ocpp.BootReasonEnumType;
 package ocpp.BootNotificationRequest is
    action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("BootNotification"); 
    type T is new call with record
-      chargingStation : object;
-      reason : string;
+      chargingStation : ChargingStationType.T;
+      reason : BootReasonEnumType.T;
    end record;
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex: in out Integer;
@@ -23,7 +23,7 @@ package ocpp.BootNotificationRequest is
                 valid => (msg, msgindex, self),
                 msgindex => (msg, msgIndex, self),
                 self  => (msg, msgindex, self)
-               ),
+),
     post => (if valid = true then
                (self.messagetypeid = 2) and
                (NonSparkTypes.messageid_t.Length(self.messageid) > 0) and

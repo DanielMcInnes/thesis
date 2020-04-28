@@ -17,11 +17,11 @@ package ocpp.EVSEType is
    with
     Global => null,
     Depends => (
-                valid => (msg, msgindex),
-                msgindex => (msg, msgIndex),
+                valid => (msg, msgindex, self),
+                msgindex => (msg, msgIndex, self),
                 self  => (msg, msgindex, self)
-               );
-   
+            );
+
    procedure To_Bounded_String(Self: in T;
                                retval: out NonSparkTypes.packet.Bounded_String);
 end ocpp.EVSEType;

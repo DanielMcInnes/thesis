@@ -31,13 +31,11 @@ procedure findquotedstring_packet is new findquotedstring(
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "name", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-
-      self.name := NonSparkTypes.ComponentType.strname.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded),Drop => Right);
+      self.name := NonSparkTypes.ComponentType.strname_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "instance", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
-
-      self.instance := NonSparkTypes.ComponentType.strinstance.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.instance := NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
       valid := true;
@@ -47,15 +45,14 @@ procedure findquotedstring_packet is new findquotedstring(
                                retval: out NonSparkTypes.packet.Bounded_String)
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
-      strevsetype : NonSparkTypes.packet.Bounded_String; 
+      strevse : NonSparkTypes.packet.Bounded_String;
    begin
-      EVSEType.To_Bounded_String(Self.evse, strevsetype);
-
+      EVSEType.To_Bounded_String(Self.evse, strevse);
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "name" & '"' & ": " & NonSparkTypes.ComponentType.strname.To_String(Self.name) & ASCII.LF
-                                                       & "    " & '"' & "instance" & '"' & ": " & NonSparkTypes.ComponentType.strinstance.To_String(Self.instance) & ASCII.LF
-                                                       & "    " & '"' & "evse" & '"' & ": " & '"' &  NonSparkTypes.packet.To_String(strevsetype) & '"'
+                                                      & "    " & '"' & NonSparkTypes.packet.To_String(strevse) & '"' & ": "
+                                                      & "    " & '"' & NonSparkTypes.ComponentType.strname_t.To_String(Self.name) & '"' & ": "
+                                                      & "    " & '"' & NonSparkTypes.ComponentType.strinstance_t.To_String(Self.instance) & '"' & ": "
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;
