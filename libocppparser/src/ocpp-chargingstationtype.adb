@@ -60,7 +60,7 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & "{" & ASCII.LF
                                                       & "    " & '"' & NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(Self.serialNumber) & '"' & ": " & "," & ASCII.LF
                                                       & "    " & '"' & NonSparkTypes.ChargingStationType.strmodel_t.To_String(Self.model) & '"' & ": " & "," & ASCII.LF
-                                                      & "    " & '"' & NonSparkTypes.packet.To_String(strmodem) & '"' & ": "
+                                                      & "    " & '"' & "modem" & '"' & ":" & '"' & NonSparkTypes.packet.To_String(strmodem) & '"' & ": "
  & "," & ASCII.LF
                                                       & "    " & '"' & NonSparkTypes.ChargingStationType.strvendorName_t.To_String(Self.vendorName) & '"' & ": " & "," & ASCII.LF
                                                       & "    " & '"' & NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_String(Self.firmwareVersion) & '"' & ": " & ASCII.LF

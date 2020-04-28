@@ -53,7 +53,7 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
                                                       & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & NonSparkTypes.packet.To_String(strchargingStation) & '"' & ": "
+                                                      & "    " & '"' & "chargingStation" & '"' & ":" & '"' & NonSparkTypes.packet.To_String(strchargingStation) & '"' & ": "
  & "," & ASCII.LF
                                                       & "       " & '"' & "reason" & '"' & ":"  & '"' & BootReasonEnumType.string_t.To_String(strreason) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF

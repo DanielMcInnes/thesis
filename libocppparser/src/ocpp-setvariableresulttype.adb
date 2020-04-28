@@ -62,9 +62,9 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & "{" & ASCII.LF
                                                       & "       " & '"' & "attributeType" & '"' & ":"  & '"' & AttributeEnumType.string_t.To_String(strattributeType) & '"' & "," & ASCII.LF
                                                       & "       " & '"' & "attributeStatus" & '"' & ":"  & '"' & SetVariableStatusEnumType.string_t.To_String(strattributeStatus) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & NonSparkTypes.packet.To_String(strcomponent) & '"' & ": "
+                                                      & "    " & '"' & "component" & '"' & ":" & '"' & NonSparkTypes.packet.To_String(strcomponent) & '"' & ": "
  & "," & ASCII.LF
-                                                      & "    " & '"' & NonSparkTypes.packet.To_String(strvariable) & '"' & ": "
+                                                      & "    " & '"' & "variable" & '"' & ":" & '"' & NonSparkTypes.packet.To_String(strvariable) & '"' & ": "
  & ASCII.LF
                                                       & "}" & ASCII.LF
 , Drop => Right);
