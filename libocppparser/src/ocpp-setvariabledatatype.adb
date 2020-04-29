@@ -24,20 +24,23 @@ procedure findquotedstring_packet is new findquotedstring(
       dummyInt: integer;
    begin
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "attributeType", dummybounded);
+      if (valid = false) then NonSparkTypes.put_line("333 Invalid SetVariableDataTypeattributeType"); return; end if;
+
       ocpp.AttributeEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.attributeType, valid);
       if (valid = false) then NonSparkTypes.put_line("334 Invalid SetVariableDataTypeattributeType"); return; end if;
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "attributeValue", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("338 Invalid SetVariableDataTypeattributeValue"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("333 Invalid SetVariableDataTypeattributeValue"); return; end if;
+
       self.attributeValue := NonSparkTypes.SetVariableDataType.strattributeValue_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
-      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "component", dummybounded);
+      ocpp.findQuotedKey(msg, msgIndex, valid, "component");
       if (valid = false) then NonSparkTypes.put_line("355 Invalid SetVariableDataTypecomponent"); return; end if;
 
       ComponentType.parse(msg, msgindex, self.component, valid);
       if (valid = false) then NonSparkTypes.put_line("357 Invalid SetVariableDataTypecomponent"); return; end if;
 
-      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "variable", dummybounded);
+      ocpp.findQuotedKey(msg, msgIndex, valid, "variable");
       if (valid = false) then NonSparkTypes.put_line("355 Invalid SetVariableDataTypevariable"); return; end if;
 
       VariableType.parse(msg, msgindex, self.variable, valid);

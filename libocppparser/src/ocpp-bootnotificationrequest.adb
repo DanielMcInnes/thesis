@@ -26,13 +26,15 @@ procedure findquotedstring_packet is new findquotedstring(
       checkValid(msg, msgindex, self, action, valid);
       if (valid = false) then NonSparkTypes.put_line("313 Invalid BootNotificationRequestreason"); return; end if;
 
-      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "chargingStation", dummybounded);
+      ocpp.findQuotedKey(msg, msgIndex, valid, "chargingStation");
       if (valid = false) then NonSparkTypes.put_line("355 Invalid BootNotificationRequestchargingStation"); return; end if;
 
       ChargingStationType.parse(msg, msgindex, self.chargingStation, valid);
       if (valid = false) then NonSparkTypes.put_line("357 Invalid BootNotificationRequestchargingStation"); return; end if;
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "reason", dummybounded);
+      if (valid = false) then NonSparkTypes.put_line("333 Invalid BootNotificationRequestreason"); return; end if;
+
       ocpp.BootReasonEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.reason, valid);
       if (valid = false) then NonSparkTypes.put_line("334 Invalid BootNotificationRequestreason"); return; end if;
 

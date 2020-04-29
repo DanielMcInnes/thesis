@@ -27,7 +27,7 @@ procedure findquotedstring_packet is new findquotedstring(
       checkValid(msg, msgindex, self, action, valid);
       if (valid = false) then NonSparkTypes.put_line("313 Invalid GetVariablesRequestgetVariableData"); return; end if;
 
-      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "getVariableData", dummybounded);
+      ocpp.findQuotedKey(msg, msgIndex, valid, "getVariableData");
       if (valid = false) then NonSparkTypes.put_line("345 Invalid GetVariablesRequestgetVariableData"); return; end if;
 
       GetVariableDataTypeArray.FromString(msg, msgindex, self.getVariableData, valid);

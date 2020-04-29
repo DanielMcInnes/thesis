@@ -24,11 +24,13 @@ procedure findquotedstring_packet is new findquotedstring(
       dummyInt: integer;
    begin
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "name", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("338 Invalid VariableTypename"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("333 Invalid VariableTypename"); return; end if;
+
       self.name := NonSparkTypes.VariableType.strname_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "instance", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("338 Invalid VariableTypeinstance"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("333 Invalid VariableTypeinstance"); return; end if;
+
       self.instance := NonSparkTypes.VariableType.strinstance_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       if (valid = false) then NonSparkTypes.put_line("365 Invalid VariableTypeinstance"); return; end if;

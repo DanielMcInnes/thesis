@@ -22,26 +22,22 @@ procedure findquotedstring_packet is new findquotedstring(
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
-      tempPositive: Integer;
    begin
-      put("GetVariableResultType: parse: msgindex :"); put_line(msgindex'Image);
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "attributeStatus", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("failed to find attributeStatus"); return; end if;
-      
+      if (valid = false) then NonSparkTypes.put_line("333 Invalid GetVariableResultTypeattributeStatus"); return; end if;
+
       ocpp.GetVariableStatusEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.attributeStatus, valid);
       if (valid = false) then NonSparkTypes.put_line("334 Invalid GetVariableResultTypeattributeStatus"); return; end if;
-      NonSparkTypes.put_line("found attributeStatus");
-      NonSparkTypes.put_line("found comma");
-
-      
-      
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "attributeType", dummybounded);
+      if (valid = false) then NonSparkTypes.put_line("333 Invalid GetVariableResultTypeattributeType"); return; end if;
+
       ocpp.AttributeEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.attributeType, valid);
       if (valid = false) then NonSparkTypes.put_line("334 Invalid GetVariableResultTypeattributeType"); return; end if;
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "attributeValue", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("338 Invalid GetVariableResultTypeattributeValue"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("333 Invalid GetVariableResultTypeattributeValue"); return; end if;
+
       self.attributeValue := NonSparkTypes.GetVariableResultType.strattributeValue_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKey(msg, msgIndex, valid, "component");

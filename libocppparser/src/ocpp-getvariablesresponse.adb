@@ -24,13 +24,10 @@ procedure findquotedstring_packet is new findquotedstring(
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
-      NonSparkTypes.put("ocpp-getvariablesresponse: parse(): 27: msgindex"); NonSparkTypes.put_line(msgindex'Image);
       checkValid(msg, msgindex, self, valid);
       if (valid = false) then NonSparkTypes.put_line("313 Invalid GetVariablesResponsegetVariableResult"); return; end if;
 
-      NonSparkTypes.put("ocpp-getvariablesresponse: parse(): 31: msgindex"); NonSparkTypes.put_line(msgindex'Image);
       ocpp.findQuotedKey(msg, msgIndex, valid, "getVariableResult");
-      NonSparkTypes.put("ocpp-getvariablesresponse: parse(): 33: msgindex"); NonSparkTypes.put_line(msgindex'Image);
       if (valid = false) then NonSparkTypes.put_line("345 Invalid GetVariablesResponsegetVariableResult"); return; end if;
 
       GetVariableResultTypeArray.FromString(msg, msgindex, self.getVariableResult, valid);
