@@ -14,9 +14,19 @@ procedure findquotedstring_packet is new findquotedstring(
                                                              To_Bounded_String =>  NonSparkTypes.packet.To_Bounded_String
                                                             );
 
+   procedure Initialize(self: out ocpp.GetVariablesRequest.T)
+   is
+   begin
+      NonSparkTypes.put_line("Initialize()");
+      self.messageTypeId:= -1;
+      self.messageId := NonSparkTypes.messageid_t.To_Bounded_String("");
+      self.action := NonSparkTypes.action_t.To_Bounded_String("");
+      getVariableDataTypeArray.Initialize(self.getVariableData);
+
+   end Initialize;
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
-                   msgindex: in out Integer;
-                   self: in out ocpp.GetVariablesRequest.T;
+                   msgindex: out Integer;
+                   self: out ocpp.GetVariablesRequest.T;
                    valid: out Boolean
                   )
    is
@@ -24,6 +34,14 @@ procedure findquotedstring_packet is new findquotedstring(
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
+      Initialize(self);
+      msgIndex := 1;
+      ocpp.ParseMessageType(msg, self.messagetypeid, msgindex, valid);
+      if (valid = false) then NonSparkTypes.put_line("413 Invalid GetVariablesRequestgetVariableData messagetypeid"); return; end if;
+
+      ocpp.ParseMessageId(msg, self.messageid, msgindex, valid);
+      if (valid = false) then NonSparkTypes.put_line("416 Invalid GetVariablesRequestgetVariableData messageid"); return; end if;
+
       checkValid(msg, msgindex, self, action, valid);
       if (valid = false) then NonSparkTypes.put_line("313 Invalid GetVariablesRequestgetVariableData"); return; end if;
 

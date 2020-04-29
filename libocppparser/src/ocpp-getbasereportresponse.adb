@@ -14,15 +14,32 @@ procedure findquotedstring_packet is new findquotedstring(
                                                              To_Bounded_String =>  NonSparkTypes.packet.To_Bounded_String
                                                             );
 
+   procedure Initialize(self: out ocpp.GetBaseReportResponse.T)
+   is
+   begin
+      NonSparkTypes.put_line("Initialize()");
+      self.messageTypeId:= -1;
+      self.messageId := NonSparkTypes.messageid_t.To_Bounded_String("");
+      self.status := Accepted;
+
+   end Initialize;
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
-                   msgindex: in out Integer;
-                   self: in out ocpp.GetBaseReportResponse.T;
+                   msgindex: out Integer;
+                   self: out ocpp.GetBaseReportResponse.T;
                    valid: out Boolean
                   )
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
+      Initialize(self);
+      msgIndex := 1;
+      ocpp.ParseMessageType(msg, self.messagetypeid, msgindex, valid);
+      if (valid = false) then NonSparkTypes.put_line("413 Invalid GetBaseReportResponsestatus messagetypeid"); return; end if;
+
+      ocpp.ParseMessageId(msg, self.messageid, msgindex, valid);
+      if (valid = false) then NonSparkTypes.put_line("416 Invalid GetBaseReportResponsestatus messageid"); return; end if;
+
       checkValid(msg, msgindex, self, valid);
       if (valid = false) then NonSparkTypes.put_line("313 Invalid GetBaseReportResponsestatus"); return; end if;
 

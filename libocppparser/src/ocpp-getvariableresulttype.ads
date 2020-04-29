@@ -17,17 +17,19 @@ package ocpp.GetVariableResultType is
       component : ComponentType.T;
       variable : VariableType.T;
    end record;
+   procedure Initialize(self: out ocpp.GetVariableResultType.T);
+
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
-                msgindex: in out Integer;
-                self: in out ocpp.GetVariableResultType.T;
+                msgindex:  in out Integer;
+                self: out ocpp.GetVariableResultType.T;
                 valid: out Boolean
                )
    with
     Global => null,
     Depends => (
-                valid => (msg, msgindex, self),
-                msgindex => (msg, msgIndex, self),
-                self  => (msg, msgindex, self)
+                valid => (msg, msgindex),
+                msgindex => (msg, msgindex),
+                self  => (msg, msgindex)
             );
 
    procedure To_Bounded_String(Self: in T;

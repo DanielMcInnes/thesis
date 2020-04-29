@@ -60,7 +60,8 @@ package body ocpp is
       valid:= false;
       
       if request.messagetypeid /= 3 then
-         NonSparkTypes.put_line("ocpp.adb: 64: invalid messagetypeid"); 
+         NonSparkTypes.put("ocpp.adb: 64: invalid messagetypeid: "); 
+         NonSparkTypes.put_line(request.messagetypeid'Image); 
          return;
       end if;
       

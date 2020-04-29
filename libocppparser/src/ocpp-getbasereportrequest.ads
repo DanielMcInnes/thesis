@@ -11,17 +11,19 @@ package ocpp.GetBaseReportRequest is
       requestId : integer;
       reportBase : ReportBaseEnumType.T;
    end record;
+   procedure Initialize(self: out ocpp.GetBaseReportRequest.T);
+
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
-                msgindex: in out Integer;
-                self: in out ocpp.GetBaseReportRequest.T;
+                msgindex:  out Integer;
+                self: out ocpp.GetBaseReportRequest.T;
                 valid: out Boolean
                )
    with
     Global => null,
     Depends => (
-                valid => (msg, msgindex, self),
-                msgindex => (msg, msgIndex, self),
-                self  => (msg, msgindex, self)
+                valid => (msg),
+                msgindex => (msg),
+                self  => (msg)
 ),
     post => (if valid = true then
                (self.messagetypeid = 2) and

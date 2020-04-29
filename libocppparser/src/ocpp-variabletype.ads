@@ -10,17 +10,19 @@ package ocpp.VariableType is
       name : NonSparkTypes.VariableType.strname_t.Bounded_String;
       instance : NonSparkTypes.VariableType.strinstance_t.Bounded_String;
    end record;
+   procedure Initialize(self: out ocpp.VariableType.T);
+
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
-                msgindex: in out Integer;
-                self: in out ocpp.VariableType.T;
+                msgindex:  in out Integer;
+                self: out ocpp.VariableType.T;
                 valid: out Boolean
                )
    with
     Global => null,
     Depends => (
-                valid => (msg, msgindex, self),
-                msgindex => (msg, msgIndex, self),
-                self  => (msg, msgindex, self)
+                valid => (msg, msgindex),
+                msgindex => (msg, msgindex),
+                self  => (msg, msgindex)
             );
 
    procedure To_Bounded_String(Self: in T;
