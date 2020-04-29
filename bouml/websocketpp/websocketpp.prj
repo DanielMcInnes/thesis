@@ -824,12 +824,12 @@ ${inlines}
 	MysqlColumn
       end
 
-      classrelation 164738 // <directional composition>
+      classrelation 164738 // evse (<directional composition>)
 	relation 164738 *-->
-	  a role_name "" multiplicity "0..1" private
+	  a role_name "evse" multiplicity "0..1" private
 	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
-	    classrelation_ref 164738 // <directional composition>
+	    classrelation_ref 164738 // evse (<directional composition>)
 	  b parent class_ref 198018 // EVSEType
       end
     end

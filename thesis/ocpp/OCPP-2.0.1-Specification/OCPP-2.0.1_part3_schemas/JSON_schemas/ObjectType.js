@@ -81,7 +81,7 @@ function createArrayType(name, schema) {
    _outfile = cleanfilename('ocpp-' + name + 'TypeArray.adb').toLowerCase();
    _buffer ="pragma SPARK_mode (on); \n\n";
 
-   _buffer ="with Ada.Strings; use Ada.Strings;\n\n";
+   _buffer +="with Ada.Strings; use Ada.Strings;\n\n";
    _buffer += ('package body ocpp.' + schema.items.javaType + 'TypeArray is\n');
    _buffer += ('procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;\n')
    _buffer += ('                     msgindex: in out Integer;\n')
@@ -103,13 +103,18 @@ function createArrayType(name, schema) {
          NonSparkTypes.packet.Append(Source => msg, New_Item => dummybounded,Drop => Right);
       end loop;
       */
-
+   _buffer += ('   msg := NonSparkTypes.packet.To_Bounded_String("");\n')
+   _buffer += ('   NonSparkTypes.packet.Append(Source => msg, New_Item => "[",Drop => Right);\n')
    _buffer += ('   for i in Index loop\n')
    _buffer += ('      if (self.content(i).zzzArrayElementInitialized = True) then\n')
+   _buffer += ('         if i /= Index\'First then\n')
+   _buffer += ('            NonSparkTypes.packet.Append(Source => msg, New_Item => ",",Drop => Right);\n')
+   _buffer += ('         end if;\n')
    _buffer += ('         ' + schema.items.javaType + 'Type.To_Bounded_String(self.content(1), dummybounded);\n')
    _buffer += ('         NonSparkTypes.packet.Append(Source => msg, New_Item => dummybounded,Drop => Right);\n')
    _buffer += ('      end if;\n')
    _buffer += ('   end loop;\n')
+   _buffer += ('   NonSparkTypes.packet.Append(Source => msg, New_Item => "]",Drop => Right);\n')
 
    _buffer += ('end To_Bounded_String;\n\n')
 
