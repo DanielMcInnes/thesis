@@ -219,7 +219,7 @@ module.exports.parse = function (name, schema) {
    }
    else {
       _buffer += '   type T is record\n';
-      _buffer += '      zzzArrayElementInitialized : Boolean := True;\n';
+      _buffer += '      zzzArrayElementInitialized : Boolean := False;\n';
    }
 
    for (var property in schema.properties) {
