@@ -24,6 +24,7 @@ procedure findquotedstring_packet is new findquotedstring(
       self.instance := NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("");
 
    end Initialize;
+
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: in out Integer;
                    self: out ocpp.ComponentType.T;

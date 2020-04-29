@@ -135,6 +135,9 @@ function createArrayType(name, schema) {
    _buffer += ('   begin\n')
    _buffer += ('      valid := false;\n')
    _buffer += ('      for i in Index loop\n')
+   _buffer += ('         ' + schema.items.javaType + 'Type.Initialize(self.content(i));\n')
+   _buffer += ('      end loop;\n')
+   _buffer += ('      for i in Index loop\n')
    _buffer += ('         if i /= Index\'First then \n')
    _buffer += ('            ocpp.move_index_past_token(msg, \',\', msgindex, last);\n')
    _buffer += ('            if (last = 0) then\n')
@@ -360,7 +363,7 @@ module.exports.parse = function (name, schema) {
 
 
 
-   _buffer += '   end Initialize;\n';
+   _buffer += '   end Initialize;\n\n';
 
    _buffer += '   procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;\n';
    _buffer += '                   msgindex:' + ((!(name.endsWith("Request") || name.endsWith("Response"))) ? " in" : "") + ' out Integer;\n';
@@ -376,6 +379,7 @@ module.exports.parse = function (name, schema) {
       var type = schema.properties[property]["type"];   // int, string
       var _javaType = schema.properties[property]['javaType'] 
 
+      /*
       switch (type) {
          case "array":
             _buffer += '      str' + property + ': NonSparkTypes.packet.Bounded_String;\n';
@@ -383,6 +387,7 @@ module.exports.parse = function (name, schema) {
          default:
             break;
       }
+      */
    }
 
    _buffer += '      dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");\n';

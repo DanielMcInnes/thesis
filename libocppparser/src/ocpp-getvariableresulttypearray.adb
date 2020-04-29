@@ -22,6 +22,9 @@ package body ocpp.GetVariableResultTypeArray is
    begin
       valid := false;
       for i in Index loop
+         GetVariableResultType.Initialize(self.content(i));
+      end loop;
+      for i in Index loop
          if i /= Index'First then 
             ocpp.move_index_past_token(msg, ',', msgindex, last);
             if (last = 0) then

@@ -23,13 +23,13 @@ procedure findquotedstring_packet is new findquotedstring(
       setVariableResultTypeArray.Initialize(self.setVariableResult);
 
    end Initialize;
+
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: out Integer;
                    self: out ocpp.SetVariablesResponse.T;
                    valid: out Boolean
                   )
    is
-      strsetVariableResult: NonSparkTypes.packet.Bounded_String;
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
