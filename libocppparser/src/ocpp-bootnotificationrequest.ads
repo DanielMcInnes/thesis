@@ -15,16 +15,16 @@ package ocpp.BootNotificationRequest is
    procedure Initialize(self: out ocpp.BootNotificationRequest.T);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
-                msgindex: in out Integer;
+                msgindex:  out Integer;
                 self: out ocpp.BootNotificationRequest.T;
                 valid: out Boolean
                )
    with
     Global => null,
     Depends => (
-                valid => (msg, msgindex),
-                msgindex => (msg, msgIndex),
-                self  => (msg, msgindex)
+                valid => (msg),
+                msgindex => (msg),
+                self  => (msg)
 ),
     post => (if valid = true then
                (self.messagetypeid = 2) and

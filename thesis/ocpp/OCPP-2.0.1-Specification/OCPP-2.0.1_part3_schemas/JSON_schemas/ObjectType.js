@@ -268,17 +268,17 @@ module.exports.parse = function (name, schema) {
    _buffer += '\n';
    _buffer += '   procedure Initialize(self: out ocpp.' + name + '.T);\n\n'
    _buffer += '   procedure parse(msg: in NonSparkTypes.packet.Bounded_String;\n'
-   _buffer += '                msgindex: in out Integer;\n'
+   _buffer += '                msgindex: ' + ((!(name.endsWith("Request") || name.endsWith("Response"))) ? " in" : "") + ' out Integer;\n'
    _buffer += '                self: out ocpp.' + name + '.T;\n'
    _buffer += '                valid: out Boolean\n'
    _buffer += '               )\n'
    _buffer += '   with\n'
    _buffer += '    Global => null,\n'
    _buffer += '    Depends => (\n'
-   _buffer += '                valid => (msg, msgindex),\n'
-   _buffer += '                msgindex => (msg, msgIndex),\n'
-   _buffer += '                self  => (msg, msgindex)\n'
-   if (name.endsWith('Request') || name.endsWith('Result')) {
+   _buffer += '                valid => (msg' + ((!(name.endsWith("Request") || name.endsWith("Response"))) ? ", msgindex" : "") + '),\n'
+   _buffer += '                msgindex => (msg' + ((!(name.endsWith("Request") || name.endsWith("Response"))) ? ", msgindex" : "") + '),\n'
+   _buffer += '                self  => (msg' + ((!(name.endsWith("Request") || name.endsWith("Response"))) ? ", msgindex" : "") + ')\n'
+   if (name.endsWith('Request') || name.endsWith('Response')) {
       _buffer += '),\n'
       _buffer += '    post => (if valid = true then\n'
       _buffer += '               (self.messagetypeid = ' + (name.endsWith('Request') ? '2' : '3') + ') and\n'
@@ -363,7 +363,7 @@ module.exports.parse = function (name, schema) {
    _buffer += '   end Initialize;\n';
 
    _buffer += '   procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;\n';
-   _buffer += '                   msgindex: in out Integer;\n';
+   _buffer += '                   msgindex:' + ((!(name.endsWith("Request") || name.endsWith("Response"))) ? " in" : "") + ' out Integer;\n';
    _buffer += '                   self: out ocpp.' + name + '.T;\n';
    _buffer += '                   valid: out Boolean\n';
    _buffer += '                  )\n';
@@ -410,7 +410,10 @@ module.exports.parse = function (name, schema) {
    
       _buffer += '      msgIndex := 1;\n'
       _buffer += '      ocpp.ParseMessageType(msg, self.messagetypeid, msgindex, valid);\n'
+      _buffer += '      if (valid = false) then NonSparkTypes.put_line("413 Invalid ' + name + property + ' messagetypeid"); return; end if;\n\n'
+      
       _buffer += '      ocpp.ParseMessageId(msg, self.messageid, msgindex, valid);\n'
+      _buffer += '      if (valid = false) then NonSparkTypes.put_line("416 Invalid ' + name + property + ' messageid"); return; end if;\n\n'
 
 
 

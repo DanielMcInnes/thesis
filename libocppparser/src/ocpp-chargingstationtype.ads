@@ -17,7 +17,7 @@ package ocpp.ChargingStationType is
    procedure Initialize(self: out ocpp.ChargingStationType.T);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
-                msgindex: in out Integer;
+                msgindex:  in out Integer;
                 self: out ocpp.ChargingStationType.T;
                 valid: out Boolean
                )
@@ -25,7 +25,7 @@ package ocpp.ChargingStationType is
     Global => null,
     Depends => (
                 valid => (msg, msgindex),
-                msgindex => (msg, msgIndex),
+                msgindex => (msg, msgindex),
                 self  => (msg, msgindex)
             );
 

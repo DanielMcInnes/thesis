@@ -26,7 +26,7 @@ procedure findquotedstring_packet is new findquotedstring(
 
    end Initialize;
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
-                   msgindex: in out Integer;
+                   msgindex: out Integer;
                    self: out ocpp.GetBaseReportRequest.T;
                    valid: out Boolean
                   )
@@ -37,7 +37,11 @@ procedure findquotedstring_packet is new findquotedstring(
       Initialize(self);
       msgIndex := 1;
       ocpp.ParseMessageType(msg, self.messagetypeid, msgindex, valid);
+      if (valid = false) then NonSparkTypes.put_line("413 Invalid GetBaseReportRequestreportBase messagetypeid"); return; end if;
+
       ocpp.ParseMessageId(msg, self.messageid, msgindex, valid);
+      if (valid = false) then NonSparkTypes.put_line("416 Invalid GetBaseReportRequestreportBase messageid"); return; end if;
+
       checkValid(msg, msgindex, self, action, valid);
       if (valid = false) then NonSparkTypes.put_line("313 Invalid GetBaseReportRequestreportBase"); return; end if;
 

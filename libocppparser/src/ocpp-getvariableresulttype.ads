@@ -20,7 +20,7 @@ package ocpp.GetVariableResultType is
    procedure Initialize(self: out ocpp.GetVariableResultType.T);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
-                msgindex: in out Integer;
+                msgindex:  in out Integer;
                 self: out ocpp.GetVariableResultType.T;
                 valid: out Boolean
                )
@@ -28,7 +28,7 @@ package ocpp.GetVariableResultType is
     Global => null,
     Depends => (
                 valid => (msg, msgindex),
-                msgindex => (msg, msgIndex),
+                msgindex => (msg, msgindex),
                 self  => (msg, msgindex)
             );
 
