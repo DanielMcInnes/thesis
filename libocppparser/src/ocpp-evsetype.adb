@@ -24,14 +24,14 @@ procedure findquotedstring_packet is new findquotedstring(
       dummyInt: integer;
    begin
       ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "id", dummyInt);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("328 Invalid EVSETypeid"); return; end if;
       self.id := dummyInt;
 
       ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "connectorId", dummyInt);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("328 Invalid EVSETypeconnectorId"); return; end if;
       self.connectorId := dummyInt;
 
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("365 Invalid EVSETypeconnectorId"); return; end if;
       valid := true;
    end parse;
 

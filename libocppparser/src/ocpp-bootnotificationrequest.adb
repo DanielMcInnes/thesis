@@ -24,18 +24,19 @@ procedure findquotedstring_packet is new findquotedstring(
       dummyInt: integer;
    begin
       checkValid(msg, msgindex, self, action, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("313 Invalid BootNotificationRequestreason"); return; end if;
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "chargingStation", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("355 Invalid BootNotificationRequestchargingStation"); return; end if;
 
       ChargingStationType.parse(msg, msgindex, self.chargingStation, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("357 Invalid BootNotificationRequestchargingStation"); return; end if;
 
+      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "reason", dummybounded);
       ocpp.BootReasonEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.reason, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("334 Invalid BootNotificationRequestreason"); return; end if;
 
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("365 Invalid BootNotificationRequestreason"); return; end if;
       valid := true;
    end parse;
 

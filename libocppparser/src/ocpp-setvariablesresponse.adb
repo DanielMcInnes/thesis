@@ -25,15 +25,15 @@ procedure findquotedstring_packet is new findquotedstring(
       dummyInt: integer;
    begin
       checkValid(msg, msgindex, self, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("313 Invalid SetVariablesResponsesetVariableResult"); return; end if;
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "setVariableResult", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("345 Invalid SetVariablesResponsesetVariableResult"); return; end if;
 
       SetVariableResultTypeArray.FromString(msg, msgindex, self.setVariableResult, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("347 Invalid SetVariablesResponsesetVariableResult"); return; end if;
 
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("365 Invalid SetVariablesResponsesetVariableResult"); return; end if;
       valid := true;
    end parse;
 

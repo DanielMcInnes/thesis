@@ -23,22 +23,23 @@ procedure findquotedstring_packet is new findquotedstring(
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
+      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "attributeType", dummybounded);
       ocpp.AttributeEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.attributeType, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("334 Invalid GetVariableDataTypeattributeType"); return; end if;
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "component", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("355 Invalid GetVariableDataTypecomponent"); return; end if;
 
       ComponentType.parse(msg, msgindex, self.component, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("357 Invalid GetVariableDataTypecomponent"); return; end if;
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "variable", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("355 Invalid GetVariableDataTypevariable"); return; end if;
 
       VariableType.parse(msg, msgindex, self.variable, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("357 Invalid GetVariableDataTypevariable"); return; end if;
 
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("365 Invalid GetVariableDataTypevariable"); return; end if;
       valid := true;
    end parse;
 

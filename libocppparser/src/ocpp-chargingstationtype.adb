@@ -24,28 +24,28 @@ procedure findquotedstring_packet is new findquotedstring(
       dummyInt: integer;
    begin
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "serialNumber", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("338 Invalid ChargingStationTypeserialNumber"); return; end if;
       self.serialNumber := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "model", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("338 Invalid ChargingStationTypemodel"); return; end if;
       self.model := NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "modem", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("355 Invalid ChargingStationTypemodem"); return; end if;
 
       ModemType.parse(msg, msgindex, self.modem, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("357 Invalid ChargingStationTypemodem"); return; end if;
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "vendorName", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("338 Invalid ChargingStationTypevendorName"); return; end if;
       self.vendorName := NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "firmwareVersion", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("338 Invalid ChargingStationTypefirmwareVersion"); return; end if;
       self.firmwareVersion := NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("365 Invalid ChargingStationTypefirmwareVersion"); return; end if;
       valid := true;
    end parse;
 

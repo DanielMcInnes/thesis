@@ -8,8 +8,16 @@ procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;
                      self: out T;
                      valid: out Boolean)
 is
+   tempBool : Boolean;
 begin
-   NonSparkTypes.put_line("SetVariableDataTypeArray.FromString");
+   valid := false;
+   for i in Index loop
+      SetVariableDataType.parse(msg, msgIndex, self.content(i), tempBool);
+      self.content(i).zzzArrayElementInitialized := tempBool;
+      if tempBool = True then
+         valid := True; -- need at least one valid item in the array for parsing to succeed
+      end if;
+   end loop;
 end FromString;
 
 procedure To_Bounded_String(msg: out NonSparkTypes.packet.Bounded_String;
