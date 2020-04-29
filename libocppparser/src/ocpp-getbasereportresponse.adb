@@ -27,6 +27,8 @@ procedure findquotedstring_packet is new findquotedstring(
       if (valid = false) then NonSparkTypes.put_line("313 Invalid GetBaseReportResponsestatus"); return; end if;
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "status", dummybounded);
+      if (valid = false) then NonSparkTypes.put_line("333 Invalid GetBaseReportResponsestatus"); return; end if;
+
       ocpp.GenericDeviceModelStatusEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.status, valid);
       if (valid = false) then NonSparkTypes.put_line("334 Invalid GetBaseReportResponsestatus"); return; end if;
 

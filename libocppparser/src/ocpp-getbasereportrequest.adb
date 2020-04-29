@@ -31,6 +31,8 @@ procedure findquotedstring_packet is new findquotedstring(
       self.requestId := dummyInt;
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "reportBase", dummybounded);
+      if (valid = false) then NonSparkTypes.put_line("333 Invalid GetBaseReportRequestreportBase"); return; end if;
+
       ocpp.ReportBaseEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.reportBase, valid);
       if (valid = false) then NonSparkTypes.put_line("334 Invalid GetBaseReportRequestreportBase"); return; end if;
 

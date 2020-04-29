@@ -83,11 +83,11 @@ function createArrayType(name, schema) {
 
    _buffer +="with Ada.Strings; use Ada.Strings;\n\n";
    _buffer += ('package body ocpp.' + schema.items.javaType + 'TypeArray is\n');
-   _buffer += ('procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;\n')
-   _buffer += ('                     msgindex: in out Integer;\n')
-   _buffer += ('                     self: out T;\n')
-   _buffer += ('                     valid: out Boolean)\n')
-   _buffer += ('is\n')
+   _buffer += ('   procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;\n')
+   _buffer += ('                        msgindex: in out Integer;\n')
+   _buffer += ('                        self: out T;\n')
+   _buffer += ('                        valid: out Boolean)\n')
+   _buffer += ('   is\n')
    /*
    procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;
                         msgindex: in out Integer;
@@ -95,54 +95,75 @@ function createArrayType(name, schema) {
                         valid: out Boolean)
    is
       tempBool : Boolean;
+      last   : Natural;
    begin
       valid := false;
       for i in Index loop
-         GetVariableDataType.parse(msg, msgindex, self.content(i), tempBool);
+         if i /= Index'First then
+            ocpp.move_index_past_token(msg, ',', msgindex, last);
+            if (last = 0) then
+               put_line("39: no comma");
+               self.content(i).zzzArrayElementInitialized := false;
+               return; -- end of array
+            else
+               put("found comma. msgindex:"); put_line(msgindex'Image);
+            end if;
+         end if;
+
+         GetVariableResultType.parse(msg, msgIndex, self.content(i), tempBool);
          self.content(i).zzzArrayElementInitialized := tempBool;
          if tempBool = True then
-            valid := True;
+            valid := True; -- need at least one valid item in the array for parsing to succeed
          end if;
       end loop;
    end FromString;
+   
    */
-   _buffer += ('   tempBool : Boolean;\n')
-   _buffer += ('begin\n')
-   _buffer += ('   valid := false;\n')
-   _buffer += ('   for i in Index loop\n')
-   _buffer += ('      ' + schema.items.javaType + 'Type.parse(msg, msgIndex, self.content(i), tempBool);\n')
-   _buffer += ('      self.content(i).zzzArrayElementInitialized := tempBool;\n')
-   _buffer += ('      if tempBool = True then\n')
-   _buffer += ('         valid := True; -- need at least one valid item in the array for parsing to succeed\n')
-   _buffer += ('      end if;\n')
-   _buffer += ('   end loop;\n')
-   _buffer += ('end FromString;\n\n')
+   _buffer += ('      tempBool : Boolean;\n')
+   _buffer += ('      last: Natural;\n')
+   _buffer += ('   begin\n')
+   _buffer += ('      valid := false;\n')
+   _buffer += ('      for i in Index loop\n')
+   _buffer += ('         if i /= Index\'First then \n')
+   _buffer += ('            ocpp.move_index_past_token(msg, \',\', msgindex, last);\n')
+   _buffer += ('            if (last = 0) then\n')
+   _buffer += ('               --put_line("39: no comma");\n')
+   _buffer += ('               self.content(i).zzzArrayElementInitialized := false;\n')
+   _buffer += ('               return; -- end of array\n')
+   _buffer += ('            end if;\n')
+   _buffer += ('         end if;\n')
+   _buffer += ('         ' + schema.items.javaType + 'Type.parse(msg, msgIndex, self.content(i), tempBool);\n')
+   _buffer += ('         self.content(i).zzzArrayElementInitialized := tempBool;\n')
+   _buffer += ('         if tempBool = True then\n')
+   _buffer += ('            valid := True; -- need at least one valid item in the array for parsing to succeed\n')
+   _buffer += ('         end if;\n')
+   _buffer += ('      end loop;\n')
+   _buffer += ('   end FromString;\n\n')
 
-   _buffer += ('procedure To_Bounded_String(msg: out NonSparkTypes.packet.Bounded_String;\n')
-   _buffer += ('                   self: in T)\n')
-   _buffer += ('is\n')
-   _buffer += ('   dummybounded: NonSparkTypes.packet.Bounded_String;\n')
-   _buffer += ('begin\n')
+   _buffer += ('   procedure To_Bounded_String(msg: out NonSparkTypes.packet.Bounded_String;\n')
+   _buffer += ('                            self: in T)\n')
+   _buffer += ('   is\n')
+   _buffer += ('      dummybounded: NonSparkTypes.packet.Bounded_String;\n')
+   _buffer += ('   begin\n')
    /*
       for i in Index loop
          GetVariableDataType.To_Bounded_String(self.content(i), dummybounded);
          NonSparkTypes.packet.Append(Source => msg, New_Item => dummybounded,Drop => Right);
       end loop;
       */
-   _buffer += ('   msg := NonSparkTypes.packet.To_Bounded_String("");\n')
-   _buffer += ('   NonSparkTypes.packet.Append(Source => msg, New_Item => "[",Drop => Right);\n')
-   _buffer += ('   for i in Index loop\n')
-   _buffer += ('      if (self.content(i).zzzArrayElementInitialized = True) then\n')
+   _buffer += ('      msg := NonSparkTypes.packet.To_Bounded_String("");\n')
+   _buffer += ('      NonSparkTypes.packet.Append(Source => msg, New_Item => "[",Drop => Right);\n')
+   _buffer += ('      for i in Index loop\n')
+   _buffer += ('         exit when self.content(i).zzzArrayElementInitialized = False;\n')
    _buffer += ('         if i /= Index\'First then\n')
    _buffer += ('            NonSparkTypes.packet.Append(Source => msg, New_Item => ",",Drop => Right);\n')
    _buffer += ('         end if;\n')
-   _buffer += ('         ' + schema.items.javaType + 'Type.To_Bounded_String(self.content(1), dummybounded);\n')
+   _buffer += ('         ' + schema.items.javaType + 'Type.To_Bounded_String(self.content(i), dummybounded);\n')
    _buffer += ('         NonSparkTypes.packet.Append(Source => msg, New_Item => dummybounded,Drop => Right);\n')
-   _buffer += ('      end if;\n')
-   _buffer += ('   end loop;\n')
-   _buffer += ('   NonSparkTypes.packet.Append(Source => msg, New_Item => "]",Drop => Right);\n')
+   _buffer += ('      end loop;\n')
+   _buffer += ('      NonSparkTypes.packet.Append(Source => msg, New_Item => "]",Drop => Right);\n')
 
-   _buffer += ('end To_Bounded_String;\n\n')
+   _buffer += ('   end To_Bounded_String;\n\n')
 
    _buffer += ('end ocpp.' + schema.items.javaType + 'TypeArray;\n')
 
@@ -329,36 +350,31 @@ module.exports.parse = function (name, schema) {
             _buffer += '      self.' + property + ' := dummyInt;\n';
             break;
          case 'string':
-            if (!!_javaType && _javaType.endsWith('Enum')) { // eg: getBaseReportRequest.reportBase : ocpp.ReportBaseEnum
                _buffer += '      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "' + property + '", dummybounded);\n';
+               _buffer += '      if (valid = false) then NonSparkTypes.put_line("333 Invalid ' + name + property + '"); return; end if;\n\n'
+            if (!!_javaType && _javaType.endsWith('Enum')) { // eg: getBaseReportRequest.reportBase : ocpp.ReportBaseEnum
                _buffer += '      ocpp.' + _javaType + 'Type.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.' + property + ', valid);\n';
                _buffer += '      if (valid = false) then NonSparkTypes.put_line("334 Invalid ' + name + property + '"); return; end if;\n'
-          } else
+            } else
             {
-               _buffer += '      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "' + property + '", dummybounded);\n';
-               _buffer += '      if (valid = false) then NonSparkTypes.put_line("338 Invalid ' + name + property + '"); return; end if;\n'
                _buffer += '      self.' + property + ' := NonSparkTypes.' + name + '.str' + property + '_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);\n';
             }
             
             break;
          case 'array':
-            _buffer += '      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "' + property + '", dummybounded);\n';
+            _buffer += '      ocpp.findQuotedKey(msg, msgIndex, valid, "' + property + '");\n';
             _buffer += '      if (valid = false) then NonSparkTypes.put_line("345 Invalid ' + name + property + '"); return; end if;\n\n'
             _buffer += '      ' + schema.properties[property]["items"]["javaType"] + 'TypeArray.FromString(msg, msgindex, self.' + property + ', valid);\n';
             _buffer += '      if (valid = false) then NonSparkTypes.put_line("347 Invalid ' + name + property + '"); return; end if;\n'
             break;
          default:
-            switch (_javaType) {
-               default: 
-                  if (!!_javaType && _javaType.endsWith('Enum')) {
-                  } else {
-                     _buffer += '      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "' + property + '", dummybounded);\n';
-                     _buffer += '      if (valid = false) then NonSparkTypes.put_line("355 Invalid ' + name + property + '"); return; end if;\n\n'
-                     _buffer += '      ' + utils.parseType(schema.properties[property]) + 'Type.parse(msg, msgindex, self.' + property + ', valid);\n';
-                     _buffer += '      if (valid = false) then NonSparkTypes.put_line("357 Invalid ' + name + property + '"); return; end if;\n'
-                  }
-                  break;
-               }
+            if (!!_javaType) {
+               _buffer += '      ocpp.findQuotedKey(msg, msgIndex, valid, "' + property + '");\n';
+               _buffer += '      if (valid = false) then NonSparkTypes.put_line("355 Invalid ' + name + property + '"); return; end if;\n\n'
+               _buffer += '      ' + utils.parseType(schema.properties[property]) + 'Type.parse(msg, msgindex, self.' + property + ', valid);\n';
+               _buffer += '      if (valid = false) then NonSparkTypes.put_line("357 Invalid ' + name + property + '"); return; end if;\n'
+            }
+            break;
       }
       _buffer += '\n';
 

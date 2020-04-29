@@ -24,11 +24,13 @@ procedure findquotedstring_packet is new findquotedstring(
       dummyInt: integer;
    begin
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "iccid", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("338 Invalid ModemTypeiccid"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("333 Invalid ModemTypeiccid"); return; end if;
+
       self.iccid := NonSparkTypes.ModemType.striccid_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "imsi", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("338 Invalid ModemTypeimsi"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("333 Invalid ModemTypeimsi"); return; end if;
+
       self.imsi := NonSparkTypes.ModemType.strimsi_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       if (valid = false) then NonSparkTypes.put_line("365 Invalid ModemTypeimsi"); return; end if;

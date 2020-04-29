@@ -24,16 +24,18 @@ procedure findquotedstring_packet is new findquotedstring(
       dummyInt: integer;
    begin
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "attributeType", dummybounded);
+      if (valid = false) then NonSparkTypes.put_line("333 Invalid GetVariableDataTypeattributeType"); return; end if;
+
       ocpp.AttributeEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.attributeType, valid);
       if (valid = false) then NonSparkTypes.put_line("334 Invalid GetVariableDataTypeattributeType"); return; end if;
 
-      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "component", dummybounded);
+      ocpp.findQuotedKey(msg, msgIndex, valid, "component");
       if (valid = false) then NonSparkTypes.put_line("355 Invalid GetVariableDataTypecomponent"); return; end if;
 
       ComponentType.parse(msg, msgindex, self.component, valid);
       if (valid = false) then NonSparkTypes.put_line("357 Invalid GetVariableDataTypecomponent"); return; end if;
 
-      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "variable", dummybounded);
+      ocpp.findQuotedKey(msg, msgIndex, valid, "variable");
       if (valid = false) then NonSparkTypes.put_line("355 Invalid GetVariableDataTypevariable"); return; end if;
 
       VariableType.parse(msg, msgindex, self.variable, valid);

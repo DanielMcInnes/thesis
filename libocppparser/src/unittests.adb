@@ -994,8 +994,11 @@ package body unittests is
       ocpp.server.receivePacket(server, packet, response, result);
       if (result = false) then return; end if;
       
+      NonSparkTypes.put_line("997");
       ocpp.GetVariablesResponse.To_Bounded_String(server.getVariablesResponse, strServerPacket);
+      NonSparkTypes.put_line("999");
       ocpp.GetVariablesResponse.To_Bounded_String(getVariablesResponse, strTestPacket);
+      NonSparkTypes.put_line("1001");
       if(strTestPacket /= strServerPacket) 
       then 
          NonSparkTypes.put_line("ERROR 804");
