@@ -78,6 +78,7 @@
   address   = {Paris, France},
   url       = {https://webstore.iea.org/global-ev-outlook-2019},
   note      = {{Accessed: June 25, 2019}},
+  annote    = "This annual publication describes the state of electric mobility around the world. It includes statistics for the number of publicly available fast chargers, which increased 33\% from 107\,650 in 2017 to 143\,502 in 2018. These numbers show the potential usefulness of a verified OCPP v2.0 server."
 }
 
 % The Verifast Program Verifier: A Tutorial
@@ -92,6 +93,7 @@
   address   = {Leuven, Belgium},
   url       = "https://people.cs.kuleuven.be/\~{}bart.jacobs/verifast/tutorial.pdf",
   note      = {{Accessed: June 20, 2019}},
+  annote    = "This report gives useful examples of how to use the VeriFast Program Verifier to prove the absence of buffer overflows, data races and functional correctness as specified by preconditions and postconditions."
 }
 
 % Professional internet site
@@ -108,6 +110,7 @@
   title        = "``{Appraisal} {OCPP}''",
   note         = {{Accessed: June 22, 2019}},
   url          = "www.openchargealliance.org/about-us/appraisal-ocpp/",
+  annote    = "This webpage gives the goals of the OCPP protocol. It includes statistics for the number of charging stations (which may consist of 1 or more chargers) using the OCPP protocol, which currently number of 10\,000 in over 50 different countries. These numbers show the potential usefulness of a verified OCPP v2.0 server. The web site is operated by the Open Charge Alliance, whose stated mission is to ``Uphold OCPP and OSCP as vital standards, with implementations widely adopted and deployed'', i.e., they have a vested interest in portraying the adoption of the OCPP protocol in a positive light. In spite of this vested interest, the data seems trustworthy."
 }
 
 % https://www.openchargealliance.org/downloads/
@@ -156,6 +159,7 @@
   title        = "``{Research prototype tool for modular formal verification of C and Java programs}''",
   note         = {{Accessed:} June 22, 2019},
   url          = "https://github.com/verifast/verifast/",
+  annote    = "This website is the home page of the VeriFast project. It gives an overview of the product, installation instructions and links to tutorials and papers. It was useful when evaluating the different verification tools available, particularly the list of known bugs in the tool."
 }
 
 % Featherweight Verifast
@@ -169,6 +173,7 @@
   pages = {1–57},
   year = {2015},
   url = {https://lmcs.episciences.org/1595},
+  annote = "In this article Vogels \textit{et al.} discuss VeriFast, a tool for modular verification of safety and correctness properties of single threaded and multithreaded C and Java programs. The authors present a formal definition and soundness proof of a core subset of the VeriFast program verification approach. The article provides a detailed description of what VeriFast does and how it works, then introduces a simplified version of Verifast, ``Featherweight Verifast'', as well as another variant called ``Mechanised Featherweight Verifast''. The article is useful mainly for its description of what guarantees VeriFast provides. Surprisingly, these features are not obvious from the VeriFast website https://github.com/verifast/verifast or from internet searches. The main limitation of the article is that it focuses on a subset of VeriFast. The authors list future work to be done to create formal definitions and proofs for those features of VeriFast that are not included in Featherweight Verifast. This article provides useful supplementary information for comparing different software verification tools."
 }
 
 % http://www.openjml.org/
@@ -179,6 +184,7 @@
   title        = "``{Does your program do what it is supposed to do?}''",
   note         = {{Accessed: June 22, 2019}},
   url          = "https://github.com/verifast/verifast/",
+  annote       = "This is the website for the OpenJML verification tool. It gives an overview of the product, installation instructions and links to more documentation. It is useful for evaluating the different verification tools available."
 }
 
 @inproceedings{CokD.R.2014OSvf,
@@ -192,6 +198,7 @@ title = {{OpenJML}: Software verification for {Java} 7 using {JML}, {OpenJDK}, a
 copyright = {Copyright 2015 Elsevier B.V., All rights reserved.},
 author = {Cok, D.R.},
 keywords = {Computer Science - Software Engineering ; Computer Science - Logic In Computer Science ; Computer Science - Programming Languages;},
+annote = "This paper describes `OpenJML', a verification tool for Java programs. It has a section on the soundness of the tool, which is vague and inconclusive. The paper is useful for evaluating the different verification tools available."
 }
 
 % https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/
@@ -202,6 +209,7 @@ keywords = {Computer Science - Software Engineering ; Computer Science - Logic I
   title        = "``{VCC: A Verifier for Concurrent C}''",
   note         = {{Accessed:June 22, 2019}},
   url          = "https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/",
+  annote       = "This is the website for the VCC verification tool. It gives an overview of the product, installation instructions and links to more documentation. It is useful for evaluating the different verification tools available."
 }
 
 % A practical verification methodology for concurrent programs
@@ -214,7 +222,9 @@ keywords = {Computer Science - Software Engineering ; Computer Science - Logic I
   address   = {1 Microsoft Way, Redmond, WA},
   url       = "https://www.microsoft.com/en-us/research/publication/a-practical-verification-methodology-for-concurrent-programs/",
   note      = {Accessed: June 22, 2019},
+  annote    = "This paper describes the verification methodology used in `VCC', an automated, sound C verifier, which translates annotated C code into BoogiePL. Boogie generates verification conditions, which are then fed into the Z3 SMT solver.  It was useful for evaluating the different verification tools available."
 }
+
 % Verifying C Programs: A VCC Tutorial
 @TechReport{vcctutorial,
   author = {E. Cohen and M. Hillebrand and S. Tobies and M. Moskal and W. Schulte}, 
@@ -225,6 +235,7 @@ keywords = {Computer Science - Software Engineering ; Computer Science - Logic I
   address   = {Leuven, Belgium},
   url       = "https://swt.informatik.uni-freiburg.de/teaching/SS2015/swtvl/Resources/literature/vcc-tutorial-col2.pdf",
   note      = {Accessed: June 22, 2019},
+  annote    = "This tutorial gives useful examples of how to use the VCC verification tool. It is not obvious from the project webpage what features the tool provides, and the tutorial was used to infer these features. The tutorial indicates that is a ``working draft, version 0.2'', and it is not available on the Microsoft website, rather it is available indirectly via the University of Freiburg. In spite of this, it is well written, and it was easy to follow the examples and perform the proofs."
 }
 
 @inproceedings{0e6db16b44c94a84a74afdb7ee00ce3b,
@@ -243,6 +254,7 @@ pages = "25--42",
 editor = "Reiner H{\"a}hnle and {van der Aalst}, Wil",
 booktitle = "Fundamental Approaches to Software Engineering - 22nd International Conference, FASE 2019, Held as Part of the European Joint Conferences on Theory and Practice of Software, ETAPS 2019, Proceedings",
 address = "Germany",
+annote    = "This paper introduces `CorC', a graphical and textual IDE for creating software using the `correctness by construction' methodology. `CorC' uses the `KeY' theorem prover. The authors found that when a set of algorithms were developed using the `correctness by construction' approach, verification was much faster than post-hoc verification. The graphical component is surprisingly effective at making the software and its proof easier to understand."
 }
 
 @inproceedings{bobot:hal-00790310,
@@ -256,6 +268,7 @@ address = "Germany",
   PDF = {https://hal.inria.fr/hal-00790310/file/main.pdf},
   HAL_ID = {hal-00790310},
   HAL_VERSION = {v1},
+  annote    = "This article describes the Why3 software verification platform. All of the authors are members of the ``Toccata'' project, which developed Why3, and therefore have a vested interest in portraying the platform in a positive light. It was useful for evaluating the different verification tools available."
 }
 
 @inproceedings{filliatre:hal-00789533,
@@ -272,6 +285,7 @@ address = "Germany",
   PDF = {https://hal.inria.fr/hal-00789533/file/main.pdf},
   HAL_ID = {hal-00789533},
   HAL_VERSION = {v1},
+  annote    = "This article describes the Why3 software verification platform, and the WhyML language. WhyML is used for both specification and programming. It was useful for evaluating the different verification tools available."
 }
 
 @misc{JuhaszUri2014VAVI,
@@ -282,6 +296,7 @@ title = {Viper: A Verification Infrastructure for Permission-Based Reasoning},
 language = {eng},
 author = {Juhasz, Uri and Kassios, Ioannis T and Müller, Peter and Novacek, Milos and Schwerhoff, Malte and Summers, Alexander J},
 keywords = {Verification (Software Engineering) ; Verifikation (Software Engineering) ; Data Processing, Computer Science},
+annote    = "This paper describes the ``Viper'' verification infrastructure, the ``Silver'' intermediate language and the ``Silicon'' and ``Carbon'' back-end verifiers. The ``Viper'' tool provides a verification infrastructure based on permission logics. Three of the six authors are current members of the Viper project, and therefore have a vested interest in portraying Viper in a positive light. The paper was useful for evaluating the different verification tools available."
 }
 
 @book{KeYBook2016dd,
@@ -293,6 +308,7 @@ keywords = {Verification (Software Engineering) ; Verifikation (Software Enginee
   url          = {http://dx.doi.org/10.1007/978-3-319-49812-6},
   doi          = {10.1007/978-3-319-49812-6},
   year         = {2016},
+  annote       = "This book describes the KeY software verification framework. The framework uses the Java Modeling Language to formally specify Java programs, and provides both automatic and interactive functional verification. The book was useful for evaluating the different verification tools available."
 }
 
 @incollection{BarnettMike2005TSPS,
@@ -309,6 +325,7 @@ language = {eng},
 address = {Berlin, Heidelberg},
 author = {Barnett, Mike and Leino, K Rustan M and Schulte, Wolfram},
 keywords = {Computer Science ; Software Engineering ; Special Purpose and Application-Based Systems ; Programming Techniques ; Programming Languages, Compilers, Interpreters ; Operating Systems ; Logics and Meanings of Programs ; Engineering ; Computer Science},
+annote    = "This article describes the Spec\# software verification system. The Spec\# language is a superset of C\#, which uses Boogie to check specifications statically. The article was useful for evaluating the different verification tools available."
 }
 
 @inproceedings{LeinoK.R.M.2010DAap,
@@ -321,6 +338,7 @@ year = {2010},
 title = {Dafny: An automatic program verifier for functional correctness},
 copyright = {Copyright 2011 Elsevier B.V., All rights reserved.},
 author = {Leino, K.R.M.},
+annote    = "This article describes the Dafny Automatic Program Verifier. The Dafny verifier translates Dafny source code into Boogie2, which generates first order verification conditions, which are proved by the Z3 SMT solver. The article was useful for evaluating the different verification tools available."
 }
 
 @inproceedings{UttingM.2017Mwb,
@@ -335,6 +353,7 @@ title = {Making {Whiley} {Boogie}!},
 copyright = {Copyright 2017 Elsevier B.V., All rights reserved.},
 author = {Utting, M. and Pearce, D.J. and Groves, L.},
 keywords = {Boogie ; Impedance Mismatch ; Intermediate Verification Language ; Semantic Translation ; Verifying Compiler ; Whiley},
+annote    = "This article describes the Whiley programming language. The article was useful for evaluating the different verification tools available."
 }
 
 @InProceedings{10.1007/978-3-319-02654-1_13,
@@ -351,6 +370,7 @@ address="Cham",
 pages="238--248",
 abstract="An ongoing challenge for computer science is the development of a tool which automatically verifies programs meet their specifications, and are free from runtime errors such as divide-by-zero, array out-of-bounds and null dereferences. Several impressive systems have been developed to this end, such as ESC/Java and Spec{\#}, which build on existing programming languages (e.g. Java, C{\#}). However, there remains a need for an open research platform in this area. We have developed the Whiley programming language, and its accompanying verifying compiler, as an open platform for research. Whiley has been designed from the ground up to simplify the verification process. In this paper, we introduce the Whiley language and it accompanying verifying compiler tool.",
 isbn="978-3-319-02654-1"
+annote    = "This article describes the Whiley programming language and its verifying compiler. Whiley serves an important role as on open platform (BSD licensed) for research into software verification. The article was useful for evaluating the different verification tools available."
 }
 
 @book{McCormickJohnW.2015Bhia,
@@ -363,6 +383,7 @@ language = {eng},
 author = {McCormick, John W.},
 keywords = {Spark (Computer Program Language) ; Fault-Tolerant Computing ; Computers And It ; Information Technology: General Issues ; Software Engineering ; Business Applications ; Programming &Amp;Amp Amp Scripting Languages: General ; Computer Science},
 lccn = {2015014814},
+annote    = "This book describes the Spark programming language. It is not written by the tool vendor, the authors are users and teachers of the technology, so therefore have some vested interest in portraying the technology in a positive light. The book has a more practical approach than many scientific articles. The book was useful for evaluating the different verification tools available."
 }
 
 @Electronic{OCAappraisal,

@@ -19,11 +19,12 @@ procedure findquotedstring_packet is new findquotedstring(
    begin
       NonSparkTypes.put_line("Initialize()");
       self.zzzArrayElementInitialized := False;
-      self.attributeType := Actual;
+      self.attributeType := AttributeEnumType.Actual;
       ComponentType.Initialize(self.component);
       VariableType.Initialize(self.variable);
 
    end Initialize;
+
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: in out Integer;
                    self: out ocpp.GetVariableDataType.T;

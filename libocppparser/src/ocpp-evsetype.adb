@@ -23,6 +23,7 @@ procedure findquotedstring_packet is new findquotedstring(
       self.connectorId := -1;
 
    end Initialize;
+
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: in out Integer;
                    self: out ocpp.EVSEType.T;
