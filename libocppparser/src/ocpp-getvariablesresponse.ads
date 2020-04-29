@@ -9,17 +9,19 @@ package ocpp.GetVariablesResponse is
    type T is new callresult with record
       getVariableResult : getVariableResultTypeArray.T;
    end record;
+   procedure Initialize(self: out ocpp.GetVariablesResponse.T);
+
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex: in out Integer;
-                self: in out ocpp.GetVariablesResponse.T;
+                self: out ocpp.GetVariablesResponse.T;
                 valid: out Boolean
                )
    with
     Global => null,
     Depends => (
-                valid => (msg, msgindex, self),
-                msgindex => (msg, msgIndex, self),
-                self  => (msg, msgindex, self)
+                valid => (msg, msgindex),
+                msgindex => (msg, msgIndex),
+                self  => (msg, msgindex)
             );
 
    procedure To_Bounded_String(Self: in T;

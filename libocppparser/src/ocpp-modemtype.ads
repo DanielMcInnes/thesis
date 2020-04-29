@@ -10,17 +10,19 @@ package ocpp.ModemType is
       iccid : NonSparkTypes.ModemType.striccid_t.Bounded_String;
       imsi : NonSparkTypes.ModemType.strimsi_t.Bounded_String;
    end record;
+   procedure Initialize(self: out ocpp.ModemType.T);
+
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex: in out Integer;
-                self: in out ocpp.ModemType.T;
+                self: out ocpp.ModemType.T;
                 valid: out Boolean
                )
    with
     Global => null,
     Depends => (
-                valid => (msg, msgindex, self),
-                msgindex => (msg, msgIndex, self),
-                self  => (msg, msgindex, self)
+                valid => (msg, msgindex),
+                msgindex => (msg, msgIndex),
+                self  => (msg, msgindex)
             );
 
    procedure To_Bounded_String(Self: in T;

@@ -3,6 +3,15 @@ pragma SPARK_mode (on);
 with Ada.Strings; use Ada.Strings;
 
 package body ocpp.SetVariableResultTypeArray is
+   procedure Initialize(self: out ocpp.SetVariableResultTypeArray.T)
+
+   is
+   begin
+      for i in Index loop
+         SetVariableResultType.Initialize(self.content(i));
+         self.content(i).zzzArrayElementInitialized := False;
+      end loop;
+   end Initialize;
    procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;
                         msgindex: in out Integer;
                         self: out T;

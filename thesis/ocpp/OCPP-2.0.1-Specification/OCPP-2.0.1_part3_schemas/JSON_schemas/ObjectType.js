@@ -58,6 +58,8 @@ function createArrayType(name, schema) {
    _buffer += ('   content : array_' + schema.items.javaType + 'Type;\n')
    _buffer += ('end record;\n')
 
+   _buffer += ('procedure Initialize(self: out ocpp.' + schema.items.javaType + 'TypeArray.T);\n\n')
+
    _buffer += ('procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;\n')
    _buffer += ('                     msgindex: in out Integer;\n')
    _buffer += ('                     self: out T;\n')
@@ -83,6 +85,15 @@ function createArrayType(name, schema) {
 
    _buffer +="with Ada.Strings; use Ada.Strings;\n\n";
    _buffer += ('package body ocpp.' + schema.items.javaType + 'TypeArray is\n');
+   _buffer += ('   procedure Initialize(self: out ocpp.' + schema.items.javaType + 'TypeArray.T)\n\n')
+   _buffer += ('   is\n')
+   _buffer += ('   begin\n')
+   _buffer += ('      for i in Index loop\n')
+   _buffer += ('         ' + schema.items.javaType + 'Type.Initialize(self.content(i));\n')
+   _buffer += ('         self.content(i).zzzArrayElementInitialized := False;\n')
+   _buffer += ('      end loop;\n')
+   _buffer += ('   end Initialize;\n')
+
    _buffer += ('   procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;\n')
    _buffer += ('                        msgindex: in out Integer;\n')
    _buffer += ('                        self: out T;\n')
@@ -255,17 +266,18 @@ module.exports.parse = function (name, schema) {
    _buffer += '   end record;';
 
    _buffer += '\n';
+   _buffer += '   procedure Initialize(self: out ocpp.' + name + '.T);\n\n'
    _buffer += '   procedure parse(msg: in NonSparkTypes.packet.Bounded_String;\n'
    _buffer += '                msgindex: in out Integer;\n'
-   _buffer += '                self: in out ocpp.' + name + '.T;\n'
+   _buffer += '                self: out ocpp.' + name + '.T;\n'
    _buffer += '                valid: out Boolean\n'
    _buffer += '               )\n'
    _buffer += '   with\n'
    _buffer += '    Global => null,\n'
    _buffer += '    Depends => (\n'
-   _buffer += '                valid => (msg, msgindex, self),\n'
-   _buffer += '                msgindex => (msg, msgIndex, self),\n'
-   _buffer += '                self  => (msg, msgindex, self)\n'
+   _buffer += '                valid => (msg, msgindex),\n'
+   _buffer += '                msgindex => (msg, msgIndex),\n'
+   _buffer += '                self  => (msg, msgindex)\n'
    if (name.endsWith('Request') || name.endsWith('Result')) {
       _buffer += '),\n'
       _buffer += '    post => (if valid = true then\n'
@@ -300,9 +312,59 @@ module.exports.parse = function (name, schema) {
    _buffer += '                                                             To_String => NonSparkTypes.packet.to_string,\n'
    _buffer += '                                                             To_Bounded_String =>  NonSparkTypes.packet.To_Bounded_String\n'
    _buffer += '                                                            );\n\n'
+   _buffer += '   procedure Initialize(self: out ocpp.' + name + '.T)\n'
+   _buffer += '   is\n';
+   _buffer += '   begin\n';
+   _buffer += '      NonSparkTypes.put_line("Initialize()");\n';
+   if (!((name.endsWith('Request') || name.endsWith('Response')))) {
+      _buffer += '      self.zzzArrayElementInitialized := False;\n';
+   }
+   if (name.endsWith('Request') || name.endsWith('Response')) {
+      _buffer += '      self.messageTypeId:= -1;\n';
+      _buffer += '      self.messageId := NonSparkTypes.messageid_t.To_Bounded_String("");\n';
+   }
+   if (name.endsWith('Request')) {
+      _buffer += '      self.action := NonSparkTypes.action_t.To_Bounded_String("");\n';
+   }
+
+   for (var property in schema.properties) {
+      if (property === 'customData') {
+         continue;
+      }
+
+      var type = schema.properties[property]["type"];   // int, string
+      var _javaType = schema.properties[property]['javaType'] 
+
+      switch (type) {
+         case 'integer':
+            _buffer += '      self.' + property + ' := -1;\n';
+            break;
+         case 'array':
+            _buffer += '      ' + property + 'TypeArray.Initialize(self.' + property + ');\n';
+            break;
+         case 'string':
+               if (!!_javaType && _javaType.endsWith('Enum')) { // eg: getBaseReportRequest.reportBase : ocpp.ReportBaseEnum
+                  _buffer += '      self.' + property + ' := ' + schema.properties[property]["enum"][0] +';\n';
+               } else {
+                  _buffer += '      self.' + property + ' := NonSparkTypes.' + name + '.str' + property + '_t.To_Bounded_String("");\n';
+               }
+            break;
+         default:
+               _buffer += '      ' + _javaType + 'Type.Initialize(self.' + property + ');\n';
+            break;
+
+      }
+   }
+   _buffer += '\n';
+
+
+
+
+   _buffer += '   end Initialize;\n';
+
    _buffer += '   procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;\n';
    _buffer += '                   msgindex: in out Integer;\n';
-   _buffer += '                   self: in out ocpp.' + name + '.T;\n';
+   _buffer += '                   self: out ocpp.' + name + '.T;\n';
    _buffer += '                   valid: out Boolean\n';
    _buffer += '                  )\n';
    _buffer += '   is\n';
@@ -328,10 +390,38 @@ module.exports.parse = function (name, schema) {
 
 
    _buffer += '   begin\n';
+   _buffer += '      Initialize(self);\n';
 
    if (name.endsWith('Request') || name.endsWith('Response')) {
+/*
+   procedure ParseMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
+                              messagetypeid : out integer;-- eg. 2
+                              index: in out Integer;
+                              valid: out Boolean
+                             );
+
+   procedure ParseMessageId(msg:   in  NonSparkTypes.packet.Bounded_String;
+                            messageid : out NonSparkTypes.messageid_t.Bounded_String;
+                            index: in out Integer;
+                            valid: out Boolean
+                           );
+*/
+
+   
+      _buffer += '      msgIndex := 1;\n'
+      _buffer += '      ocpp.ParseMessageType(msg, self.messagetypeid, msgindex, valid);\n'
+      _buffer += '      ocpp.ParseMessageId(msg, self.messageid, msgindex, valid);\n'
+
+
+
+
       _buffer += '      checkValid(msg, msgindex, self, ' + (name.endsWith('Request') ? 'action, ' : '') + 'valid);\n'
       _buffer += '      if (valid = false) then NonSparkTypes.put_line("313 Invalid ' + name + property + '"); return; end if;\n\n'
+      /*
+         NonSparkTypes.put_line("313 Invalid SetVariablesResponsesetVariableResult"); 
+         NonSparkTypes.put("self.messagetypeid:"); NonSparkTypes.put_line(self.messagetypeid'Image); 
+         NonSparkTypes.put("self.messageid:"); NonSparkTypes.put_line(messageid_t.To_String(self.messageid)); 
+         */
    }
 
    // parse each property

@@ -9,6 +9,8 @@ type array_SetVariableResultType is array (Index) of ocpp.SetVariableResultType.
 type T is record
    content : array_SetVariableResultType;
 end record;
+procedure Initialize(self: out ocpp.SetVariableResultTypeArray.T);
+
 procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;
                      msgindex: in out Integer;
                      self: out T;

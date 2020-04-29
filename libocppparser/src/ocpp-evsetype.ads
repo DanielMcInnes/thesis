@@ -10,17 +10,19 @@ package ocpp.EVSEType is
       id : integer;
       connectorId : integer;
    end record;
+   procedure Initialize(self: out ocpp.EVSEType.T);
+
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex: in out Integer;
-                self: in out ocpp.EVSEType.T;
+                self: out ocpp.EVSEType.T;
                 valid: out Boolean
                )
    with
     Global => null,
     Depends => (
-                valid => (msg, msgindex, self),
-                msgindex => (msg, msgIndex, self),
-                self  => (msg, msgindex, self)
+                valid => (msg, msgindex),
+                msgindex => (msg, msgIndex),
+                self  => (msg, msgindex)
             );
 
    procedure To_Bounded_String(Self: in T;

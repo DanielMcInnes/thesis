@@ -14,17 +14,19 @@ package ocpp.ChargingStationType is
       vendorName : NonSparkTypes.ChargingStationType.strvendorName_t.Bounded_String;
       firmwareVersion : NonSparkTypes.ChargingStationType.strfirmwareVersion_t.Bounded_String;
    end record;
+   procedure Initialize(self: out ocpp.ChargingStationType.T);
+
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex: in out Integer;
-                self: in out ocpp.ChargingStationType.T;
+                self: out ocpp.ChargingStationType.T;
                 valid: out Boolean
                )
    with
     Global => null,
     Depends => (
-                valid => (msg, msgindex, self),
-                msgindex => (msg, msgIndex, self),
-                self  => (msg, msgindex, self)
+                valid => (msg, msgindex),
+                msgindex => (msg, msgIndex),
+                self  => (msg, msgindex)
             );
 
    procedure To_Bounded_String(Self: in T;

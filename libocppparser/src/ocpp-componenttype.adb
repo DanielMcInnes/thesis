@@ -14,15 +14,26 @@ procedure findquotedstring_packet is new findquotedstring(
                                                              To_Bounded_String =>  NonSparkTypes.packet.To_Bounded_String
                                                             );
 
+   procedure Initialize(self: out ocpp.ComponentType.T)
+   is
+   begin
+      NonSparkTypes.put_line("Initialize()");
+      self.zzzArrayElementInitialized := False;
+      EVSEType.Initialize(self.evse);
+      self.name := NonSparkTypes.ComponentType.strname_t.To_Bounded_String("");
+      self.instance := NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("");
+
+   end Initialize;
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: in out Integer;
-                   self: in out ocpp.ComponentType.T;
+                   self: out ocpp.ComponentType.T;
                    valid: out Boolean
                   )
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
+      Initialize(self);
       ocpp.findQuotedKey(msg, msgIndex, valid, "evse");
       if (valid = false) then NonSparkTypes.put_line("355 Invalid ComponentTypeevse"); return; end if;
 

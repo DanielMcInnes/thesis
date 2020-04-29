@@ -10,17 +10,19 @@ package ocpp.SetVariablesRequest is
    type T is new call with record
       setVariableData : setVariableDataTypeArray.T;
    end record;
+   procedure Initialize(self: out ocpp.SetVariablesRequest.T);
+
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex: in out Integer;
-                self: in out ocpp.SetVariablesRequest.T;
+                self: out ocpp.SetVariablesRequest.T;
                 valid: out Boolean
                )
    with
     Global => null,
     Depends => (
-                valid => (msg, msgindex, self),
-                msgindex => (msg, msgIndex, self),
-                self  => (msg, msgindex, self)
+                valid => (msg, msgindex),
+                msgindex => (msg, msgIndex),
+                self  => (msg, msgindex)
 ),
     post => (if valid = true then
                (self.messagetypeid = 2) and

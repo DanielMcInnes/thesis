@@ -14,15 +14,25 @@ procedure findquotedstring_packet is new findquotedstring(
                                                              To_Bounded_String =>  NonSparkTypes.packet.To_Bounded_String
                                                             );
 
+   procedure Initialize(self: out ocpp.VariableType.T)
+   is
+   begin
+      NonSparkTypes.put_line("Initialize()");
+      self.zzzArrayElementInitialized := False;
+      self.name := NonSparkTypes.VariableType.strname_t.To_Bounded_String("");
+      self.instance := NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("");
+
+   end Initialize;
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: in out Integer;
-                   self: in out ocpp.VariableType.T;
+                   self: out ocpp.VariableType.T;
                    valid: out Boolean
                   )
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
+      Initialize(self);
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "name", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid VariableTypename"); return; end if;
 

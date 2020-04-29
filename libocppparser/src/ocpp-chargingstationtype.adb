@@ -14,15 +14,28 @@ procedure findquotedstring_packet is new findquotedstring(
                                                              To_Bounded_String =>  NonSparkTypes.packet.To_Bounded_String
                                                             );
 
+   procedure Initialize(self: out ocpp.ChargingStationType.T)
+   is
+   begin
+      NonSparkTypes.put_line("Initialize()");
+      self.zzzArrayElementInitialized := False;
+      self.serialNumber := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("");
+      self.model := NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("");
+      ModemType.Initialize(self.modem);
+      self.vendorName := NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("");
+      self.firmwareVersion := NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("");
+
+   end Initialize;
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: in out Integer;
-                   self: in out ocpp.ChargingStationType.T;
+                   self: out ocpp.ChargingStationType.T;
                    valid: out Boolean
                   )
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
+      Initialize(self);
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "serialNumber", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid ChargingStationTypeserialNumber"); return; end if;
 

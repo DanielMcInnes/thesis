@@ -12,17 +12,19 @@ package ocpp.BootNotificationRequest is
       chargingStation : ChargingStationType.T;
       reason : BootReasonEnumType.T;
    end record;
+   procedure Initialize(self: out ocpp.BootNotificationRequest.T);
+
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex: in out Integer;
-                self: in out ocpp.BootNotificationRequest.T;
+                self: out ocpp.BootNotificationRequest.T;
                 valid: out Boolean
                )
    with
     Global => null,
     Depends => (
-                valid => (msg, msgindex, self),
-                msgindex => (msg, msgIndex, self),
-                self  => (msg, msgindex, self)
+                valid => (msg, msgindex),
+                msgindex => (msg, msgIndex),
+                self  => (msg, msgindex)
 ),
     post => (if valid = true then
                (self.messagetypeid = 2) and
