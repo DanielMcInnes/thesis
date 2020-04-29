@@ -104,6 +104,10 @@ package ocpp is
                               foundString: out string_t) 
      with  Global => null;
    
+   procedure findQuotedKey(msg: in NonSparkTypes.packet.Bounded_String;
+                                      msgIndex: in out Integer;
+                                      valid: out Boolean;
+                                      key: in string);
 
    procedure findQuotedKeyQuotedValue(msg: in NonSparkTypes.packet.Bounded_String;
                                       msgIndex: in out Integer;

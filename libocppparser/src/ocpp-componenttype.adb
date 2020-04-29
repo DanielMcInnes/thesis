@@ -23,21 +23,21 @@ procedure findquotedstring_packet is new findquotedstring(
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
       dummyInt: integer;
    begin
-      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "evse", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      ocpp.findQuotedKey(msg, msgIndex, valid, "evse");
+      if (valid = false) then NonSparkTypes.put_line("355 Invalid ComponentTypeevse"); return; end if;
 
       EVSEType.parse(msg, msgindex, self.evse, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("357 Invalid ComponentTypeevse"); return; end if;
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "name", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("338 Invalid ComponentTypename"); return; end if;
       self.name := NonSparkTypes.ComponentType.strname_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "instance", dummybounded);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("338 Invalid ComponentTypeinstance"); return; end if;
       self.instance := NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("365 Invalid ComponentTypeinstance"); return; end if;
       valid := true;
    end parse;
 

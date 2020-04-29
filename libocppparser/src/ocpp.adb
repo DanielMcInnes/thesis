@@ -512,6 +512,7 @@ package body ocpp is
    begin
       action := NonSparkTypes.action_t.To_Bounded_String("");
       valid:= false;
+      NonSparkTypes.put("ParseAction: 515: msgindex:"); NonSparkTypes.put_Line(msgindex'Image);
       if (msgindex >= NonSparkTypes.packet.Length(msg))
       then
          NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(msgindex'Image);
@@ -529,6 +530,7 @@ package body ocpp is
          return; 
       end if;
       
+      NonSparkTypes.put("ParseAction: 533: msgindex:"); NonSparkTypes.put_Line(msgindex'Image);
       NonSparkTypes.put("parse: action: "); NonSparkTypes.put_Line(NonSparkTypes.action_t.To_String(action));
       
       
@@ -549,7 +551,7 @@ package body ocpp is
       if (msgIndex < 1) then
          return;
       end if;
-      
+      NonSparkTypes.put("findString: 554: msgindex:"); NonSparkTypes.put_line(msgIndex'Image);
       findquotedstring_packet(msg, msgindex, valid, dummybounded);
       if (valid = false) then 
          NonSparkTypes.put("parse: ERROR: looking for string: ");
@@ -558,11 +560,11 @@ package body ocpp is
       NonSparkTypes.put("parse: found: "); NonSparkTypes.put_Line(NonSparkTypes.packet.To_String(dummybounded));
       --if (NonSparkTypes.packet.To_String(dummybounded) /= "attributeType") then 
       if (dummybounded /= needle) then 
-         NonSparkTypes.put("parse: 198: ERROR: looking for 'attributeType': ");
-         NonSparkTypes.put(" dummybounded: ");
-         NonSparkTypes.put(NonSparkTypes.packet.To_String(dummybounded));
-         NonSparkTypes.put(", needle: ");
-         NonSparkTypes.put_line(needle);
+         NonSparkTypes.put("parse: 198: ERROR: looking for : ");
+         NonSparkTypes.put(needle);
+         NonSparkTypes.put(" found: ");
+         NonSparkTypes.put_line(NonSparkTypes.packet.To_String(dummybounded));
+         NonSparkTypes.put("findString: 567: msgindex:"); NonSparkTypes.put_line(msgIndex'Image);
          
          valid := false;
          return; 
@@ -607,6 +609,42 @@ package body ocpp is
       
       findnextinteger(msg, msgIndex, value, valid);
    end findQuotedKeyUnquotedValue;
+
+   procedure findQuotedKey(msg: in NonSparkTypes.packet.Bounded_String;
+                                      msgIndex: in out Integer;
+                                      valid: out Boolean;
+                                      key: in string
+                                      )
+   is
+      dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
+      tempPositive: integer;
+      
+      use NonSparkTypes.packet;
+   begin
+      if ((msgIndex < 1) or (msgIndex > NonSparkTypes.packet.Max_Length))
+      then 
+         valid := false; 
+         pragma assert(valid = false); 
+         return; 
+      end if;
+      
+            
+      findString(msg, msgIndex, valid, key);
+      if (valid = false) then
+         return;
+      end if;
+      
+      if (msgIndex < 1) then
+         valid := false;
+         return;
+      end if;
+      
+      ocpp.move_index_past_token(msg, ':', msgindex, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 233"); return; end if;
+         
+      
+      valid := true;
+      
+   end findQuotedKey;
 
    procedure findQuotedKeyQuotedValue(msg: in NonSparkTypes.packet.Bounded_String;
                                       msgIndex: in out Integer;
@@ -664,6 +702,7 @@ package body ocpp is
       valid := true;
       
    end findQuotedKeyQuotedValue;
+   
    
                         
 

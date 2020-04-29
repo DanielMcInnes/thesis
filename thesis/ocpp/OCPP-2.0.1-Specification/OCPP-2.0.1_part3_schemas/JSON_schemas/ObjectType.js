@@ -88,8 +88,34 @@ function createArrayType(name, schema) {
    _buffer += ('                     self: out T;\n')
    _buffer += ('                     valid: out Boolean)\n')
    _buffer += ('is\n')
+   /*
+   procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;
+                        msgindex: in out Integer;
+                        self: out T;
+                        valid: out Boolean)
+   is
+      tempBool : Boolean;
+   begin
+      valid := false;
+      for i in Index loop
+         GetVariableDataType.parse(msg, msgindex, self.content(i), tempBool);
+         self.content(i).zzzArrayElementInitialized := tempBool;
+         if tempBool = True then
+            valid := True;
+         end if;
+      end loop;
+   end FromString;
+   */
+   _buffer += ('   tempBool : Boolean;\n')
    _buffer += ('begin\n')
-   _buffer += ('   NonSparkTypes.put_line("' + schema.items.javaType + 'TypeArray.FromString");\n')
+   _buffer += ('   valid := false;\n')
+   _buffer += ('   for i in Index loop\n')
+   _buffer += ('      ' + schema.items.javaType + 'Type.parse(msg, msgIndex, self.content(i), tempBool);\n')
+   _buffer += ('      self.content(i).zzzArrayElementInitialized := tempBool;\n')
+   _buffer += ('      if tempBool = True then\n')
+   _buffer += ('         valid := True; -- need at least one valid item in the array for parsing to succeed\n')
+   _buffer += ('      end if;\n')
+   _buffer += ('   end loop;\n')
    _buffer += ('end FromString;\n\n')
 
    _buffer += ('procedure To_Bounded_String(msg: out NonSparkTypes.packet.Bounded_String;\n')
@@ -284,7 +310,7 @@ module.exports.parse = function (name, schema) {
 
    if (name.endsWith('Request') || name.endsWith('Response')) {
       _buffer += '      checkValid(msg, msgindex, self, ' + (name.endsWith('Request') ? 'action, ' : '') + 'valid);\n'
-      _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n\n'
+      _buffer += '      if (valid = false) then NonSparkTypes.put_line("313 Invalid ' + name + property + '"); return; end if;\n\n'
    }
 
    // parse each property
@@ -299,26 +325,27 @@ module.exports.parse = function (name, schema) {
       switch (type) {
          case 'integer':
             _buffer += '      ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "' + property + '", dummyInt);\n';
-            _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n'
+            _buffer += '      if (valid = false) then NonSparkTypes.put_line("328 Invalid ' + name + property + '"); return; end if;\n'
             _buffer += '      self.' + property + ' := dummyInt;\n';
             break;
          case 'string':
             if (!!_javaType && _javaType.endsWith('Enum')) { // eg: getBaseReportRequest.reportBase : ocpp.ReportBaseEnum
+               _buffer += '      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "' + property + '", dummybounded);\n';
                _buffer += '      ocpp.' + _javaType + 'Type.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.' + property + ', valid);\n';
-               _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n'
+               _buffer += '      if (valid = false) then NonSparkTypes.put_line("334 Invalid ' + name + property + '"); return; end if;\n'
           } else
             {
                _buffer += '      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "' + property + '", dummybounded);\n';
-               _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n'
+               _buffer += '      if (valid = false) then NonSparkTypes.put_line("338 Invalid ' + name + property + '"); return; end if;\n'
                _buffer += '      self.' + property + ' := NonSparkTypes.' + name + '.str' + property + '_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);\n';
             }
             
             break;
          case 'array':
             _buffer += '      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "' + property + '", dummybounded);\n';
-            _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n\n'
+            _buffer += '      if (valid = false) then NonSparkTypes.put_line("345 Invalid ' + name + property + '"); return; end if;\n\n'
             _buffer += '      ' + schema.properties[property]["items"]["javaType"] + 'TypeArray.FromString(msg, msgindex, self.' + property + ', valid);\n';
-            _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n'
+            _buffer += '      if (valid = false) then NonSparkTypes.put_line("347 Invalid ' + name + property + '"); return; end if;\n'
             break;
          default:
             switch (_javaType) {
@@ -326,9 +353,9 @@ module.exports.parse = function (name, schema) {
                   if (!!_javaType && _javaType.endsWith('Enum')) {
                   } else {
                      _buffer += '      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "' + property + '", dummybounded);\n';
-                     _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n\n'
+                     _buffer += '      if (valid = false) then NonSparkTypes.put_line("355 Invalid ' + name + property + '"); return; end if;\n\n'
                      _buffer += '      ' + utils.parseType(schema.properties[property]) + 'Type.parse(msg, msgindex, self.' + property + ', valid);\n';
-                     _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n'
+                     _buffer += '      if (valid = false) then NonSparkTypes.put_line("357 Invalid ' + name + property + '"); return; end if;\n'
                   }
                   break;
                }
@@ -336,7 +363,7 @@ module.exports.parse = function (name, schema) {
       _buffer += '\n';
 
    }
-   _buffer += '      if (valid = false) then NonSparkTypes.put_line("Invalid ' + schema + '"); return; end if;\n'
+   _buffer += '      if (valid = false) then NonSparkTypes.put_line("365 Invalid ' + name + property + '"); return; end if;\n'
 
 
 

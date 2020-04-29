@@ -115,6 +115,7 @@ is
       messageId : NonSparkTypes.messageid_t.Bounded_String;
       action : NonSparkTypes.action_t.Bounded_String;
    begin
+      NonSparkTypes.put_line("ocppServer: handleResponse");
       ocpp.ParseMessageId(msg, messageId, index, valid); -- eg. "19223201"
       if (valid = false) then
          return;
@@ -184,12 +185,15 @@ is
       getVariableResponse : GetVariablesResponse.T;
       
    begin
+      NonSparkTypes.put_line("ocppServer: handleGetVariablesResponse()");
       getVariableResponse.messagetypeid := 3;
       getVariableResponse.messageid := messageId;
       ocpp.GetVariablesResponse.parse(msg, index, getVariableResponse, valid);
-      if (valid = true)
-      then
+      if (valid = true) then
+         NonSparkTypes.put_line("ocppServer: handleGetVariablesResponse(): 193: good packet");
          theServer.getVariablesResponse := getVariableResponse;
+      else
+         NonSparkTypes.put_line("ocppServer: handleGetVariablesResponse(): 196: bad packet");
       end if;
    end handleGetVariablesResponse;
 

@@ -24,12 +24,13 @@ procedure findquotedstring_packet is new findquotedstring(
       dummyInt: integer;
    begin
       checkValid(msg, msgindex, self, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("313 Invalid GetBaseReportResponsestatus"); return; end if;
 
+      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "status", dummybounded);
       ocpp.GenericDeviceModelStatusEnumType.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.status, valid);
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("334 Invalid GetBaseReportResponsestatus"); return; end if;
 
-      if (valid = false) then NonSparkTypes.put_line("Invalid [object Object]"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("365 Invalid GetBaseReportResponsestatus"); return; end if;
       valid := true;
    end parse;
 

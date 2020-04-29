@@ -839,6 +839,9 @@ package body unittests is
                                             );
 
       packet: NonSparkTypes.packet.Bounded_String;
+      strServerPacket: NonSparkTypes.packet.Bounded_String;
+      strTestPacket: NonSparkTypes.packet.Bounded_String;
+      
       response: NonSparkTypes.packet.Bounded_String;
       expectedresponse: NonSparkTypes.packet.Bounded_String :=
         NonSparkTypes.packet.To_Bounded_String( ""
@@ -928,17 +931,17 @@ package body unittests is
                                                                                                             attributeType => AttributeEnumType.Actual,
                                                                                                             attributeValue => NonSparkTypes.GetVariableResultType.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
                                                                                                             component => (
-                                                                                                                          zzzArrayElementInitialized => False,
+                                                                                                                          zzzArrayElementInitialized => True,
                                                                                                                           name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("evse"),
                                                                                                                           instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
                                                                                                                           evse => (
-                                                                                                                                   zzzArrayElementInitialized => False,
+                                                                                                                                   zzzArrayElementInitialized => True,
                                                                                                                                    id => 0,
                                                                                                                                    connectorId => 0
                                                                                                                                   )
                                                                                                                          ),
                                                                                                             variable => (
-                                                                                                                         zzzArrayElementInitialized => False,
+                                                                                                                         zzzArrayElementInitialized => True,
                                                                                                                          name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
                                                                                                                          instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
                                                                                                                         )
@@ -991,7 +994,9 @@ package body unittests is
       ocpp.server.receivePacket(server, packet, response, result);
       if (result = false) then return; end if;
       
-      if(server.getVariablesResponse /= getVariablesResponse) 
+      ocpp.GetVariablesResponse.To_Bounded_String(server.getVariablesResponse, strServerPacket);
+      ocpp.GetVariablesResponse.To_Bounded_String(getVariablesResponse, strTestPacket);
+      if(strTestPacket /= strServerPacket) 
       then 
          NonSparkTypes.put_line("ERROR 804");
          ocpp.GetVariablesResponse.To_Bounded_String(server.getVariablesResponse, dummystring);
