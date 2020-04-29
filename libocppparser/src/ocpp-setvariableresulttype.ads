@@ -10,7 +10,7 @@ with ocpp.VariableType; use ocpp.VariableType;
 
 package ocpp.SetVariableResultType is
    type T is record
-      zzzArrayElementInitialized : Boolean := True;
+      zzzArrayElementInitialized : Boolean := False;
       attributeType : AttributeEnumType.T;
       attributeStatus : SetVariableStatusEnumType.T;
       component : ComponentType.T;
