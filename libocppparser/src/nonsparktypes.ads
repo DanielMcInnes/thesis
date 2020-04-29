@@ -5,7 +5,7 @@ with Ada.Strings.Bounded;
 with Ada.Text_IO;
 
 package NonSparkTypes is
-   package packet is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 500);
+   package packet is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 5000);
    package messageid_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    package action_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    package BootReasonEnumType is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 16);

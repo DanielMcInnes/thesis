@@ -863,11 +863,30 @@ package body unittests is
                                                                                                         component => (
                                                                                                                       zzzArrayElementInitialized => False,
                                                                                                                       name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String ("evse", Drop => Right),
-                                                                                                                      instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
+                                                                                                                      instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("10"),
                                                                                                                       evse => (
                                                                                                                                zzzArrayElementInitialized => False,
-                                                                                                                               id => 0,
-                                                                                                                               connectorId => 0
+                                                                                                                               id => 11,
+                                                                                                                               connectorId => 12
+                                                                                                                              )
+                                                                                                                     ),
+                                                                                                        variable => (
+                                                                                                                     zzzArrayElementInitialized => False,
+                                                                                                                     name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
+                                                                                                                     instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("13")
+                                                                                                                    )
+                                                                                                      ),
+                                                                                            2 => (
+                                                                                                        zzzArrayElementInitialized => True,
+                                                                                                        attributeType => AttributeEnumType.MaxSet,
+                                                                                                        component => (
+                                                                                                                      zzzArrayElementInitialized => False,
+                                                                                                                      name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String ("evse", Drop => Right),
+                                                                                                                      instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("20"),
+                                                                                                                      evse => (
+                                                                                                                               zzzArrayElementInitialized => False,
+                                                                                                                               id => 21,
+                                                                                                                               connectorId => 22
                                                                                                                               )
                                                                                                                      ),
                                                                                                         variable => (
