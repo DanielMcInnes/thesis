@@ -25,6 +25,7 @@ procedure findquotedstring_packet is new findquotedstring(
       self.reportBase := ConfigurationInventory;
 
    end Initialize;
+
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: out Integer;
                    self: out ocpp.GetBaseReportRequest.T;
