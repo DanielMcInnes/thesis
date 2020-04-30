@@ -7,10 +7,16 @@ with Ada.Strings; use Ada.Strings;
 with ocpp.BootNotification;
 with ocpp.ComponentType;
 with ocpp.CustomDataType;
+with ocpp.GetBaseReportRequest;
+with ocpp.GetBaseReportResponse;
 with ocpp.GetVariableDataTypeArray;
 with ocpp.GetVariablesRequest; use ocpp.GetVariablesRequest;
 with ocpp.GetVariablesResponse;
 with ocpp.GetVariableResultType;
+with ocpp.NotifyReportRequest;
+--with ocpp.NotifyReportResponse;
+
+
 with ocpp.server;
 with ocpp.SetVariablesRequest;
 with ocpp.SetVariablesResponse;
@@ -117,9 +123,6 @@ with ocpp.UpdateStatusEnumType;
 with ocpp.UploadLogStatusEnumType;
 with ocpp.vpnenumtype;
 
-with ocpp.GetBaseReportRequest;
-with ocpp.GetBaseReportResponse;
-
 package body unittests is
    
    procedure fail is
@@ -132,12 +135,12 @@ package body unittests is
    is
    begin
       B01(result);      if (result = false) then         fail; return;      end if;
-      B02(result);      if (result = false) then         fail; return;      end if;
-      B03(result);      if (result = false) then         fail; return;      end if;
-      B04(result);      if (result = false) then         fail; return;      end if;
-      B05(result);      if (result = false) then         fail; return;      end if;
-      B06(result);      if (result = false) then         fail; return;      end if;
-      B07(result);      if (result = false) then         fail; return;      end if; -- GetBaseReportRequest
+      --B02(result);      if (result = false) then         fail; return;      end if;
+      --B03(result);      if (result = false) then         fail; return;      end if;
+      --B04(result);      if (result = false) then         fail; return;      end if;
+      --B05(result);      if (result = false) then         fail; return;      end if;
+      --B06(result);      if (result = false) then         fail; return;      end if;
+      --B07(result);      if (result = false) then         fail; return;      end if; -- GetBaseReportRequest
       
       --TODO:
       --B07 

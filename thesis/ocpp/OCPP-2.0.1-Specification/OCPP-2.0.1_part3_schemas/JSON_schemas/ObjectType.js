@@ -29,6 +29,12 @@ function clean(f) {
    return retval;
 }
 
+function cleanpropertyname(f) {
+   const regextype= /type/g;
+   var retval = f.replace(regextype, 'zzztype');
+   return retval;
+}
+
 function cleanfilename(f) {
    const regex15118 = /15118/g;
    const regex_json = /_json/g;
@@ -99,37 +105,6 @@ function createArrayType(name, schema) {
    _buffer += ('                        self: out T;\n')
    _buffer += ('                        valid: out Boolean)\n')
    _buffer += ('   is\n')
-   /*
-   procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;
-                        msgindex: in out Integer;
-                        self: out T;
-                        valid: out Boolean)
-   is
-      tempBool : Boolean;
-      last   : Natural;
-   begin
-      valid := false;
-      for i in Index loop
-         if i /= Index'First then
-            ocpp.move_index_past_token(msg, ',', msgindex, last);
-            if (last = 0) then
-               put_line("39: no comma");
-               self.content(i).zzzArrayElementInitialized := false;
-               return; -- end of array
-            else
-               put("found comma. msgindex:"); put_line(msgindex'Image);
-            end if;
-         end if;
-
-         GetVariableResultType.parse(msg, msgIndex, self.content(i), tempBool);
-         self.content(i).zzzArrayElementInitialized := tempBool;
-         if tempBool = True then
-            valid := True; -- need at least one valid item in the array for parsing to succeed
-         end if;
-      end loop;
-   end FromString;
-   
-   */
    _buffer += ('      tempBool : Boolean;\n')
    _buffer += ('      last: Natural;\n')
    _buffer += ('   begin\n')
@@ -192,6 +167,15 @@ function createArrayType(name, schema) {
 
 module.exports.parse = function (name, schema) {
    name = cleanfilename(name);
+
+   // clean the property names. e.g. if a property is called 'type', rename it as 'zzztype' as 'type' is a reserved ada keyword
+   for (var property in schema.properties) {
+      var cleanproperty = cleanpropertyname(property)
+      if (cleanproperty != property) {
+         console.log('ObjectType.parse: renaming property' + property + 'to' + cleanproperty)
+         property = cleanproperty
+      }
+   }
    console.log('parseObjectType: ', name);
    var _outfile
    if (name.endsWith('Request') || name.endsWith('Response')) {
