@@ -135,12 +135,12 @@ package body unittests is
    is
    begin
       B01(result);      if (result = false) then         fail; return;      end if;
-      --B02(result);      if (result = false) then         fail; return;      end if;
-      --B03(result);      if (result = false) then         fail; return;      end if;
-      --B04(result);      if (result = false) then         fail; return;      end if;
-      --B05(result);      if (result = false) then         fail; return;      end if;
-      --B06(result);      if (result = false) then         fail; return;      end if;
-      --B07(result);      if (result = false) then         fail; return;      end if; -- GetBaseReportRequest
+      B02(result);      if (result = false) then         fail; return;      end if;
+      B03(result);      if (result = false) then         fail; return;      end if;
+      B04(result);      if (result = false) then         fail; return;      end if;
+      B05(result);      if (result = false) then         fail; return;      end if;
+      B06(result);      if (result = false) then         fail; return;      end if;
+      B07(result);      if (result = false) then         fail; return;      end if; -- GetBaseReportRequest
       
       --TODO:
       --B07 
@@ -1117,6 +1117,120 @@ package body unittests is
       packet: NonSparkTypes.packet.Bounded_String;
       response: NonSparkTypes.packet.Bounded_String;
       expectedresponse: NonSparkTypes.packet.Bounded_String;
+      nrr: ocpp.NotifyReportRequest.T := (
+                                          messagetypeid => 2,
+                                          messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223203"),
+                                          action => action_t.To_Bounded_String("NotifyReport"),
+                                          requestId => 1,
+                                          generatedAt => NonSparkTypes.NotifyReportRequest.strgeneratedAt_t.To_Bounded_String("Wed Mar 25 2015 10:00:00 GMT+1000 (Australian Eastern Standard Time)"),
+                                          reportData => ( 
+                                                          content =>
+                                                            (
+                                                             1 => (
+                                                                   zzzArrayElementInitialized => True,
+                                                                   component => (
+                                                                                 zzzArrayElementInitialized => True,
+                                                                                 name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("evse"),
+                                                                                 instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
+                                                                                 evse => (
+                                                                                          zzzArrayElementInitialized => True,
+                                                                                          id => 0,
+                                                                                          connectorId => 0
+                                                                                         )
+                                                                                ),
+                                                                   variable => (
+                                                                                zzzArrayElementInitialized => False,
+                                                                                name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
+                                                                                instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
+                                                                               ),
+                                                                   VariableAttribute => (
+                                                                                         content =>
+                                                                                           (
+                                                                                            1 => (
+                                                                                                  zzzArrayElementInitialized => True,
+                                                                                                  zzztype => AttributeEnumType.Actual,
+                                                                                                  value => NonSparkTypes.VariableAttributeType.strvalue_t.To_Bounded_String("some value"),
+                                                                                                  mutability => MutabilityEnumType.ReadOnly,
+                                                                                                  persistent => True,
+                                                                                                  zzzconstant => True
+                                                                                                 ),
+                                                                                            others => (
+                                                                                                       zzzArrayElementInitialized => False,
+                                                                                                       zzztype => AttributeEnumType.Actual,
+                                                                                                       value => NonSparkTypes.VariableAttributeType.strvalue_t.To_Bounded_String("some value"),
+                                                                                                       mutability => MutabilityEnumType.ReadOnly,
+                                                                                                       persistent => True,
+                                                                                                       zzzconstant => True
+                                                                                                       
+                                                                                                      )
+                                                                                           )
+                                                                                        ),
+                                                                   variableCharacteristics => (
+                                                                                               zzzArrayElementInitialized => True,
+                                                                                               unit => NonSparkTypes.VariableCharacteristicsType.strunit_t.To_Bounded_String("degrees Celsius"),
+                                                                                               dataType => DataEnumType.zzzstring,
+                                                                                               minLimit => 1,
+                                                                                               maxLimit => 100,
+                                                                                               valuesList => NonSparkTypes.VariableCharacteristicsType.strvaluesList_t.To_Bounded_String("a list of stuff"),
+                                                                                               supportsMonitoring => False
+                                                                                              )
+                                                                  ),
+                                                             others => (
+                                                                        zzzArrayElementInitialized => False,
+                                                                        component => (
+                                                                                      zzzArrayElementInitialized => True,
+                                                                                      name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("evse"),
+                                                                                      instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
+                                                                                      evse => (
+                                                                                               zzzArrayElementInitialized => True,
+                                                                                               id => 0,
+                                                                                               connectorId => 0
+                                                                                              )
+                                                                                     ),
+                                                                        variable => (
+                                                                                     zzzArrayElementInitialized => False,
+                                                                                     name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
+                                                                                     instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
+                                                                                    ),
+                                                                        VariableAttribute => (
+                                                                                              content =>
+                                                                                                (
+                                                                                                 1 => (
+                                                                                                       zzzArrayElementInitialized => True,
+                                                                                                       zzztype => AttributeEnumType.Actual,
+                                                                                                       value => NonSparkTypes.VariableAttributeType.strvalue_t.To_Bounded_String("some value"),
+                                                                                                       mutability => MutabilityEnumType.ReadOnly,
+                                                                                                       persistent => True,
+                                                                                                       zzzconstant => True
+                                                                                                      ),
+                                                                                                 others => (
+                                                                                                            zzzArrayElementInitialized => False,
+                                                                                                            zzztype => AttributeEnumType.Actual,
+                                                                                                            value => NonSparkTypes.VariableAttributeType.strvalue_t.To_Bounded_String("some value"),
+                                                                                                            mutability => MutabilityEnumType.ReadOnly,
+                                                                                                            persistent => True,
+                                                                                                            zzzconstant => True
+                                                                                                       
+                                                                                                           )
+                                                                                                )
+                                                                                             ),
+                                                                        variableCharacteristics => (
+                                                                                                    zzzArrayElementInitialized => True,
+                                                                                                    unit => NonSparkTypes.VariableCharacteristicsType.strunit_t.To_Bounded_String("degrees Celsius"),
+                                                                                                    dataType => DataEnumType.zzzstring,
+                                                                                                    minLimit => 1,
+                                                                                                    maxLimit => 100,
+                                                                                                    valuesList => NonSparkTypes.VariableCharacteristicsType.strvaluesList_t.To_Bounded_String("a list of stuff"),
+                                                                                                    supportsMonitoring => False
+                                                                                                   )
+                                                                       )
+                                                            )
+                                                               
+                                                         ),
+                                          tbc => False,
+                                          seqNo => 1
+                                        
+                                         );
       
    begin      
       NonSparkTypes.put_line("B07");
@@ -1133,9 +1247,12 @@ package body unittests is
       
       ocpp.server.sendRequest(server, getBaseReportRequest);
       
-      GetBaseReportResponse.To_Bounded_String(response);
-      NonSparkTypes.put_line(NonSparkTypes.packet.To_String(response));
-      ocpp.server.receivePacket(server, response, dummystring, valid);
+      --GetBaseReportResponse.To_Bounded_String(response);
+      --NonSparkTypes.put_line(NonSparkTypes.packet.To_String(response));
+      --ocpp.server.receivePacket(server, response, dummystring, valid);
+      
+      --ocpp.NotifyReportRequest.To_Bounded_String(nrr, packet);
+      --ocpp.server.receivePacket(server, packet, dummystring, valid);
       
       result := valid;
    end B07;

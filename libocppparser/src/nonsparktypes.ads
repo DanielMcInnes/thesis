@@ -5,17 +5,31 @@ with Ada.Strings.Bounded;
 with Ada.Text_IO;
 
 package NonSparkTypes is
-   package packet is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 5000);
+   package packet is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 500);
    package messageid_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    package action_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    package BootReasonEnumType is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 16);
    
+   package VariableCharacteristicsType is
+      package strunit_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 16);
+      package strvaluesList_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 1000);
+      
+   end VariableCharacteristicsType;
+
+   package NotifyReportRequest is
+      package strgeneratedAt_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 100);
+   end NotifyReportRequest;
+
+   package VariableAttributeType is
+      package strvalue_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 2500);
+   end VariableAttributeType;
+
    package GetVariableResultType is
-      package strattributeValue_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 2500);
+      package strattributeValue_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 250);
    end GetVariableResultType;
 
    package SetVariableDataType is
-      package strattributeValue_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 2500);
+      package strattributeValue_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 250);
    end SetVariableDataType;
 
    package VariableType is

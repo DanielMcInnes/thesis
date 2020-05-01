@@ -30,8 +30,18 @@ function clean(f) {
 }
 
 function cleanpropertyname(f) {
-   const regextype= /type/g;
+   const regextype = /type/g;
+   const regexconstant = /constant/g;
+
    var retval = f.replace(regextype, 'zzztype');
+   retval = retval.replace(regexconstant, 'zzzconstant');
+   
+   if (retval != f) {
+      console.log('renaming ' + f + ' to ' + retval)
+   } else {
+      console.log('not renaming ' + f + ' to ' + retval)
+   }
+
    return retval;
 }
 
@@ -168,14 +178,6 @@ function createArrayType(name, schema) {
 module.exports.parse = function (name, schema) {
    name = cleanfilename(name);
 
-   // clean the property names. e.g. if a property is called 'type', rename it as 'zzztype' as 'type' is a reserved ada keyword
-   for (var property in schema.properties) {
-      var cleanproperty = cleanpropertyname(property)
-      if (cleanproperty != property) {
-         console.log('ObjectType.parse: renaming property' + property + 'to' + cleanproperty)
-         property = cleanproperty
-      }
-   }
    console.log('parseObjectType: ', name);
    var _outfile
    if (name.endsWith('Request') || name.endsWith('Response')) {
@@ -247,8 +249,11 @@ module.exports.parse = function (name, schema) {
          case 'object':
             _type = schema.properties[property]['javaType'] + 'Type.T';
             break;
+         case 'number':
+            _type = 'Integer';
+            break;
       }
-      _buffer += '      ' + property + ' : ' + _type + ';\n'; 
+      _buffer += '      ' + cleanpropertyname(property) + ' : ' + _type + ';\n'; 
    }
    _buffer += '   end record;';
 
@@ -323,6 +328,7 @@ module.exports.parse = function (name, schema) {
       var _javaType = schema.properties[property]['javaType'] 
 
       switch (type) {
+         case 'number':
          case 'integer':
             _buffer += '      self.' + property + ' := -1;\n';
             break;
@@ -331,10 +337,13 @@ module.exports.parse = function (name, schema) {
             break;
          case 'string':
                if (!!_javaType && _javaType.endsWith('Enum')) { // eg: getBaseReportRequest.reportBase : ocpp.ReportBaseEnum
-                  _buffer += '      self.' + property + ' := ' + schema.properties[property]["enum"][0] +';\n';
+                  _buffer += '      self.' + cleanpropertyname(property) + ' := ' + _javaType + 'Type.' + clean(schema.properties[property]["enum"][0]) +';\n';
                } else {
                   _buffer += '      self.' + property + ' := NonSparkTypes.' + name + '.str' + property + '_t.To_Bounded_String("");\n';
                }
+            break;
+         case 'boolean':
+            _buffer += '      self.' + cleanpropertyname(property) + ' := False;\n';
             break;
          default:
                _buffer += '      ' + _javaType + 'Type.Initialize(self.' + property + ');\n';
@@ -435,7 +444,7 @@ module.exports.parse = function (name, schema) {
                _buffer += '      ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "' + property + '", dummybounded);\n';
                _buffer += '      if (valid = false) then NonSparkTypes.put_line("333 Invalid ' + name + property + '"); return; end if;\n\n'
             if (!!_javaType && _javaType.endsWith('Enum')) { // eg: getBaseReportRequest.reportBase : ocpp.ReportBaseEnum
-               _buffer += '      ocpp.' + _javaType + 'Type.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.' + property + ', valid);\n';
+               _buffer += '      ocpp.' + _javaType + 'Type.FromString(NonSparkTypes.packet.To_String(dummybounded), Self.' + cleanpropertyname(property) + ', valid);\n';
                _buffer += '      if (valid = false) then NonSparkTypes.put_line("334 Invalid ' + name + property + '"); return; end if;\n'
             } else
             {
@@ -481,6 +490,8 @@ module.exports.parse = function (name, schema) {
       var _javaType = schema.properties[property]['javaType'] 
 
       switch (type) {
+         case 'boolean':
+         case 'number':
          case 'integer':
             break;
          case 'string':
@@ -508,11 +519,13 @@ module.exports.parse = function (name, schema) {
       var _javaType = schema.properties[property]['javaType'] 
 
       switch (type) {
+         case 'boolean':
+            break;
          case 'integer':
             break;
          case 'string':
             if (!!_javaType && _javaType.endsWith('Enum')) {
-               _buffer += '      ' + _javaType + 'Type.ToString(Self.' + property + ', str' + property + ');\n';
+               _buffer += '      ' + _javaType + 'Type.ToString(Self.' + cleanpropertyname(property) + ', str' + property + ');\n';
             }
             break;
          case 'object':
@@ -559,9 +572,11 @@ module.exports.parse = function (name, schema) {
          type = schema.properties[property]["type"];   // int, string
       }
       switch (type) {
+         case 'boolean':
+         case 'number':
          case 'integer':
-            _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": "' +
-                                                                                 ' & ' + 'Self.' + property + '\'Image';
+            _buffer +=    '                                                      & "    " & \'"\' & "' + cleanpropertyname(property) + '" & \'"\' & ": "' +
+                                                                                 ' & ' + 'Self.' + cleanpropertyname(property) + '\'Image';
             break;
          case 'object':
             _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & ASCII.LF' 
