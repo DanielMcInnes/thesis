@@ -211,6 +211,7 @@ package body unittests is
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(bootNotificationRequest));
       ocpp.server.receivePacket(server, bootNotificationRequest, bootNotificationResponse, valid);
+      
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
