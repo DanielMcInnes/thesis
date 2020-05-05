@@ -1,10 +1,10 @@
 pragma SPARK_mode (on); 
 
 with ocpp;
-with ocpp.SetVariablesRequest;
+with ocpp.StatusNotificationResponse;
 with Ada.Strings; use Ada.Strings;
 
-package body ocpp.SetVariablesRequest is 
+package body ocpp.StatusNotificationResponse is 
 
 procedure findquotedstring_packet is new findquotedstring(
                                                              Max => NonSparkTypes.packet.Max_Length, 
@@ -14,20 +14,19 @@ procedure findquotedstring_packet is new findquotedstring(
                                                              To_Bounded_String =>  NonSparkTypes.packet.To_Bounded_String
                                                             );
 
-   procedure Initialize(self: out ocpp.SetVariablesRequest.T)
+   procedure Initialize(self: out ocpp.StatusNotificationResponse.T)
    is
    begin
       NonSparkTypes.put_line("Initialize()");
       self.messageTypeId:= -1;
       self.messageId := NonSparkTypes.messageid_t.To_Bounded_String("");
-      self.action := NonSparkTypes.action_t.To_Bounded_String("");
-      setVariableDataTypeArray.Initialize(self.setVariableData);
+      self.unused := -1;
 
    end Initialize;
 
    procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                    msgindex: out Integer;
-                   self: out ocpp.SetVariablesRequest.T;
+                   self: out ocpp.StatusNotificationResponse.T;
                    valid: out Boolean
                   )
    is
@@ -37,24 +36,15 @@ procedure findquotedstring_packet is new findquotedstring(
       Initialize(self);
       msgIndex := 1;
       ocpp.ParseMessageType(msg, self.messagetypeid, msgindex, valid);
-      if (valid = false) then NonSparkTypes.put_line("413 Invalid SetVariablesRequestsetVariableData messagetypeid"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("413 Invalid StatusNotificationResponsecustomData messagetypeid"); return; end if;
 
       ocpp.ParseMessageId(msg, self.messageid, msgindex, valid);
-      if (valid = false) then NonSparkTypes.put_line("416 Invalid SetVariablesRequestsetVariableData messageid"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("416 Invalid StatusNotificationResponsecustomData messageid"); return; end if;
 
-      ocpp.ParseAction(msg, msgindex, self.action, valid);
-      if (valid = false) then NonSparkTypes.put_line("404 Invalid action"); return; end if; 
+      checkValid(msg, msgindex, self, valid);
+      if (valid = false) then NonSparkTypes.put_line("313 Invalid StatusNotificationResponsecustomData"); return; end if;
 
-      checkValid(msg, msgindex, self, action, valid);
-      if (valid = false) then NonSparkTypes.put_line("313 Invalid SetVariablesRequestsetVariableData"); return; end if;
-
-      ocpp.findQuotedKey(msg, msgIndex, valid, "setVariableData");
-      if (valid = false) then NonSparkTypes.put_line("345 Invalid SetVariablesRequestsetVariableData"); return; end if;
-
-      SetVariableDataTypeArray.FromString(msg, msgindex, self.setVariableData, valid);
-      if (valid = false) then NonSparkTypes.put_line("347 Invalid SetVariablesRequestsetVariableData"); return; end if;
-
-      if (valid = false) then NonSparkTypes.put_line("365 Invalid SetVariablesRequestsetVariableData"); return; end if;
+      if (valid = false) then NonSparkTypes.put_line("365 Invalid StatusNotificationResponsecustomData"); return; end if;
       valid := true;
    end parse;
 
@@ -62,16 +52,12 @@ procedure findquotedstring_packet is new findquotedstring(
                                retval: out NonSparkTypes.packet.Bounded_String)
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
-      strsetVariableData: NonSparkTypes.packet.Bounded_String;
    begin
-      SetVariableDataTypeArray.To_Bounded_String(strsetVariableData, self.setVariableData);
       retval := NonSparkTypes.packet.To_Bounded_String(""
-                                                      & "[2," & ASCII.LF
+                                                      & "[3," & ASCII.LF
                                                       & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
-                                                      & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "setVariableData" & '"' & ": " & NonSparkTypes.packet.To_String(strsetVariableData) & ASCII.LF
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;
-end ocpp.SetVariablesRequest;
+end ocpp.StatusNotificationResponse;

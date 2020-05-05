@@ -1,0 +1,33 @@
+format 222
+
+classinstance 128258 class_ref 238850 // OCPP_Server
+  name ""   xyz 44 4.2 2000 life_line_z 2000
+classinstance 128386 class_ref 239106 // ChargingStation
+  name ""   xyz 503 4.2 2000 life_line_z 2000
+durationcanvas 130946 classinstance_ref 128386 // :ChargingStation
+  xyzwh 555 68 2010 11 61
+end
+durationcanvas 132610 classinstance_ref 128258 // :OCPP_Server
+  xyzwh 92 92 2010 11 136
+end
+durationcanvas 133250 classinstance_ref 128386 // :ChargingStation
+  xyzwh 558 180 2010 11 71
+end
+reflexivemsg 131074 synchronous
+  to durationcanvas_ref 130946
+  yz 68 2015 explicitmsg "powerUp"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 545 47
+msg 132738 asynchronous
+  from durationcanvas_ref 130946
+  to durationcanvas_ref 132610
+  yz 121 2015 msg operation_ref 174850 // "BootNotificationRequest(in reason : , in chargingStation : )"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 114 98
+msg 133378 asynchronous
+  from durationcanvas_ref 132610
+  to durationcanvas_ref 133250
+  yz 178 2015 msg operation_ref 175106 // "BootNotificationResponse(in status : , in currentTime : , in interval : )"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 134 156
+end

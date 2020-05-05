@@ -213,9 +213,16 @@ module.exports.parse = function (name, schema) {
    if (name.includes('Request') ) {
       _buffer += '   action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("' + utils.parseAction(name) + '"); \n';
       _buffer += '   type T is new call with record\n';
+      if (Object.keys(schema.properties).length === 1) {
+         _buffer += '      unused : Integer;\n';
+      }
    }
    else if (name.includes('Response') ){
       _buffer += '   type T is new callresult with record\n';
+      console.log("schema.properties.length:", name, Object.keys(schema.properties).length);
+      if (Object.keys(schema.properties).length === 1) {
+         _buffer += '      unused : Integer;\n';
+      }
    }
    else {
       _buffer += '   type T is record\n';
@@ -314,6 +321,9 @@ module.exports.parse = function (name, schema) {
    if (name.endsWith('Request') || name.endsWith('Response')) {
       _buffer += '      self.messageTypeId:= -1;\n';
       _buffer += '      self.messageId := NonSparkTypes.messageid_t.To_Bounded_String("");\n';
+      if (Object.keys(schema.properties).length === 1) {
+         _buffer += '      self.unused := -1;\n';
+      }
    }
    if (name.endsWith('Request')) {
       _buffer += '      self.action := NonSparkTypes.action_t.To_Bounded_String("");\n';
@@ -412,6 +422,16 @@ module.exports.parse = function (name, schema) {
       
       _buffer += '      ocpp.ParseMessageId(msg, self.messageid, msgindex, valid);\n'
       _buffer += '      if (valid = false) then NonSparkTypes.put_line("416 Invalid ' + name + property + ' messageid"); return; end if;\n\n'
+
+
+/*
+      ocpp.ParseAction(msg, msgindex, self.action, valid);
+      checkValid(msg, msgindex, self, action, valid);
+      */
+      if (name.endsWith('Request')) {
+         _buffer += '      ocpp.ParseAction(msg, msgindex, self.action, valid);\n'
+         _buffer += '      if (valid = false) then NonSparkTypes.put_line("404 Invalid action"); return; end if; \n\n'
+      }
 
 
 
