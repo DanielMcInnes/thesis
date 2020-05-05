@@ -134,12 +134,12 @@ package body unittests is
    procedure testall(result: out Boolean)
    is
    begin
-      B01(result);      if (result = false) then         fail; return;      end if;
-      B02(result);      if (result = false) then         fail; return;      end if;
-      B03(result);      if (result = false) then         fail; return;      end if;
-      B04(result);      if (result = false) then         fail; return;      end if;
-      B05(result);      if (result = false) then         fail; return;      end if;
-      B06(result);      if (result = false) then         fail; return;      end if;
+      --B01(result);      if (result = false) then         fail; return;      end if;
+      --B02(result);      if (result = false) then         fail; return;      end if;
+      --B03(result);      if (result = false) then         fail; return;      end if;
+      --B04(result);      if (result = false) then         fail; return;      end if;
+      --B05(result);      if (result = false) then         fail; return;      end if;
+      --B06(result);      if (result = false) then         fail; return;      end if;
       B07(result);      if (result = false) then         fail; return;      end if; -- GetBaseReportRequest
       
       --TODO:
@@ -180,7 +180,7 @@ package body unittests is
       sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("01234567890123456789");
       valid: Boolean;
 
-      packet: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String( ""
+      bootNotificationRequest: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String( ""
                                                                                              & "[2," & ASCII.LF
                                                                                              & '"'  &"19223201"  &'"' & "," & ASCII.LF
                                                                                              & '"' & "BootNotification" & '"' & "," & ASCII.LF
@@ -194,7 +194,7 @@ package body unittests is
                                                                                              & "}" & ASCII.LF
                                                                                              & "]");
 
-      response: NonSparkTypes.packet.Bounded_String;
+      bootNotificationResponse: NonSparkTypes.packet.Bounded_String;
       expectedresponse: NonSparkTypes.packet.Bounded_String :=
         NonSparkTypes.packet.To_Bounded_String( ""
                                                 & "[3," & ASCII.LF
@@ -209,14 +209,14 @@ package body unittests is
       ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);
       result := false;
       Put_line("Receiving:");
-      Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.receivePacket(server, packet, response, valid);
+      Put_Line(NonSparkTypes.packet.To_String(bootNotificationRequest));
+      ocpp.server.receivePacket(server, bootNotificationRequest, bootNotificationResponse, valid);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
-      Put_Line(NonSparkTypes.packet.To_String(response));
+      Put_Line(NonSparkTypes.packet.To_String(bootNotificationResponse));
 
-      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
+      if (NonSparkTypes.packet.To_String(bootNotificationResponse) = NonSparkTypes.packet.To_String(expectedresponse)) then
          Put_line("Success");
       else
          Put_line("Error: 50");
@@ -229,7 +229,7 @@ package body unittests is
       
 
       -- include the optional 'firmwareVersion' and 'serialNumber'
-      packet := NonSparkTypes.packet.To_Bounded_String( ""
+      bootNotificationRequest := NonSparkTypes.packet.To_Bounded_String( ""
                                                         & "[2," & ASCII.LF
                                                         & '"'  &"19223201"  &'"' & "," & ASCII.LF
                                                         & '"' & "BootNotification" & '"' & "," & ASCII.LF
@@ -245,14 +245,14 @@ package body unittests is
                                                         & "]");
 
       Put_line("Receiving:");
-      Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.receivePacket(server, packet, response, valid);
+      Put_Line(NonSparkTypes.packet.To_String(bootNotificationRequest));
+      ocpp.server.receivePacket(server, bootNotificationRequest, bootNotificationResponse, valid);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
-      Put_Line(NonSparkTypes.packet.To_String(response));
+      Put_Line(NonSparkTypes.packet.To_String(bootNotificationResponse));
 
-      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
+      if (NonSparkTypes.packet.To_String(bootNotificationResponse) = NonSparkTypes.packet.To_String(expectedresponse)) then
          Put_line("Success");
       else
          Put_line("Error: 81");
@@ -265,7 +265,7 @@ package body unittests is
       
       
       -- include the optional 'modemInfo' and 'serialNumber'
-      packet := NonSparkTypes.packet.To_Bounded_String( ""
+      bootNotificationRequest := NonSparkTypes.packet.To_Bounded_String( ""
                                                         & "[2," & ASCII.LF
                                                         & '"'  &"19223201"  &'"' & "," & ASCII.LF
                                                         & '"' & "BootNotification" & '"' & "," & ASCII.LF
@@ -284,14 +284,14 @@ package body unittests is
                                                         & "]");
 
       Put_line("Receiving:");
-      Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.receivePacket(server, packet, response, valid);
+      Put_Line(NonSparkTypes.packet.To_String(bootNotificationRequest));
+      ocpp.server.receivePacket(server, bootNotificationRequest, bootNotificationResponse, valid);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
-      Put_Line(NonSparkTypes.packet.To_String(response));
+      Put_Line(NonSparkTypes.packet.To_String(bootNotificationResponse));
 
-      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
+      if (NonSparkTypes.packet.To_String(bootNotificationResponse) = NonSparkTypes.packet.To_String(expectedresponse)) then
          Put_line("Success");
       else
          Put_line("Error: 81");
@@ -304,7 +304,7 @@ package body unittests is
       
       
       -- include the optional 'modemInfo' and the optional 'firmwareVersion' and 'serialNumber'
-      packet := NonSparkTypes.packet.To_Bounded_String( ""
+      bootNotificationRequest := NonSparkTypes.packet.To_Bounded_String( ""
                                                         & "[2," & ASCII.LF
                                                         & '"'  &"19223201"  &'"' & "," & ASCII.LF
                                                         & '"' & "BootNotification" & '"' & "," & ASCII.LF
@@ -322,14 +322,14 @@ package body unittests is
                                                         & "]");
 
       Put_line("Receiving:");
-      Put_Line(NonSparkTypes.packet.To_String(packet));
-      ocpp.server.receivePacket(server, packet, response, valid);
+      Put_Line(NonSparkTypes.packet.To_String(bootNotificationRequest));
+      ocpp.server.receivePacket(server, bootNotificationRequest, bootNotificationResponse, valid);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
-      Put_Line(NonSparkTypes.packet.To_String(response));
+      Put_Line(NonSparkTypes.packet.To_String(bootNotificationResponse));
 
-      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
+      if (NonSparkTypes.packet.To_String(bootNotificationResponse) = NonSparkTypes.packet.To_String(expectedresponse)) then
          Put_line("Success");
       else
          Put_line("Error: 81");
@@ -1239,7 +1239,7 @@ package body unittests is
       getBaseReportRequest.To_Bounded_String(dummystring);
       NonSparkTypes.put_line(NonSparkTypes.packet.To_String(dummystring));
       
-      ocpp.server.receivePacket(server, dummystring, response, valid); 
+      --ocpp.server.receivePacket(server, dummystring, response, valid); 
       if (dummystring = expectedresponse) 
       then
          NonSparkTypes.put_line("B07 1 passed.");

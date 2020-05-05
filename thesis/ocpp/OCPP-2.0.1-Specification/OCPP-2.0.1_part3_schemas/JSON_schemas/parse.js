@@ -67,16 +67,16 @@ if (process.argv.length <= 2) {
    process.exit(-1);
 }
 
-//parseJsonFile('./GetVariablesRequest.json')
-//parseJsonFile('./GetVariablesResponse.json')
+parseJsonFile('./GetVariablesRequest.json')
+parseJsonFile('./GetVariablesResponse.json')
 parseJsonFile('./NotifyReportRequest.json')
-/*parseJsonFile('./NotifyReportResponse.json')
+parseJsonFile('./NotifyReportResponse.json')
 parseJsonFile('./SetVariablesRequest.json')
 parseJsonFile('./SetVariablesResponse.json')
 parseJsonFile('./GetBaseReportRequest.json')
 parseJsonFile('./GetBaseReportResponse.json')
 parseJsonFile('./BootNotificationRequest.json')
-*/
+
 var path = process.argv[2];
 
 /*

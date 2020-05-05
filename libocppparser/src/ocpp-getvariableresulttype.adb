@@ -19,8 +19,8 @@ procedure findquotedstring_packet is new findquotedstring(
    begin
       NonSparkTypes.put_line("Initialize()");
       self.zzzArrayElementInitialized := False;
-      self.attributeStatus := Accepted;
-      self.attributeType := Actual;
+      self.attributeStatus := GetVariableStatusEnumType.Accepted;
+      self.attributeType := AttributeEnumType.Actual;
       self.attributeValue := NonSparkTypes.GetVariableResultType.strattributeValue_t.To_Bounded_String("");
       ComponentType.Initialize(self.component);
       VariableType.Initialize(self.variable);

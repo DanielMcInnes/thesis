@@ -4,7 +4,7 @@ with NonSparkTypes;
 with ocpp.VariableAttributeType;
 
 package ocpp.VariableAttributeTypeArray is
-type Index is range 1 .. 100;
+type Index is range 1 .. 10;
 type array_VariableAttributeType is array (Index) of ocpp.VariableAttributeType.T;
 type T is record
    content : array_VariableAttributeType;

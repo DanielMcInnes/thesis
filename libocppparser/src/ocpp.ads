@@ -30,9 +30,17 @@ package ocpp is
                );
 
    type callresult is tagged record
-      messagetypeid : integer;-- eg. 3
-      messageid : messageid_t.Bounded_String; -- eg. 19223201
+      messagetypeid : integer := -1;-- eg. 3
+      messageid : messageid_t.Bounded_String := messageid_t.To_Bounded_String(""); -- eg. 19223201
    end record;
+   procedure To_Bounded_String(Self: in ocpp.callresult;
+                               retval: out NonSparkTypes.packet.Bounded_String)
+     with
+       Global => null,
+       Depends => (
+                     retval => (Self)
+                  );
+     
    
    procedure checkValid(msg: in NonSparkTypes.packet.Bounded_String;
                    msgindex: in Integer;

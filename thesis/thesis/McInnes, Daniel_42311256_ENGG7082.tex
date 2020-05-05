@@ -4,6 +4,8 @@
 \usepackage[colorlinks,allcolors=blue]{hyperref, xcolor} % must be bfore pgfplots
 \usepackage{pgfplots} % must be after xcolor
 \usepackage{colortbl}
+\usepackage{float}
+\usepackage{flafter}
 % If you use a macro file called macros.tex :
 % \input{macros}
 % Note: The present document has its macros built in.
@@ -143,7 +145,7 @@
 % To include every \include file, just hit RETURN.
 % If you are running LaTeX from xtexsh, you may need to click the mouse
 % in the LaTeX window to position the cursor at the \@typein prompt.
-\graphicspath{{/home/dmcinnes/Dropbox/thesis/thesis/images/}}
+\graphicspath{{/home/dmcinnes/git/thesis/thesis/thesis/images/}}
 \begin{document}
 
 \frontmatter
@@ -155,7 +157,7 @@
 \includegraphics{UQlogo}\\
 \vspace*{35mm}
 \Huge\bf
-		A VERIFIED OCPP v2.0 SERVER\\
+		A VERIFIED OCPP v2.01 SERVER\\
 		FOR ELECTRIC VEHICLE CHARGER NETWORKS\\
 \vspace{20mm}
 \large\sl
@@ -193,26 +195,26 @@
   St Lucia, Q 4072\\
   \bigskip\bigskip
   Dear Professor Abbosh,
-\end{flushleft}
 
+\medskip
 In accordance with the requirements of the degree of Master of
 Engineering in the division of 
 Software Engineering,
 I present the
 following thesis entitled ``A Verified Server for an Electric Vehicle Charger Network''.  This work was performed under the supervision of A/Prof. Graeme Smith.
+\medskip
 
 I declare that the work submitted in this thesis is my own, except as
 acknowledged in the text and footnotes, and has not been previously
 submitted for a degree at The University of Queensland or any other
 institution.
 
-\begin{flushright}
 	Yours sincerely,\\
 	\medskip
 %	\emph{Author's Signature}\\
 	\medskip
 	Daniel McInnes.
-\end{flushright}
+\end{flushleft}
 
 \cleardoublepage
 
@@ -260,7 +262,7 @@ Currently, networks of publicly available electric vehicle fast chargers communi
 
 
 
-The International Energy Agency \cite{ieaglobalevoutlook} reports that the number of publicly available fast chargers ($>$ 22kW) increased from 107\,650 in 2017 to 143\,502 in 2018.\\
+The International Energy Agency \cite{GlobalEVOutlook2019} reports that the number of publicly available fast chargers ($>$ 22kW) increased from 107\,650 in 2017 to 143\,502 in 2018.\\
 
 \begin{figure}[htbp]
 \caption{Publicly available fast chargers}
@@ -303,7 +305,7 @@ The Open Charge Alliance \cite{ocaappraisal} reports that more than 10\,000 char
 
 
  
-In this paper I investigate and compare the features of several different software verifiation tools and choose one to partially implement an OCPP server. The tools include VeriFast, VCC, OpenJML, KeY, Spec\#, Daphney, Whiley, and AdaSPARK.
+In this paper I investigate and compare the features of several different software verifiation tools and choose one to partially implement an OCPP server. The tools include Dafny, KeY, OpenJML, SPARK 2014, Spec\#, VCC, VeriFast, Viper, Whiley, and Why3.
 
 The tools vary in what guarantees they provide. Desirable guarantees that I was interested in are: 
 \label{criteria}
@@ -315,7 +317,10 @@ The tools vary in what guarantees they provide. Desirable guarantees that I was 
 	\item the program should verifiably meet its requirements. These requirements are typically in the form of preconditions and postconditions.
 	\item the program should never exhibit undefined behaviour
 	\item the program should constrain information flow, i.e. not leak sensitive information such as passwords
-	\item The tool should be sound. Many of the tools claim to be sound ``modulo bugs in the tool'', and have lengthy lists of known bugs. I want a tool that has no known unsound behaviour.
+	\item The tool should be sound. Many of the tools claim to be sound ``modulo bugs in the tool'', and have lengthy lists of known bugs. I wanted a tool that has no known unsound behaviour. `Soundness' may be further broken down into the following levels.
+	\subitem Level 1: No false positives: The tool should not report that the software is correct when there are in fact errors. This is fundamental, there is not much point in using the tool if you can't trust it.
+	\subitem Level 2: No false negatives: The tool should not report that the software is incorrect when it is in fact correct. This is desiriable, but not as important as level 1, as the developer's attention is drawn to the issue prior to the software being released.
+
 
 \end{itemize}
 
@@ -336,30 +341,344 @@ the one above.
 
 ------------------------------------------------------------------
 
-10 different verification tools were evaluated to determine which fulfilled the criteria \ref{criteria}.
+Numerous software verification tools were considered for use in implementing the OCPP server. These tools include Dafny, KeY, OpenJML, SPARK 2014, Spec\#, VCC, Verifast, Viper, Whiley, and Why3. SPARK 2014 was found to best fulfill the criteria \ref{criteria}.
 
-\section {Dafny}
-\section {JML}
-\section {KeY}
-\section {SPARK Ada}
-\section {Spec\#}
-\section {Verifast}
-Vogels claims VeriFast is to be sound. However, 
+\section{Dafny}
+	\subsection{Home Page}%	
+		https://rise4fun.com/Dafny
+	\subsection{Features}
+		Dafny is both a language and a verifier \cite{LeinoK.R.M.2010DAap}. Dafny supports feature verification via preconditions, postconditions, loop invariants and loop variants. It uses the `Boogie' intermediate language and the Z3 theorem prover. The Dafny compiler produces executable files for the .NET platform \cite{dafny02}.
+	\subsection{Soundness}
+		Dafny is designed to be sound but incomplete, and is known to report errors on correct programs \cite{dafny01}.
+	\subsection{Supported Platforms}
+		Windows, Linux, OSX host, for a .NET target platform.
+	\subsection{License Information}
+		MIT.
+	\subsection{Evidence of successful use in commercial software development}
+		Internet searches failed to find any evidence of Dafny being used in commercial software development. 		
+	\subsection{Existing Libraries}
+		There is a `mathematics' library for Dafny.
+		
+	\subsection{Multithreaded Application Support}
+		Internet searches failed to find evidence of multithreaded application support. 
+		
+	\subsection{Supported Languages}
+		Dafny.
 
-Verifast guarantees (modulo bugs in the tool) the absence of illegal memory accesses such as null pointer dereferences, accesses of uninitialized memory, accessing outside of the bounds of an array, data race conditions, violations of the user specified function contracts.
-VeriFast performs modular formal verification ofcorrectness properties of single and multithreaded C and Java programs. \\
+\section{KeY}
+	\subsection{Home Page}%	
+	https://www.key-project.org/
+	\subsection{Features} 
+		KeY offers functional verification for Java programs. The specifications are written as comments in JML in the Java source code. KeY is built on a formal logic called `Java Card DL', which is itself a first-order dynamic logic, and an extension of Hoare logic. It is targeted at JavaCard programs. 
+	\subsection{Soundness} 
+		KeY is thought to be sound. Internet searches failed to find examples of unsoundness.
+	\subsection{Supported Platforms} 
+		Windows, Linux, and OSX hosts, for a JVM target.
+	\subsection{License Information} 
+		GPL.		
+	\subsection{Evidence of successful use in commercial software development} 
+		Internet searches failed to find any evidence of KeY being used in commercial software development. 
+	\subsection{Existing Libraries} 
+		There are extensive libraries available for Java programs.
+	\subsection{Multithreaded Application Support} 
+		No.
+	\subsection{Supported Languages} 
+		Java.	
 
-%(Vogels et al, p1. ``VeriFast is a sound modular formal verification approach for single-threaded and multithreaded imperative programs being developed at KU Leuven''.) 
-\section {VCC}
-\section {Viper}
-\section {Whiley}
-\section {Why3}
-``Why3 is a platform for deductive program verification. It provides a rich language for
-specification and programming, called WhyML, and relies on external theorem provers,
-both automated and interactive, to discharge verification conditions.''\\
-``A user can write WhyML programs directly and get correct-by-construction
-OCaml programs through an automated extraction mechanism. WhyML is also used as
-an intermediate language for the verification of C, Java, or Ada programs.''
+
+
+
+
+
+
+
+
+
+\section{OpenJML}
+	\subsection{Home Page}%	
+	http://www.openjml.org/
+	\subsection{Features}
+	OpenJML is a suite of tools for verifying Java programs that are annotated with JML statements. It is based on OpenJDKv1.8. It detects illegal memory access at compile time. It verifies preconditions and postconditions. It arguably guarantees the absence of undefined behaviour for single threaded applications. It does not constrain information flow.
+	
+	\subsection{Soundness}
+	Yes
+	\subsection{Supported Platforms}
+	Windows, Linux, OSX.
+	\subsection{License Information}
+		GPLv2.
+	\subsection{Evidence of successful use in commercial software development} 
+		Internet searches failed to find any evidence of OpenJML being used in commercial software development. 
+
+	\subsection{Existing Libraries} 
+		There are extensive libraries available for Java programs.
+	\subsection{Multithreaded Application Support}
+	No.
+	\subsection{Supported Languages}
+	Java (only OpenJDK v1.8, may become unsupported in December 2020)
+
+
+
+
+
+
+
+
+
+
+\section{SPARK 2014}
+	SPARK 2014 is both a formally defined programming language and a set of verification tools. In typical use, a programmer writes SPARK code, which is compiled by the GNAT compiler, then analyzed by the GNATprove tool to produce numerous verification conditions.
+	
+	GNATprove uses Alt-Ergo (OCamlPro, 2014), CVC4 (NYU, 2014), YICES (Dutertre, 2014) and Z3 (Bjorner, 2012) 		to prove the verification conditions.
+
+	\subsubsection{Features}
+	Formally verifies:
+	\begin{itemize}
+		\item information flow
+		\item freedom from runtime errors	
+		\item functional correctness
+	\end{itemize}
+
+	\subsubsection{Safety Standards}
+		SPARK 2014 satisifes:
+	\begin{itemize}
+		\item DO-178B/C
+		\item Formal Methods supplement DO-333
+		\item CENELEC 51028
+		\item IEC 61508
+		\item DEFSTAN 00-56
+	\end{itemize}
+
+	\subsubsection{Soundness}
+		SPARK is thought to be sound. Internet searches failed to find examples of unsoundness.
+
+	\subsubsection{Supported Platforms}
+		Windows, Linux, OSX.
+
+	\subsubsection{License Information}
+		Dual license:
+
+		SPARK GPL is available for free from http://libre.adacore.com under the GPL.
+
+		SPARK PRO is available under a commercial license from http://www.adacore.com.
+
+
+	\subsubsection{Evidence of successful use in commercial software development}
+	There is abundant evidence of the successful use of SPARK in high integrity software development. See: \cite{spark01}, \cite{spark02}, \cite{spark03}, \cite{spark04}, \cite{spark05}, \cite{spark06}, \cite{spark07}, \cite{spark08}, \cite{spark09}, \cite{spark10}, \cite{spark11}, \cite{spark12}, \cite{spark13}, \cite{spark14}, \cite{spark15}, \cite{spark16}, \cite{spark17}, \cite{spark18}, \cite{spark19}, \cite{spark20}, \cite{spark21}, \cite{spark22}, \cite{spark23}, \cite{spark24}, \cite{spark25}, \cite{spark26}, \cite{spark27}, \cite{spark28}, \cite{spark29}, \cite{spark30}, \cite{spark31}, \cite{spark32}, \cite{spark33}, \cite{spark34}, \cite{spark35}, \cite{spark36}, \cite{spark37}, \cite{spark38}, \cite{spark39}, \cite{spark40}, \cite{spark41}, \cite{spark42}, \cite{spark43}, \cite{spark44}, \cite{spark45}.
+	
+	
+	Of particular relevance is the experience of the CubeSat Laboratory at Vermont Technical College\cite{sparkstudents}. Cubesats are small cubes launched into space with various sensors onboard, in this case without post-launch software update capabilities. This means the software must be fault free at the time of launch. The students (mostly third and fourth year undergraduates, with no prior knowledge of SPARK or Ada, and a high turnover rate) proved the software to be free of runtime errors. 14 Cubesats were launched in November 2013. Most were never heard from again, but the SPARK Cubesat worked for 2 years until it reentered Earth's atmosphere as planned in November 2015. 
+
+	\subsubsection{Existing Libraries}
+	SPARK has a minimal container library. SPARK interfaces easily with Ada, which has an extensive standard library.
+
+	\subsubsection{Multithreaded Application Support}
+	Unsupported.
+
+	\subsubsection{Supported Languages}
+	SPARK 2104 supports a subset of Ada 2012.
+
+
+	See \cite[p.18]{McCormickJohnW.2015Bhia}
+
+	``The following Ada 2012 features are not currently supported by Spark:
+
+	Aliasing of names; no object may be referenced by multiple names
+
+	Pointers (access types) and dynamic memory allocation
+
+	Goto statements
+
+	Expressions or functions with side effects
+
+	Exception handlers
+
+	Controlled types; types that provide fine control of object creation, assignment, and destruction
+
+	Tasking/multithreading (will be included in future releases)
+
+
+
+
+
+
+
+
+
+
+
+\section{Spec\#}
+	\subsection{Home Page}%	
+	https://www.microsoft.com/en-us/research/project/spec/
+	\subsection{Features}
+		Spec\# consists of the Spec\# programming language, the Spec\# compiler, and the Spec\# static program verifier. The programming language is an extension of C\#, adding non-null types, checked exceptions, preconditions, postconditions, and object invariants \cite{spec01}. It uses Boogie for verification.
+	\subsection{Soundness}
+		Spec\# claims to be sound\cite{BarnettMike2005TSPS}.
+	\subsection{Supported Platforms}
+		Windows host platform, .NET target platform.
+	\subsection{License Information}
+		Internet searches failed to find Spec\# license information.
+	\subsection{Evidence of successful use in commercial software development}
+		Internet searches failed to find evidence of Spec\# being used in commercial software development.
+	\subsection{Existing Libraries}
+		Internet searches failed to find Spec\# libraries. However, Spec\# offers interoperability with the .NET platform, which has an extensive standard library, although the soundness of this library is not guaranteed.
+	\subsection{Multithreaded Application Support}
+		Yes\cite{spec01}.
+	\subsection{Supported Languages}
+		Spec\#.
+
+
+
+
+
+
+
+
+
+\section{VCC}
+	\subsection{Home Page}%	
+		https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/	
+	\subsection{Features}
+	VCC verifies preconditions and postconditions written in the form of special comments in the source code. 		It detects data races in multithreaded applications and illegal memory access at compile time. It does not 		guarantee the absence of undefined behaviour.
+
+	\subsection{Soundness}
+	Yes
+
+	\subsection{Supported Platforms}
+	Windows
+
+	\subsection{License Information}
+	%https://github.com/microsoft/vcc/blob/master/LICENSE
+	MIT \cite{vcc01}
+
+	\subsection{Evidence of successful use in commercial software development}
+		VCC has been used successfully in at least one major commercial project, the verification of the Microsoft Hypervisor, the virtualization kernel of Hyper-V \cite{vcc2}.
+
+	\subsection{Existing Libraries}
+		Internet searches failed to find libraries verified with VCC. However, applications written with VCC can link against unverified libraries, effectively giving access to extensive library support.
+
+	\subsection{Multithreaded Application Support}
+	Yes
+
+	\subsection{Supported Languages}
+	C
+
+
+
+
+\section{Verifast}
+	\subsection{Home Page}%	
+	https://github.com/verifast/verifast
+
+	\subsection{Features}
+	Verifast verifies preconditions, and postconditions in the form of special comments in the source code.
+	It detects race conditions in multithreaded applications. It does not guarantee the absence of undefined behaviour, or verify the absence of stack overflows.	
+	
+	\subsection{Soundness}
+	No, see https://github.com/verifast/verifast/blob/master/soundness.md
+	\subsection{Supported Platforms}
+	Windows, Linux, OSX.
+
+	\subsection{License Information} 
+	MIT \cite {verifastlicense}.
+	\subsection{Evidence of successful use in commercial software development}
+	There is evidence of some use in industrial applications\cite{PhilippaertsPieter2014SvwV}.
+	\subsection{Existing Libraries}
+		Internet searches failed to find libraries verified by / written with VeriFast annotations. However, applications written with VeriFast can link against unverified libraries, effectively gaining access to extensive library support.
+	\subsection{Multithreaded Application Support}
+	Yes.
+	\subsection{Supported Languages}
+	C, Java
+
+
+
+
+
+
+
+
+
+\section{Viper}
+	\subsection{Home Page}%	
+https://www.pm.inf.ethz.ch/research/viper.html
+	\subsection{Features}
+		Viper consists of the Viper intermediate verification language, automatic verifiers, and example front end tools \cite{viper01}. It is more of a tool for creating other verification tools than a tool for verifying software. In practice, a developer would write code in Python and use the `Nagini' front end (based on Viper) to verify the code \cite{Eilers2018NaginiAS}. A corresponding front end for Rust exists, `Prusti' \cite{AstrauskasMuellerPoliSummers19}.
+	\subsection{Soundness}
+		Yes.
+	\subsection{Supported Platforms}
+		Windows, MacOS, Linux\cite{JuhaszUri2014VAVI}.
+	\subsection{License Information}
+	https://bitbucket.org/viperproject/carbon/src/default/LICENSE.txt
+		Mozilla Public License Version 2.0\cite{viperlicense}
+	\subsection{Evidence of successful use in commercial software development}
+		Internet searches failed to find evidence of Viper being used in commercial software development.
+	\subsection{Existing Libraries}
+		Internet searches failed to find libraries verified by Viper front ends. However, applications written with these front ends can link against unverified libraries, effectively gaining access to extensive library support.
+	\subsection{Multithreaded Application Support}
+	Yes.
+	\subsection{Supported Languages}
+	Python, Rust, Java, OpenCL, Chalice.
+
+
+
+
+
+\section{Whiley}
+	\subsection{Home Page}
+	http://whiley.org/
+	
+	\subsection{Features}
+	Whiley consists of the Whiley language, the Whiley Build System, the Whiley Compiler, the Whiley Intermediate Language, the Whiley-2-Java Compiler, the Whiley-2-C Compiler, and the Whiley Constraint Solver\cite{10.1007/978-3-319-02654-1_13}. 
+	
+	Whiley uses a variant of first-order logic called the Whiley Assertion Language for verification.
+	
+	In typical use, a developer will write source code in Whiley, build with the Whiley Build system, and execute the resulting Java class file on the JVM.  
+
+	\subsection{Soundness}
+	Internet searches did not find evidence to say that Whiley is unsound.
+	\subsection{Supported Platforms}
+	JVM.
+	\subsection{License Information}
+	BSD.
+	\subsection{Evidence of successful use in commercial software development}
+		Internet searches failed to find evidence of Whiley being used in commercial software development.
+	\subsection{Existing Libraries}
+		Internet searches failed to find libraries verified by Whiley. However, applications written with Whiley can link against unverified Java functions, effectively gaining access to extensive library support.
+	\subsection{Multithreaded Application Support}
+	No.
+	\subsection{Supported Languages}
+	Whiley. The Whiley-2-Java Compiler (WyJC) can convert verified Whiley programs into JVM class files. Whiley can import Java functions, and export Whiley functions for use in Java programs.
+
+
+
+
+
+
+\section{Why3}
+	\subsection{Home Page}
+	http://why3.lri.fr/
+	\subsection{Features}
+	The Why3 deductive program verification platform includes the WhyML language, a standard library of logical theories, and basic programming data structures\cite{why3homepage}. In typical use, a developer will write software in WhyML, and get correct-by-construction OCaml programs through an automated extraction mechanism. It verifies preconditions and postconditions.
+	
+	WhyML is also used by numerous popular verification tools (FramaC, SPARK2014, Krakatoa) as an intermediate language for verification of C, Java and Ada programs.
+	\subsection{Soundness}
+	Yes.
+	\subsection{Supported Platforms}
+	Windows, Linux, OSX. Why3 is distributed as a Debian package and as an OPAM package.
+	
+	\subsection{License Information}
+	GNU LGPL 2.1.
+	\subsection{Evidence of successful use in commercial software development}
+		Internet searches failed to find evidence of WhyML being used in commercial software development. However, there are countless cases of commercial software development using WhyML as an intermediate language, as it is used by FramaC, SPARK, and others.
+ 
+	\subsection{Existing Libraries}
+	Why3 comes with a standard library of logical theories and basic programming data structures.
+	\subsection{Multithreaded Application Support}
+	No.
+	\subsection{Supported Languages}
+	WhyML.
+
+\section{Conclusion of Review of Background and Associated Work}
+Based on the properties of the verification tools available, it has been decided to use SPARK 2014 for the implementation and verification of the OCPP server. It has wide use in industry, which gives me confidence that it is a practical choice. It verifies all of the properties that are important to me, and has good library support.
 
 
 
@@ -412,26 +731,16 @@ Why3& ? & ? & ?& ?& ?& ?& ?& ?\\
 
 \label{unproven} Internet searches failed to find evidence that this is supported.
 
-\chapter{Theory}
-
------------------------------------------------------------------\\
-A scientific paper is likely to be read by people who are not
-specialists in the same field as the author(s), but who nevertheless
-may need to use the results of the paper in their own fields.
-Similarly, the examiners of your thesis will probably include at least
-one academic who does not teach or conduct research in the subject
-area of your thesis.  In an early chapter of your thesis, therefore,
-you should quote any theoretical results which are necessary for the
-understanding of later chapters.  Examiners who are not specialists in
-your area will know whether you have given sufficient theoretical
-information.  They will also know whether you have insulted their
-status by presenting material which is familiar to every
-half-competent graduate in every field of ECE.\\
------------------------------------------------------------------
-
-\chapter{Methodology, procedure, design, etc.}
 
 
+
+
+
+
+
+
+
+\chapter{OCPP Server Implementation}
 -----------------------------------------------------------------\\
 This may be one chapter or several.  Again, titles should be more
 informative than the above.
@@ -444,6 +753,68 @@ the mathematical formatting features of \LaTeX\ to be used in
 diagrams; but the \texttt{picture} files, unlike PostScript files,
 usually require manual editing.\\
 -----------------------------------------------------------------\\
+
+
+\section{OCPP Overview}
+An OCPP server acts as a websocket server. There may be many individual charging stations, which act as websocket clients. The clients establish a websocket connection with the server, and once this is complete, JSON formatted packets are exchanged between the client and the server.
+\begin{center}
+
+\begin{figure}
+\includegraphics[width=\linewidth]{ocppOverview}
+\caption{OCPP overview.}
+\end{figure}
+
+\end{center}
+
+
+\section{Minimal OCPP implementation}
+The OCPP protocol supports many use cases which are not required for a basic implementation. The following table \cite{ocpp} shows a minimal subset of OCPP messages required to support basic functionality.\\
+
+\begin{table}[htp]
+\caption{Use cases for a basic implementation}
+\begin{tabular}{ |p{4cm}|p{3cm}|p{4cm}|p{2cm}| p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1cm}|p{1cm} }
+ \hline
+Functionality & 
+Use Case & 
+Messages &
+Complete
+\\
+ \hline
+Booting a charge station& B01 - B04& BootNotification & \cellcolor{green} \\
+ \hline
+Configuring a charge station & B05-B07 & SetVariables, GetVariables, GetReportBase & \cellcolor{green} \\
+ \hline
+Resetting a charge station& B11-B12 & Reset & \\
+ \hline
+Authorization Options& One of C01, C02, C04 & Authorize &\\
+ \hline
+Transaction Mechanism & E01 (one of S1-S6), E02-E03,
+E05, E06 (one of S1-S6), E07-
+E08, One of E09-E10, E11-E13 & TransactionEvent & \\
+ \hline
+Availability& G01, G03-G04& ChangeAvailability, StatusNotification &\\
+ \hline
+Monitoring Events& G05, N07 & NotifyEvent & \\
+ \hline
+Meter Values & J02 & TransactionEvent & \\
+ \hline
+Data Transfer& P01-P02 & DataTransfer & \\
+ \hline
+\end{tabular}
+\end{table}
+
+\subsection{Boot Notification}
+A high level view of a typical boot notification sequence is given in Figure \ref{fig:SD-B01}.
+	\begin{center}
+		\begin{figure}[H]
+			\label{fig:SD-B01}
+			\includegraphics[width=\linewidth]{SD-B01}
+			\caption{Cold Booting a Charging Station \cite{ocpp2b}.}
+		\end{figure}
+	\end{center}
+
+\subsubsection{Implementation}
+
 
 
 \chapter{Results and discussion \ldots}
@@ -461,6 +832,8 @@ also useful for program listings.
 \section{Summary and conclusions}
 
 \section{Possible future work}
+\subsection{Websocket Implmentation}
+
 
 \appendix
 
@@ -593,128 +966,7 @@ See https://github.com/DanielMcInnes/thesis.git .
 
 \cleardoublepage
 
-\begin{thebibliography}{99}
-\addcontentsline{toc}{chapter}{Annotated Bibliography}
-
-
-% IEA Global EV Outlook 2019
-\bibitem{ieaglobalevoutlook} International Energy Agency, ``Global EV Outlook 2019'', \textit{International Energy Agency}, May 2019. Available: \href{https://webstore.iea.org/global-ev-outlook-2019}{\color{blue}{\underline{https://webstore.iea.org/global-ev-outlook-2019}}}. [Accessed June 25, 2019]. \\
-2. \\
-3. \\
-4. \\
-5.  \\
-6. \\
-7. \\
-8. \\
-
-
-
-% https://www.openchargealliance.org/about-us/appraisal-ocpp/
-\bibitem{ocaappraisal} Open Charge Alliance, ``Appraisal OCPP'',  todo - undated. [online]. Available: \href{https://www.openchargealliance.org/about-us/appraisal-ocpp/}{\color{blue}{\underline{https://www.openchargealliance.org/about-us/appraisal-ocpp/}}}. [Accessed June 22, 2019]. \\
-3. \\
-4. \\
-5. \\
-6. \\
-7. \\
-8. \\
-
-% https://www.openchargealliance.org/protocols/ocpp-20/
-\bibitem{ocalwebsite} Open Charge Alliance, ``Open Charge Point Protocol 2.0'', todo - undated. [online]. Available: \href{https://www.openchargealliance.org/protocols/ocpp-20/}{\color{blue}{\underline{https://www.openchargealliance.org/protocols/ocpp-20/}}}. [Accessed June 22, 2019]. \\
-3. \\
-4. \\
-5. \\
-6. \\
-7. \\
-8. \\
-
-
-
-% https://github.com/verifast/verifast
-\bibitem{verifastwebsite} VeriFast, ``Research prototype tool for modular formal verification of C and Java programs'', todo - undated. [online]. Available: \href{https://github.com/verifast/verifast/}{\color{blue}{\underline{https://github.com/verifast/verifast/}}}. [Accessed June 22, 2019]. \\
-2. This is the website for the VeriFast verification tool.\\
-3. \\
-4. \\
-5. \\
-6. \\
-7. \\
-8. \\
-
-
-
-\bibitem{featherweightverifast} F. Vogels, B. Jacobs, and F. Piessens, ``Featherweight Verifast'', \emph{Logical Methods in Computer Science}, Vol. 11(3:19), pp. 1–57, 2015. [Online serial]. Available: \href{https://lmcs.episciences.org/1595}{\color{blue}{\underline{https://lmcs.episciences.org/1595}}}. [Accessed June 20, 2019]. \\
-2.In this article Vogels \textit{et al.} discuss VeriFast, a tool for modular verification of safety and correctness properties of single threaded and multithreaded C and Java programs. \\
-3. The authors present a formal definition and soundness proof of a core subset of the VeriFast program verification approach. \\
-4. The article provides a detailed description of what VeriFast does and how it works, then introduces a simplified version of Verifast, ``Featherweight Verifast'', as well as another variant called ``Mechanised Featherweight Verifast''. \\
-5. The article is useful to my project mainly for its description of what guarantees VeriFast provides. Surprisingly, these features are not obvious from the VeriFast website https://github.com/verifast/verifast or from internet searches. \\
-6. The main limitation of the article is that it focuses on a subset of VeriFast. \\
-7. The authors list future work to be done to create formal definitions and proofs for those features of VeriFast that are not included in Featherweight Verifast. \\
-8. This article will not form the basis of my research, however it will provide useful supplementary information for comparing different software verification tools. \\
-
-% Technical Report CW-520, Department of Computer Science, Katholieke Universiteit Leuven, Belgium, August 2008
-\bibitem{theverifastprogramverifier} B. Jacobs and F. Piessens, ``The Verifast Program Verifier'', Department of Computer Science, Katholieke Universiteit Leuven, Belgium, Tech. Report. CW-520, August 2008. Available: \href{https://people.cs.kuleuven.be/~bart.jacobs/verifast/verifast.pdf}{\color{blue}{\underline{https://people.cs.kuleuven.be/~bart.jacobs/verifast/verifast.pdf}}}. [Accessed June 20, 2019]. \\
-2. This report describes some aspects of an early version of the VeriFast Program Verifier.\\
-3. Based on the title of this paper, I had hoped it would help me understand the advantages of using VeriFast, however this was not the case.  This report is not particularly useful for my  project, as it describes the design of an early version of the tool, and does not explain the guarantees that using the tool provides.\\
-4. \\
-5.  \\
-6. \\
-7. \\
-8. \\
-
-% The Verifast Program Verifier: A Tutorial
-\bibitem{theverifastprogramverifiertutorial} B. Jacobs, J. Smans, and F. Piessens, ``The Verifast Program Verifier: A Tutorial'', Department of Computer Science, Katholieke Universiteit Leuven, Belgium, [online document], November 28, 2017. Available: \href{https://people.cs.kuleuven.be/~bart.jacobs/verifast/tutorial.pdf}{\color{blue}{\underline{https://people.cs.kuleuven.be/~bart.jacobs/verifast/tutorial.pdf}}}. [Accessed June 20, 2019]. \\
-2. This report gives useful examples of how to use the VeriFast Program Verifier to prove the absence of buffer overflows, data races and functional correctness as specified by preconditions and postconditions.\\
-3. \\v
-4. \\
-5.  \\
-6. \\
-7. \\
-8. \\
-
-% VCC - A practical Verification Methodology for Concurrent Programs
-\bibitem{practicalverificationmethodology} E. Cohen, M. Moskal, W. Schulte, and S. Tobies, ``A Practical Verification Methodology for Concurrent Programs'', Microsoft Research, [online document], February 12, 2009. Available: \href{https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/concurrency3.pdf}{\color{blue}{\underline{https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/concurrency3.pdf}}}. [Accessed June 22, 2019]. \\
-2. This document focusses on a methodology for verifying concurrent programs using VCC. It covers some theory behind the tool, but is not particularly useful for my thesis. It does not provide a list of the features the tool provides, or simple examples to demonstrate its use.\\
-3. \\
-4. \\
-5.  \\
-6. \\
-7. \\
-8. \\
-
-% Verifying C Programs: A VCC Tutorial
-\bibitem{vcctutorial} E. Cohen, M. Hillebrand, S. Tobies, M. Moskal, and W. Schulte, ``Verifying C Programs: A VCC Tutorial'', University of Freiburg, [online document], July 10, 2015. Available: \href{https://swt.informatik.uni-freiburg.de/teaching/SS2015/swtvl/Resources/literature/vcc-tutorial-col2.pdf}{\color{blue}{\underline{https://swt.informatik.uni-freiburg.de/teaching/SS2015/swtvl/Resources/literature/vcc-tutorial-col2.pdf}}}. [Accessed June 22, 2019]. \\
-2. This tutorial gives useful examples of how to use the VCC verification tool.\\
-3. \\
-4. \\
-5.  \\
-6. The tutorial indicates that is a ``working draft, version 0.2'', and I notice that it is not available on the Microsft website, rather it is available indrectly via the University of Freiburg. In spite of this, I found it well written, and it was easy to follow the examples and perform the proofs myself.\\
-7. \\
-8. \\
-
-% https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/
-\bibitem{vccwebsite} M. Moskal, ``VCC: A Verifier for Concurrent C'', microsoft.com, December 10, 2008. [online]. Available: \href{https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/}{\color{blue}{\underline{https://www.microsoft.com/en-us/research/project/vcc-a-verifier-for-concurrent-c/}}}. [Accessed June 22, 2019]. \\
-2. This is the website for the VCC verification tool.\\
-3. \\
-4. \\
-5. \\
-6. \\
-7. \\
-8. \\
-
-% http://www.openjml.org/
-\bibitem{openjmlwebsite} OpenJML, ``Does your program do what it is supposed to do?'', http://www.openjml.org, todo - undated. [online]. Available: \href{http://www.openjml.org/}{\color{blue}{\underline{http://www.openjml.org/}}}. [Accessed June 22, 2019]. \\
-2. This is the website for the OpenJML verification tool.\\
-3. \\
-4. \\
-5. \\
-6. \\
-7. \\
-8. \\
-
-
-\bibitem{lamport} L.~Lamport, \emph{\LaTeX: A Document Preparation
-System}, 2nd ed. (Addison-Wesley, 1994).
-\bibitem{LABEL2} REFERENCE 2
-\bibitem{ETC.} Etc.
-\end{thebibliography}
-
+\nocite{*}
+\bibliographystyle{IEEEannot}
+\bibliography{annot}
 \end{document}

@@ -68,7 +68,7 @@ function createArrayType(name, schema) {
 
    _buffer += ('package ocpp.' + schema.items.javaType + 'TypeArray is\n');
 
-   _buffer += ('type Index is range 1 .. 100;\n')
+   _buffer += ('type Index is range 1 .. 10;\n')
    _buffer += ('type array_' + schema.items.javaType + 'Type is array (Index) of ocpp.' + schema.items.javaType + 'Type.T;\n')
    _buffer += ('type T is record\n')
    _buffer += ('   content : array_' + schema.items.javaType + 'Type;\n')

@@ -22,7 +22,7 @@ procedure findquotedstring_packet is new findquotedstring(
       self.messageId := NonSparkTypes.messageid_t.To_Bounded_String("");
       self.action := NonSparkTypes.action_t.To_Bounded_String("");
       self.requestId := -1;
-      self.reportBase := ConfigurationInventory;
+      self.reportBase := ReportBaseEnumType.ConfigurationInventory;
 
    end Initialize;
 

@@ -1,6 +1,7 @@
 pragma SPARK_Mode (On);
 
 with ocpp;
+with ada.strings;
 with ada.strings.maps;
 
 package body ocpp is
@@ -24,9 +25,9 @@ package body ocpp is
       then
          NonSparkTypes.put_line("ocpp.checkValid: Error: invalid action"); 
          NonSparkTypes.put("request.action: "); 
-         NonSparkTypes.put(action_t.To_String(request.action));
+         NonSparkTypes.put_line(action_t.To_String(request.action));
          NonSparkTypes.put(" expectedAction: ");
-         NonSparkTypes.put(action_t.To_String(expectedAction));
+         NonSparkTypes.put_line(action_t.To_String(expectedAction));
          
          return;
       end if;      
@@ -704,6 +705,17 @@ package body ocpp is
       
    end findQuotedKeyQuotedValue;
    
+   procedure To_Bounded_String(Self: in ocpp.callresult;
+                               retval: out NonSparkTypes.packet.Bounded_String)
+   is
+      dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
+      strreportData: NonSparkTypes.packet.Bounded_String;
+   begin
+      retval := NonSparkTypes.packet.To_Bounded_String(""
+                                                      & "[3," & ASCII.LF
+                                                      & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
+                                                      & "]", Drop => Ada.Strings.Right);
+   end To_Bounded_String;
    
                         
 

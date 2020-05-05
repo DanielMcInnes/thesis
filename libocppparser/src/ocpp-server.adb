@@ -8,6 +8,7 @@ with NonSparkTypes; use NonSparkTypes.action_t;
 with ocpp.BootNotification;
 with ocpp.GetBaseReportRequest;
 with ocpp.GetBaseReportResponse;
+with ocpp.NotifyReportRequest;
 with ocpp.SetVariablesRequest;
 
 with ocpp.heartbeat;
@@ -100,6 +101,9 @@ is
       elsif (action = ocpp.GetBaseReportRequest.action)
       then
          handleGetBaseReportRequest(theServer, msg, index, valid, response, 2, messageId, action);
+      elsif (action = ocpp.NotifyReportRequest.action)
+      then
+         handleNotifyReportRequest(theServer, msg, index, valid, response, 2, messageId, action);
       else
          NonSparkTypes.put_line("ocpp-server: 103: ERROR: invalid action");
       end if;
@@ -295,6 +299,35 @@ is
       valid := false;
       
    end handleGetBaseReportRequest;
+   
+   procedure handleNotifyReportRequest(theServer: in out ocpp.server.Class;
+                                    msg: in NonSparkTypes.packet.Bounded_String;
+                                    index : in out Integer;
+                                    valid: out Boolean;
+                                    response: out NonSparkTypes.packet.Bounded_String;
+                                    messageTypeId : in Integer;
+                                    messageId : in NonSparkTypes.messageid_t.Bounded_String;
+                                    action : in NonSparkTypes.action_t.Bounded_String
+                                   )
+   is
+      notifyReportRequest : ocpp.NotifyReportRequest.T;
+      notifyReportResponse : ocpp.callresult;
+      dummyBounded : NonSparkTypes.packet.Bounded_String;
+   begin
+      notifyReportRequest.messageid := messageId;
+      notifyReportRequest.action := action;
+      ocpp.NotifyReportRequest.parse(msg, index, notifyReportRequest, valid);
+      
+      if (valid = false) then
+         NonSparkTypes.put_line("ocpp-server: 258: invalid NotifyReportRequest");
+         return;
+      end if;
+      
+      notifyReportResponse.messageid := notifyReportRequest.messageid;
+      
+      ocpp.To_Bounded_String(notifyReportResponse, response);
+      valid := true;      
+   end handleNotifyReportRequest;
    
    procedure toString(msg: out NonSparkTypes.packet.Bounded_String;
                       response: in ocpp.BootNotification.Response)
