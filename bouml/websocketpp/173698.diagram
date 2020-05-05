@@ -1,0 +1,16 @@
+format 222
+
+classcanvas 128002 class_ref 238850 // OCPP_Server
+  classdiagramsettings member_max_width 0 end
+  xyz 123 256 2000
+end
+classcanvas 128130 class_ref 238978 // Charging_Station
+  classdiagramsettings member_max_width 0 end
+  xyz 528 257 2000
+end
+relationcanvas 128258 relation_ref 206466 // <association>
+  from ref 128002 z 2001 stereotype "<<OCPP over websocket>>" xyz 322.5 288 3000 to ref 128130
+  no_role_a no_role_b
+  multiplicity_a_pos 495 299 3000 no_multiplicity_b
+end
+end
