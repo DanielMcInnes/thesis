@@ -18,6 +18,10 @@ package NonSparkTypes is
       package strattributeValue_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 2500);
    end SetVariableDataType;
 
+   package StatusNotificationRequest is
+      package strtimestamp_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50);
+   end StatusNotificationRequest;
+   
    package VariableType is
       package strname_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50);
       package strinstance_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50);

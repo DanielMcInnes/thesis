@@ -170,6 +170,23 @@ is
                    theServer => (msg, theServer)
                   );
 
+   procedure handleStatusNotificationRequest(theServer: in out ocpp.server.Class;
+                                    msg: in NonSparkTypes.packet.Bounded_String;
+                                    index : in out Integer;
+                                    valid: out Boolean;
+                                    response: out NonSparkTypes.packet.Bounded_String;
+                                    messageTypeId : in Integer;
+                                    messageId : in NonSparkTypes.messageid_t.Bounded_String;
+                                    action : in NonSparkTypes.action_t.Bounded_String
+                                   )
+     with
+       Depends => (
+                     index => (msg, index),
+                   valid => (msg, index),
+                     response => (msg, index, theServer, messageTypeId, messageId, action),
+                   theServer => (msg, theServer)
+                  );
+
    procedure toString(msg: out NonSparkTypes.packet.Bounded_String;
                       response: in ocpp.BootNotification.Response);
 

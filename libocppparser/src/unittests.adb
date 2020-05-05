@@ -14,6 +14,8 @@ with ocpp.GetVariableResultType;
 with ocpp.server;
 with ocpp.SetVariablesRequest;
 with ocpp.SetVariablesResponse;
+with ocpp.StatusNotificationRequest;
+with ocpp.StatusNotificationResponse;
 with ocpp.VariableType;
 
 with ocpp.A15118evcertificatestatusenumtype;
@@ -202,6 +204,23 @@ package body unittests is
                                                 & "   " & '"' & "status" & '"' & ": " & '"' & "Accepted" & '"' & ASCII.LF
                                                 & "}" & ASCII.LF
                                                 & "]");
+
+      statusnotificationrequest: ocpp.StatusNotificationRequest.T := 
+        (
+         messageTypeId => 2,
+         messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+         action => ocpp.StatusNotificationRequest.action,
+         timestamp => NonSparkTypes.StatusNotificationRequest.strtimestamp_t.To_Bounded_String("1234"),
+         connectorStatus => ocpp.ConnectorStatusEnumType.Available,
+         evseId => 1,
+         connectorId => 1         
+        );
+      statusnotificationresponse: ocpp.StatusNotificationResponse.T := 
+        (
+         unused => -1,
+         messageTypeId => 3,
+         messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202")
+        );
    begin
       ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);
       result := false;
@@ -333,7 +352,18 @@ package body unittests is
          return;
       end if;
       
-      result := true;
+--   procedure receivePacket(theServer: in out ocpp.server.Class;
+--                    msg: in NonSparkTypes.packet.Bounded_String;
+--                           response: out NonSparkTypes.packet.Bounded_String;
+--                          valid: out Boolean)
+
+      statusnotificationrequest.To_Bounded_String(packet);
+      NonSparkTypes.put_line(NonSparkTypes.packet.To_String(packet));
+      server.receivePacket(packet, response, result);
+      
+      statusnotificationresponse.To_Bounded_String(expectedresponse);
+      if (response /= expectedresponse) then result := false; end if;
+        
       
    end B01;     
    

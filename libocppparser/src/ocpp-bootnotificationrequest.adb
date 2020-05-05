@@ -43,6 +43,9 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.ParseMessageId(msg, self.messageid, msgindex, valid);
       if (valid = false) then NonSparkTypes.put_line("416 Invalid BootNotificationRequestreason messageid"); return; end if;
 
+      ocpp.ParseAction(msg, msgindex, self.action, valid);
+      if (valid = false) then NonSparkTypes.put_line("404 Invalid action"); return; end if; 
+
       checkValid(msg, msgindex, self, action, valid);
       if (valid = false) then NonSparkTypes.put_line("313 Invalid BootNotificationRequestreason"); return; end if;
 

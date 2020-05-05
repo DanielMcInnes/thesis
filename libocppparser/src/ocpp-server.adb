@@ -9,6 +9,8 @@ with ocpp.BootNotification;
 with ocpp.GetBaseReportRequest;
 with ocpp.GetBaseReportResponse;
 with ocpp.SetVariablesRequest;
+with ocpp.StatusNotificationRequest;
+with ocpp.StatusNotificationResponse;
 
 with ocpp.heartbeat;
 
@@ -100,6 +102,9 @@ is
       elsif (action = ocpp.GetBaseReportRequest.action)
       then
          handleGetBaseReportRequest(theServer, msg, index, valid, response, 2, messageId, action);
+      elsif (action = ocpp.StatusNotificationRequest.action)
+      then
+         handleStatusNotificationRequest(theServer, msg, index, valid, response, 2, messageId, action);
       else
          NonSparkTypes.put_line("ocpp-server: 103: ERROR: invalid action");
       end if;
@@ -296,6 +301,36 @@ is
       
    end handleGetBaseReportRequest;
    
+   procedure handleStatusNotificationRequest(theServer: in out ocpp.server.Class;
+                                    msg: in NonSparkTypes.packet.Bounded_String;
+                                    index : in out Integer;
+                                    valid: out Boolean;
+                                    response: out NonSparkTypes.packet.Bounded_String;
+                                    messageTypeId : in Integer;
+                                    messageId : in NonSparkTypes.messageid_t.Bounded_String;
+                                    action : in NonSparkTypes.action_t.Bounded_String
+                                   )
+   is
+      statusNotificationRequest : ocpp.StatusNotificationRequest.T;
+      statusNotificationResponse : ocpp.StatusNotificationResponse.T;
+      dummyBounded : NonSparkTypes.packet.Bounded_String;
+   begin
+      ocpp.StatusNotificationRequest.parse(msg, index, statusNotificationRequest, valid);
+      
+      if (valid = false) then
+         NonSparkTypes.put_line("ocpp-server: 258: invalid StatusNotificationRequest");
+         return;
+      end if;
+      
+      statusNotificationResponse.messagetypeid := 3;
+      statusNotificationResponse.messageid := statusNotificationRequest.messageid;
+      
+      statusNotificationResponse.To_Bounded_String(response);
+      valid := true;
+      
+   end handleStatusNotificationRequest;
+   
+
    procedure toString(msg: out NonSparkTypes.packet.Bounded_String;
                       response: in ocpp.BootNotification.Response)
    is
