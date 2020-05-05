@@ -1097,7 +1097,6 @@ package body unittests is
                                                              );
       server: ocpp.server.Class;
       sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("01234567890123456789");
-      valid: Boolean;
       bnr: ocpp.BootNotification.Request := (
                                              messagetypeid => 2,
                                              messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
@@ -1254,8 +1253,6 @@ package body unittests is
       
       --ocpp.NotifyReportRequest.To_Bounded_String(nrr, packet);
       --ocpp.server.receivePacket(server, packet, dummystring, valid);
-      
-      result := valid;
    end B07;
    
       

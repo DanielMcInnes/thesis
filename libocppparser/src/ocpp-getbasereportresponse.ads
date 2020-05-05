@@ -6,9 +6,8 @@ with ocpp; use ocpp;
 with ocpp.GenericDeviceModelStatusEnumType; use ocpp.GenericDeviceModelStatusEnumType;
 
 package ocpp.GetBaseReportResponse is
-   action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("GetBaseReport"); 
    type T is new callresult with record
-      status : GenericDeviceModelStatusEnumType.T := GenericDeviceModelStatusEnumType.Accepted;
+      status : GenericDeviceModelStatusEnumType.T;
    end record;
    procedure Initialize(self: out ocpp.GetBaseReportResponse.T);
 
