@@ -12,12 +12,12 @@ diagrams
   sequencediagram_ref 154114 // sd1 boot not
     1528 843 200 A4 0 0
   active  classdiagram_ref 160642 // cd3 SetVariables
-    1598 843 70 A0 156 351
+    1598 843 70 A0 101 166
   classdiagram_ref 167170 // cd4 getbasereport
     1598 843 90 A0 0 0
 end
 show_stereotypes
-selected attribute_ref 178050 // attributeValue
+selected attribute_ref 215170 // constant
 open
   class_ref 150018 // connection
   class_ref 150146 // transport::asio::connection
@@ -31,9 +31,9 @@ open
   class_ref 197378 // ocpp.BootNotification.Request
   class_ref 197506 // ChargingStation_t
   class_ref 197762 // SetVariableDataType
-  class_ref 197890 // ComponentType
+  class_ref 197890 // ComponentType.T
   class_ref 198018 // EVSEType
-  class_ref 198146 // VariableType
+  class_ref 198146 // VariableType.T
   class_ref 204674 // ocpp.callResponse
   class_ref 211586 // GetVariableDataType
   class_ref 218242 // GetVariableResultType
@@ -43,6 +43,9 @@ open
   class_ref 225154 // ocpp.ResetResponse
   class_ref 225282 // TransactionEventRequest
   class_ref 225410 // StatusNotificationRequest
+  class_ref 231938 // ocpp.NotifyReportRequest
+  class_ref 232194 // ocpp.VariableAttributeType
+  class_ref 232322 // VariableCharacteristicsType.T
   classview_ref 128770 // asio
   deploymentview_ref 128642 // asio
   class_ref 156930 // bootnotification
