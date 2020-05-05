@@ -4,7 +4,7 @@ with NonSparkTypes;
 with ocpp.SetVariableResultType;
 
 package ocpp.SetVariableResultTypeArray is
-type Index is range 1 .. 100;
+type Index is range 1 .. 10;
 type array_SetVariableResultType is array (Index) of ocpp.SetVariableResultType.T;
 type T is record
    content : array_SetVariableResultType;

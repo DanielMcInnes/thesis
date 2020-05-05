@@ -20,7 +20,7 @@ procedure findquotedstring_packet is new findquotedstring(
       NonSparkTypes.put_line("Initialize()");
       self.messageTypeId:= -1;
       self.messageId := NonSparkTypes.messageid_t.To_Bounded_String("");
-      self.status := Accepted;
+      self.status := GenericDeviceModelStatusEnumType.Accepted;
 
    end Initialize;
 
