@@ -55,44 +55,36 @@ package body ocpp.BootNotification is
                                                             );
 
    procedure findquotedstring_serialNumber is new findquotedstring(
-                                                            Max => NonSparkTypes.ChargingStationType.serialNumber.Max_Length, 
-                                                            string_t => NonSparkTypes.ChargingStationType.serialNumber.Bounded_String,
-                                                            length => NonSparkTypes.ChargingStationType.serialNumber.Length,
-                                                            To_String => NonSparkTypes.ChargingStationType.serialNumber.to_string,
-                                                            To_Bounded_String =>  NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String
+                                                            Max => NonSparkTypes.ChargingStationType.strserialNumber_t.Max_Length, 
+                                                            string_t => NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String,
+                                                            length => NonSparkTypes.ChargingStationType.strserialNumber_t.Length,
+                                                            To_String => NonSparkTypes.ChargingStationType.strserialNumber_t.to_string,
+                                                            To_Bounded_String =>  NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String
                                                            );
 
    procedure findquotedstring_model is new findquotedstring(
-                                                            Max => NonSparkTypes.ChargingStationType.model.Max_Length, 
-                                                            string_t => NonSparkTypes.ChargingStationType.Model.Bounded_String,
-                                                            length => NonSparkTypes.ChargingStationType.Model.Length,
-                                                            To_String => NonSparkTypes.ChargingStationType.Model.to_string,
-                                                            To_Bounded_String =>  NonSparkTypes.ChargingStationType.Model.To_Bounded_String
+                                                            Max => NonSparkTypes.ChargingStationType.strmodel_t.Max_Length, 
+                                                            string_t => NonSparkTypes.ChargingStationType.strmodel_t.Bounded_String,
+                                                            length => NonSparkTypes.ChargingStationType.strmodel_t.Length,
+                                                            To_String => NonSparkTypes.ChargingStationType.strmodel_t.to_string,
+                                                            To_Bounded_String =>  NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String
                                                            );
 
    procedure findquotedstring_vendor is new findquotedstring(
-                                                             Max => NonSparkTypes.ChargingStationType.vendorName.Max_Length, 
-                                                             string_t => NonSparkTypes.ChargingStationType.vendorName.Bounded_String,
-                                                             length => NonSparkTypes.ChargingStationType.vendorName.Length,
-                                                             To_String => NonSparkTypes.ChargingStationType.vendorName.to_string,
-                                                             To_Bounded_String =>  NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String
+                                                             Max => NonSparkTypes.ChargingStationType.strvendorName_t.Max_Length, 
+                                                             string_t => NonSparkTypes.ChargingStationType.strvendorName_t.Bounded_String,
+                                                             length => NonSparkTypes.ChargingStationType.strvendorName_t.Length,
+                                                             To_String => NonSparkTypes.ChargingStationType.strvendorName_t.to_string,
+                                                             To_Bounded_String =>  NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String
                                                             );
 
    
    procedure findquotedstring_firmwareVersion is new findquotedstring(
-                                                            Max => NonSparkTypes.ChargingStationType.firmwareVersion.Max_Length, 
-                                                            string_t => NonSparkTypes.ChargingStationType.firmwareVersion.Bounded_String,
-                                                            length => NonSparkTypes.ChargingStationType.firmwareVersion.Length,
-                                                            To_String => NonSparkTypes.ChargingStationType.firmwareVersion.to_string,
-                                                            To_Bounded_String =>  NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String
-                                                           );
-
-   procedure findquotedstring_attributeType is new findquotedstring(
-                                                            Max => NonSparkTypes.ChargingStationType.firmwareVersion.Max_Length, 
-                                                            string_t => NonSparkTypes.ChargingStationType.firmwareVersion.Bounded_String,
-                                                            length => NonSparkTypes.ChargingStationType.firmwareVersion.Length,
-                                                            To_String => NonSparkTypes.ChargingStationType.firmwareVersion.to_string,
-                                                            To_Bounded_String =>  NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String
+                                                            Max => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.Max_Length, 
+                                                            string_t => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.Bounded_String,
+                                                            length => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.Length,
+                                                            To_String => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.to_string,
+                                                            To_Bounded_String =>  NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String
                                                            );
 
    procedure validreason(thereason: in NonSparkTypes.BootReasonEnumType.Bounded_String;
@@ -231,7 +223,7 @@ package body ocpp.BootNotification is
             return;
          end if;
          
-         NonSparkTypes.put("parse: serialNumber: "); NonSparkTypes.put_Line(NonSparkTypes.ChargingStationType.serialNumber.To_String(request.chargingStation.serialNumber));
+         NonSparkTypes.put("parse: serialNumber: "); NonSparkTypes.put_Line(NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(request.chargingStation.serialNumber));
          msgindex := indexStartOfOptionalParameters;
       end if;
       
@@ -243,7 +235,7 @@ package body ocpp.BootNotification is
       
       findquotedstring_model(msg, msgindex, retval, request.chargingStation.model);
       if (retval = false) then return; end if;
-      NonSparkTypes.put("parse: model: "); NonSparkTypes.put_Line(NonSparkTypes.ChargingStationType.model.To_String(request.chargingStation.model));
+      NonSparkTypes.put("parse: model: "); NonSparkTypes.put_Line(NonSparkTypes.ChargingStationType.strmodel_t.To_String(request.chargingStation.model));
       
       ocpp.move_index_past_token(msg, ',', msgindex, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
       
@@ -255,7 +247,7 @@ package body ocpp.BootNotification is
       
       findquotedstring_vendor(msg, msgindex, retval, request.chargingStation.vendorName);
       if (retval = false) then return; end if;
-      NonSparkTypes.put("parse: vendor: "); NonSparkTypes.put_Line(NonSparkTypes.ChargingStationType.vendorName.To_String(request.chargingStation.vendorName)); 
+      NonSparkTypes.put("parse: vendor: "); NonSparkTypes.put_Line(NonSparkTypes.ChargingStationType.strvendorName_t.To_String(request.chargingStation.vendorName)); 
       
 
       
@@ -271,7 +263,7 @@ package body ocpp.BootNotification is
             NonSparkTypes.put_line("ERROR: 'firmwareVersion' not supplied");
             return;
          end if;
-         NonSparkTypes.put("parse: firmwareVersion: "); NonSparkTypes.put_Line(NonSparkTypes.ChargingStationType.firmwareVersion.To_String(request.chargingStation.firmwareVersion));
+         NonSparkTypes.put("parse: firmwareVersion: "); NonSparkTypes.put_Line(NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_String(request.chargingStation.firmwareVersion));
          msgindex := indexStartOfOptionalParameters;
       end if;
 
@@ -308,13 +300,13 @@ package body ocpp.BootNotification is
                                                         & "{" & ASCII.LF
                                                         & "   " & '"' & "reason" & '"' & ": " & '"' & NonSparkTypes.BootReasonEnumType.To_String(Self.reason) & '"' & "," & ASCII.LF -- "PowerUp"
                                                         & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
-                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & NonSparkTypes.ChargingStationType.serialNumber.To_String(Self.chargingStation.serialNumber) & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "model"  & '"' & ":" & '"' & NonSparkTypes.ChargingStationType.model.To_String(Self.chargingStation.model) & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "vendorName" & '"' & ": " & '"' & NonSparkTypes.ChargingStationType.vendorName.To_String(Self.chargingStation.vendorName) & '"' & ASCII.LF
-                                                        & "      " & '"' & "firmwareVersion"  & '"' & ":" & '"' & NonSparkTypes.ChargingStationType.firmwareVersion.To_String(Self.chargingStation.firmwareVersion) & '"' & "," & ASCII.LF
+                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(Self.chargingStation.serialNumber) & '"' & "," & ASCII.LF
+                                                        & "      " & '"' & "model"  & '"' & ":" & '"' & NonSparkTypes.ChargingStationType.strmodel_t.To_String(Self.chargingStation.model) & '"' & "," & ASCII.LF
+                                                        & "      " & '"' & "vendorName" & '"' & ": " & '"' & NonSparkTypes.ChargingStationType.strvendorName_t.To_String(Self.chargingStation.vendorName) & '"' & ASCII.LF
+                                                        & "      " & '"' & "firmwareVersion"  & '"' & ":" & '"' & NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_String(Self.chargingStation.firmwareVersion) & '"' & "," & ASCII.LF
                                                         & "      " & '"' & "modem"  & '"' & ":" & "{" & ASCII.LF
-                                                        & "         " & '"' & "iccid" & '"' & ": " & '"' & NonSparkTypes.ModemType.iccid_t.To_String(Self.chargingStation.modem.iccid) & '"' & ASCII.LF
-                                                        & "         " & '"' & "imsi" & '"' & ": " & '"' & NonSparkTypes.ModemType.imsi_t.To_String(Self.chargingStation.modem.imsi) & '"' & ASCII.LF
+                                                        & "         " & '"' & "iccid" & '"' & ": " & '"' & NonSparkTypes.ModemType.striccid_t.To_String(Self.chargingStation.modem.iccid) & '"' & ASCII.LF
+                                                        & "         " & '"' & "imsi" & '"' & ": " & '"' & NonSparkTypes.ModemType.strimsi_t.To_String(Self.chargingStation.modem.imsi) & '"' & ASCII.LF
                                                         & "         }" & ASCII.LF
                                                         & "      }" & ASCII.LF
                                                         & "   }" & ASCII.LF

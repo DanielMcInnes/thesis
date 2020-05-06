@@ -1,5 +1,6 @@
 with Ada.Containers; use Ada.Containers;
 with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Bounded; use Ada.Strings.Bounded;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Maps.Constants; use Ada.Strings.Maps.Constants;
 
@@ -16,20 +17,20 @@ package body NonSparkTypes is
       ada.Text_IO.put_line(msg);
    end put_line;
 
-   procedure put(msg : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String)
+   procedure put(msg : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String)
    is
    begin
-      ada.Text_IO.put(NonSparkTypes.ChargingStationType.serialNumber.To_String(msg));
+      ada.Text_IO.put(NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(msg));
    end;
 
-   procedure put_line(msg : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String)
+   procedure put_line(msg : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String)
    is
    begin
-      ada.Text_IO.put_line(NonSparkTypes.ChargingStationType.serialNumber.To_String(msg));
+      ada.Text_IO.put_line(NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(msg));
    end;
 
    procedure contains(theList : in out vecChargers_t;
-                      theValue: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
+                      theValue: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
                       retval: out Boolean)
    is
    begin
@@ -40,7 +41,7 @@ package body NonSparkTypes is
 
    procedure append(theList : in out vecChargers_t;
                     retval : out Boolean;
-                    theValue: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String
+                    theValue: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String
                    )
    is
 

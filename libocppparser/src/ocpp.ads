@@ -50,16 +50,16 @@ package ocpp is
                );
 
    type ModemType_t is tagged record
-      iccid: ModemType.iccid_t.Bounded_String;
-      imsi: ModemType.imsi_t.Bounded_String;
+      iccid: ModemType.striccid_t.Bounded_String;
+      imsi: ModemType.strimsi_t.Bounded_String;
    end record;   
    procedure Initialize(Self : out ModemType_t);
    
    type ChargingStation_t is tagged record
-      serialNumber : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("");
-      model:  NonSparkTypes.ChargingStationType.model.Bounded_String := NonSparkTypes.ChargingStationType.model.To_Bounded_String(""); -- eg. SingleSocketCharger
-      vendorName: NonSparkTypes.ChargingStationType.vendorName.Bounded_String := NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String(""); -- eg. VendorX
-      firmwareVersion: NonSparkTypes.ChargingStationType.firmwareVersion.Bounded_String := NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String("");
+      serialNumber : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("");
+      model:  NonSparkTypes.ChargingStationType.strmodel_t.Bounded_String := NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String(""); -- eg. SingleSocketCharger
+      vendorName: NonSparkTypes.ChargingStationType.strvendorName_t.Bounded_String := NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String(""); -- eg. VendorX
+      firmwareVersion: NonSparkTypes.ChargingStationType.strfirmwareVersion_t.Bounded_String := NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("");
       modem: ModemType_t;
    end record;
    

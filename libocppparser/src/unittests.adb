@@ -176,9 +176,9 @@ package body unittests is
    procedure B01(result: out Boolean)
    is
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String ("00000000000000000001");
-      sn2 : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("00000000000000000002");
-      sn3 : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("01234567890123456789");
+      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String ("00000000000000000001");
+      sn2 : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("00000000000000000002");
+      sn3 : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("01234567890123456789");
       valid: Boolean;
 
       packet: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String( ""
@@ -372,7 +372,7 @@ package body unittests is
    procedure B02(result: out Boolean)
    is
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("B030001");
+      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("B030001");
       valid: Boolean;
       hbr: ocpp.heartbeat.Request;
       bnr: ocpp.BootNotification.Request := (
@@ -382,12 +382,12 @@ package body unittests is
                                              reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
                                              chargingStation => (
                                                                  serialNumber => sn,
-                                                                 model => NonSparkTypes.ChargingStationType.model.To_Bounded_String("SingleSocketCharger"),
-                                                                 vendorName => NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String("VendorX"),
-                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String("01.23456789"),
+                                                                 model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                 vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
                                                                  modem => (
-                                                                           iccid => ModemType.iccid_t.To_Bounded_String("01234567890123456789"),
-                                                                           imsi => ModemType.imsi_t.To_Bounded_String("01234567890123456789")
+                                                                           iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                           imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
                                                                           )
                                                                 )                                                 
                                             );
@@ -468,7 +468,7 @@ package body unittests is
    procedure B03(result: out Boolean)
    is
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("B030001");
+      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("B030001");
       valid: Boolean;
 
       packet: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String( ""
@@ -645,7 +645,7 @@ package body unittests is
    procedure B04(result: out Boolean)
    is
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("B030001");
+      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("B030001");
       valid: Boolean;
       hbr: ocpp.heartbeat.Request;
       bnr: ocpp.BootNotification.Request := (
@@ -655,12 +655,12 @@ package body unittests is
                                              reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
                                              chargingStation => (
                                                                  serialNumber => sn,
-                                                                 model => NonSparkTypes.ChargingStationType.model.To_Bounded_String("SingleSocketCharger"),
-                                                                 vendorName => NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String("VendorX"),
-                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String("01.23456789"),
+                                                                 model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                 vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
                                                                  modem => (
-                                                                           iccid => ModemType.iccid_t.To_Bounded_String("01234567890123456789"),
-                                                                           imsi => ModemType.imsi_t.To_Bounded_String("01234567890123456789")
+                                                                           iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                           imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
                                                                           )
                                                                 )                                                 
                                             );
@@ -731,7 +731,7 @@ package body unittests is
       --use ocpp.SetVariablesRequest.DataType;
 
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("01234567890123456789");
+      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("01234567890123456789");
       valid: Boolean;
       bnr: ocpp.BootNotification.Request := (
                                              messagetypeid => 2,
@@ -740,12 +740,12 @@ package body unittests is
                                              reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
                                              chargingStation => (
                                                                  serialNumber => sn,
-                                                                 model => NonSparkTypes.ChargingStationType.model.To_Bounded_String("SingleSocketCharger"),
-                                                                 vendorName => NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String("VendorX"),
-                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String("01.23456789"),
+                                                                 model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                 vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
                                                                  modem => (
-                                                                           iccid => ModemType.iccid_t.To_Bounded_String("01234567890123456789"),
-                                                                           imsi => ModemType.imsi_t.To_Bounded_String("01234567890123456789")
+                                                                           iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                           imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
                                                                           )
                                                                 )                                                 
                                             );
@@ -910,7 +910,7 @@ package body unittests is
    is
       use ocpp.GetVariablesResponse;
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("01234567890123456789");
+      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("01234567890123456789");
       valid: Boolean;
       dummystring: NonSparkTypes.packet.Bounded_String;
       bnr: ocpp.BootNotification.Request := (
@@ -920,12 +920,12 @@ package body unittests is
                                              reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
                                              chargingStation => (
                                                                  serialNumber => sn,
-                                                                 model => NonSparkTypes.ChargingStationType.model.To_Bounded_String("SingleSocketCharger"),
-                                                                 vendorName => NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String("VendorX"),
-                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String("01.23456789"),
+                                                                 model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                 vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
                                                                  modem => (
-                                                                           iccid => ModemType.iccid_t.To_Bounded_String("01234567890123456789"),
-                                                                           imsi => ModemType.imsi_t.To_Bounded_String("01234567890123456789")
+                                                                           iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                           imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
                                                                           )
                                                                 )                                                 
                                             );
@@ -1124,7 +1124,7 @@ package body unittests is
                                                               status => GenericDeviceModelStatusEnumType.Accepted
                                                              );
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.serialNumber.Bounded_String := NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String("01234567890123456789");
+      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("01234567890123456789");
       valid: Boolean;
       bnr: ocpp.BootNotification.Request := (
                                              messagetypeid => 2,
@@ -1133,12 +1133,12 @@ package body unittests is
                                              reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
                                              chargingStation => (
                                                                  serialNumber => sn,
-                                                                 model => NonSparkTypes.ChargingStationType.model.To_Bounded_String("SingleSocketCharger"),
-                                                                 vendorName => NonSparkTypes.ChargingStationType.vendorName.To_Bounded_String("VendorX"),
-                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.firmwareVersion.To_Bounded_String("01.23456789"),
+                                                                 model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                 vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
                                                                  modem => (
-                                                                           iccid => ModemType.iccid_t.To_Bounded_String("01234567890123456789"),
-                                                                           imsi => ModemType.imsi_t.To_Bounded_String("01234567890123456789")
+                                                                           iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                           imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
                                                                           )
                                                                 )                                                 
                                             );

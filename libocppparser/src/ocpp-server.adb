@@ -5,7 +5,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with NonSparkTypes; use NonSparkTypes.action_t;
 
 
-with ocpp.BootNotification;
+with ocpp.BootNotificationRequest;
 with ocpp.GetBaseReportRequest;
 with ocpp.GetBaseReportResponse;
 with ocpp.SetVariablesRequest;
@@ -23,14 +23,14 @@ is
       self.enrolledChargers.Reserve_Capacity(1);
    end Initialize;
    procedure enrolChargingStation(theList: in out NonSparkTypes.vecChargers_t;
-                                  serialNumber: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
+                                  serialNumber: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
                                   retval: out Boolean)
    is
    begin
       NonSparkTypes.contains(theList, serialNumber, retval);      
       if (retval) then
          --if (theList.Contains(serialNumber)) then
-         NonSparkTypes.put("ocpp.server.addChargingStation: already contains charger"); NonSparkTypes.put_line(NonSparkTypes.ChargingStationType.serialNumber.To_String(serialNumber));
+         NonSparkTypes.put("ocpp.server.addChargingStation: already contains charger"); NonSparkTypes.put_line(NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(serialNumber));
          retval := true;
          return;
       end if;
@@ -39,7 +39,7 @@ is
    end enrolChargingStation;
    
    procedure isEnrolled(theList: in out NonSparkTypes.vecChargers_t;
-                        serialNumber: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
+                        serialNumber: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
                         retval: out Boolean)
    is
    begin

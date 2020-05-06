@@ -28,7 +28,7 @@ is
    procedure Initialize(self: out T);
 
    procedure enrolChargingStation(theList: in out NonSparkTypes.vecChargers_t;
-                                  serialNumber: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
+                                  serialNumber: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
                                   retval: out Boolean)
      with
        Depends => (
@@ -37,7 +37,7 @@ is
                   );
    
    procedure isEnrolled(theList: in out NonSparkTypes.vecChargers_t;
-                        serialNumber: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
+                        serialNumber: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
                         retval: out Boolean)
      with
        Depends => (
