@@ -16,6 +16,12 @@ with ocpp.heartbeat;
 
 package body ocpp.server 
 is
+   procedure Initialize(self: out T)
+   is
+   begin
+      NonSparkTypes.put_line("ocpp.server.initialize");
+      self.enrolledChargers.Reserve_Capacity(1);
+   end Initialize;
    procedure enrolChargingStation(theList: in out NonSparkTypes.vecChargers_t;
                                   serialNumber: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String;
                                   retval: out Boolean)
@@ -29,9 +35,7 @@ is
          return;
       end if;
 
-      NonSparkTypes.append(theList, serialNumber);
-      
-      retval := true;
+      NonSparkTypes.append(theList, retval, serialNumber);
    end enrolChargingStation;
    
    procedure isEnrolled(theList: in out NonSparkTypes.vecChargers_t;
@@ -43,7 +47,7 @@ is
       NonSparkTypes.put("ocpp.server.isEnrolled: "); NonSparkTypes.put(serialNumber); NonSparkTypes.put(retval'Image); --NonSparkTypes.put_line(enrolledChargers.Length'Image);
    end isEnrolled;
    
-   procedure sendRequest(theServer: in out ocpp.server.Class;
+   procedure sendRequest(theServer: in out ocpp.server.T;
                             msg: in call'Class)
    is
    begin
@@ -51,7 +55,7 @@ is
       theServer.call := msg.action;
    end sendRequest;
    
-   procedure receivePacket(theServer: in out ocpp.server.Class;
+   procedure receivePacket(theServer: in out ocpp.server.T;
                     msg: in NonSparkTypes.packet.Bounded_String;
                            response: out NonSparkTypes.packet.Bounded_String;
                           valid: out Boolean)
@@ -64,7 +68,8 @@ is
       ocpp.ParseMessageType(msg, messageTypeId, index, valid);
       if (messageTypeId = 2) 
       then 
-         handleRequest(theServer, msg, response, valid);
+         theServer.handleRequest(msg, response, valid);
+         --handleRequest(theServer, msg, response, valid);
       elsif (messageTypeId = 3)
       then
          handleResponse(theServer, msg, valid);
@@ -72,7 +77,7 @@ is
       
    end receivePacket;
    
-   procedure handleRequest(theServer: in out ocpp.server.Class;
+   procedure handleRequest(theServer: in out ocpp.server.T;
                     msg: in NonSparkTypes.packet.Bounded_String;
                            response: out NonSparkTypes.packet.Bounded_String;
                           valid: out Boolean)
@@ -95,7 +100,7 @@ is
 
       if (action = ocpp.BootNotification.action)
       then
-         handleBootNotification(theServer, msg, index, valid, response, 2, messageId, action);
+         theServer.handleBootNotification(msg, index, valid, response, 2, messageId, action);
       elsif (action = ocpp.heartbeat.action)
       then
          handleHeartbeat(theServer, msg, index, valid, response, 2, messageId, action);
@@ -111,7 +116,7 @@ is
       
    end handleRequest;
    
-   procedure handleResponse(theServer: in out ocpp.server.Class;
+   procedure handleResponse(theServer: in out ocpp.server.T;
                     msg: in NonSparkTypes.packet.Bounded_String;
                           valid: out Boolean)
    is
@@ -143,7 +148,7 @@ is
       end if;
    end handleResponse;
    
-   procedure handleSetVariablesResponse(theServer: in out ocpp.server.Class;
+   procedure handleSetVariablesResponse(theServer: in out ocpp.server.T;
                                         msg: in NonSparkTypes.packet.Bounded_String;
                                         index : in out Integer;
                                         valid: out Boolean;
@@ -161,7 +166,7 @@ is
       end if;
    end handleSetVariablesResponse;
 
-   procedure handleGetBaseReportResponse(theServer: in out ocpp.server.Class;
+   procedure handleGetBaseReportResponse(theServer: in out ocpp.server.T;
                                         msg: in NonSparkTypes.packet.Bounded_String;
                                         index : in out Integer;
                                         valid: out Boolean;
@@ -181,7 +186,7 @@ is
       end if;
    end handleGetBaseReportResponse;
 
-   procedure handleGetVariablesResponse(theServer: in out ocpp.server.Class;
+   procedure handleGetVariablesResponse(theServer: in out ocpp.server.T;
                                         msg: in NonSparkTypes.packet.Bounded_String;
                                         index : in out Integer;
                                         valid: out Boolean;
@@ -203,7 +208,7 @@ is
    end handleGetVariablesResponse;
 
 
-   procedure handleBootNotification(theServer: in out ocpp.server.Class;
+   procedure handleBootNotification(theServer: in out ocpp.server.T;
                                     msg: in NonSparkTypes.packet.Bounded_String;
                                     index : in out Integer;
                                     valid: out Boolean;
@@ -244,7 +249,7 @@ is
       
    end handleBootNotification;
    
-   procedure handleHeartbeat(theServer: in out ocpp.server.Class;
+   procedure handleHeartbeat(theServer: in out ocpp.server.T;
                                     msg: in NonSparkTypes.packet.Bounded_String;
                                     index : in out Integer;
                                     valid: out Boolean;
@@ -272,7 +277,7 @@ is
       NonSparkTypes.put("ocpp-server: 137: response:"); NonSparkTypes.put_line(NonSparkTypes.packet.To_String( response));
    end handleHeartbeat;
    
-   procedure handleGetBaseReportRequest(theServer: in out ocpp.server.Class;
+   procedure handleGetBaseReportRequest(theServer: in out ocpp.server.T;
                                     msg: in NonSparkTypes.packet.Bounded_String;
                                     index : in out Integer;
                                     valid: out Boolean;
@@ -301,7 +306,7 @@ is
       
    end handleGetBaseReportRequest;
    
-   procedure handleStatusNotificationRequest(theServer: in out ocpp.server.Class;
+   procedure handleStatusNotificationRequest(theServer: in out ocpp.server.T;
                                     msg: in NonSparkTypes.packet.Bounded_String;
                                     index : in out Integer;
                                     valid: out Boolean;

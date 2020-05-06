@@ -107,6 +107,7 @@ package NonSparkTypes is
                       retval: out Boolean);
    
    procedure append(theList : in out vecChargers_t;
+                    retval : out Boolean;
                     theValue: in NonSparkTypes.ChargingStationType.serialNumber.Bounded_String
                    );   
    

@@ -68,6 +68,7 @@ if (process.argv.length <= 2) {
 }
 
 parseJsonFile('./BootNotificationRequest.json')
+parseJsonFile('./BootNotificationResponse.json')
 parseJsonFile('./GetBaseReportRequest.json')
 parseJsonFile('./GetBaseReportResponse.json')
 parseJsonFile('./GetVariablesRequest.json')
