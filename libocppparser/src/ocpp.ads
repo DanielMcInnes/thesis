@@ -128,7 +128,7 @@ package ocpp is
 
 private
    
-   procedure move_index_past_token
+   procedure moveIndexPastToken
      (msg : packet.Bounded_String;
       token    : Character;
       index   : in out integer;
@@ -142,7 +142,7 @@ private
      ),
      Global => null;
 
-   procedure move_index_past_token
+   procedure moveIndexPastToken
      (msg : packet.Bounded_String;
       token    : Character;
       index   : in out Positive;

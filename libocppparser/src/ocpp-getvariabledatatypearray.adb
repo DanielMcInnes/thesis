@@ -26,7 +26,7 @@ package body ocpp.GetVariableDataTypeArray is
       end loop;
       for i in Index loop
          if i /= Index'First then 
-            ocpp.move_index_past_token(msg, ',', msgindex, last);
+            ocpp.moveIndexPastToken(msg, ',', msgindex, last);
             if (last = 0) then
                --put_line("39: no comma");
                self.content(i).zzzArrayElementInitialized := false;

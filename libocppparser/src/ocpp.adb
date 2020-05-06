@@ -198,7 +198,7 @@ package body ocpp is
 
    end find_token;
 
-   procedure move_index_past_token
+   procedure moveIndexPastToken
      (msg   : packet.Bounded_String;
       token : Character;
       index : in out integer;
@@ -229,9 +229,9 @@ package body ocpp is
       end if;
       pragma assert(index <= NonSparkTypes.packet.Length(msg)); 
       pragma assert(index > 0); 
-   end move_index_past_token;
+   end moveIndexPastToken;
 
-   procedure move_index_past_token
+   procedure moveIndexPastToken
      (msg : packet.Bounded_String;
       token    : Character;
       index   : in out Positive;
@@ -273,7 +273,7 @@ package body ocpp is
       end if;
       pragma assert(index <= NonSparkTypes.packet.Length(msg)); 
 
-   end move_index_past_token;
+   end moveIndexPastToken;
 
 
    procedure findnonwhitespace(msg: in string_t;
@@ -358,14 +358,14 @@ package body ocpp is
       --put("    120: index: "); put_line(index'image);
 
       if (msgindex > NonSparkTypes.packet.Length(msg)) then return; end if;
-      ocpp.move_index_past_token(msg, '"', msgindex, first, tempPositive);
+      ocpp.moveIndexPastToken(msg, '"', msgindex, first, tempPositive);
       if (msgindex > NonSparkTypes.packet.Length(msg)) then return; end if;
       if (tempPositive = 0) then found := false; return; end if;
 
       --put("    133: index: "); put_line(index'image);
 
       if (msgindex > NonSparkTypes.packet.Length(msg)) then return; end if;
-      ocpp.move_index_past_token(msg, '"', msgindex, second, tempPositive);
+      ocpp.moveIndexPastToken(msg, '"', msgindex, second, tempPositive);
       if (msgindex > NonSparkTypes.packet.Length(msg)) then return; end if;
 
       if (tempPositive = 0) then
@@ -446,7 +446,7 @@ package body ocpp is
          NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
          return;
       end if;
-      ocpp.move_index_past_token(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
+      ocpp.moveIndexPastToken(msg, '[', index, tempPositive); if (tempPositive = 0) then return; end if;
       
       if (index < 1)
       then
@@ -458,7 +458,7 @@ package body ocpp is
       --NonSparkTypes.put ("ocpp: GetMessageType: messageTypeId: "); NonSparkTypes.put_line(request.messageTypeId'image); 
       
       NonSparkTypes.put("ocpp: GetMessageType: 171 index: "); NonSparkTypes.put_line(index'image);
-      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
+      ocpp.moveIndexPastToken(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
       if (retval = false) then return; end if;
       valid := true;
    end ParseMessageType;
@@ -499,7 +499,7 @@ package body ocpp is
          NonSparkTypes.put("***ERROR***"); NonSparkTypes.put(" index: "); NonSparkTypes.put(index'Image);
          return;
       end if;
-      ocpp.move_index_past_token(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
+      ocpp.moveIndexPastToken(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
 
       
    end ParseMessageId;
@@ -602,7 +602,7 @@ package body ocpp is
          return;
       end if;
       
-      ocpp.move_index_past_token(msg, ':', msgindex, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 233"); return; end if;
+      ocpp.moveIndexPastToken(msg, ':', msgindex, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 233"); return; end if;
       if (msgIndex < 1) then
          valid := false;
          return;
@@ -640,7 +640,7 @@ package body ocpp is
          return;
       end if;
       
-      ocpp.move_index_past_token(msg, ':', msgindex, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 233"); return; end if;
+      ocpp.moveIndexPastToken(msg, ':', msgindex, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 233"); return; end if;
          
       
       valid := true;
@@ -678,7 +678,7 @@ package body ocpp is
          return;
       end if;
       
-      ocpp.move_index_past_token(msg, ':', msgindex, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 233"); return; end if;
+      ocpp.moveIndexPastToken(msg, ':', msgindex, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 233"); return; end if;
          
       
       findquotedstring_packet(msg, msgIndex, valid, value);

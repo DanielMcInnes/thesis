@@ -29,7 +29,7 @@ package body NonSparkTypes is
       ada.Text_IO.put_line(NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(msg));
    end;
 
-   procedure contains(theList : in out vecChargers_t;
+   procedure contains(theList : in vecChargers_t;
                       theValue: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
                       retval: out Boolean)
    is

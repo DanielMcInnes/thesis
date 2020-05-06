@@ -1,30 +1,291 @@
 format 222
 
 classinstance 128002 class_ref 183426 // server
-  name ""   xyz 136.2 4.2 2005 life_line_z 2000
-classinstance 128130 class_ref 156802 // main
-  name ""   xyz 32.2 4 2005 life_line_z 2000
-classinstance 128642 class_ref 156930 // bootnotification
-  name ""   xyz 231.6 4.2 2000 life_line_z 2000
-durationcanvas 128258 classinstance_ref 128130 // :main
-  xyzwh 51 90 2010 11 41
+  name ""   xyz 100.8 5.2 2005 life_line_z 2010
+classinstance 128130 class_ref 156802 // charger
+  name ""   xyz 25.1 4 2005 life_line_z 2000
+classinstance 130946 class_ref 189954 // BootNotificationRequest
+  name ""   xyz 161.4 5.2 2000 life_line_z 2000
+classinstance 132738 class_ref 238850 // ocpp
+  name ""   xyz 338.6 5.2 2000 life_line_z 2000
+classinstance 135426 class_ref 190210 // ChargingStationType
+  name ""   xyz 400 5.2 2005 life_line_z 2000
+classinstance 137346 class_ref 190338 // ModemType
+  name ""   xyz 556.8 3.7 2010 life_line_z 2000
+durationcanvas 128258 classinstance_ref 128130 // :charger
+  xyzwh 52 113.6 2010 11 920
 end
 durationcanvas 128386 classinstance_ref 128002 // :server
-  xyzwh 158 93 2010 11 126
+  xyzwh 123 113.6 2010 11 901
+  overlappingdurationcanvas 129538
+    xyzwh 129 169.9 2020 11 834
+    overlappingdurationcanvas 129794
+      xyzwh 135 264.9 2030 11 726
+      overlappingdurationcanvas 139522
+	xyzwh 141 954.6 2040 11 25
+      end
+    end
+  end
 end
-durationcanvas 129026 classinstance_ref 128642 // :bootnotification
-  xyzwh 282 210 2010 11 25
+durationcanvas 129282 classinstance_ref 128002 // :server
+  xyzwh 123 52.7 2010 11 25
+end
+durationcanvas 131074 classinstance_ref 130946 // :BootNotificationRequest
+  xyzwh 242 286.5 2010 11 661
+  overlappingdurationcanvas 132482
+    xyzwh 248 328 2020 11 25
+  end
+end
+durationcanvas 132098 classinstance_ref 128130 // :charger
+  xyzwh 53 79.3 2010 11 26
+end
+durationcanvas 132226 classinstance_ref 128002 // :server
+  xyzwh 124 81.8 2020 11 24
+end
+durationcanvas 132866 classinstance_ref 132738 // :ocpp
+  xyzwh 357 357 2010 11 30
+end
+durationcanvas 133634 classinstance_ref 132738 // :ocpp
+  xyzwh 357 190.2 2010 11 28
+end
+durationcanvas 133890 classinstance_ref 132738 // :ocpp
+  xyzwh 357 226.3 2010 11 26
+end
+durationcanvas 134146 classinstance_ref 132738 // :ocpp
+  xyzwh 357 132.4 2010 11 31
+end
+durationcanvas 134402 classinstance_ref 132738 // :ocpp
+  xyzwh 357 390.1 2010 11 29
+end
+durationcanvas 134658 classinstance_ref 132738 // :ocpp
+  xyzwh 357 424.9 2010 11 28
+end
+durationcanvas 134914 classinstance_ref 132738 // :ocpp
+  xyzwh 357 453.7 2010 11 28
+end
+durationcanvas 135170 classinstance_ref 132738 // :ocpp
+  xyzwh 357 488.6 2010 11 28
+end
+durationcanvas 135554 classinstance_ref 135426 // :ChargingStationType
+  xyzwh 470 517.3 2010 11 398
+  overlappingdurationcanvas 135810
+    xyzwh 476 546.6 2020 11 25
+  end
+end
+durationcanvas 136066 classinstance_ref 132738 // :ocpp
+  xyzwh 357 559.5 2010 11 98
+  overlappingdurationcanvas 136322
+    xyzwh 363 600 2020 11 24
+  end
+  overlappingdurationcanvas 136578
+    xyzwh 363 629.1 2020 11 24
+  end
+end
+durationcanvas 136834 classinstance_ref 132738 // :ocpp
+  xyzwh 357 662.4 2010 11 28
+end
+durationcanvas 137090 classinstance_ref 132738 // :ocpp
+  xyzwh 357 699.8 2010 11 32
+end
+durationcanvas 137474 classinstance_ref 137346 // :ModemType
+  xyzwh 598 721.3 2010 11 152
+  overlappingdurationcanvas 137730
+    xyzwh 604 752.7 2020 11 25
+  end
+end
+durationcanvas 137986 classinstance_ref 132738 // :ocpp
+  xyzwh 357 789 2010 11 28
+end
+durationcanvas 138242 classinstance_ref 132738 // :ocpp
+  xyzwh 357 824.6 2010 11 28
+end
+durationcanvas 138498 classinstance_ref 132738 // :ocpp
+  xyzwh 357 857.4 2010 11 28
+end
+durationcanvas 138754 classinstance_ref 132738 // :ocpp
+  xyzwh 357 897.8 2010 11 27
+end
+durationcanvas 139010 classinstance_ref 132738 // :ocpp
+  xyzwh 357 930.6 2010 11 27
 end
 msg 128514 synchronous
   from durationcanvas_ref 128258
   to durationcanvas_ref 128386
-  yz 92 2015 explicitmsg "handle(in randomText : string, out ocppResponse : string)"
+  yz 115 2015 msg operation_ref 174978 // "receivePacket(in msg : string, out response : string, out valid : bool)"
   show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
-  label_xy 29 67
-msg 129154 synchronous
+  label_xy 141 110
+reflexivemsg 129410 synchronous
+  to durationcanvas_ref 129282
+  yz 52 2015 msg operation_ref 174850 // "enrolChargingStation(in theList : , in serialNumber : , out retval : )"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 163 49
+reflexivemsg 129666 synchronous
+  to durationcanvas_ref 129538
+  yz 169 2025 msg operation_ref 161538 // "handleRequest(in msg : , out response : , out valid : )"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 168 165
+reflexivemsg 129922 synchronous
+  to durationcanvas_ref 129794
+  yz 264 2035 msg operation_ref 175106 // "handleBootNotificationRequest(in msg : , inout index : , out valid : , out response : , in msgTypeId : , in msgId : , in action : )"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 180 259
+msg 131202 synchronous
+  from durationcanvas_ref 129794
+  to durationcanvas_ref 131074
+  yz 289 2035 msg operation_ref 175362 // "parse(in msg : , out msgindex : , out self : , out valid : )"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 258 289
+msg 132354 synchronous
+  from durationcanvas_ref 132098
+  to durationcanvas_ref 132226
+  yz 86 2025 explicitmsg "(establish websocket)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 141 74
+reflexivemsg 132610 synchronous
+  to durationcanvas_ref 132482
+  yz 328 2025 msg operation_ref 168322 // "Initialize(out self : )"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 267 320
+msg 132994 synchronous
+  from durationcanvas_ref 131074
+  to durationcanvas_ref 132866
+  yz 360 2015 msg operation_ref 181890 // "ParseMessageType(in msg : string, out messageTypeId : int, out index : int, out valid : bool)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 377 354
+msg 133762 synchronous
+  from durationcanvas_ref 129538
+  to durationcanvas_ref 133634
+  yz 194 2025 msg operation_ref 182018 // "ParseMessageId(in msg : string, out msgId : string, inout index : int, out valid : bool)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 371 189
+msg 134018 synchronous
+  from durationcanvas_ref 129538
+  to durationcanvas_ref 133890
+  yz 228 2025 msg operation_ref 182146 // "ParseAction(in msg : string, inout msgindex : integer, out action : string, out valid : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 373 224
+msg 134274 synchronous
   from durationcanvas_ref 128386
-  to durationcanvas_ref 129026
-  yz 208 2015 msg operation_ref 161794 // "parse(in randomText : string, out bnr : BootNotificationRequest, in valid : bool)"
+  to durationcanvas_ref 134146
+  yz 135 2015 msg operation_ref 181890 // "ParseMessageType(in msg : string, out messageTypeId : int, out index : int, out valid : bool)"
   show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
-  label_xy 18 175
+  label_xy 373 137
+msg 134530 synchronous
+  from durationcanvas_ref 131074
+  to durationcanvas_ref 134402
+  yz 394 2015 msg operation_ref 182018 // "ParseMessageId(in msg : string, out msgId : string, inout index : int, out valid : bool)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 376 390
+msg 134786 synchronous
+  from durationcanvas_ref 131074
+  to durationcanvas_ref 134658
+  yz 428 2015 msg operation_ref 182146 // "ParseAction(in msg : string, inout msgindex : integer, out action : string, out valid : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 375 427
+msg 135042 synchronous
+  from durationcanvas_ref 131074
+  to durationcanvas_ref 134914
+  yz 456 2015 msg operation_ref 182402 // "checkValid(in msg : , in msgIndex : , in request : ocpp.call, in expectedAction : , out valid : )"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 374 457
+msg 135298 synchronous
+  from durationcanvas_ref 131074
+  to durationcanvas_ref 135170
+  yz 490 2015 msg operation_ref 182530 // "findQuotedKey(in msg : string, inout msgIndex : int, out valid : bool, in key : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "\"chargingStation\""
+  label_xy 375 484
+msg 135682 synchronous
+  from durationcanvas_ref 131074
+  to durationcanvas_ref 135554
+  yz 519 2015 msg operation_ref 182658 // "parse(in msg : string, inout msgIndex : int, out self : ChargingStationType.T, out valid : bool)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 487 516
+reflexivemsg 135938 synchronous
+  to durationcanvas_ref 135810
+  yz 546 2025 msg operation_ref 182786 // "Initialize(out self : ChargingStationType)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 517 541
+msg 136194 synchronous
+  from durationcanvas_ref 135554
+  to durationcanvas_ref 136066
+  yz 563 2015 msg operation_ref 182914 // "findQuotedKeyQuotedValue(in msg : , in msgIndex : , out valid : , in key : string, out value : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "msg, msgIndex, valid, \"serialNumber\", dummybounded"
+  label_xy 474 563
+reflexivemsg 136450 synchronous
+  to durationcanvas_ref 136322
+  yz 600 2025 msg operation_ref 183042 // "findString(in msg : string, inout msgIndex : int, out valid : bool, in needle : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 401 590
+reflexivemsg 136706 synchronous
+  to durationcanvas_ref 136578
+  yz 629 2025 msg operation_ref 183298 // "findquotedstring_packet(in msg : string, inout msgIndex : int, out found : bool, out foundString : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 401 621
+msg 136962 synchronous
+  from durationcanvas_ref 135554
+  to durationcanvas_ref 136834
+  yz 665 2015 msg operation_ref 182914 // "findQuotedKeyQuotedValue(in msg : , in msgIndex : , out valid : , in key : string, out value : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "msg, msgIndex, valid, \"model\", dummybounded"
+  label_xy 390 647
+msg 137218 synchronous
+  from durationcanvas_ref 135554
+  to durationcanvas_ref 137090
+  yz 703 2015 msg operation_ref 182530 // "findQuotedKey(in msg : string, inout msgIndex : int, out valid : bool, in key : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "msg, msgIndex, valid, \"modem\""
+  label_xy 390 683
+msg 137602 synchronous
+  from durationcanvas_ref 135554
+  to durationcanvas_ref 137474
+  yz 723 2015 msg operation_ref 183426 // "parse(in msg : string, inout msgIndex : int, out self : ModemType.T, out valid : bool)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 611 710
+reflexivemsg 137858 synchronous
+  to durationcanvas_ref 137730
+  yz 752 2025 msg operation_ref 183554 // "Initialize(out self : ModemType.T)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 632 752
+msg 138114 synchronous
+  from durationcanvas_ref 137474
+  to durationcanvas_ref 137986
+  yz 791 2015 msg operation_ref 182914 // "findQuotedKeyQuotedValue(in msg : , in msgIndex : , out valid : , in key : string, out value : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "msg, msgIndex, valid, \"iccid\", dummybounded"
+  label_xy 379 774
+msg 138370 synchronous
+  from durationcanvas_ref 137474
+  to durationcanvas_ref 138242
+  yz 829 2015 msg operation_ref 182914 // "findQuotedKeyQuotedValue(in msg : , in msgIndex : , out valid : , in key : string, out value : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "msg, msgIndex, valid, \"imsi\", dummybounded"
+  label_xy 388 805
+msg 138626 synchronous
+  from durationcanvas_ref 135554
+  to durationcanvas_ref 138498
+  yz 860 2015 msg operation_ref 182914 // "findQuotedKeyQuotedValue(in msg : , in msgIndex : , out valid : , in key : string, out value : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "msg, msgIndex, valid, \"vendorName\", dummybounded"
+  label_xy 380 840
+msg 138882 synchronous
+  from durationcanvas_ref 135554
+  to durationcanvas_ref 138754
+  yz 900 2015 msg operation_ref 182914 // "findQuotedKeyQuotedValue(in msg : , in msgIndex : , out valid : , in key : string, out value : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "msg, msgIndex, valid, \"firmwareVersion\", dummybounded"
+  label_xy 380 882
+msg 139138 synchronous
+  from durationcanvas_ref 131074
+  to durationcanvas_ref 139010
+  yz 933 2015 msg operation_ref 182914 // "findQuotedKeyQuotedValue(in msg : , in msgIndex : , out valid : , in key : string, out value : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "msg, msgIndex, valid, \"reason\", dummybounded"
+  label_xy 377 928
+reflexivemsg 139650 synchronous
+  to durationcanvas_ref 139522
+  yz 954 2045 msg operation_ref 175234 // "isEnrolled(in theList : , in serialNumber : , out retval : )"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 174 963
 end

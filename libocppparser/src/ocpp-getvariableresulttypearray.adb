@@ -1,4 +1,4 @@
-pragma SPARK_mode (on); 
+pragma SPARK_mode (on);
 
 with Ada.Strings; use Ada.Strings;
 
@@ -25,8 +25,8 @@ package body ocpp.GetVariableResultTypeArray is
          GetVariableResultType.Initialize(self.content(i));
       end loop;
       for i in Index loop
-         if i /= Index'First then 
-            ocpp.move_index_past_token(msg, ',', msgindex, last);
+         if i /= Index'First then
+            ocpp.moveIndexPastToken(msg, ',', msgindex, last);
             if (last = 0) then
                --put_line("39: no comma");
                self.content(i).zzzArrayElementInitialized := false;

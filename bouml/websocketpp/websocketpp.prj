@@ -1,6 +1,6 @@
 format 222
 "websocketpp"
-  revision 20
+  revision 22
   modified_by 2 "dmcinnes"
 
 
@@ -85,8 +85,8 @@ format 222
     end
 
     sequencediagram 154114 "sd1 boot not"
-      sequencediagramsettings show_full_operations_definition yes end
-      overlapping_bars size A4
+      sequencediagramsettings show_full_operations_definition yes write_horizontally yes end
+      overlapping_bars size A0
     end
 
     class 150018 "connection"
@@ -306,14 +306,87 @@ ${inlines}
       explicit_switch_type ""
       mysql_decl ""
       
-      operation 161538 "handle"
+      operation 161538 "handleRequest"
 	public explicit_return_type ""
-	nparams 2
-	  param in name "request" explicit_type "string"
-	  param out name "response" explicit_type "string"
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} & ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+	nparams 3
+	  param in name "msg" explicit_type ""
+	  param out name "response" explicit_type ""
+	  param out name "valid" explicit_type ""
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}${)}${const}${volatile}${throw}${abstract};
 "
-	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} & ${p1}${)}${const}${volatile}${throw}${staticnl}{
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}const ${t0} & ${p0}, ${t1} & ${p1}, ${t2} & ${p2}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 174850 "enrolChargingStation"
+	public explicit_return_type ""
+	nparams 3
+	  param in name "theList" explicit_type ""
+	  param in name "serialNumber" explicit_type ""
+	  param out name "retval" explicit_type ""
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}const ${t0} & ${p0}, const ${t1} & ${p1}, ${t2} & ${p2}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 174978 "receivePacket"
+	public explicit_return_type ""
+	nparams 3
+	  param in name "msg" explicit_type "string"
+	  param out name "response" explicit_type "string"
+	  param out name "valid" explicit_type "bool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} & ${p1}, ${t2} & ${p2}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 175106 "handleBootNotificationRequest"
+	public explicit_return_type ""
+	nparams 7
+	  param in name "msg" explicit_type ""
+	  param inout name "index" explicit_type ""
+	  param out name "valid" explicit_type ""
+	  param out name "response" explicit_type ""
+	  param in name "msgTypeId" explicit_type ""
+	  param in name "msgId" explicit_type ""
+	  param in name "action" explicit_type ""
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}, ${t3} & ${p3}${v3}, const ${t4} & ${p4}${v4}, const ${t5} & ${p5}${v5}, const ${t6} & ${p6}${v6}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}const ${t0} & ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3} & ${p3}, const ${t4} & ${p4}, const ${t5} & ${p5}, const ${t6} & ${p6}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 175234 "isEnrolled"
+	public explicit_return_type ""
+	nparams 3
+	  param in name "theList" explicit_type ""
+	  param in name "serialNumber" explicit_type ""
+	  param out name "retval" explicit_type ""
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}const ${t0} & ${p0}, const ${t1} & ${p1}, ${t2} & ${p2}${)}${const}${volatile}${throw}${staticnl}{
   ${body}}
 "
 	
@@ -323,7 +396,185 @@ ${inlines}
       end
     end
 
-    class 189954 "BootNotification::Request"
+    class 238850 "ocpp"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      operation 181890 "ParseMessageType"
+	public explicit_return_type ""
+	nparams 4
+	  param in name "msg" explicit_type "string"
+	  param out name "messageTypeId" explicit_type "int"
+	  param out name "index" explicit_type "int"
+	  param out name "valid" explicit_type "bool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}, ${t3} & ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3} & ${p3}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 182018 "ParseMessageId"
+	public explicit_return_type ""
+	nparams 4
+	  param in name "msg" explicit_type "string"
+	  param out name "msgId" explicit_type "string"
+	  param inout name "index" explicit_type "int"
+	  param out name "valid" explicit_type "bool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}, ${t3} & ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3} & ${p3}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 182146 "ParseAction"
+	public explicit_return_type ""
+	nparams 4
+	  param in name "msg" explicit_type "string"
+	  param inout name "msgindex" explicit_type "integer"
+	  param out name "action" explicit_type "string"
+	  param out name "valid" explicit_type "string"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}, ${t3} & ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3} & ${p3}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 182402 "checkValid"
+	public explicit_return_type ""
+	nparams 5
+	  param in name "msg" explicit_type ""
+	  param in name "msgIndex" explicit_type ""
+	  param in name "request" type class_ref 197250 // ocpp.call
+	  param in name "expectedAction" explicit_type ""
+	  param out name "valid" explicit_type ""
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, const ${t1} & ${p1}${v1}, const ${t2} & ${p2}${v2}, const ${t3} & ${p3}${v3}, ${t4} & ${p4}${v4}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}const ${t0} & ${p0}, const ${t1} & ${p1}, const ${t2} & ${p2}, const ${t3} & ${p3}, ${t4} & ${p4}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 182530 "findQuotedKey"
+	public explicit_return_type ""
+	nparams 4
+	  param in name "msg" explicit_type "string"
+	  param inout name "msgIndex" explicit_type "int"
+	  param out name "valid" explicit_type "bool"
+	  param in name "key" explicit_type "string"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}, ${t3} ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3} ${p3}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 182914 "findQuotedKeyQuotedValue"
+	public explicit_return_type ""
+	nparams 5
+	  param in name "msg" explicit_type ""
+	  param in name "msgIndex" explicit_type ""
+	  param out name "valid" explicit_type ""
+	  param in name "key" explicit_type "string"
+	  param out name "value" explicit_type "string"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}, ${t3} ${p3}${v3}, ${t4} & ${p4}${v4}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}const ${t0} & ${p0}, const ${t1} & ${p1}, ${t2} & ${p2}, ${t3} ${p3}, ${t4} & ${p4}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 183042 "findString"
+	public explicit_return_type ""
+	nparams 4
+	  param in name "msg" explicit_type "string"
+	  param inout name "msgIndex" explicit_type "int"
+	  param out name "valid" explicit_type "bool"
+	  param in name "needle" explicit_type "string"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}, ${t3} ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3} ${p3}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 183170 "moveIndexPastToken"
+	public explicit_return_type ""
+	nparams 4
+	  param in name "msg" explicit_type "string"
+	  param in name "token" explicit_type "char"
+	  param inout name "index" explicit_type "int"
+	  param out name "Last" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} & ${p2}${v2}, ${t3} & ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} & ${p2}, ${t3} & ${p3}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 183298 "findquotedstring_packet"
+	public explicit_return_type ""
+	nparams 4
+	  param in name "msg" explicit_type "string"
+	  param inout name "msgIndex" explicit_type "int"
+	  param out name "found" explicit_type "bool"
+	  param out name "foundString" explicit_type "string"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}, ${t3} & ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3} & ${p3}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 189954 "BootNotificationRequest"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -354,12 +605,13 @@ ${inlines}
 	  b parent class_ref 190210 // ChargingStationType
       end
 
-      operation 168322 "DefaultInitialization"
+      operation 168322 "Initialize"
 	public explicit_return_type ""
-	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+	nparams 1
+	  param out name "self" explicit_type ""
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
 "
-	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
   ${body}}
 "
 	
@@ -375,6 +627,25 @@ ${inlines}
 	    classrelation_ref 157442 // <generalisation>
 	  b parent class_ref 190466 // call
       end
+
+      operation 175362 "parse"
+	public explicit_return_type ""
+	nparams 4
+	  param in name "msg" explicit_type ""
+	  param out name "msgindex" explicit_type ""
+	  param out name "self" explicit_type ""
+	  param out name "valid" explicit_type ""
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}, ${t3} & ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}const ${t0} & ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3} & ${p3}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
     end
 
     class 190082 "BootReasonEnumType"
@@ -461,6 +732,39 @@ ${inlines}
 	    classrelation_ref 157314 // (modem)
 	  b parent class_ref 190338 // ModemType
       end
+
+      operation 182658 "parse"
+	public explicit_return_type ""
+	nparams 4
+	  param in name "msg" explicit_type "string"
+	  param inout name "msgIndex" explicit_type "int"
+	  param out name "self" explicit_type "ChargingStationType.T"
+	  param out name "valid" explicit_type "bool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}, ${t3} & ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3} & ${p3}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 182786 "Initialize"
+	public explicit_return_type ""
+	nparams 1
+	  param out name "self" type class_ref 190210 // ChargingStationType
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
     end
 
     class 190338 "ModemType"
@@ -498,6 +802,39 @@ ${inlines}
 	idl_decl ""
 	mysql_decl ""
 	MysqlColumn
+      end
+
+      operation 183426 "parse"
+	public explicit_return_type ""
+	nparams 4
+	  param in name "msg" explicit_type "string"
+	  param inout name "msgIndex" explicit_type "int"
+	  param out name "self" explicit_type "ModemType.T"
+	  param out name "valid" explicit_type "bool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}, ${t3} & ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3} & ${p3}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 183554 "Initialize"
+	public explicit_return_type ""
+	nparams 1
+	  param out name "self" explicit_type "ModemType.T"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
       end
     end
 
@@ -1797,7 +2134,7 @@ ${inlines}
       size A4
     end
 
-    class 156802 "main"
+    class 156802 "charger"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -1812,7 +2149,7 @@ ${inlines}
       
     end
 
-    class 156930 "bootnotification"
+    class 156930 "BootNotificationRequest"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};

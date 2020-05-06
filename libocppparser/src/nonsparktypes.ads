@@ -8,7 +8,6 @@ package NonSparkTypes is
    package packet is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 5000);
    package messageid_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    package action_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
-   package BootReasonEnumType is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 16);
 
    package ChargingStationType is
       package strserialNumber_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 25);
@@ -60,14 +59,16 @@ package NonSparkTypes is
      (Index_Type => index_t, 
       Element_Type => NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String);   
    subtype vecChargers_t is vector_chargers.Vector;
-      
-   package bootnotification_t is      
-      package response is
-         package currentTime is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
-         package interval is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
-         package status is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
-      end response;
-   end bootnotification_t;
+
+   package HeartbeatResponse is
+         package strcurrentTime_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   end HeartbeatResponse;
+   
+   package BootNotificationResponse is      
+         package strcurrentTime_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+         package strinterval_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+         package strstatus_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   end BootNotificationResponse;
    
    --package attributeValue_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 1000); -- used by setVariables, getVariables
    package attributeValue_t is 
@@ -92,7 +93,7 @@ package NonSparkTypes is
    procedure put(msg : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String);
    procedure put_line(msg : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String);
 
-   procedure contains(theList : in out vecChargers_t;
+   procedure contains(theList : in vecChargers_t;
                       theValue: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
                       retval: out Boolean);
    

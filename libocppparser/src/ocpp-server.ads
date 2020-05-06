@@ -1,9 +1,10 @@
 pragma SPARK_Mode (On);
 
 with ocpp;
-with ocpp.BootNotification;
+with ocpp.BootNotificationRequest;
+with ocpp.BootNotificationResponse;
 with ocpp.GetBaseReportResponse;
-with ocpp.heartbeat;
+with ocpp.HeartbeatResponse;
 with ocpp.SetVariablesRequest;
 with ocpp.SetVariablesResponse;
 with ocpp.GetVariablesRequest;
@@ -36,40 +37,40 @@ is
                    theList => (serialNumber, theList)
                   );
    
-   procedure isEnrolled(theList: in out NonSparkTypes.vecChargers_t;
+   procedure isEnrolled(theList: in NonSparkTypes.vecChargers_t;
                         serialNumber: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
                         retval: out Boolean)
      with
        Depends => (
-                     retval => (serialNumber, theList),
-                   theList => (serialNumber)
+                     retval => (serialNumber, theList)
                   );
 
    procedure receivePacket(theServer: in out ocpp.server.T;
-                    msg: in NonSparkTypes.packet.Bounded_String;
+                           msg: in NonSparkTypes.packet.Bounded_String;
                            response: out NonSparkTypes.packet.Bounded_String;
-                          valid: out Boolean)
+                           valid: out Boolean)
      with
+                     Global => null,
        Depends => (
-                     valid => (msg, theServer),
-                     response => (msg, theServer),
+                   valid => (msg, theServer),
+                   response => (msg, theServer),
                    theServer => (msg, theServer)
                   );
    
    procedure handleRequest(theServer: in out ocpp.server.T;
-                    msg: in NonSparkTypes.packet.Bounded_String;
+                           msg: in NonSparkTypes.packet.Bounded_String;
                            response: out NonSparkTypes.packet.Bounded_String;
-                          valid: out Boolean)
+                           valid: out Boolean)
      with
        Depends => (
                      valid => (msg, theServer),
-                     response => (msg, theServer),
+                   response => (msg, theServer),
                    theServer => (msg, theServer)
                   );
    
    procedure handleResponse(theServer: in out ocpp.server.T;
-                    msg: in NonSparkTypes.packet.Bounded_String;
-                          valid: out Boolean)
+                            msg: in NonSparkTypes.packet.Bounded_String;
+                            valid: out Boolean)
      with
        Depends => (
                      valid => (msg, theServer),
@@ -77,67 +78,67 @@ is
                   );
    
    procedure handleSetVariablesResponse(theServer: in out ocpp.server.T;
-                                    msg: in NonSparkTypes.packet.Bounded_String;
-                                    index : in out Integer;
-                                    valid: out Boolean;
-                                    messageId : in NonSparkTypes.messageid_t.Bounded_String
-                                   )
+                                        msg: in NonSparkTypes.packet.Bounded_String;
+                                        index : in out Integer;
+                                        valid: out Boolean;
+                                        messageId : in NonSparkTypes.messageid_t.Bounded_String
+                                       )
      with
        Depends => (
                      index => (msg, index),
-                     valid => (msg, index,  messageId),
+                   valid => (msg, index,  messageId),
                    theServer => (msg, theServer)
                   );
 
    procedure handleGetBaseReportResponse(theServer: in out ocpp.server.T;
-                                    msg: in NonSparkTypes.packet.Bounded_String;
-                                    index : in out Integer;
-                                    valid: out Boolean;
-                                    messageId : in NonSparkTypes.messageid_t.Bounded_String
-                                   )
+                                         msg: in NonSparkTypes.packet.Bounded_String;
+                                         index : in out Integer;
+                                         valid: out Boolean;
+                                         messageId : in NonSparkTypes.messageid_t.Bounded_String
+                                        )
      with
        Depends => (
                      index => (msg, index),
-                     valid => (msg, index,  messageId),
+                   valid => (msg, index,  messageId),
                    theServer => (msg, theServer)
                   );
 
    procedure handleGetVariablesResponse(theServer: in out ocpp.server.T;
-                                    msg: in NonSparkTypes.packet.Bounded_String;
-                                    index : in out Integer;
-                                    valid: out Boolean;
-                                    messageId : in NonSparkTypes.messageid_t.Bounded_String
-                                   )
+                                        msg: in NonSparkTypes.packet.Bounded_String;
+                                        index : in out Integer;
+                                        valid: out Boolean;
+                                        messageId : in NonSparkTypes.messageid_t.Bounded_String
+                                       )
      with
        Depends => (
                      index => (msg, index),
-                     valid => (msg, index,  messageId),
+                   valid => (msg, index,  messageId),
                    theServer => (msg, theServer)
                   );
 
 
    procedure sendRequest(theServer: in out ocpp.server.T;
-                            msg: in call'Class
-                           );
+                         msg: in call'Class
+                        );
 
-   procedure handleBootNotification(theServer: in out ocpp.server.T;
-                                    msg: in NonSparkTypes.packet.Bounded_String;
-                                    index : in out Integer;
-                                    valid: out Boolean;
-                                    response: out NonSparkTypes.packet.Bounded_String;
-                                    messageTypeId : in Integer;
-                                    messageId : in NonSparkTypes.messageid_t.Bounded_String;
-                                    action : in NonSparkTypes.action_t.Bounded_String
-                                   )
+   procedure handleBootNotificationRequest(theServer: in out ocpp.server.T;
+                                           msg: in NonSparkTypes.packet.Bounded_String;
+                                           index : in out Integer;
+                                           valid: out Boolean;
+                                           response: out NonSparkTypes.packet.Bounded_String;
+                                           messageTypeId : in Integer;
+                                           messageId : in NonSparkTypes.messageid_t.Bounded_String;
+                                           action : in NonSparkTypes.action_t.Bounded_String
+                                          )
      with
        Depends => (
                      index => (msg, index),
-                     valid => (msg, index),
-                     response => (msg, index, theServer, messageTypeId, messageId, action),
-                     theServer => (msg, theServer)
+                   valid => (msg, index),
+                   response => (msg, index, theServer, messageTypeId, messageId, action),
+                   theServer => (msg, theServer)
                   );
 
-   procedure handleHeartbeat(theServer: in out ocpp.server.T;
+   procedure handleHeartbeatRequest(theServer: in out ocpp.server.T;
                                     msg: in NonSparkTypes.packet.Bounded_String;
                                     index : in out Integer;
                                     valid: out Boolean;
@@ -150,49 +151,42 @@ is
        Depends => (
                      index => (msg, index),
                    valid => (msg, index),
-                     response => (msg, index, theServer, messageTypeId, messageId, action),
+                   response => (msg, index, theServer, messageTypeId, messageId, action),
                    theServer => (msg, theServer)
                   );
 
    procedure handleGetBaseReportRequest(theServer: in out ocpp.server.T;
-                                    msg: in NonSparkTypes.packet.Bounded_String;
-                                    index : in out Integer;
-                                    valid: out Boolean;
-                                    response: out NonSparkTypes.packet.Bounded_String;
-                                    messageTypeId : in Integer;
-                                    messageId : in NonSparkTypes.messageid_t.Bounded_String;
-                                    action : in NonSparkTypes.action_t.Bounded_String
-                                   )
+                                        msg: in NonSparkTypes.packet.Bounded_String;
+                                        index : in out Integer;
+                                        valid: out Boolean;
+                                        response: out NonSparkTypes.packet.Bounded_String;
+                                        messageTypeId : in Integer;
+                                        messageId : in NonSparkTypes.messageid_t.Bounded_String;
+                                        action : in NonSparkTypes.action_t.Bounded_String
+                                       )
      with
        Depends => (
                      index => (msg, index),
                    valid => (msg, index),
-                     response => (msg, index, theServer, messageTypeId, messageId, action),
+                   response => (msg, index, theServer, messageTypeId, messageId, action),
                    theServer => (msg, theServer)
                   );
 
    procedure handleStatusNotificationRequest(theServer: in out ocpp.server.T;
-                                    msg: in NonSparkTypes.packet.Bounded_String;
-                                    index : in out Integer;
-                                    valid: out Boolean;
-                                    response: out NonSparkTypes.packet.Bounded_String;
-                                    messageTypeId : in Integer;
-                                    messageId : in NonSparkTypes.messageid_t.Bounded_String;
-                                    action : in NonSparkTypes.action_t.Bounded_String
-                                   )
+                                             msg: in NonSparkTypes.packet.Bounded_String;
+                                             index : in out Integer;
+                                             valid: out Boolean;
+                                             response: out NonSparkTypes.packet.Bounded_String;
+                                             messageTypeId : in Integer;
+                                             messageId : in NonSparkTypes.messageid_t.Bounded_String;
+                                             action : in NonSparkTypes.action_t.Bounded_String
+                                            )
      with
        Depends => (
                      index => (msg, index),
                    valid => (msg, index),
-                     response => (msg, index, theServer, messageTypeId, messageId, action),
+                   response => (msg, index, theServer, messageTypeId, messageId, action),
                    theServer => (msg, theServer)
                   );
 
-   procedure toString(msg: out NonSparkTypes.packet.Bounded_String;
-                      response: in ocpp.BootNotification.Response);
-
-   procedure toString(msg: out NonSparkTypes.packet.Bounded_String;
-                      response: in ocpp.heartbeat.Response);
-
-   
 end ocpp.server;

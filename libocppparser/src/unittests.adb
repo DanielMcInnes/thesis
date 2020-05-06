@@ -1,10 +1,13 @@
 with ocpp; use ocpp;
-with ocpp.heartbeat; use ocpp.heartbeat;
+with ocpp.HeartbeatRequest;
+with ocpp.HeartbeatResponse;
 with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.messageid_t; use NonSparkTypes.packet;
 with System; use System;
 with Ada.Strings; use Ada.Strings;
 
-with ocpp.BootNotification;
+with ocpp.BootNotificationRequest;
+with ocpp.BootNotificationResponse;
+with ocpp.BootReasonEnumType;
 with ocpp.ComponentType;
 with ocpp.CustomDataType;
 with ocpp.GetVariableDataTypeArray;
@@ -142,7 +145,6 @@ package body unittests is
       B07(result);      if (result = false) then         fail; return;      end if; -- GetBaseReportRequest
       
       --TODO:
-      --B07 
       --B11
       --B12
       -- one of C01, C02, C04
@@ -181,31 +183,36 @@ package body unittests is
       sn3 : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("01234567890123456789");
       valid: Boolean;
 
-      packet: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String( ""
-                                                                                             & "[2," & ASCII.LF
-                                                                                             & '"'  &"19223201"  &'"' & "," & ASCII.LF
-                                                                                             & '"' & "BootNotification" & '"' & "," & ASCII.LF
-                                                                                             & "{" & ASCII.LF
-                                                                                             & "   " & '"' & "reason" & '"' & ": " & '"' & "PowerUp" & '"' & "," & ASCII.LF
-                                                                                             & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
-                                                                                             & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "00000000000000000001" & '"' & "," & ASCII.LF
-                                                                                             & "      " & '"' & "model"  & '"' & ":" & '"' & "SingleSocketCharger" & '"' & "," & ASCII.LF
-                                                                                             & "      " & '"' & "vendorName" & '"' & ": " & '"' & "VendorX" & '"' & ASCII.LF
-                                                                                             & "   }" & ASCII.LF
-                                                                                             & "}" & ASCII.LF
-                                                                                             & "]");
+      packet: NonSparkTypes.packet.Bounded_String;
+      bootNotificationRequest: ocpp.BootNotificationRequest.T := (
+                                                                  messagetypeid => 2,
+                                                                  messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                                  action => action_t.To_Bounded_String("BootNotification"),
+                                                                  reason => BootReasonEnumType.PowerUp,
+                                                                  chargingStation => (
+                                                                                      zzzArrayElementInitialized => False,
+                                                                                      serialNumber => sn,
+                                                                                      model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                                      vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                                      firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
+                                                                                      modem => (
+                                                                                                zzzArrayElementInitialized => False,
+                                                                                                iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                                                imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
+                                                                                               )
+                                                                                     )                                                 
+                                                                 );
+      BootNotificationResponse: ocpp.BootNotificationResponse.T := (
+                                                                    messagetypeid => 3,
+                                                                    messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                                    currentTime => NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
+                                                                    interval => 300,
+                                                                    status => RegistrationStatusEnumType.Accepted
+                                                                   );
+
 
       response: NonSparkTypes.packet.Bounded_String;
-      expectedresponse: NonSparkTypes.packet.Bounded_String :=
-        NonSparkTypes.packet.To_Bounded_String( ""
-                                                & "[3," & ASCII.LF
-                                                & '"'  &"19223201"  &'"' & "," & ASCII.LF
-                                                & "{" & ASCII.LF
-                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
-                                                & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
-                                                & "   " & '"' & "status" & '"' & ": " & '"' & "Accepted" & '"' & ASCII.LF
-                                                & "}" & ASCII.LF
-                                                & "]");
+      expectedresponse: NonSparkTypes.packet.Bounded_String;
 
       statusnotificationrequest: ocpp.StatusNotificationRequest.T := 
         (
@@ -231,128 +238,22 @@ package body unittests is
       ocpp.server.enrolChargingStation(server.enrolledChargers, sn3, result);
       if (result = False) then return; end if;
       result := false;
+      
+
+      bootNotificationRequest.To_Bounded_String(packet);
+      
+
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
       server.receivePacket(packet, response, valid);
+      
+      bootNotificationResponse.To_Bounded_String(expectedresponse);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
       Put_Line(NonSparkTypes.packet.To_String(response));
 
-      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
-         Put_line("Success");
-      else
-         Put_line("Error: 50");
-         return;
-      end if;
-
-
-      
-      
-      
-
-      -- include the optional 'firmwareVersion' and 'serialNumber'
-      packet := NonSparkTypes.packet.To_Bounded_String( ""
-                                                        & "[2," & ASCII.LF
-                                                        & '"'  &"19223201"  &'"' & "," & ASCII.LF
-                                                        & '"' & "BootNotification" & '"' & "," & ASCII.LF
-                                                        & "{" & ASCII.LF
-                                                        & "   " & '"' & "reason" & '"' & ": " & '"' & "PowerUp" & '"' & "," & ASCII.LF
-                                                        & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
-                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "00000000000000000001" & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "model" & '"' & ":" & '"' & "SingleSocketCharger" & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "vendorName" & '"' & ": " & '"' & "VendorX" & '"' & ASCII.LF
-                                                        & "      " & '"' & "firmwareVersion"  & '"' & ":" & '"' & "01.23456789" & '"' & "," & ASCII.LF
-                                                        & "   }" & ASCII.LF
-                                                        & "}" & ASCII.LF
-                                                        & "]");
-
-      Put_line("Receiving:");
-      Put_Line(NonSparkTypes.packet.To_String(packet));
-      server.receivePacket(packet, response, valid);
-      Put_line("expected response:");
-      Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
-      Put_line("Sending:");
-      Put_Line(NonSparkTypes.packet.To_String(response));
-
-      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
-         Put_line("Success");
-      else
-         Put_line("Error: 81");
-         return;
-      end if;
-
-
-      
-      
-      
-      
-      -- include the optional 'modemInfo' and 'serialNumber'
-      packet := NonSparkTypes.packet.To_Bounded_String( ""
-                                                        & "[2," & ASCII.LF
-                                                        & '"'  &"19223201"  &'"' & "," & ASCII.LF
-                                                        & '"' & "BootNotification" & '"' & "," & ASCII.LF
-                                                        & "{" & ASCII.LF
-                                                        & "   " & '"' & "reason" & '"' & ": " & '"' & "PowerUp" & '"' & "," & ASCII.LF
-                                                        & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
-                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "01234567890123456789" & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "model"  & '"' & ":" & '"' & "SingleSocketCharger" & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "vendorName" & '"' & ": " & '"' & "VendorX" & '"' & ASCII.LF
-                                                        & "      " & '"' & "firmwareVersion"  & '"' & ":" & '"' & "01.23456789" & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "modem"  & '"' & ":" & "{" & ASCII.LF
-                                                        & "         " & '"' & "iccid" & '"' & ": " & '"' & "01234567890123456789" & '"' & ASCII.LF
-                                                        & "         " & '"' & "imsi" & '"' & ": " & '"' & "01234567890123456789" & '"' & ASCII.LF
-                                                        & "   }" & ASCII.LF
-                                                        & "}" & ASCII.LF
-                                                        & "]");
-
-      Put_line("Receiving:");
-      Put_Line(NonSparkTypes.packet.To_String(packet));
-      server.receivePacket(packet, response, valid);
-      Put_line("expected response:");
-      Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
-      Put_line("Sending:");
-      Put_Line(NonSparkTypes.packet.To_String(response));
-
-      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
-         Put_line("Success");
-      else
-         Put_line("Error: 81");
-         return;
-      end if;
-
-
-      
-      
-      
-      
-      -- include the optional 'modemInfo' and the optional 'firmwareVersion' and 'serialNumber'
-      packet := NonSparkTypes.packet.To_Bounded_String( ""
-                                                        & "[2," & ASCII.LF
-                                                        & '"'  &"19223201"  &'"' & "," & ASCII.LF
-                                                        & '"' & "BootNotification" & '"' & "," & ASCII.LF
-                                                        & "{" & ASCII.LF
-                                                        & "   " & '"' & "reason" & '"' & ": " & '"' & "PowerUp" & '"' & "," & ASCII.LF
-                                                        & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
-                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "01234567890123456789" & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "model"  & '"' & ":" & '"' & "SingleSocketCharger" & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "vendorName" & '"' & ": " & '"' & "VendorX" & '"' & ASCII.LF
-                                                        & "      " & '"' & "modem"  & '"' & ":" & "{" & ASCII.LF
-                                                        & "         " & '"' & "iccid" & '"' & ": " & '"' & "01234567890123456789" & '"' & ASCII.LF
-                                                        & "         " & '"' & "imsi" & '"' & ": " & '"' & "01234567890123456789" & '"' & ASCII.LF
-                                                        & "   }" & ASCII.LF
-                                                        & "}" & ASCII.LF
-                                                        & "]");
-
-      Put_line("Receiving:");
-      Put_Line(NonSparkTypes.packet.To_String(packet));
-      server.receivePacket(packet, response, valid);
-      Put_line("expected response:");
-      Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
-      Put_line("Sending:");
-      Put_Line(NonSparkTypes.packet.To_String(response));
-
-      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
+      if (response = expectedresponse) then
          Put_line("Success");
       else
          Put_line("Error: 81");
@@ -374,45 +275,60 @@ package body unittests is
       server: ocpp.server.T;
       sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("B030001");
       valid: Boolean;
-      hbr: ocpp.heartbeat.Request;
-      bnr: ocpp.BootNotification.Request := (
-                                             messagetypeid => 2,
-                                             messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                             action => action_t.To_Bounded_String("BootNotification"),
-                                             reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
-                                             chargingStation => (
-                                                                 serialNumber => sn,
-                                                                 model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
-                                                                 vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
-                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
-                                                                 modem => (
-                                                                           iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
-                                                                           imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
-                                                                          )
-                                                                )                                                 
-                                            );
+      heartbeatRequest: ocpp.heartbeatRequest.T := (
+                                                    messagetypeid => 2,
+                                                    messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                    action => action_t.To_Bounded_String("Heartbeat"),
+                                                    unused => -1
+                                                   );
+      heartbeatResponse: ocpp.HeartbeatResponse.T := (
+                                                      messagetypeid => 3,
+                                                      messageid => heartbeatRequest.messageid,
+                                                      currentTime => NonSparkTypes.HeartbeatResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z")                                                      
+                                                     );
+      
+      bnr: ocpp.BootNotificationRequest.T := (
+                                              messagetypeid => 2,
+                                              messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                              action => action_t.To_Bounded_String("BootNotification"),
+                                              reason => BootReasonEnumType.PowerUp,
+                                              chargingStation => (
+                                                                  zzzArrayElementInitialized => False,
+                                                                  serialNumber => sn,
+                                                                  model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                  vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                  firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
+                                                                  modem => (
+                                                                            zzzArrayElementInitialized => False,
+                                                                            iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                            imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
+                                                                           )
+                                                                 )                                                 
+                                             );
+      
+      bootNotificationResponse: ocpp.BootNotificationResponse.T := (
+                                                                    messagetypeid => 3,
+                                                                    messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                                    currentTime => NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
+                                                                    interval => 300,
+                                                                    status => RegistrationStatusEnumType.Pending
+                                                                   );
 
       packet: NonSparkTypes.packet.Bounded_String;
       response: NonSparkTypes.packet.Bounded_String;
-      expectedresponse: NonSparkTypes.packet.Bounded_String :=
-        NonSparkTypes.packet.To_Bounded_String( ""
-                                                & "[3," & ASCII.LF
-                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
-                                                & "{" & ASCII.LF
-                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
-                                                & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
-                                                & "   " & '"' & "status" & '"' & ": " & '"' & "Pending" & '"' & ASCII.LF
-                                                & "}" & ASCII.LF
-                                                & "]");
+      expectedresponse: NonSparkTypes.packet.Bounded_String;
    begin
-      ocpp.heartbeat.DefaultInitialize(hbr);
+         
+         
       server.isDeferringBootNotificationAccept := true;
       ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);
-      ocpp.BootNotification.To_Bounded_String(bnr, packet);      
+      ocpp.BootNotificationRequest.To_Bounded_String(bnr, packet);      
       
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
       server.receivePacket(packet, response, valid);
+
+      bootNotificationResponse.To_Bounded_String(expectedresponse);
       Put_line("expected response:");
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
@@ -437,20 +353,23 @@ package body unittests is
                                                 & "}" & ASCII.LF
                                                 & "]");
 
-      ocpp.heartbeat.To_Bounded_String(hbr, packet);           
+      heartbeatRequest.To_Bounded_String(packet);           
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
+
+      
       server.receivePacket(packet, response, valid);
+      if (valid = false) then
+         NonSparkTypes.put_line("ERROR 357");
+         return;
+      end if;
+        
+      
+      
+      
       Put_line("expected response:");
-      expectedresponse:=
-        NonSparkTypes.packet.To_Bounded_String( ""
-                                                & "[3," & ASCII.LF
-                                                --                                                & '"'  & "19223202"  &'"' & "," & ASCII.LF
-                                                & '"'  & NonSparkTypes.messageid_t.To_String(hbr.messageid)  &'"' & "," & ASCII.LF
-                                                & "{" & ASCII.LF
-                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
-                                                & "}" & ASCII.LF
-                                                & "]");
+
+      heartbeatResponse.To_Bounded_String(expectedresponse);
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
       Put_Line(NonSparkTypes.packet.To_String(response));
@@ -458,7 +377,7 @@ package body unittests is
       if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
          Put_line("Success");
       else
-         Put_line("Error: 438");
+         Put_line("Error: 371");
          return;
       end if;
       
@@ -470,174 +389,75 @@ package body unittests is
       server: ocpp.server.T;
       sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("B030001");
       valid: Boolean;
-
-      packet: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String( ""
-                                                                                             & "[2," & ASCII.LF
-                                                                                             & '"'  &"19223202"  &'"' & "," & ASCII.LF
-                                                                                             & '"' & "BootNotification" & '"' & "," & ASCII.LF
-                                                                                             & "{" & ASCII.LF
-                                                                                             & "   " & '"' & "reason" & '"' & ": " & '"' & "PowerUp" & '"' & "," & ASCII.LF
-                                                                                             & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
-                                                                                             & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "B030001" & '"' & "," & ASCII.LF
-                                                                                             & "      " & '"' & "model"  & '"' & ":" & '"' & "SingleSocketCharger" & '"' & "," & ASCII.LF
-                                                                                             & "      " & '"' & "vendorName" & '"' & ": " & '"' & "VendorX" & '"' & ASCII.LF
-                                                                                             & "   }" & ASCII.LF
-                                                                                             & "}" & ASCII.LF
-                                                                                             & "]");
-
+      bootNotificationRequest: ocpp.BootNotificationRequest.T := (
+                                                                  messagetypeid => 2,
+                                                                  messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                                  action => action_t.To_Bounded_String("BootNotification"),
+                                                                  reason => BootReasonEnumType.PowerUp,
+                                                                  chargingStation => (
+                                                                                      zzzArrayElementInitialized => False,
+                                                                                      serialNumber => sn,
+                                                                                      model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                                      vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                                      firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
+                                                                                      modem => (
+                                                                                                zzzArrayElementInitialized => False,
+                                                                                                iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                                                imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
+                                                                                               )
+                                                                                     )                                                 
+                                                                 );
+      expectedresponse: ocpp.BootNotificationResponse.T := (
+                                                       messagetypeid => 3,
+                                                       messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                       currentTime => NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
+                                                       interval => 300,
+                                                       status => RegistrationStatusEnumType.Rejected);
+      
+      packet: NonSparkTypes.packet.Bounded_String;
       response: NonSparkTypes.packet.Bounded_String;
-      expectedresponse: NonSparkTypes.packet.Bounded_String :=
-        NonSparkTypes.packet.To_Bounded_String( ""
-                                                & "[3," & ASCII.LF
-                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
-                                                & "{" & ASCII.LF
-                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
-                                                & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
-                                                & "   " & '"' & "status" & '"' & ": " & '"' & "Rejected" & '"' & ASCII.LF
-                                                & "}" & ASCII.LF
-                                                & "]");
    begin
       result := false;
+      bootNotificationRequest.To_Bounded_String(packet);
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
       server.receivePacket(packet, response, valid);
+      
+      expectedresponse.To_Bounded_String(packet);
+      
       Put_line("expected response:");
-      Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
+      Put_Line(NonSparkTypes.packet.To_String(packet));
       Put_line("Sending:");
       Put_Line(NonSparkTypes.packet.To_String(response));
 
-      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
+      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(packet)) then
          Put_line("Success");
       else
          Put_line("Error: 234");
          return;
       end if;
-
-      -- include the optional 'firmwareVersion' and 'serialNumber'
-      packet := NonSparkTypes.packet.To_Bounded_String( ""
-                                                        & "[2," & ASCII.LF
-                                                        & '"'  &"19223202"  &'"' & "," & ASCII.LF
-                                                        & '"' & "BootNotification" & '"' & "," & ASCII.LF
-                                                        & "{" & ASCII.LF
-                                                        & "   " & '"' & "reason" & '"' & ": " & '"' & "PowerUp" & '"' & "," & ASCII.LF
-                                                        & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
-                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "B030001" & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "model" & '"' & ":" & '"' & "SingleSocketCharger" & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "vendorName" & '"' & ": " & '"' & "VendorX" & '"' & ASCII.LF
-                                                        & "      " & '"' & "firmwareVersion"  & '"' & ":" & '"' & "01.23456789" & '"' & "," & ASCII.LF
-                                                        & "   }" & ASCII.LF
-                                                        & "}" & ASCII.LF
-                                                        & "]");
-
+      
+      ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);     
+      expectedresponse.status := RegistrationStatusEnumType.Accepted;
+      
       Put_line("Receiving:");
+      bootNotificationRequest.To_Bounded_String(packet);
       Put_Line(NonSparkTypes.packet.To_String(packet));
       server.receivePacket(packet, response, valid);
-      Put_line("257: expected response:");
-      Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
-      Put_line("Sending:");
-      Put_Line(NonSparkTypes.packet.To_String(response));
-
-      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
-         Put_line("Success");
-      else
-         Put_line("Error: 81");
-         return;
-      end if;
-
       
-      
-      
-      
-      
-      
-      ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);
-      
-      expectedresponse :=
-        NonSparkTypes.packet.To_Bounded_String( ""
-                                                & "[3," & ASCII.LF
-                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
-                                                & "{" & ASCII.LF
-                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
-                                                & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
-                                                & "   " & '"' & "status" & '"' & ": " & '"' & "Accepted" & '"' & ASCII.LF
-                                                & "}" & ASCII.LF
-                                                & "]");
-      
-      
-      
-      
-      -- include the optional 'modemInfo' and 'serialNumber'
-      packet := NonSparkTypes.packet.To_Bounded_String( ""
-                                                        & "[2," & ASCII.LF
-                                                        & '"'  &"19223202"  &'"' & "," & ASCII.LF
-                                                        & '"' & "BootNotification" & '"' & "," & ASCII.LF
-                                                        & "{" & ASCII.LF
-                                                        & "   " & '"' & "reason" & '"' & ": " & '"' & "PowerUp" & '"' & "," & ASCII.LF
-                                                        & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
-                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "B030001" & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "model"  & '"' & ":" & '"' & "SingleSocketCharger" & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "vendorName" & '"' & ": " & '"' & "VendorX" & '"' & ASCII.LF
-                                                        & "      " & '"' & "firmwareVersion"  & '"' & ":" & '"' & "01.23456789" & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "modem"  & '"' & ":" & "{" & ASCII.LF
-                                                        & "         " & '"' & "iccid" & '"' & ": " & '"' & "01234567890123456789" & '"' & ASCII.LF
-                                                        & "         " & '"' & "imsi" & '"' & ": " & '"' & "01234567890123456789" & '"' & ASCII.LF
-                                                        & "   }" & ASCII.LF
-                                                        & "}" & ASCII.LF
-                                                        & "]");
-
-      Put_line("Receiving:");
-      Put_Line(NonSparkTypes.packet.To_String(packet));
-      server.receivePacket(packet, response, valid);
+      expectedresponse.To_Bounded_String(packet);
       Put_line("expected response:");
-      Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
-      Put_line("Sending:");
-      Put_Line(NonSparkTypes.packet.To_String(response));
-
-      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
-         Put_line("Success");
-      else
-         Put_line("Error: 81");
-         return;
-      end if;
-
-
-      
-      
-      
-      
-      -- include the optional 'modemInfo' and the optional 'firmwareVersion' and 'serialNumber'
-      packet := NonSparkTypes.packet.To_Bounded_String( ""
-                                                        & "[2," & ASCII.LF
-                                                        & '"'  &"19223202"  &'"' & "," & ASCII.LF
-                                                        & '"' & "BootNotification" & '"' & "," & ASCII.LF
-                                                        & "{" & ASCII.LF
-                                                        & "   " & '"' & "reason" & '"' & ": " & '"' & "PowerUp" & '"' & "," & ASCII.LF
-                                                        & "   " & '"' & "chargingStation" & '"' & ": {" & ASCII.LF
-                                                        & "      " & '"' & "serialNumber"  & '"' & ":" & '"' & "B030001" & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "model"  & '"' & ":" & '"' & "SingleSocketCharger" & '"' & "," & ASCII.LF
-                                                        & "      " & '"' & "vendorName" & '"' & ": " & '"' & "VendorX" & '"' & ASCII.LF
-                                                        & "      " & '"' & "modem"  & '"' & ":" & "{" & ASCII.LF
-                                                        & "         " & '"' & "iccid" & '"' & ": " & '"' & "01234567890123456789" & '"' & ASCII.LF
-                                                        & "         " & '"' & "imsi" & '"' & ": " & '"' & "01234567890123456789" & '"' & ASCII.LF
-                                                        & "   }" & ASCII.LF
-                                                        & "}" & ASCII.LF
-                                                        & "]");
-
-      Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
-      server.receivePacket(packet, response, valid);
-      Put_line("expected response:");
-      Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
       Put_Line(NonSparkTypes.packet.To_String(response));
 
-      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
+      if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(packet)) then
          Put_line("Success");
       else
-         Put_line("Error: 81");
+         Put_line("Error: 497");
          return;
       end if;
-      
+
       result := true;
       
    end B03;     
@@ -647,45 +467,56 @@ package body unittests is
       server: ocpp.server.T;
       sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("B030001");
       valid: Boolean;
-      hbr: ocpp.heartbeat.Request;
-      bnr: ocpp.BootNotification.Request := (
-                                             messagetypeid => 2,
-                                             messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                             action => action_t.To_Bounded_String("BootNotification"),
-                                             reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
-                                             chargingStation => (
-                                                                 serialNumber => sn,
-                                                                 model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
-                                                                 vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
-                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
-                                                                 modem => (
-                                                                           iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
-                                                                           imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
-                                                                          )
-                                                                )                                                 
-                                            );
+      heartbeatRequest: ocpp.heartbeatRequest.T := (
+                                       messagetypeid => 2,
+                                       messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                       action => action_t.To_Bounded_String("Heartbeat"),
+                                       unused => -1
+                                                   );
+      heartbeatResponse: ocpp.HeartbeatResponse.T := (
+                                                      messagetypeid => 3,
+                                                      messageid => heartbeatRequest.messageid,
+                                                      currentTime => NonSparkTypes.HeartbeatResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z")                                                      
+                                                     );
+      
+      
+      bootNotificationRequest: ocpp.BootNotificationRequest.T := (
+                                              messagetypeid => 2,
+                                              messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                              action => action_t.To_Bounded_String("BootNotification"),
+                                              reason => BootReasonEnumType.PowerUp,
+                                              chargingStation => (
+                                                                  zzzArrayElementInitialized => False,
+                                                                  serialNumber => sn,
+                                                                  model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                  vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                  firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
+                                                                  modem => (
+                                                                            zzzArrayElementInitialized => False,
+                                                                            iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                            imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
+                                                                           )
+                                                                 )                                                 
+                                             );
 
+      bootNotificationResponse: ocpp.BootNotificationResponse.T := (
+                                                       messagetypeid => 3,
+                                                       messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                       currentTime => NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
+                                                       interval => 300,
+                                                       status => RegistrationStatusEnumType.Accepted);
       packet: NonSparkTypes.packet.Bounded_String;
       response: NonSparkTypes.packet.Bounded_String;
-      expectedresponse: NonSparkTypes.packet.Bounded_String :=
-        NonSparkTypes.packet.To_Bounded_String( ""
-                                                & "[3," & ASCII.LF
-                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
-                                                & "{" & ASCII.LF
-                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
-                                                & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
-                                                & "   " & '"' & "status" & '"' & ": " & '"' & "Accepted" & '"' & ASCII.LF
-                                                & "}" & ASCII.LF
-                                                & "]");
+      expectedresponse: NonSparkTypes.packet.Bounded_String;
    begin
-      ocpp.heartbeat.DefaultInitialize(hbr);
       ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);     
-      ocpp.BootNotification.To_Bounded_String(bnr, packet);      
-      
+      bootNotificationRequest.To_Bounded_String(packet);
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
       server.receivePacket(packet, response, valid);
+
       Put_line("expected response:");
+      bootNotificationResponse.To_Bounded_String(expectedresponse);
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
       Put_Line(NonSparkTypes.packet.To_String(response));
@@ -697,20 +528,12 @@ package body unittests is
          return;
       end if;
 
-      ocpp.heartbeat.To_Bounded_String(hbr, packet);           
+      heartbeatRequest.To_Bounded_String(packet);           
       Put_line("Receiving:");
       Put_Line(NonSparkTypes.packet.To_String(packet));
       server.receivePacket(packet, response, valid);
       Put_line("expected response:");
-      expectedresponse:=
-        NonSparkTypes.packet.To_Bounded_String( ""
-                                                & "[3," & ASCII.LF
-                                                --                                                & '"'  & "19223202"  &'"' & "," & ASCII.LF
-                                                & '"'  & NonSparkTypes.messageid_t.To_String(hbr.messageid)  &'"' & "," & ASCII.LF
-                                                & "{" & ASCII.LF
-                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
-                                                & "}" & ASCII.LF
-                                                & "]");
+      heartbeatResponse.To_Bounded_String(expectedresponse);
       Put_Line(NonSparkTypes.packet.To_String(expectedresponse));
       Put_line("Sending:");
       Put_Line(NonSparkTypes.packet.To_String(response));
@@ -718,7 +541,7 @@ package body unittests is
       if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
          Put_line("Success");
       else
-         Put_line("Error: 438");
+         Put_line("Error: 637");
          return;
       end if;
       
@@ -733,22 +556,30 @@ package body unittests is
       server: ocpp.server.T;
       sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("01234567890123456789");
       valid: Boolean;
-      bnr: ocpp.BootNotification.Request := (
-                                             messagetypeid => 2,
-                                             messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                             action => action_t.To_Bounded_String("BootNotification"),
-                                             reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
-                                             chargingStation => (
-                                                                 serialNumber => sn,
-                                                                 model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
-                                                                 vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
-                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
-                                                                 modem => (
-                                                                           iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
-                                                                           imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
-                                                                          )
-                                                                )                                                 
-                                            );
+      bootNotificationRequest: ocpp.BootNotificationRequest.T := (
+                                              messagetypeid => 2,
+                                              messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                              action => action_t.To_Bounded_String("BootNotification"),
+                                              reason => BootReasonEnumType.PowerUp,
+                                              chargingStation => (
+                                                                  zzzArrayElementInitialized => False,
+                                                                  serialNumber => sn,
+                                                                  model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                  vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                  firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
+                                                                  modem => (
+                                                                            zzzArrayElementInitialized => False,
+                                                                            iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                            imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
+                                                                           )
+                                                                 )                                                 
+                                             );
+      bootNotificationResponse: ocpp.BootNotificationResponse.T := (
+                                                       messagetypeid => 3,
+                                                       messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                       currentTime => NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
+                                                       interval => 300,
+                                                       status => RegistrationStatusEnumType.Accepted);
 
       packet: NonSparkTypes.packet.Bounded_String;
       response: NonSparkTypes.packet.Bounded_String;
@@ -756,16 +587,7 @@ package body unittests is
       strServerPacket: NonSparkTypes.packet.Bounded_String;
       strTestPacket: NonSparkTypes.packet.Bounded_String;
       
-      expectedresponse: NonSparkTypes.packet.Bounded_String :=
-        NonSparkTypes.packet.To_Bounded_String( ""
-                                                & "[3," & ASCII.LF
-                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
-                                                & "{" & ASCII.LF
-                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
-                                                & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
-                                                & "   " & '"' & "status" & '"' & ": " & '"' & "Accepted" & '"' & ASCII.LF
-                                                & "}" & ASCII.LF
-                                                & "]");
+      expectedresponse: NonSparkTypes.packet.Bounded_String;
 
       setVariablesRequest : ocpp.SetVariablesRequest.T := (
                                                            messagetypeid => 2,
@@ -875,8 +697,9 @@ package body unittests is
       result := false;
       ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);     
 
-      ocpp.BootNotification.To_Bounded_String(bnr, packet);      
+      ocpp.BootNotificationRequest.To_Bounded_String(bootNotificationRequest, packet);      
       server.receivePacket(packet, response, valid);
+      bootNotificationResponse.To_Bounded_String(expectedresponse);
       if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
          Put_line("Success");
       else
@@ -913,38 +736,38 @@ package body unittests is
       sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("01234567890123456789");
       valid: Boolean;
       dummystring: NonSparkTypes.packet.Bounded_String;
-      bnr: ocpp.BootNotification.Request := (
-                                             messagetypeid => 2,
-                                             messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                             action => action_t.To_Bounded_String("BootNotification"),
-                                             reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
-                                             chargingStation => (
-                                                                 serialNumber => sn,
-                                                                 model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
-                                                                 vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
-                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
-                                                                 modem => (
-                                                                           iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
-                                                                           imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
-                                                                          )
-                                                                )                                                 
-                                            );
+      bootNotificationRequest: ocpp.BootNotificationRequest.T := (
+                                              messagetypeid => 2,
+                                              messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                              action => action_t.To_Bounded_String("BootNotification"),
+                                              reason => BootReasonEnumType.PowerUp,
+                                              chargingStation => (
+                                                                  zzzArrayElementInitialized => False,
+                                                                  serialNumber => sn,
+                                                                  model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                  vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                  firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
+                                                                  modem => (
+                                                                            zzzArrayElementInitialized => False,
+                                                                            iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                            imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
+                                                                           )
+                                                                 )                                                 
+                                             );
+
+      bootNotificationResponse: ocpp.BootNotificationResponse.T := (
+                                                       messagetypeid => 3,
+                                                       messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                                       currentTime => NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
+                                                       interval => 300,
+                                                       status => RegistrationStatusEnumType.Accepted);
 
       packet: NonSparkTypes.packet.Bounded_String;
       strServerPacket: NonSparkTypes.packet.Bounded_String;
       strTestPacket: NonSparkTypes.packet.Bounded_String;
       
       response: NonSparkTypes.packet.Bounded_String;
-      expectedresponse: NonSparkTypes.packet.Bounded_String :=
-        NonSparkTypes.packet.To_Bounded_String( ""
-                                                & "[3," & ASCII.LF
-                                                & '"'  &"19223202"  &'"' & "," & ASCII.LF
-                                                & "{" & ASCII.LF
-                                                & "   " & '"' & "currentTime" & '"' & ": " & '"' & "2013-02-01T20:53:32.486Z" & '"' & "," & ASCII.LF
-                                                & "   " & '"' & "interval" & '"' & ": 300," & ASCII.LF
-                                                & "   " & '"' & "status" & '"' & ": " & '"' & "Accepted" & '"' & ASCII.LF
-                                                & "}" & ASCII.LF
-                                                & "]");
+      expectedresponse: NonSparkTypes.packet.Bounded_String;
 
       getVariablesRequest : ocpp.GetVariablesRequest.T := (
                                                            messagetypeid => 2,
@@ -1066,8 +889,9 @@ package body unittests is
       result := false;
       ocpp.server.enrolChargingStation(server.enrolledChargers, sn, result);     
 
-      ocpp.BootNotification.To_Bounded_String(bnr, packet);      
+      ocpp.BootNotificationRequest.To_Bounded_String(bootNotificationRequest, packet);      
       server.receivePacket(packet, response, valid);
+      bootNotificationResponse.To_Bounded_String(expectedresponse);
       if (NonSparkTypes.packet.To_String(response) = NonSparkTypes.packet.To_String(expectedresponse)) then
          Put_line("Success");
       else
@@ -1096,14 +920,9 @@ package body unittests is
          NonSparkTypes.put_line("ERROR 804");
          ocpp.GetVariablesResponse.To_Bounded_String(server.getVariablesResponse, dummystring);
          NonSparkTypes.put_line(NonSparkTypes.packet.To_String(dummystring));
-         
-         
          result := false; 
          return; 
       end if;
-      
-      
-      
       
       result := true;
    end B06;
@@ -1126,22 +945,24 @@ package body unittests is
       server: ocpp.server.T;
       sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("01234567890123456789");
       valid: Boolean;
-      bnr: ocpp.BootNotification.Request := (
-                                             messagetypeid => 2,
-                                             messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                             action => action_t.To_Bounded_String("BootNotification"),
-                                             reason => NonSparkTypes.BootReasonEnumType.To_Bounded_String("PowerUp"),
-                                             chargingStation => (
-                                                                 serialNumber => sn,
-                                                                 model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
-                                                                 vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
-                                                                 firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
-                                                                 modem => (
-                                                                           iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
-                                                                           imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
-                                                                          )
-                                                                )                                                 
-                                            );
+      bnr: ocpp.BootNotificationRequest.T := (
+                                              messagetypeid => 2,
+                                              messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
+                                              action => action_t.To_Bounded_String("BootNotification"),
+                                              reason => BootReasonEnumType.PowerUp,
+                                              chargingStation => (
+                                                                  zzzArrayElementInitialized => False,
+                                                                  serialNumber => sn,
+                                                                  model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                  vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                  firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
+                                                                  modem => (
+                                                                            zzzArrayElementInitialized => False,
+                                                                            iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                            imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
+                                                                           )
+                                                                 )                                                 
+                                             );
 
       packet: NonSparkTypes.packet.Bounded_String;
       response: NonSparkTypes.packet.Bounded_String;
