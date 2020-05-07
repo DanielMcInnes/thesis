@@ -13,11 +13,11 @@ package ocpp is
       action : action_t.Bounded_String;-- eg. BootNotification
    end record;
    procedure checkValid(msg: in NonSparkTypes.packet.Bounded_String;
-                   msgindex: in Integer;
+                        msgindex: in Integer;
                         request: in ocpp.call;
                         expectedAction: in action_t.Bounded_String;
-                   valid: out Boolean
-                  )
+                        valid: out Boolean
+                       )
      with
        Global => null,
        Depends => (
@@ -26,7 +26,7 @@ package ocpp is
        post => (if valid = true then
                   (request.messagetypeid = 2) and
                   (NonSparkTypes.messageid_t.Length(request.messageid) > 0) and
-                  (request.action = expectedAction)
+                    (request.action = expectedAction)
                );
 
    type callresult is tagged record
@@ -35,10 +35,10 @@ package ocpp is
    end record;
    
    procedure checkValid(msg: in NonSparkTypes.packet.Bounded_String;
-                   msgindex: in Integer;
-                   request: in ocpp.callresult;
-                   valid: out Boolean
-                  )
+                        msgindex: in Integer;
+                        request: in ocpp.callresult;
+                        valid: out Boolean
+                       )
      with
        Global => null,
        Depends => (
@@ -77,8 +77,15 @@ package ocpp is
    procedure ParseMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
                               messagetypeid : out integer;-- eg. 2
                               index: in out Integer;
-                              valid: out Boolean
-                             );
+                              valid: out Boolean)
+     with  Global => null,
+     post => (if valid = true then 
+                (messagetypeid = 2 or messagetypeid = 3 or messagetypeid = 4)
+              and
+                (index < NonSparkTypes.packet.Length(msg))
+             );
+   
+                             
 
    procedure ParseMessageId(msg:   in  NonSparkTypes.packet.Bounded_String;
                             messageid : out NonSparkTypes.messageid_t.Bounded_String;
@@ -105,9 +112,9 @@ package ocpp is
      with  Global => null;
    
    procedure findQuotedKey(msg: in NonSparkTypes.packet.Bounded_String;
-                                      msgIndex: in out Integer;
-                                      valid: out Boolean;
-                                      key: in string);
+                           msgIndex: in out Integer;
+                           valid: out Boolean;
+                           key: in string);
 
    procedure findQuotedKeyQuotedValue(msg: in NonSparkTypes.packet.Bounded_String;
                                       msgIndex: in out Integer;

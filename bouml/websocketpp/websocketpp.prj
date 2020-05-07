@@ -74,6 +74,11 @@ format 222
       size A0
     end
 
+    classdiagram 141058 "cd2 libocpp"
+      classdiagramsettings show_members_full_definition yes member_max_width 0 end
+      size A4
+    end
+
     classdiagram 160642 "cd3 SetVariables"
       classdiagramsettings show_members_full_definition yes show_members_multiplicity yes member_max_width 0 end
       size A0
@@ -81,6 +86,11 @@ format 222
 
     classdiagram 167170 "cd4 getbasereport"
       classdiagramsettings show_members_full_definition yes show_members_multiplicity yes show_members_initialization yes member_max_width 0 end
+      size A0
+    end
+
+    classdiagram 173698 "cd5 BootNotification"
+      classdiagramsettings hide_operations yes show_members_full_definition yes member_max_width 0 end
       size A0
     end
 
@@ -129,11 +139,6 @@ ${inlines}
 	
 	
       end
-    end
-
-    sequencediagram 134530 "sd1"
-      sequencediagramsettings end
-      overlapping_bars size A4
     end
 
     class 150146 "transport::asio::connection"
@@ -2097,6 +2102,102 @@ ${inlines}
 	MysqlColumn
       end
     end
+
+    class 238978 "BootNotificationResponse"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 221698 "currentTime"
+	private explicit_type "char[36]"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 221826 "interval"
+	private explicit_type "char[36]"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 221954 "status"
+	private explicit_type "char[36]"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 206466 // <generalisation>
+	relation 206466 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 206466 // <generalisation>
+	  b parent class_ref 239106 // callresult
+      end
+    end
+
+    class 239106 "callresult"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 222082 "messagetypeid"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 222210 "messageId"
+	private explicit_type "char[36]"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
   end
 
   package_ref 128002 // http
@@ -2129,11 +2230,6 @@ ${inlines}
     
     activitydiagramsettings
      end
-    classdiagram 141058 "cd2 libocpp"
-      classdiagramsettings show_members_full_definition yes member_max_width 0 end
-      size A4
-    end
-
     class 156802 "charger"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {

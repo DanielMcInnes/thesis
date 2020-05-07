@@ -1,16 +1,56 @@
 format 222
 
-classcanvas 128002 class_ref 238850 // OCPP_Server
+classcanvas 129154 class_ref 189954 // BootNotificationRequest
   classdiagramsettings member_max_width 0 end
-  xyz 123 256 2000
+  xyz 363.9 262.4 2000
 end
-classcanvas 128130 class_ref 238978 // Charging_Station
+classcanvas 129282 class_ref 190082 // BootReasonEnumType
   classdiagramsettings member_max_width 0 end
-  xyz 528 257 2000
+  xyz 260 406.7 2000
 end
-relationcanvas 128258 relation_ref 206466 // <association>
-  from ref 128002 z 2001 stereotype "<<OCPP over websocket>>" xyz 322.5 288 3000 to ref 128130
+classcanvas 129538 class_ref 190210 // ChargingStationType
+  classdiagramsettings member_max_width 0 end
+  xyz 496.3 406.7 2000
+end
+classcanvas 129794 class_ref 190338 // ModemType
+  classdiagramsettings member_max_width 0 end
+  xyz 533.2 650.4 2000
+end
+classcanvas 130050 class_ref 190466 // call
+  classdiagramsettings member_max_width 0 end
+  xyz 381.9 88.9 2000
+end
+classcanvas 130818 class_ref 238978 // BootNotificationResponse
+  classdiagramsettings member_max_width 0 end
+  xyz 798.4 262.8 2000
+end
+classcanvas 130946 class_ref 239106 // callresult
+  classdiagramsettings member_max_width 0 end
+  xyz 822.8 100 2000
+end
+relationcanvas 129410 relation_ref 157058 // reason
+  from ref 129154 z 2001 label "reason" italic max_width 255 xyz 376.5 331.5 2001 to ref 129282
   no_role_a no_role_b
-  multiplicity_a_pos 495 299 3000 no_multiplicity_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129666 relation_ref 157186 // chargingStation
+  from ref 129154 z 2001 label "chargingStation" italic max_width 255 xyz 457 334.5 2001 to ref 129538
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129922 relation_ref 157314 // modem
+  from ref 129538 z 2001 label "modem" italic max_width 255 xyz 557.5 584 2001 to ref 129794
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 130178 relation_ref 157442 // <generalisation>
+  from ref 129154 z 2001 to ref 130050
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 131074 relation_ref 206466 // <generalisation>
+  from ref 130818 z 2001 to ref 130946
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
 end
 end

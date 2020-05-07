@@ -459,8 +459,12 @@ package body ocpp is
       
       NonSparkTypes.put("ocpp: GetMessageType: 171 index: "); NonSparkTypes.put_line(index'image);
       ocpp.moveIndexPastToken(msg, ',', index, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 227"); return; end if;
-      if (retval = false) then return; end if;
-      valid := true;
+      
+      if (messagetypeid = 2 or messagetypeid = 3 or messagetypeid = 4) and (index < NonSparkTypes.packet.Length(msg))
+      then
+         valid := true;
+      end if;
+     
    end ParseMessageType;
    
    procedure ParseMessageId(msg:   in  NonSparkTypes.packet.Bounded_String;

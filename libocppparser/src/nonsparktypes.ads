@@ -1,4 +1,4 @@
-with ada.Containers.Vectors;
+
 with Ada.Finalization;
 with Ada.Strings; 
 with Ada.Strings.Bounded; 
@@ -52,14 +52,6 @@ package NonSparkTypes is
    --Unknown - The boot reason is unknown.
    --Watchdog -The Charging Station rebooted due to an elapsed watchdog timer.
 
-   use ChargingStationType.strserialNumber_t;
-
-   subtype index_t is Natural range 1 .. 100;  
-   package vector_chargers is new Ada.Containers.Vectors
-     (Index_Type => index_t, 
-      Element_Type => NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String);   
-   subtype vecChargers_t is vector_chargers.Vector;
-
    package HeartbeatResponse is
          package strcurrentTime_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    end HeartbeatResponse;
@@ -93,15 +85,6 @@ package NonSparkTypes is
    procedure put(msg : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String);
    procedure put_line(msg : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String);
 
-   procedure contains(theList : in vecChargers_t;
-                      theValue: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
-                      retval: out Boolean);
-   
-   procedure append(theList : in out vecChargers_t;
-                    retval : out Boolean;
-                    theValue: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String
-                   );   
-   
    function Uncased_Equals (L, R : String) return Boolean;
 
 end NonSparkTypes;

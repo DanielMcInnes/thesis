@@ -3,47 +3,26 @@ cleanlooks_style
 diagrams
   classdiagram_ref 128002 // cd1
     1528 843 70 A0 0 0
-  sequencediagram_ref 134530 // sd1
-    120 106 100 A4 0 0
   classdiagram_ref 141058 // cd2 libocpp
     1528 843 100 A4 0 0
   classdiagram_ref 147586 // cd2 function deps
     1528 843 80 A0 0 0
-  active  sequencediagram_ref 154114 // sd1 boot not
-    1598 843 150 A0 0 0
+  sequencediagram_ref 154114 // sd1 boot not
+    1598 843 60 A0 0 0
   classdiagram_ref 160642 // cd3 SetVariables
-    1598 843 70 A0 5 166
+    1598 843 60 A0 5 166
   classdiagram_ref 167170 // cd4 getbasereport
     1598 843 90 A0 0 0
+  active  classdiagram_ref 173698 // cd5 BootNotification
+    1598 843 80 A0 0 0
 end
 show_stereotypes
-selected operation_ref 168322 // Initialize
+selected attribute_ref 222210 // messageId
 open
-  class_ref 189954 // BootNotificationRequest
-  class_ref 190210 // ChargingStationType
-  class_ref 190338 // ModemType
-  class_ref 190466 // call
-  class_ref 197250 // ocpp.call
-  class_ref 197378 // ocpp.BootNotification.Request
-  class_ref 197506 // ChargingStation_t
-  class_ref 197762 // SetVariableDataType
-  class_ref 197890 // ComponentType.T
-  class_ref 198018 // EVSEType
-  class_ref 198146 // VariableType.T
-  class_ref 204674 // ocpp.callResponse
-  class_ref 211586 // GetVariableDataType
-  class_ref 218242 // GetVariableResultType
-  class_ref 224770 // GetBaseReportRequest
-  class_ref 224898 // GetBaseReportResponse
-  class_ref 225026 // ocpp.ResetRequest
-  class_ref 225154 // ocpp.ResetResponse
-  class_ref 225282 // TransactionEventRequest
-  class_ref 225410 // StatusNotificationRequest
-  class_ref 231938 // ocpp.NotifyReportRequest
-  class_ref 232194 // ocpp.VariableAttributeType
-  class_ref 232322 // VariableCharacteristicsType.T
-  classview_ref 128770 // asio
-  deploymentview_ref 128642 // asio
+  classdiagram_ref 141058 // cd2 libocpp
+  classdiagram_ref 167170 // cd4 getbasereport
+  class_ref 238978 // BootNotificationResponse
+  class_ref 239106 // callresult
   classview_ref 142338 // cv2libocpp
 end
 end

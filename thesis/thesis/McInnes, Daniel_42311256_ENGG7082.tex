@@ -1,4 +1,6 @@
 \documentclass[12pt,openany,a4paper]{book}
+\usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{graphics}	% if you want encapsulated PS figures.
 \usepackage{graphicx}
 \usepackage[colorlinks,allcolors=blue]{hyperref, xcolor} % must be bfore pgfplots
@@ -6,6 +8,8 @@
 \usepackage{colortbl}
 \usepackage{float}
 \usepackage{flafter}
+
+
 % If you use a macro file called macros.tex :
 % \input{macros}
 % Note: The present document has its macros built in.
@@ -804,16 +808,177 @@ Data Transfer& P01-P02 & DataTransfer & \\
 \end{table}
 
 \subsection{Boot Notification}
-A high level view of a typical boot notification sequence is given in Figure \ref{fig:SD-B01}.
+Whenever a charger is powered on in the field, it establishes a websocket connection with the server, and sends a `BootNotificationRequest' packet to announce itself. A high level view of a typical boot notification sequence is given in figure \ref{fig:SD-B01}.
+
 	\begin{center}
 		\begin{figure}[H]
-			\label{fig:SD-B01}
 			\includegraphics[width=\linewidth]{SD-B01}
 			\caption{Cold Booting a Charging Station \cite{ocpp2b}.}
+			\label{fig:SD-B01}
+		\end{figure}
+	\end{center}
+	
+The `BootNotificationRequest' packet contains information describing the charger. If the server recognises the charger, it returns a `BootNotificationResponse' message with a status of `Accepted'. The contents of these packets is described in figure \ref{fig:CDBootNotification}.
+
+	\begin{center}
+		\begin{figure}[H]
+			\includegraphics[width=\linewidth]{CDBootNotification}
+			\caption{`Boot Notification' class diagram}
+			\label{fig:CDBootNotification}
+		\end{figure}
+	\end{center}
+	
+Note that figure \ref{fig:CDBootNotification} is a UML class diagram, the different arrow types have special meanings. The `BootNotificationRequest' class inherits from the `call' class, and has a member variable called `reason' of class `BootReasonEnumType'. It also has a member variable called `chargingStation' of class `ChargingStationType', which in turn has a member variable called `modem' of class `ModemType'.
+
+\pagebreak
+The `BootNotificationRequest' packet arrives at the server as a big blob of text, as follows:
+\begin{verbatim}
+[2,	        // `2' indicates that this is a `request'
+"19223202",// this is the message ID, and associates requests with responses
+"BootNotification", // the `action'
+{
+   "chargingStation":
+   {
+      "serialNumber": "00000000000000000001",
+      "model": "SingleSocketCharger",
+      "modem":
+      {
+         "iccid": "01234567890123456789",
+         "imsi": "01234567890123456789"
+      },
+      "vendorName": "VendorX",
+      "firmwareVersion": "01.23456789"
+   },
+   "reason":"PowerUp"
+}
+]
+\end{verbatim}
+
+The server's job is to correctly parse this text, determine what kind of packet it is, and respond appropriately. In this example, the server converts the blob of incoming text into a `BootNotificationRequest' packet, builds a `BootNotificationResponse' packet, converts it to a blob of text, and sends it back over the websocket to the charger. The reponse looks like this:
+
+\begin{verbatim}
+[3,// `3' indicates that this is a `response'
+"19223202",// this responds to request "19223202"
+{
+    "currentTime": "2013-02-01T20:53:32.486Z",
+    "interval":  300,
+    "status":"Accepted"
+}
+]
+\end{verbatim}
+
+\pagebreak
+
+\subsection{OCPP message types}
+
+Valid OCPP message types are either CALL, CALLRESULT, or CALLERROR.
+
+\subsubsection{CALL}
+A CALL consists of 4 parts, as described in \ref{tab:CALL}
+
+\begin{table}[htp]
+\begin{tabular}{ |p{3cm}|p{2.5cm}|p{9cm}| }
+ \hline
+\textbf{Field} & \textbf{Data Type} & \textbf{Meaning}
+\\
+ \hline MessageTypeId & Integer (=2)& This is a Message Type Number which is used to identify the type of the message.\\
+ \hline MessageId & string[36] & This is a unique identifier that will be used to match request and result.\\
+ \hline Action & string[36] & The name of the remote procedure or action. This field SHALL contain a case-sensitive string.
+The field SHALL contain the OCPP Message name without the "Request" suffix. For example: For
+a "BootNotificationRequest", this field shall be set to "BootNotification".\\
+ \hline Payload & JSON & JSON Payload of the action.\\
+ \hline
+\end{tabular}
+\caption{CALL message type \cite{ocpp4}}
+\label{tab:CALL}
+\end{table}
+
+
+\subsubsection{CALLRESULT}
+A CALL consists of 4 parts, as described in \ref{tab:CALLRESULT}
+
+\begin{table}[H]
+\begin{tabular}{ |p{3cm}|p{2.5cm}|p{9cm}| }
+ \hline
+\textbf{Field} & \textbf{Data Type} & \textbf{Meaning}
+\\
+ \hline MessageTypeId & Integer (=3) & This is a Message Type Number which is used to identify the type of the message.\\
+ \hline MessageId & string[36] & This must be the exact same ID that is in the call request so that the recipient can match request and result.\\
+ \hline Payload & JSON & JSON Payload of the action.\\
+ \hline
+\end{tabular}
+\caption{CALLRESULT message type \cite{ocpp4}}
+\label{tab:CALLRESULT}
+\end{table}
+
+
+\subsubsection{CALLERROR}
+The CALLERROR message is only used when an error occurs during message transport, or in response to an invalid OCPP message. A CALL consists of 5 parts, as described in \ref{tab:CALLERROR}. 
+\begin{table}[htp]
+\begin{tabular}{ |p{3cm}|p{2.5cm}|p{9cm}| }
+ \hline
+\textbf{Field} & \textbf{Data Type} & \textbf{Meaning}
+\\
+ \hline MessageTypeId & Integer (=4)& This is a Message Type Number which is used to identify the type of the message.\\
+ \hline MessageId & string[36] & This must be the exact same ID that is in the call request so that the recipient can match request and result.\\
+ \hline Action & string[36] & The name of the remote procedure or action. This field SHALL contain a case-sensitive string.
+The field SHALL contain the OCPP Message name without the "Request" suffix. For example: For
+a "BootNotificationRequest", this field shall be set to "BootNotification".\\
+ \hline Payload & JSON & JSON Payload of the action.\\
+ \hline
+\end{tabular}
+\caption{CALLERROR message type \cite{ocpp4}}
+\label{tab:CALLERROR}
+\end{table}
+
+
+\subsection{Implementation}
+The sequence diagram \ref{fig:SDBootNotification} describes the typical sequence of events that occurs when a charger is powered on, boots up and connects to a server. The first thing that happens, prior to the charger booting, is the charger is enrolled on the server. The server maintains a list of known chargers. Only chargers on this list may successfully start an OCPP session.\\
+Once a charger powers up, it establishes a websocket connection with the server and communicates with OCPP packets over this link. The first OCPP message the charger sends is a `BootNotificationRequest'.\\
+When the server receives a blob of text, it arrives in a function called `ReceivePacket'.
+
+\subsection{`ReceivePacket' Function}
+
+\begin{verbatim}
+   procedure receivePacket(theServer: in out ocpp.server.T;
+                           msg: in NonSparkTypes.packet.Bounded_String;
+                           response: out NonSparkTypes.packet.Bounded_String;
+                           valid: out Boolean)
+     with
+       Global => null,
+       Depends => (
+                   valid => (msg),
+                   response => (msg, theServer),
+                   theServer => (msg, theServer)
+                  );
+\end{verbatim}
+
+\subsubsection{`Global' section}
+The line `$Global \Rightarrow null$' means that the procedure does not modify any global state.
+\subsubsection{`Depends' section}
+The `Depends' clause means that:
+\begin{itemize}
+\item the final value of `valid' depends only on `msg'. It makes sense that the validity of an OCPP packet depends only on the content of the message, and is independent of the state of the server.
+\item the final value of `response' depends on `msg' and on `theServer'. It makes intuitive sense that the response depends on what the request was. It may not be immediately obvious why the response should depend on the state of the server, until we consider that the server maintains a list of known chargers, and will respond to BootNotificationRequests with a `Rejected' status for unknown chargers.
+\item the final value of `theServer' depends on the initial state of `theServer' and on `msg'. 
+\end{itemize}
+
+
+
+
+The first thing the function `ReceivePacket' does is parse the `MessageType', as seen in \ref{fig:SDBootNotification}. 
+
+	\begin{center}
+		\begin{figure}[H]
+			\includegraphics[width=\linewidth]{SDBootNotification}
+			\caption{Cold Booting a Charging Station \cite{ocpp2b}.}
+			\label{fig:SDBootNotification}
 		\end{figure}
 	\end{center}
 
-\subsubsection{Implementation}
+\subsection{`ParseMessageType' Function}
+
+The first thing the function `receivePacket' does is parse the `MessageType', as seen in \ref{fig:SDBootNotification}. 
 
 
 
