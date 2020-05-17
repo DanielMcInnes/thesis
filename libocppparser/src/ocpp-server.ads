@@ -74,8 +74,7 @@ is
                    index => (msg, index),
                    response => (msg, index, theServer)
                   ),
-       Post => (if valid = true then index <= NonSparkTypes.packet.Length(msg))
-;
+       Post => (if valid = true then index <= NonSparkTypes.packet.Length(msg));
    
    procedure handleResponse(theServer: in out ocpp.server.T;
                             msg: in NonSparkTypes.packet.Bounded_String;

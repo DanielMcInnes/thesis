@@ -807,7 +807,9 @@ Data Transfer& P01-P02 & DataTransfer & \\
 \end{tabular}
 \end{table}
 
-\subsection{Boot Notification}
+\subsection{Boot Notification Discussion}
+To understand what interesting software properties may be proved, we will walk through a typical `BootNotification' sequence.\\
+
 Whenever a charger is powered on in the field, it establishes a websocket connection with the server, and sends a `BootNotificationRequest' packet to announce itself. A high level view of a typical boot notification sequence is given in figure \ref{fig:SD-B01}.
 
 	\begin{center}
@@ -933,7 +935,7 @@ a "BootNotificationRequest", this field shall be set to "BootNotification".\\
 
 
 \subsection{Implementation}
-The sequence diagram \ref{fig:SDBootNotification} describes the typical sequence of events that occurs when a charger is powered on, boots up and connects to a server. The first thing that happens, prior to the charger booting, is the charger is enrolled on the server. The server maintains a list of known chargers. Only chargers on this list may successfully start an OCPP session.\\
+The sequence diagram \ref{fig:SDBootNotification} describes the typical sequence of events that occurs when a charger is powered on, boots up and connects to a server. Prior to the charger booting, the charger is enrolled on the server. The server maintains a list of known chargers. Only chargers on this list may successfully start an OCPP session.\\
 Once a charger powers up, it establishes a websocket connection with the server and communicates with OCPP packets over this link. The first OCPP message the charger sends is a `BootNotificationRequest'.\\
 When the server receives a blob of text, it arrives in a function called `ReceivePacket'.
 
@@ -977,9 +979,65 @@ The first thing the function `ReceivePacket' does is parse the `MessageType', as
 	\end{center}
 
 \subsection{`ParseMessageType' Function}
+\begin{verbatim}
 
-The first thing the function `receivePacket' does is parse the `MessageType', as seen in \ref{fig:SDBootNotification}. 
+   procedure ParseMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
+                              messagetypeid : out integer;-- eg. 2
+                              index: in out Integer;
+                              valid: out Boolean)
+     with  Global => null,
+     Post => (if valid = true then 
+                (messagetypeid = 2 or messagetypeid = 3 or messagetypeid = 4)
+              and
+                (index < NonSparkTypes.packet.Length(msg))
+             );
+\end{verbatim}
+\subsubsection{`Global' section}
+The line `$Global \Rightarrow null$' means that the procedure does not modify any global state.
+\subsubsection{`Post' section}
+The `Post' clause means that:
+\begin{itemize}
+\item if the function returns `valid = true', then the `messagetypeid' must be one of the valid OCPP message types, i.e. 2, 3 or 4.
+\item if the function returns `valid = true', then the `index' must not have moved past the end of `msg'. This postcondition is included as a sanity check. 
+\end{itemize}
 
+Once we have successfully parsed the message type, we know whether it is a `request' or a `response'. In this example, the server has received a `BootNotificationRequest', so we pass the message to `handleRequest' for further parsing.
+
+\subsection{`handleRequest' Function}
+\begin{verbatim}
+   procedure handleRequest(theServer: in ocpp.server.T;
+                           msg: in NonSparkTypes.packet.Bounded_String;
+                           index: in out Integer;
+                           response: out NonSparkTypes.packet.Bounded_String;
+                           valid: out Boolean)
+     with
+       Global => null,
+       Depends => (
+                   valid => (msg, index),
+                   index => (msg, index),
+                   response => (msg, index, theServer)
+                  ),
+       Post => (if valid = true then index <= NonSparkTypes.packet.Length(msg));
+   
+\end{verbatim}
+\subsubsection{`Global' section}
+The line `$Global \Rightarrow null$' means that the procedure does not modify any global state.
+\subsubsection{`Depends' section}
+\begin{itemize}
+\item The final value of `valid' depends only on `msg' and `index'. The reason `valid' depends on `index' is that if the index was already pointing at the end of the message, there would not be enough information left to construct a valid request.
+\item The final value of `index' depends only on `msg' and `index'. This makes sense, as if the message was invalid, the function will return early, without parsing much of the message, thus affecting the final value of `index'. The reason the final value of `index' depends on the initial value of `index' is that if the index was already pointing at the end of the message, the function would return without advancing `index' through the message.
+\item The value of `response' depends on `msg', `index' and `theServer'. 
+\end{itemize}
+\subsubsection{`Post' section}
+The `Post' clause means that:
+\begin{itemize}
+\item if the function returns `valid = true', then the `index' must not have moved past the end of `msg'. This postcondition is included as a sanity check. 
+\end{itemize}
+
+The body of `handleRequest()' calls `ParseAction' to determine what kind of request it is.
+
+
+compares the `action' part of the message with known actions. In this case, the action is `'
 
 
 \chapter{Results and discussion \ldots}

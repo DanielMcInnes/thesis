@@ -7,17 +7,17 @@ diagrams
     1528 843 100 A4 0 0
   classdiagram_ref 147586 // cd2 function deps
     1528 843 80 A0 0 0
-  sequencediagram_ref 154114 // sd1 boot not
-    1598 843 60 A0 0 0
+  active  sequencediagram_ref 154114 // sd1 boot not
+    1598 843 120 A0 0 0
   classdiagram_ref 160642 // cd3 SetVariables
     1598 843 60 A0 5 166
   classdiagram_ref 167170 // cd4 getbasereport
     1598 843 90 A0 0 0
-  active  classdiagram_ref 173698 // cd5 BootNotification
+  classdiagram_ref 173698 // cd5 BootNotification
     1598 843 80 A0 0 0
 end
 show_stereotypes
-selected attribute_ref 222210 // messageId
+selected sequencediagram_ref 154114 // sd1 boot not
 open
   classdiagram_ref 141058 // cd2 libocpp
   classdiagram_ref 167170 // cd4 getbasereport

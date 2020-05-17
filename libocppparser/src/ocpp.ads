@@ -71,6 +71,7 @@ package ocpp is
                              foundInteger: out integer;
                              found : out Boolean) 
      with  Global => null,
+       Annotate => (GNATprove, terminating),
      post => (if found = true then index < Integer'Last);
    
    
@@ -79,7 +80,7 @@ package ocpp is
                               index: in out Integer;
                               valid: out Boolean)
      with  Global => null,
-     post => (if valid = true then 
+     Post => (if valid = true then 
                 (messagetypeid = 2 or messagetypeid = 3 or messagetypeid = 4)
               and
                 (index < NonSparkTypes.packet.Length(msg))
