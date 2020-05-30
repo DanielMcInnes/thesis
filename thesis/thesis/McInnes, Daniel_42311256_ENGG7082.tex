@@ -1037,7 +1037,54 @@ The `Post' clause means that:
 The body of `handleRequest()' calls `ParseAction' to determine what kind of request it is.
 
 
-compares the `action' part of the message with known actions. In this case, the action is `'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{`ParseAction' Function}
+\begin{verbatim}
+   procedure handleRequest(theServer: in ocpp.server.T;
+                           msg: in NonSparkTypes.packet.Bounded_String;
+                           index: in out Integer;
+                           response: out NonSparkTypes.packet.Bounded_String;
+                           valid: out Boolean)
+     with
+       Global => null,
+       Depends => (
+                   valid => (msg, index),
+                   index => (msg, index),
+                   response => (msg, index, theServer)
+                  ),
+       Post => (if valid = true then index <= NonSparkTypes.packet.Length(msg));
+   
+\end{verbatim}
+\subsubsection{`Global' section}
+The line `$Global \Rightarrow null$' means that the procedure does not modify any global state.
+\subsubsection{`Depends' section}
+\begin{itemize}
+\item The final value of `valid' depends only on `msg' and `index'. The reason `valid' depends on `index' is that if the index was already pointing at the end of the message, there would not be enough information left to construct a valid request.
+\item The final value of `index' depends only on `msg' and `index'. This makes sense, as if the message was invalid, the function will return early, without parsing much of the message, thus affecting the final value of `index'. The reason the final value of `index' depends on the initial value of `index' is that if the index was already pointing at the end of the message, the function would return without advancing `index' through the message.
+\item The value of `response' depends on `msg', `index' and `theServer'. 
+\end{itemize}
+\subsubsection{`Post' section}
+The `Post' clause means that:
+\begin{itemize}
+\item if the function returns `valid = true', then the `index' must not have moved past the end of `msg'. This postcondition is included as a sanity check. 
+\end{itemize}
+
+The body of `handleRequest()' calls `ParseAction' to determine what kind of request it is.
+
 
 
 \chapter{Results and discussion \ldots}
