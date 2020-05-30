@@ -64,17 +64,17 @@ is
    
    procedure handleRequest(theServer: in ocpp.server.T;
                            msg: in NonSparkTypes.packet.Bounded_String;
-                           index: in out Integer;
+                           msgindex: in out Integer;
                            response: out NonSparkTypes.packet.Bounded_String;
                            valid: out Boolean)
      with
        global => null,
        Depends => (
-                     valid => (msg, index),
-                   index => (msg, index),
-                   response => (msg, index, theServer)
+                     valid => (msg, msgindex),
+                   msgindex => (msg, msgindex),
+                   response => (msg, msgindex, theServer)
                   ),
-       Post => (if valid = true then index <= NonSparkTypes.packet.Length(msg));
+       Post => (if valid = true then msgindex <= NonSparkTypes.packet.Length(msg));
    
    procedure handleResponse(theServer: in out ocpp.server.T;
                             msg: in NonSparkTypes.packet.Bounded_String;

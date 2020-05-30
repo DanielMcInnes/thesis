@@ -103,7 +103,7 @@ is
    
    procedure handleRequest(theServer: in ocpp.server.T;
                            msg: in NonSparkTypes.packet.Bounded_String;
-                           index: in out Integer;
+                           msgindex: in out Integer;
                            response: out NonSparkTypes.packet.Bounded_String;
                            valid: out Boolean)
    is
@@ -112,7 +112,7 @@ is
    begin
       response := NonSparkTypes.packet.To_Bounded_String("");
       
-      ocpp.ParseMessageId(msg, msgid, index,  valid);
+      ocpp.ParseMessageId(msg, msgid, msgindex,  valid);
       if (valid = false) then
          return;
       end if;
@@ -122,15 +122,15 @@ is
          return;
       end if;
       
-      ocpp.ParseAction(msg, index, action, valid); -- eg. "BootNotification"
+      ocpp.ParseAction(msg, msgindex, action, valid); -- eg. "BootNotification"
       if (valid = false) then
          return;
       end if;
 
       if (action = ocpp.BootNotificationRequest.action)
       then
-         handleBootNotificationRequest(theServer, msg, index, valid, response);
-         if (index > NonSparkTypes.packet.Length(msg))
+         handleBootNotificationRequest(theServer, msg, msgindex, valid, response);
+         if (msgindex > NonSparkTypes.packet.Length(msg))
          then
             valid := false;
             return;
@@ -138,24 +138,24 @@ is
 
       elsif (action = ocpp.HeartbeatRequest.action)
       then
-         handleHeartbeatRequest(msg, index, valid, response);
-         if (index > NonSparkTypes.packet.Length(msg))
+         handleHeartbeatRequest(msg, msgindex, valid, response);
+         if (msgindex > NonSparkTypes.packet.Length(msg))
          then
             valid := false;
             return;
          end if;
       elsif (action = ocpp.GetBaseReportRequest.action)
       then
-         handleGetBaseReportRequest(msg, index, valid, response);
-         if (index > NonSparkTypes.packet.Length(msg))
+         handleGetBaseReportRequest(msg, msgindex, valid, response);
+         if (msgindex > NonSparkTypes.packet.Length(msg))
          then
             valid := false;
             return;
          end if;
       elsif (action = ocpp.StatusNotificationRequest.action)
       then
-         handleStatusNotificationRequest(msg, index, valid, response);
-         if (index > NonSparkTypes.packet.Length(msg))
+         handleStatusNotificationRequest(msg, msgindex, valid, response);
+         if (msgindex > NonSparkTypes.packet.Length(msg))
          then
             valid := false;
             return;
@@ -164,7 +164,7 @@ is
          NonSparkTypes.put_line("ocpp-server: 103: ERROR: invalid action");
       end if;
       
-      if (index > NonSparkTypes.packet.Length(msg))
+      if (msgindex > NonSparkTypes.packet.Length(msg))
       then
          valid := false;
       end if;

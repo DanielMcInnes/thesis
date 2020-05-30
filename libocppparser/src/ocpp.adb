@@ -292,7 +292,8 @@ package body ocpp is
            
       temp :=  Element(msg, msgindex); --put("    findnonwhitespace 27: index: "); put(index'Image); put(" temp: "); put_line(temp'image); 
       --put("    findnonwhitespace 30: index: "); put_line(index'image);
-      while ((temp = ASCII.LF) or (temp = ' ')) loop
+      while ((temp = ASCII.LF) or (temp = ' ')) and (msgindex <= Length(msg))  loop
+         pragma Loop_Variant(Increases => msgindex);
          if (
              (msgindex = Integer'Last)  or 
                (msgindex >= Length(msg)) 
@@ -535,10 +536,15 @@ package body ocpp is
          return; 
       end if;
       
+      
       NonSparkTypes.put("ParseAction: 533: msgindex:"); NonSparkTypes.put_Line(msgindex'Image);
       NonSparkTypes.put("parse: action: "); NonSparkTypes.put_Line(NonSparkTypes.action_t.To_String(action));
-      
-      
+
+      if (msgindex >= NonSparkTypes.packet.Length(msg))
+      then
+         valid := false;
+         return;
+      end if;
    end ParseAction;
    
 

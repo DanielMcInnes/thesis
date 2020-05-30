@@ -1054,19 +1054,11 @@ The body of `handleRequest()' calls `ParseAction' to determine what kind of requ
 
 \subsection{`ParseAction' Function}
 \begin{verbatim}
-   procedure handleRequest(theServer: in ocpp.server.T;
-                           msg: in NonSparkTypes.packet.Bounded_String;
-                           index: in out Integer;
-                           response: out NonSparkTypes.packet.Bounded_String;
-                           valid: out Boolean)
-     with
-       Global => null,
-       Depends => (
-                   valid => (msg, index),
-                   index => (msg, index),
-                   response => (msg, index, theServer)
-                  ),
-       Post => (if valid = true then index <= NonSparkTypes.packet.Length(msg));
+   procedure ParseAction(msg:   in  NonSparkTypes.packet.Bounded_String;
+                         msgindex: in out Integer;
+                         action : out NonSparkTypes.action_t.Bounded_String;
+                         valid: out Boolean
+                        );
    
 \end{verbatim}
 \subsubsection{`Global' section}

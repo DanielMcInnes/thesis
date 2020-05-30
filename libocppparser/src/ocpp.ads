@@ -71,7 +71,7 @@ package ocpp is
                              foundInteger: out integer;
                              found : out Boolean) 
      with  Global => null,
-       Annotate => (GNATprove, terminating),
+     Annotate => (GNATprove, terminating),
      post => (if found = true then index < Integer'Last);
    
    
@@ -98,7 +98,13 @@ package ocpp is
                          msgindex: in out Integer;
                          action : out NonSparkTypes.action_t.Bounded_String;
                          valid: out Boolean
-                        );
+                        )
+     with  Global => null,
+     Annotate => (GNATprove, Terminating),
+     Post => (if valid = true 
+                then 
+                  (msgindex < NonSparkTypes.packet.Length(msg))
+             );
 
    generic
       Max: Positive;
@@ -110,7 +116,8 @@ package ocpp is
                               msgindex : in out Integer;
                               found : out Boolean;
                               foundString: out string_t) 
-     with  Global => null;
+     with  Global => null,
+     Annotate => (GNATprove, Terminating);
    
    procedure findQuotedKey(msg: in NonSparkTypes.packet.Bounded_String;
                            msgIndex: in out Integer;
@@ -184,7 +191,9 @@ private
       with function to_string(msg : string_t) return string;        
    procedure findnonwhitespace(msg: in string_t;
                                msgindex: in out Positive;
-                               retval: out boolean);
+                               retval: out boolean)
+     with  Global => null,
+     Annotate => (GNATprove, Terminating);
    --   with
    --          Global => null,
    --          post => (if retval = true then
