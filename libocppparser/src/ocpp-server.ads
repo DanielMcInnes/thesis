@@ -57,6 +57,7 @@ is
                            valid: out Boolean)
      with
        Global => null,
+       Annotate => (GNATprove, Terminating),
        Depends => (
                    valid => (msg, theServer),
                    response => (msg, theServer),
