@@ -31,7 +31,7 @@ is
      with
        global => null;
 
-   procedure enrolChargingStation(theList: in out ChargerList.vecChargers_t;
+   procedure EnrolChargingStation(theList: in out ChargerList.vecChargers_t;
                                   serialNumber: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
                                   retval: out Boolean)
      with
@@ -41,7 +41,7 @@ is
                    theList => (serialNumber, theList)
                   );
    
-   procedure isEnrolled(theList: in ChargerList.vecChargers_t;
+   procedure IsEnrolled(theList: in ChargerList.vecChargers_t;
                         serialNumber: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
                         retval: out Boolean)
      with
@@ -51,7 +51,7 @@ is
                      retval => (serialNumber, theList)
                   );
 
-   procedure receivePacket(theServer: in out ocpp.server.T;
+   procedure ReceivePacket(theServer: in out ocpp.server.T;
                            msg: in NonSparkTypes.packet.Bounded_String;
                            response: out NonSparkTypes.packet.Bounded_String;
                            valid: out Boolean)
@@ -64,7 +64,7 @@ is
                    theServer => (msg, theServer)
                   );
    
-   procedure handleRequest(theServer: in ocpp.server.T;
+   procedure HandleRequest(theServer: in ocpp.server.T;
                            msg: in NonSparkTypes.packet.Bounded_String;
                            msgindex: in out Integer;
                            response: out NonSparkTypes.packet.Bounded_String;
@@ -79,7 +79,7 @@ is
                   ),
        Post => (if valid = true then msgindex <= NonSparkTypes.packet.Length(msg));
    
-   procedure handleResponse(theServer: in out ocpp.server.T;
+   procedure HandleResponse(theServer: in out ocpp.server.T;
                             msg: in NonSparkTypes.packet.Bounded_String;
                            index: in out Integer;
                             valid: out Boolean)
@@ -91,7 +91,7 @@ is
                    theServer => (msg, theServer)
                   );
    
-   procedure handleSetVariablesResponse(theServer: in out ocpp.server.T;
+   procedure HandleSetVariablesResponse(theServer: in out ocpp.server.T;
                                         msg: in NonSparkTypes.packet.Bounded_String;
                                         index : out Integer;
                                         valid: out Boolean
@@ -104,7 +104,7 @@ is
                    theServer => (msg, theServer)
                   );
 
-   procedure handleGetBaseReportResponse(theServer: in out ocpp.server.T;
+   procedure HandleGetBaseReportResponse(theServer: in out ocpp.server.T;
                                          msg: in NonSparkTypes.packet.Bounded_String;
                                          index : out Integer;
                                          valid: out Boolean
@@ -117,7 +117,7 @@ is
                    theServer => (msg, theServer)
                   );
 
-   procedure handleGetVariablesResponse(theServer: in out ocpp.server.T;
+   procedure HandleGetVariablesResponse(theServer: in out ocpp.server.T;
                                         msg: in NonSparkTypes.packet.Bounded_String;
                                         index : out Integer;
                                         valid: out Boolean
@@ -131,13 +131,13 @@ is
                   );
 
 
-   procedure sendRequest(theServer: in out ocpp.server.T;
+   procedure SendRequest(theServer: in out ocpp.server.T;
                          msg: in call'Class
                         )
      with
        global => null;
 
-   procedure handleBootNotificationRequest(theServer: in ocpp.server.T;
+   procedure HandleBootNotificationRequest(theServer: in ocpp.server.T;
                                            msg: in NonSparkTypes.packet.Bounded_String;
                                            index : out Integer;
                                            valid: out Boolean;
@@ -157,7 +157,7 @@ is
          --                 )
    ;
 
-   procedure handleHeartbeatRequest(msg: in NonSparkTypes.packet.Bounded_String;
+   procedure HandleHeartbeatRequest(msg: in NonSparkTypes.packet.Bounded_String;
                                     index : in out Integer;
                                     valid: out Boolean;
                                     response: out NonSparkTypes.packet.Bounded_String
@@ -172,7 +172,7 @@ is
                    null => index
                   );
 
-   procedure handleGetBaseReportRequest(
+   procedure HandleGetBaseReportRequest(
                                         msg: in NonSparkTypes.packet.Bounded_String;
                                         index : in out Integer;
                                         valid: out Boolean;
@@ -188,7 +188,7 @@ is
                    null => index
                   );
 
-   procedure handleStatusNotificationRequest(msg: in NonSparkTypes.packet.Bounded_String;
+   procedure HandleStatusNotificationRequest(msg: in NonSparkTypes.packet.Bounded_String;
                                              index : in out Integer;
                                              valid: out Boolean;
                                              response: out NonSparkTypes.packet.Bounded_String

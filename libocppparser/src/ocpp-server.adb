@@ -33,7 +33,7 @@ is
       self.call := NonSparkTypes.action_t.To_Bounded_String("");
    end Initialize;
 
-   procedure enrolChargingStation(theList: in out ChargerList.vecChargers_t;
+   procedure EnrolChargingStation(theList: in out ChargerList.vecChargers_t;
                                   serialNumber: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
                                   retval: out Boolean)
    is
@@ -47,26 +47,26 @@ is
       end if;
 
       ChargerList.append(theList, retval, serialNumber);
-   end enrolChargingStation;
+   end EnrolChargingStation;
    
-   procedure isEnrolled(theList: in ChargerList.vecChargers_t;
+   procedure IsEnrolled(theList: in ChargerList.vecChargers_t;
                         serialNumber: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
                         retval: out Boolean)
    is
    begin
       ChargerList.contains(theList, serialNumber, retval);      
       NonSparkTypes.put("ocpp.server.isEnrolled: "); NonSparkTypes.put(serialNumber); NonSparkTypes.put(retval'Image); --NonSparkTypes.put_line(enrolledChargers.Length'Image);
-   end isEnrolled;
+   end IsEnrolled;
    
-   procedure sendRequest(theServer: in out ocpp.server.T;
+   procedure SendRequest(theServer: in out ocpp.server.T;
                          msg: in call'Class)
    is
    begin
       NonSparkTypes.put_line("transmitting packet: ");
       theServer.call := msg.action;
-   end sendRequest;
+   end SendRequest;
    
-   procedure receivePacket(theServer: in out ocpp.server.T;
+   procedure ReceivePacket(theServer: in out ocpp.server.T;
                            msg: in NonSparkTypes.packet.Bounded_String;
                            response: out NonSparkTypes.packet.Bounded_String;
                            valid: out Boolean)
@@ -84,10 +84,10 @@ is
       
       if (messageTypeId = 2) 
       then 
-         handleRequest(theServer, msg, index, response, valid);
+         HandleRequest(theServer, msg, index, response, valid);
       elsif (messageTypeId = 3)
       then
-         handleResponse(theServer, msg, index, valid);
+         HandleResponse(theServer, msg, index, valid);
       else
          valid := false;
       end if;
@@ -99,9 +99,9 @@ is
       end if;
       
       
-   end receivePacket;
+   end ReceivePacket;
    
-   procedure handleRequest(theServer: in ocpp.server.T;
+   procedure HandleRequest(theServer: in ocpp.server.T;
                            msg: in NonSparkTypes.packet.Bounded_String;
                            msgindex: in out Integer;
                            response: out NonSparkTypes.packet.Bounded_String;
@@ -129,7 +129,7 @@ is
 
       if (action = ocpp.BootNotificationRequest.action)
       then
-         handleBootNotificationRequest(theServer, msg, msgindex, valid, response);
+         HandleBootNotificationRequest(theServer, msg, msgindex, valid, response);
          if (msgindex > NonSparkTypes.packet.Length(msg))
          then
             valid := false;
@@ -138,7 +138,7 @@ is
 
       elsif (action = ocpp.HeartbeatRequest.action)
       then
-         handleHeartbeatRequest(msg, msgindex, valid, response);
+         HandleHeartbeatRequest(msg, msgindex, valid, response);
          if (msgindex > NonSparkTypes.packet.Length(msg))
          then
             valid := false;
@@ -146,7 +146,7 @@ is
          end if;
       elsif (action = ocpp.GetBaseReportRequest.action)
       then
-         handleGetBaseReportRequest(msg, msgindex, valid, response);
+         HandleGetBaseReportRequest(msg, msgindex, valid, response);
          if (msgindex > NonSparkTypes.packet.Length(msg))
          then
             valid := false;
@@ -154,7 +154,7 @@ is
          end if;
       elsif (action = ocpp.StatusNotificationRequest.action)
       then
-         handleStatusNotificationRequest(msg, msgindex, valid, response);
+         HandleStatusNotificationRequest(msg, msgindex, valid, response);
          if (msgindex > NonSparkTypes.packet.Length(msg))
          then
             valid := false;
@@ -170,9 +170,9 @@ is
       end if;
 
       
-   end handleRequest;
+   end HandleRequest;
    
-   procedure handleResponse(theServer: in out ocpp.server.T;
+   procedure HandleResponse(theServer: in out ocpp.server.T;
                             msg: in NonSparkTypes.packet.Bounded_String;
                             index: in out Integer;
                             valid: out Boolean)
@@ -182,13 +182,13 @@ is
       NonSparkTypes.put_line("ocppServer: handleResponse");
       if (theServer.call = ocpp.SetVariablesRequest.action)
       then
-         handleSetVariablesResponse(theServer, msg, index, valid);
+         HandleSetVariablesResponse(theServer, msg, index, valid);
       elsif (theServer.call = ocpp.GetVariablesRequest.action)
       then
-         handleGetVariablesResponse(theServer, msg, index, valid);
+         HandleGetVariablesResponse(theServer, msg, index, valid);
       elsif (theServer.call = ocpp.GetBaseReportRequest.action)
       then
-         handleGetBaseReportResponse(theServer, msg, index, valid);
+         HandleGetBaseReportResponse(theServer, msg, index, valid);
       else
          NonSparkTypes.put_line("ocpp-server.adb: 134: unknown response");
          NonSparkTypes.put("theServer.call: "); NonSparkTypes.put_line(NonSparkTypes.action_t.To_String(theServer.call)); 
@@ -200,9 +200,9 @@ is
          valid := false;
          return;
       end if;
-   end handleResponse;
+   end HandleResponse;
    
-   procedure handleSetVariablesResponse(theServer: in out ocpp.server.T;
+   procedure HandleSetVariablesResponse(theServer: in out ocpp.server.T;
                                         msg: in NonSparkTypes.packet.Bounded_String;
                                         index : out Integer;
                                         valid: out Boolean)
@@ -215,9 +215,9 @@ is
       then
          theServer.setVariablesResponse := setVariableResponse;
       end if;
-   end handleSetVariablesResponse;
+   end HandleSetVariablesResponse;
 
-   procedure handleGetBaseReportResponse(theServer: in out ocpp.server.T;
+   procedure HandleGetBaseReportResponse(theServer: in out ocpp.server.T;
                                          msg: in NonSparkTypes.packet.Bounded_String;
                                          index : out Integer;
                                          valid: out Boolean)
@@ -232,9 +232,9 @@ is
       else
          valid := false;
       end if;
-   end handleGetBaseReportResponse;
+   end HandleGetBaseReportResponse;
 
-   procedure handleGetVariablesResponse(theServer: in out ocpp.server.T;
+   procedure HandleGetVariablesResponse(theServer: in out ocpp.server.T;
                                         msg: in NonSparkTypes.packet.Bounded_String;
                                         index : out Integer;
                                         valid: out Boolean)
@@ -250,10 +250,10 @@ is
       else
          NonSparkTypes.put_line("ocppServer: handleGetVariablesResponse(): 196: bad packet");
       end if;
-   end handleGetVariablesResponse;
+   end HandleGetVariablesResponse;
 
 
-   procedure handleBootNotificationRequest(theServer: in ocpp.server.T;
+   procedure HandleBootNotificationRequest(theServer: in ocpp.server.T;
                                            msg: in NonSparkTypes.packet.Bounded_String;
                                            index : out Integer;
                                            valid: out Boolean;
@@ -282,7 +282,7 @@ is
       bootNotificationResponse.currentTime := NonSparkTypes.bootnotificationresponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z");
       bootNotificationResponse.interval := 300;
          
-      isEnrolled(theServer.enrolledChargers, bootNotificationRequest.chargingStation.serialNumber, isChargerEnrolled);
+      IsEnrolled(theServer.enrolledChargers, bootNotificationRequest.chargingStation.serialNumber, isChargerEnrolled);
          
       if (isChargerEnrolled) then
          if (theServer.isDeferringBootNotificationAccept) then
@@ -295,9 +295,9 @@ is
       end if;
          
       bootNotificationResponse.To_Bounded_String(response);      
-   end handleBootNotificationRequest;
+   end HandleBootNotificationRequest;
    
-   procedure handleHeartbeatRequest(msg: in NonSparkTypes.packet.Bounded_String;
+   procedure HandleHeartbeatRequest(msg: in NonSparkTypes.packet.Bounded_String;
                                     index : in out Integer;
                                     valid: out Boolean;
                                     response: out NonSparkTypes.packet.Bounded_String
@@ -320,9 +320,9 @@ is
       heartbeatResponse.currentTime := NonSparkTypes.HeartbeatResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z");
       heartbeatResponse.To_Bounded_String(response);
       NonSparkTypes.put("ocpp-server: 137: response:"); NonSparkTypes.put_line(NonSparkTypes.packet.To_String(response));
-   end handleHeartbeatRequest;
+   end HandleHeartbeatRequest;
    
-   procedure handleGetBaseReportRequest(msg: in NonSparkTypes.packet.Bounded_String;
+   procedure HandleGetBaseReportRequest(msg: in NonSparkTypes.packet.Bounded_String;
                                         index : in out Integer;
                                         valid: out Boolean;
                                         response: out NonSparkTypes.packet.Bounded_String
@@ -345,9 +345,9 @@ is
       response := dummyBounded;
       valid := false;
       
-   end handleGetBaseReportRequest;
+   end HandleGetBaseReportRequest;
    
-   procedure handleStatusNotificationRequest(msg: in NonSparkTypes.packet.Bounded_String;
+   procedure HandleStatusNotificationRequest(msg: in NonSparkTypes.packet.Bounded_String;
                                              index : in out Integer;
                                              valid: out Boolean;
                                              response: out NonSparkTypes.packet.Bounded_String
@@ -372,5 +372,5 @@ is
       statusNotificationResponse.To_Bounded_String(response);
       valid := true;
       
-   end handleStatusNotificationRequest;
+   end HandleStatusNotificationRequest;
 end ocpp.server;
