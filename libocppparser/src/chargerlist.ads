@@ -15,8 +15,8 @@ package ChargerList is
    procedure contains(theList : in vecChargers_t;
                       theValue: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
                       retval: out Boolean)
-     with
-       Global => null;
+     with  Global => null,
+     Annotate => (GNATprove, Terminating);
    
    procedure append(theList : in out vecChargers_t;
                     retval : out Boolean;

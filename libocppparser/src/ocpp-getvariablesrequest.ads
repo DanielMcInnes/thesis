@@ -19,6 +19,7 @@ package ocpp.GetVariablesRequest is
                )
    with
     Global => null,
+    Annotate => (GNATprove, Terminating),
     Depends => (
                 valid => (msg),
                 msgindex => (msg),
@@ -31,5 +32,8 @@ package ocpp.GetVariablesRequest is
             );
 
    procedure To_Bounded_String(Self: in T;
-                               retval: out NonSparkTypes.packet.Bounded_String);
+                               retval: out NonSparkTypes.packet.Bounded_String)
+      with
+ Global => null,
+ Annotate => (GNATprove, Terminating);
 end ocpp.GetVariablesRequest;

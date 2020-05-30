@@ -20,6 +20,7 @@ package ocpp is
                        )
      with
        Global => null,
+     Annotate => (GNATprove, Terminating),
        Depends => (
                      valid => (msg, msgindex, request, expectedAction)
                   ),
@@ -80,6 +81,7 @@ package ocpp is
                               index: in out Integer;
                               valid: out Boolean)
      with  Global => null,
+     Annotate => (GNATprove, Terminating),
      Post => (if valid = true then 
                 (messagetypeid = 2 or messagetypeid = 3 or messagetypeid = 4)
               and
@@ -92,7 +94,9 @@ package ocpp is
                             messageid : out NonSparkTypes.messageid_t.Bounded_String;
                             index: in out Integer;
                             valid: out Boolean
-                           );
+                           )     with
+       global => null,
+       Annotate => (GNATprove, Terminating);
 
    procedure ParseAction(msg:   in  NonSparkTypes.packet.Bounded_String;
                          msgindex: in out Integer;
@@ -122,13 +126,17 @@ package ocpp is
    procedure findQuotedKey(msg: in NonSparkTypes.packet.Bounded_String;
                            msgIndex: in out Integer;
                            valid: out Boolean;
-                           key: in string);
+                           key: in string)
+     with  Global => null,
+     Annotate => (GNATprove, Terminating);
 
    procedure findQuotedKeyQuotedValue(msg: in NonSparkTypes.packet.Bounded_String;
                                       msgIndex: in out Integer;
                                       valid: out Boolean;
                                       key: in string;
-                                      value: out NonSparkTypes.packet.Bounded_String);
+                                      value: out NonSparkTypes.packet.Bounded_String)
+     with  Global => null,
+     Annotate => (GNATprove, Terminating);
    --        with
    --          Global => null,
    --          post => (if valid = true then

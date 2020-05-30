@@ -78,7 +78,7 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & "{" & ASCII.LF
                                                       & "    " & '"' & "currentTime" & '"' & ": " & '"' & NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_String(Self.currentTime) & '"' & "," & ASCII.LF
                                                       & "    " & '"' & "interval" & '"' & ": " & Self.interval'Image & "," & ASCII.LF
-                                                      & "    " & '"' & "status" & '"' & ":"  & '"' & RegistrationStatusEnumType.string_t.To_String(strstatus) & '"' & ASCII.LF
+                                                      & "       " & '"' & "status" & '"' & ":"  & '"' & RegistrationStatusEnumType.string_t.To_String(strstatus) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;

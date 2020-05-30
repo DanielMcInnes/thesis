@@ -62,9 +62,16 @@ module.exports.parse = function(_definitions, i) {
    buffer += ('   package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => ' + maxlen + ');\n');
    buffer += ('   procedure FromString(str : in String;\n');
    buffer += ('                        attribute : out T;\n');
-   buffer += ('                        valid : out Boolean);\n');
+   buffer += ('                        valid : out Boolean)\n');
+   buffer += '      with\n'
+   buffer += ' Global => null,\n'
+   buffer += ' Annotate => (GNATprove, Terminating);\n'
+
    buffer += ('   procedure ToString(attribute : in T;\n');
-   buffer += ('                      str : out string_t.Bounded_String);\n');
+   buffer += ('                      str : out string_t.Bounded_String)\n');
+   buffer += '      with\n'
+   buffer += ' Global => null,\n'
+   buffer += ' Annotate => (GNATprove, Terminating);\n'
    buffer += ('end ocpp.' + clean(i) + ';\n');
    buffer += ('-- end ocpp-' + clean(i) + '.ads\n');
 

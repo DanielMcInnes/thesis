@@ -46,6 +46,7 @@ is
                         retval: out Boolean)
      with
        global => null,
+       Annotate => (GNATprove, Terminating),
        Depends => (
                      retval => (serialNumber, theList)
                   );
@@ -69,6 +70,7 @@ is
                            valid: out Boolean)
      with
        global => null,
+       Annotate => (GNATprove, Terminating),
        Depends => (
                      valid => (msg, msgindex),
                    msgindex => (msg, msgindex),
@@ -142,6 +144,7 @@ is
                                           )
      with
        global => null,
+       Annotate => (GNATprove, Terminating),
        Depends => (
                      index => (msg),
                    valid => (msg),
@@ -160,6 +163,7 @@ is
                                    )
      with
        global => null,
+       Annotate => (GNATprove, Terminating),
        Depends => (
                      index => (msg),
                    valid => (msg),
@@ -175,6 +179,7 @@ is
                                        )
      with
        global => null,
+       Annotate => (GNATprove, Terminating),
        Depends => (
                      index => (msg),
                    valid => (msg),

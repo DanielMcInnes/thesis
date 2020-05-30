@@ -9,7 +9,10 @@ type array_SetVariableDataType is array (Index) of ocpp.SetVariableDataType.T;
 type T is record
    content : array_SetVariableDataType;
 end record;
-procedure Initialize(self: out ocpp.SetVariableDataTypeArray.T);
+procedure Initialize(self: out ocpp.SetVariableDataTypeArray.T)
+  with
+Global => null,
+Annotate => (GNATprove, Terminating);
 
 procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;
                      msgindex: in out Integer;

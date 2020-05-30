@@ -74,7 +74,10 @@ function createArrayType(name, schema) {
    _buffer += ('   content : array_' + schema.items.javaType + 'Type;\n')
    _buffer += ('end record;\n')
 
-   _buffer += ('procedure Initialize(self: out ocpp.' + schema.items.javaType + 'TypeArray.T);\n\n')
+   _buffer += ('procedure Initialize(self: out ocpp.' + schema.items.javaType + 'TypeArray.T)\n')
+   _buffer += ('  with\n')
+   _buffer += ('Global => null,\n')
+   _buffer += ('Annotate => (GNATprove, Terminating);\n\n')
 
    _buffer += ('procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;\n')
    _buffer += ('                     msgindex: in out Integer;\n')
@@ -124,7 +127,7 @@ function createArrayType(name, schema) {
    _buffer += ('      end loop;\n')
    _buffer += ('      for i in Index loop\n')
    _buffer += ('         if i /= Index\'First then \n')
-   _buffer += ('            ocpp.move_index_past_token(msg, \',\', msgindex, last);\n')
+   _buffer += ('            ocpp.moveIndexPastToken(msg, \',\', msgindex, last);\n')
    _buffer += ('            if (last = 0) then\n')
    _buffer += ('               --put_line("39: no comma");\n')
    _buffer += ('               self.content(i).zzzArrayElementInitialized := false;\n')
@@ -273,6 +276,7 @@ module.exports.parse = function (name, schema) {
    _buffer += '               )\n'
    _buffer += '   with\n'
    _buffer += '    Global => null,\n'
+   _buffer += '    Annotate => (GNATprove, Terminating),\n'
    _buffer += '    Depends => (\n'
    _buffer += '                valid => (msg' + ((!(name.endsWith("Request") || name.endsWith("Response"))) ? ", msgindex" : "") + '),\n'
    _buffer += '                msgindex => (msg' + ((!(name.endsWith("Request") || name.endsWith("Response"))) ? ", msgindex" : "") + '),\n'
@@ -289,7 +293,11 @@ module.exports.parse = function (name, schema) {
    }
    _buffer += '            );\n\n'
    _buffer += '   procedure To_Bounded_String(Self: in T;\n'
-   _buffer += '                               retval: out NonSparkTypes.packet.Bounded_String);\n'
+   _buffer += '                               retval: out NonSparkTypes.packet.Bounded_String)\n'
+   _buffer += '      with\n'
+   _buffer += ' Global => null,\n'
+   _buffer += ' Annotate => (GNATprove, Terminating);\n'
+
    _buffer += 'end ocpp.' + name + ';';
    //console.log('\n\n\nbuffer:\n', _buffer, '\n\n');
    var outfile = 'ocpp-' + clean(name).toLowerCase() + '.ads';
