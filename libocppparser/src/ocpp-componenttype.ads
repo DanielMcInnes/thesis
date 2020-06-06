@@ -12,7 +12,11 @@ package ocpp.ComponentType is
       name : NonSparkTypes.ComponentType.strname_t.Bounded_String;
       instance : NonSparkTypes.ComponentType.strinstance_t.Bounded_String;
    end record;
-   procedure Initialize(self: out ocpp.ComponentType.T);
+   procedure Initialize(self: out ocpp.ComponentType.T)
+   with
+    Global => null,
+    Annotate => (GNATprove, Terminating),
+    Depends => (self => null);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex:  in out Integer;

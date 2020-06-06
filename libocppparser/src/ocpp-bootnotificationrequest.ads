@@ -12,7 +12,11 @@ package ocpp.BootNotificationRequest is
       chargingStation : ChargingStationType.T;
       reason : BootReasonEnumType.T;
    end record;
-   procedure Initialize(self: out ocpp.BootNotificationRequest.T);
+   procedure Initialize(self: out ocpp.BootNotificationRequest.T)
+   with
+    Global => null,
+    Annotate => (GNATprove, Terminating),
+    Depends => (self => null);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex:  out Integer;

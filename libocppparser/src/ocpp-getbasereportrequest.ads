@@ -11,7 +11,11 @@ package ocpp.GetBaseReportRequest is
       requestId : integer;
       reportBase : ReportBaseEnumType.T;
    end record;
-   procedure Initialize(self: out ocpp.GetBaseReportRequest.T);
+   procedure Initialize(self: out ocpp.GetBaseReportRequest.T)
+   with
+    Global => null,
+    Annotate => (GNATprove, Terminating),
+    Depends => (self => null);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex:  out Integer;

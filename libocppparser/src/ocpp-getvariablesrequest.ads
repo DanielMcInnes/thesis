@@ -10,7 +10,11 @@ package ocpp.GetVariablesRequest is
    type T is new call with record
       getVariableData : getVariableDataTypeArray.T;
    end record;
-   procedure Initialize(self: out ocpp.GetVariablesRequest.T);
+   procedure Initialize(self: out ocpp.GetVariablesRequest.T)
+   with
+    Global => null,
+    Annotate => (GNATprove, Terminating),
+    Depends => (self => null);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex:  out Integer;

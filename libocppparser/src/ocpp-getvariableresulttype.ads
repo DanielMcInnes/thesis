@@ -17,7 +17,11 @@ package ocpp.GetVariableResultType is
       component : ComponentType.T;
       variable : VariableType.T;
    end record;
-   procedure Initialize(self: out ocpp.GetVariableResultType.T);
+   procedure Initialize(self: out ocpp.GetVariableResultType.T)
+   with
+    Global => null,
+    Annotate => (GNATprove, Terminating),
+    Depends => (self => null);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex:  in out Integer;

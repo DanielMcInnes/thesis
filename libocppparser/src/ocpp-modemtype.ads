@@ -10,7 +10,11 @@ package ocpp.ModemType is
       iccid : NonSparkTypes.ModemType.striccid_t.Bounded_String;
       imsi : NonSparkTypes.ModemType.strimsi_t.Bounded_String;
    end record;
-   procedure Initialize(self: out ocpp.ModemType.T);
+   procedure Initialize(self: out ocpp.ModemType.T)
+   with
+    Global => null,
+    Annotate => (GNATprove, Terminating),
+    Depends => (self => null);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex:  in out Integer;

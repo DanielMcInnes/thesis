@@ -9,7 +9,11 @@ package ocpp.SetVariablesResponse is
    type T is new callresult with record
       setVariableResult : setVariableResultTypeArray.T;
    end record;
-   procedure Initialize(self: out ocpp.SetVariablesResponse.T);
+   procedure Initialize(self: out ocpp.SetVariablesResponse.T)
+   with
+    Global => null,
+    Annotate => (GNATprove, Terminating),
+    Depends => (self => null);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex:  out Integer;

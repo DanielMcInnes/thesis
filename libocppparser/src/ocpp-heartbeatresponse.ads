@@ -8,7 +8,11 @@ package ocpp.HeartbeatResponse is
    type T is new callresult with record
       currentTime : NonSparkTypes.HeartbeatResponse.strcurrentTime_t.Bounded_String;
    end record;
-   procedure Initialize(self: out ocpp.HeartbeatResponse.T);
+   procedure Initialize(self: out ocpp.HeartbeatResponse.T)
+   with
+    Global => null,
+    Annotate => (GNATprove, Terminating),
+    Depends => (self => null);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex:  out Integer;

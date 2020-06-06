@@ -10,7 +10,11 @@ package ocpp.VariableType is
       name : NonSparkTypes.VariableType.strname_t.Bounded_String;
       instance : NonSparkTypes.VariableType.strinstance_t.Bounded_String;
    end record;
-   procedure Initialize(self: out ocpp.VariableType.T);
+   procedure Initialize(self: out ocpp.VariableType.T)
+   with
+    Global => null,
+    Annotate => (GNATprove, Terminating),
+    Depends => (self => null);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex:  in out Integer;

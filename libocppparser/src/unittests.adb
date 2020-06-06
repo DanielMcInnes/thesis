@@ -137,12 +137,12 @@ package body unittests is
    is
    begin
       B01(result);      if (result = false) then         fail; return;      end if;
-      --B02(result);      if (result = false) then         fail; return;      end if;
-      --B03(result);      if (result = false) then         fail; return;      end if;
-      --B04(result);      if (result = false) then         fail; return;      end if;
-      --B05(result);      if (result = false) then         fail; return;      end if;
-      --B06(result);      if (result = false) then         fail; return;      end if;
-      --B07(result);      if (result = false) then         fail; return;      end if; -- GetBaseReportRequest
+      B02(result);      if (result = false) then         fail; return;      end if;
+      B03(result);      if (result = false) then         fail; return;      end if;
+      B04(result);      if (result = false) then         fail; return;      end if;
+      B05(result);      if (result = false) then         fail; return;      end if;
+      B06(result);      if (result = false) then         fail; return;      end if;
+      B07(result);      if (result = false) then         fail; return;      end if; -- GetBaseReportRequest
       
       --TODO:
       --B11

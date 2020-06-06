@@ -9,7 +9,11 @@ package ocpp.HeartbeatRequest is
    type T is new call with record
       unused : Integer;
    end record;
-   procedure Initialize(self: out ocpp.HeartbeatRequest.T);
+   procedure Initialize(self: out ocpp.HeartbeatRequest.T)
+   with
+    Global => null,
+    Annotate => (GNATprove, Terminating),
+    Depends => (self => null);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex:  out Integer;

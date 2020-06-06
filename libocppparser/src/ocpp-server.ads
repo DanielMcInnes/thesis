@@ -150,12 +150,7 @@ is
                      index => (msg),
                    valid => (msg),
                    response => (msg, theServer)
-                  )
-         --,
---    post => (if valid = true then
---               (NonSparkTypes.packet.Length(response) > 0)
-         --                 )
-   ;
+                  );
 
    procedure HandleHeartbeatRequest(msg: in NonSparkTypes.packet.Bounded_String;
                                     index : in out Integer;

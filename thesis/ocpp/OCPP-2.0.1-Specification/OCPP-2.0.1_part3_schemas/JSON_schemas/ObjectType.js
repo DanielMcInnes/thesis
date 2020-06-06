@@ -268,7 +268,12 @@ module.exports.parse = function (name, schema) {
    _buffer += '   end record;';
 
    _buffer += '\n';
-   _buffer += '   procedure Initialize(self: out ocpp.' + name + '.T);\n\n'
+   _buffer += '   procedure Initialize(self: out ocpp.' + name + '.T)\n'
+   _buffer += '   with\n'
+   _buffer += '    Global => null,\n'
+   _buffer += '    Annotate => (GNATprove, Terminating),\n'
+   _buffer += '    Depends => (self => null);\n\n'
+
    _buffer += '   procedure parse(msg: in NonSparkTypes.packet.Bounded_String;\n'
    _buffer += '                msgindex: ' + ((!(name.endsWith("Request") || name.endsWith("Response"))) ? " in" : "") + ' out Integer;\n'
    _buffer += '                self: out ocpp.' + name + '.T;\n'

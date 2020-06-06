@@ -8,7 +8,11 @@ package ocpp.StatusNotificationResponse is
    type T is new callresult with record
       unused : Integer;
    end record;
-   procedure Initialize(self: out ocpp.StatusNotificationResponse.T);
+   procedure Initialize(self: out ocpp.StatusNotificationResponse.T)
+   with
+    Global => null,
+    Annotate => (GNATprove, Terminating),
+    Depends => (self => null);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex:  out Integer;

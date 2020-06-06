@@ -9,7 +9,11 @@ package ocpp.GetBaseReportResponse is
    type T is new callresult with record
       status : GenericDeviceModelStatusEnumType.T;
    end record;
-   procedure Initialize(self: out ocpp.GetBaseReportResponse.T);
+   procedure Initialize(self: out ocpp.GetBaseReportResponse.T)
+   with
+    Global => null,
+    Annotate => (GNATprove, Terminating),
+    Depends => (self => null);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex:  out Integer;

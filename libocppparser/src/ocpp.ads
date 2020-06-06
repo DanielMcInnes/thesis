@@ -87,8 +87,6 @@ package ocpp is
               and
                 (index < NonSparkTypes.packet.Length(msg))
              );
-   
-                             
 
    procedure ParseMessageId(msg:   in  NonSparkTypes.packet.Bounded_String;
                             messageid : out NonSparkTypes.messageid_t.Bounded_String;

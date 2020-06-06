@@ -263,8 +263,12 @@ is
       bootNotificationRequest : ocpp.BootNotificationRequest.T;
       bootNotificationResponse : ocpp.bootnotificationResponse.T;
       isChargerEnrolled : Boolean;
+      type Integer_Ptr is access Integer;
+      
+Ptr : Integer_Ptr := new Integer'(2); -- Allocated in the heap
    begin
       response := NonSparkTypes.packet.To_Bounded_String("");
+      Ptr := new Integer'(3);
 
       ocpp.BootNotificationRequest.parse(msg, index, bootNotificationRequest, valid);
       if (valid = False)
@@ -277,8 +281,6 @@ is
       pragma assert (bootNotificationResponse.messagetypeid = 3);
           
       bootNotificationResponse.messageid := bootNotificationRequest.messageid;
-      --pragma assert (bootNotificationResponse.messageid = bootNotificationRequest.messageid);
-
       bootNotificationResponse.currentTime := NonSparkTypes.bootnotificationresponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z");
       bootNotificationResponse.interval := 300;
          

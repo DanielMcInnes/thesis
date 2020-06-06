@@ -11,7 +11,11 @@ package ocpp.BootNotificationResponse is
       interval : integer;
       status : RegistrationStatusEnumType.T;
    end record;
-   procedure Initialize(self: out ocpp.BootNotificationResponse.T);
+   procedure Initialize(self: out ocpp.BootNotificationResponse.T)
+   with
+    Global => null,
+    Annotate => (GNATprove, Terminating),
+    Depends => (self => null);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex:  out Integer;

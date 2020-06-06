@@ -10,7 +10,11 @@ package ocpp.EVSEType is
       id : integer;
       connectorId : integer;
    end record;
-   procedure Initialize(self: out ocpp.EVSEType.T);
+   procedure Initialize(self: out ocpp.EVSEType.T)
+   with
+    Global => null,
+    Annotate => (GNATprove, Terminating),
+    Depends => (self => null);
 
    procedure parse(msg: in NonSparkTypes.packet.Bounded_String;
                 msgindex:  in out Integer;
