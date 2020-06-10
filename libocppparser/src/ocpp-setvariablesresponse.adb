@@ -17,7 +17,6 @@ procedure findquotedstring_packet is new findquotedstring(
    procedure Initialize(self: out ocpp.SetVariablesResponse.T)
    is
    begin
-      NonSparkTypes.put_line("Initialize()");
       self.messageTypeId:= -1;
       self.messageId := NonSparkTypes.messageid_t.To_Bounded_String("");
       setVariableResultTypeArray.Initialize(self.setVariableResult);
@@ -47,7 +46,7 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKey(msg, msgIndex, valid, "setVariableResult");
       if (valid = false) then NonSparkTypes.put_line("345 Invalid SetVariablesResponsesetVariableResult"); return; end if;
 
-      SetVariableResultTypeArray.FromString(msg, msgindex, self.setVariableResult, valid);
+      setVariableResultTypeArray.FromString(msg, msgindex, self.setVariableResult, valid);
       if (valid = false) then NonSparkTypes.put_line("347 Invalid SetVariablesResponsesetVariableResult"); return; end if;
 
       if (valid = false) then NonSparkTypes.put_line("365 Invalid SetVariablesResponsesetVariableResult"); return; end if;
@@ -60,7 +59,7 @@ procedure findquotedstring_packet is new findquotedstring(
       dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String(""); 
       strsetVariableResult: NonSparkTypes.packet.Bounded_String;
    begin
-      SetVariableResultTypeArray.To_Bounded_String(strsetVariableResult, self.setVariableResult);
+      setVariableResultTypeArray.To_Bounded_String(strsetVariableResult, self.setVariableResult);
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "[3," & ASCII.LF
                                                       & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF

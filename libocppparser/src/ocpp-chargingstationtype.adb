@@ -17,7 +17,6 @@ procedure findquotedstring_packet is new findquotedstring(
    procedure Initialize(self: out ocpp.ChargingStationType.T)
    is
    begin
-      NonSparkTypes.put_line("Initialize()");
       self.zzzArrayElementInitialized := False;
       self.serialNumber := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("");
       self.model := NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("");

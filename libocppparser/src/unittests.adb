@@ -129,6 +129,8 @@ with ocpp.GetBaseReportResponse;
 
 with unittestb11;
 with unittestb12;
+with unittestc01;
+
 package body unittests is
    
    procedure fail is
@@ -149,10 +151,9 @@ package body unittests is
       
       unittestb11.test(result); if (result = false) then fail; return; end if; -- ResetRequest
       unittestb12.test(result); if (result = false) then fail; return; end if; -- ResetRequest
+      unittestc01.test(result); if (result = false) then fail; return; end if; -- ResetRequest
       
       --TODO:
-      --B11
-      --B12
       -- one of C01, C02, C04
       --E01 (one of S1 - S6)
       --E02

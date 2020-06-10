@@ -6,6 +6,8 @@ with ocpp.RegistrationStatusEnumType; use ocpp.RegistrationStatusEnumType.string
 with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.messageid_t; use NonSparkTypes.packet;
 with ChargerList;
 
+with ocpp.AuthorizeRequest;
+with ocpp.AuthorizeResponse;
 with ocpp.BootReasonEnumType;
 with ocpp.BootNotificationRequest;
 with ocpp.BootNotificationResponse;
@@ -157,6 +159,14 @@ is
       elsif (action = ocpp.StatusNotificationRequest.action)
       then
          HandleStatusNotificationRequest(msg, msgindex, valid, response);
+         if (msgindex > NonSparkTypes.packet.Length(msg))
+         then
+            valid := false;
+            return;
+         end if;
+      elsif (action = ocpp.AuthorizeRequest.action)
+      then
+         HandleAuthorizeRequest(msg, msgindex, valid, response);
          if (msgindex > NonSparkTypes.packet.Length(msg))
          then
             valid := false;
@@ -393,4 +403,33 @@ is
       valid := true;
       
    end HandleStatusNotificationRequest;
+
+
+   procedure HandleAuthorizeRequest(msg: in NonSparkTypes.packet.Bounded_String;
+                                             index : in out Integer;
+                                             valid: out Boolean;
+                                             response: out NonSparkTypes.packet.Bounded_String
+                                            )
+   is
+      authorizeRequest : ocpp.AuthorizeRequest.T;
+      authorizeResponse : ocpp.AuthorizeResponse.T;
+      dummyBounded : NonSparkTypes.packet.Bounded_String;
+   begin
+      response := NonSparkTypes.packet.To_Bounded_String("");
+      authorizeResponse.Initialize;
+      ocpp.AuthorizeRequest.parse(msg, index, authorizeRequest, valid);
+      
+      if (valid = false) then
+         NonSparkTypes.put_line("ocpp-server: 423: invalid AuthorizeRequest");
+         return;
+      end if;
+      
+      authorizeResponse.messagetypeid := 3;
+      authorizeResponse.messageid := authorizeRequest.messageid;
+      
+      authorizeResponse.To_Bounded_String(response);
+      valid := true;
+      
+   end HandleAuthorizeRequest;
+
 end ocpp.server;

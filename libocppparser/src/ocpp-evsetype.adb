@@ -17,7 +17,6 @@ procedure findquotedstring_packet is new findquotedstring(
    procedure Initialize(self: out ocpp.EVSEType.T)
    is
    begin
-      NonSparkTypes.put_line("Initialize()");
       self.zzzArrayElementInitialized := False;
       self.id := -1;
       self.connectorId := -1;

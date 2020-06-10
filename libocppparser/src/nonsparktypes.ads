@@ -11,6 +11,37 @@ package NonSparkTypes is
    package messageid_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
    package action_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
 
+   package MessageContentType is
+      package strlanguage_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 8);
+      package strcontent_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 512);
+   end MessageContentType;
+   
+   package GroupIdTokenType is
+      package stridToken_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   end GroupIdTokenType;
+   
+   package IdTokenInfoType is
+      package strcacheExpiryDateTime_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 360);
+      package strlanguage1_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 8);
+      package strlanguage2_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 8);
+   end IdTokenInfoType;
+   
+   package AdditionalInfoType is
+      package strtype_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 50);
+      package stradditionalIdToken_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   end AdditionalInfoType;
+   
+   package IdTokenType is
+      package stridToken_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 36);
+   end IdTokenType;
+   
+   package OCSPRequestDataType is
+      package strissuerNameHash_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 128);
+      package strissuerKeyHash_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 128);
+      package strserialNumber_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 40);
+      package strresponderURL_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 512);
+   end OCSPRequestDataType;
+   
    package ChargingStationType is
       package strserialNumber_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 25);
       package strmodel_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 20);

@@ -17,7 +17,6 @@ procedure findquotedstring_packet is new findquotedstring(
    procedure Initialize(self: out ocpp.ModemType.T)
    is
    begin
-      NonSparkTypes.put_line("Initialize()");
       self.zzzArrayElementInitialized := False;
       self.iccid := NonSparkTypes.ModemType.striccid_t.To_Bounded_String("");
       self.imsi := NonSparkTypes.ModemType.strimsi_t.To_Bounded_String("");

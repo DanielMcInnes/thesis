@@ -2,8 +2,8 @@ pragma SPARK_mode (on);
 
 with Ada.Strings; use Ada.Strings;
 
-package body ocpp.SetVariableDataTypeArray is
-   procedure Initialize(self: out ocpp.SetVariableDataTypeArray.T)
+package body ocpp.setVariableDataTypeArray is
+   procedure Initialize(self: out ocpp.setVariableDataTypeArray.T)
 
    is
    begin
@@ -12,31 +12,47 @@ package body ocpp.SetVariableDataTypeArray is
          self.content(i).zzzArrayElementInitialized := False;
       end loop;
    end Initialize;
+
    procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;
                         msgindex: in out Integer;
                         self: out T;
                         valid: out Boolean)
    is
-      tempBool : Boolean;
       last: Natural;
+      tempIndex: Integer := msgIndex;
+      lastIndex: Integer;
+      tempBool: Boolean;
    begin
       valid := false;
       for i in Index loop
          SetVariableDataType.Initialize(self.content(i));
       end loop;
+      ocpp.moveIndexPastToken(msg, ']', tempIndex, lastIndex);
+      NonSparkTypes.put("first: "); NonSparkTypes.put(msgindex'Image);
+      NonSparkTypes.put(" last:"); NonSparkTypes.put_line(lastIndex'Image);
+      NonSparkTypes.put(" tempIndex:"); NonSparkTypes.put_line(tempIndex'Image);
+      tempIndex := msgindex;
       for i in Index loop
-         if i /= Index'First then 
-            ocpp.moveIndexPastToken(msg, ',', msgindex, last);
-            if (last = 0) then
+         if i /= Index'First
+         then
+           ocpp.moveIndexPastToken(msg, ',', tempIndex, last);
+           if (tempIndex >= lastIndex) then
+              self.content(i).zzzArrayElementInitialized := false;
+              return; -- end of array
+           end if;
+           tempIndex := msgindex;           NonSparkTypes.put("moved past comma. tempIndex:"); NonSparkTypes.put_line(tempIndex'Image);
+           if (last = 0) or (tempIndex > lastIndex) then
                --put_line("39: no comma");
                self.content(i).zzzArrayElementInitialized := false;
                return; -- end of array
             end if;
          end if;
-         SetVariableDataType.parse(msg, msgIndex, self.content(i), tempBool);
+         SetVariableDataType.parse(msg, tempIndex, self.content(i), tempBool);
          self.content(i).zzzArrayElementInitialized := tempBool;
-         if tempBool = True then
+         NonSparkTypes.put("parsed AdditionalInfoType. tempIndex:"); NonSparkTypes.put(tempIndex'Image); NonSparkTypes.put_line(self.content(i).zzzArrayElementInitialized'Image);
+         if self.content(i).zzzArrayElementInitialized = True then
             valid := True; -- need at least one valid item in the array for parsing to succeed
+            msgIndex := tempIndex;
          end if;
       end loop;
    end FromString;
@@ -59,4 +75,4 @@ package body ocpp.SetVariableDataTypeArray is
       NonSparkTypes.packet.Append(Source => msg, New_Item => "]",Drop => Right);
    end To_Bounded_String;
 
-end ocpp.SetVariableDataTypeArray;
+end ocpp.setVariableDataTypeArray;

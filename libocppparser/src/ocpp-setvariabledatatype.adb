@@ -17,7 +17,6 @@ procedure findquotedstring_packet is new findquotedstring(
    procedure Initialize(self: out ocpp.SetVariableDataType.T)
    is
    begin
-      NonSparkTypes.put_line("Initialize()");
       self.zzzArrayElementInitialized := False;
       self.attributeType := AttributeEnumType.Actual;
       self.attributeValue := NonSparkTypes.SetVariableDataType.strattributeValue_t.To_Bounded_String("");

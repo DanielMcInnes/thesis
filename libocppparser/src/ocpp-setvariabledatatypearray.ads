@@ -1,15 +1,16 @@
 pragma SPARK_mode (on); 
 
 with NonSparkTypes;
+with ocpp.integerType;
 with ocpp.SetVariableDataType;
 
-package ocpp.SetVariableDataTypeArray is
+package ocpp.setVariableDataTypeArray is
 type Index is range 1 .. 10;
 type array_SetVariableDataType is array (Index) of ocpp.SetVariableDataType.T;
 type T is record
    content : array_SetVariableDataType;
 end record;
-procedure Initialize(self: out ocpp.SetVariableDataTypeArray.T)
+procedure Initialize(self: out ocpp.setVariableDataTypeArray.T)
   with
 Global => null,
 Annotate => (GNATprove, Terminating);
@@ -22,4 +23,4 @@ procedure FromString(msg: in NonSparkTypes.packet.Bounded_String;
 procedure To_Bounded_String(msg: out NonSparkTypes.packet.Bounded_String;
                    self: in T);
 
-end ocpp.SetVariableDataTypeArray;
+end ocpp.setVariableDataTypeArray;
