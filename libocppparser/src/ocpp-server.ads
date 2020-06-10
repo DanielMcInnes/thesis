@@ -5,11 +5,12 @@ with ocpp;
 with ocpp.BootNotificationRequest;
 with ocpp.BootNotificationResponse;
 with ocpp.GetBaseReportResponse;
+with ocpp.GetVariablesRequest;
+with ocpp.GetVariablesResponse;
 with ocpp.HeartbeatResponse;
 with ocpp.SetVariablesRequest;
 with ocpp.SetVariablesResponse;
-with ocpp.GetVariablesRequest;
-with ocpp.GetVariablesResponse;
+with ocpp.ResetResponse;
 
 with NonSparkTypes;
 
@@ -22,6 +23,7 @@ is
       enrolledChargers : ChargerList.vecChargers_t; -- := NonSparkTypes.vector_chargers.To_Vector(New_Item => NonSparkTypes.ChargingStationType.serialNumber.To_Bounded_String(""), Length => 0); 
 
       getBaseReportResponse: ocpp.GetBaseReportResponse.T;
+      resetResponse: ocpp.ResetResponse.T;
       getVariablesResponse: ocpp.GetVariablesResponse.T;
       isDeferringBootNotificationAccept: Boolean := false;
       setVariablesResponse: ocpp.SetVariablesResponse.T;
@@ -105,6 +107,19 @@ is
                   );
 
    procedure HandleGetBaseReportResponse(theServer: in out ocpp.server.T;
+                                         msg: in NonSparkTypes.packet.Bounded_String;
+                                         index : out Integer;
+                                         valid: out Boolean
+                                        )
+     with
+       global => null,
+       Depends => (
+                     index => (msg),
+                   valid => (msg),
+                   theServer => (msg, theServer)
+                  );
+
+   procedure HandleResetResponse(theServer: in out ocpp.server.T;
                                          msg: in NonSparkTypes.packet.Bounded_String;
                                          index : out Integer;
                                          valid: out Boolean

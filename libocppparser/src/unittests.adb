@@ -14,6 +14,8 @@ with ocpp.GetVariableDataTypeArray;
 with ocpp.GetVariablesRequest; use ocpp.GetVariablesRequest;
 with ocpp.GetVariablesResponse;
 with ocpp.GetVariableResultType;
+with ocpp.ResetRequest;
+with ocpp.ResetResponse;
 with ocpp.server;
 with ocpp.SetVariablesRequest;
 with ocpp.SetVariablesResponse;
@@ -125,12 +127,13 @@ with ocpp.vpnenumtype;
 with ocpp.GetBaseReportRequest;
 with ocpp.GetBaseReportResponse;
 
+with unittestb11;
+with unittestb12;
 package body unittests is
    
    procedure fail is
    begin
       Put_line("FAIL");
-      
    end fail;
    
    procedure testall(result: out Boolean)
@@ -143,6 +146,9 @@ package body unittests is
       B05(result);      if (result = false) then         fail; return;      end if;
       B06(result);      if (result = false) then         fail; return;      end if;
       B07(result);      if (result = false) then         fail; return;      end if; -- GetBaseReportRequest
+      
+      unittestb11.test(result); if (result = false) then fail; return; end if; -- ResetRequest
+      unittestb12.test(result); if (result = false) then fail; return; end if; -- ResetRequest
       
       --TODO:
       --B11

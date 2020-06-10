@@ -11,13 +11,14 @@ with ocpp.BootNotificationRequest;
 with ocpp.BootNotificationResponse;
 with ocpp.GetBaseReportRequest;
 with ocpp.GetBaseReportResponse;
-with ocpp.SetVariablesRequest;
-with ocpp.RegistrationStatusEnumType;
-with ocpp.StatusNotificationRequest;
-with ocpp.StatusNotificationResponse;
-
 with ocpp.HeartbeatRequest;
 with ocpp.HeartbeatResponse;
+with ocpp.SetVariablesRequest;
+with ocpp.RegistrationStatusEnumType;
+with ocpp.ResetRequest;
+with ocpp.ResetResponse;
+with ocpp.StatusNotificationRequest;
+with ocpp.StatusNotificationResponse;
 
 package body ocpp.server 
 is
@@ -30,6 +31,7 @@ is
       self.getVariablesResponse.Initialize;
       self.isDeferringBootNotificationAccept := False;
       self.setVariablesResponse.Initialize;
+      self.resetResponse.Initialize;
       self.call := NonSparkTypes.action_t.To_Bounded_String("");
    end Initialize;
 
@@ -180,6 +182,7 @@ is
       
    begin
       NonSparkTypes.put_line("ocppServer: handleResponse");
+      -- TODO - this is wrong, should check message ID, not theServer.call
       if (theServer.call = ocpp.SetVariablesRequest.action)
       then
          HandleSetVariablesResponse(theServer, msg, index, valid);
@@ -189,6 +192,9 @@ is
       elsif (theServer.call = ocpp.GetBaseReportRequest.action)
       then
          HandleGetBaseReportResponse(theServer, msg, index, valid);
+      elsif (theServer.call = ocpp.ResetRequest.action)
+      then
+         theServer.HandleResetResponse(msg, index, valid);
       else
          NonSparkTypes.put_line("ocpp-server.adb: 134: unknown response");
          NonSparkTypes.put("theServer.call: "); NonSparkTypes.put_line(NonSparkTypes.action_t.To_String(theServer.call)); 
@@ -234,6 +240,22 @@ is
       end if;
    end HandleGetBaseReportResponse;
 
+   procedure HandleResetResponse(theServer: in out ocpp.server.T;
+                                         msg: in NonSparkTypes.packet.Bounded_String;
+                                         index : out Integer;
+                                         valid: out Boolean)
+   is
+      resetResponse : ocpp.ResetResponse.T;
+   begin
+      ocpp.ResetResponse.parse(msg, index, resetResponse, valid);
+      if (valid = true)
+      then
+         theServer.resetResponse := resetResponse;
+      else
+         valid := false;
+      end if;
+   end HandleResetResponse;
+
    procedure HandleGetVariablesResponse(theServer: in out ocpp.server.T;
                                         msg: in NonSparkTypes.packet.Bounded_String;
                                         index : out Integer;
@@ -263,12 +285,8 @@ is
       bootNotificationRequest : ocpp.BootNotificationRequest.T;
       bootNotificationResponse : ocpp.bootnotificationResponse.T;
       isChargerEnrolled : Boolean;
-      type Integer_Ptr is access Integer;
-      
-Ptr : Integer_Ptr := new Integer'(2); -- Allocated in the heap
    begin
       response := NonSparkTypes.packet.To_Bounded_String("");
-      Ptr := new Integer'(3);
 
       ocpp.BootNotificationRequest.parse(msg, index, bootNotificationRequest, valid);
       if (valid = False)
