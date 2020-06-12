@@ -180,7 +180,7 @@
 		in the field of Software Engineering
 		\medskip\\
 \large
-		October 2019.		
+		June 2020.		
 \end{center}
 \end{titlepage}
 
@@ -206,7 +206,7 @@ In accordance with the requirements of the degree of Master of
 Engineering in the division of 
 Software Engineering,
 I present the
-following thesis entitled ``A Verified Server for an Electric Vehicle Charger Network''.  This work was performed under the supervision of A/Prof. Graeme Smith.
+following thesis entitled ``A Verified OCPP v2.01 Server for Electric Vehicle Charger Networks''.  This work was performed under the supervision of A/Prof. Graeme Smith.
 \medskip
 
 I declare that the work submitted in this thesis is my own, except as
@@ -234,7 +234,15 @@ I wish to acknowledge the support of my supervisor, Associate Professor Graeme S
 % Notice that all \include files are chapters -- a logical division.
 % But not all chapters are \include files; some chapters are short
 % enough to be in-lined in the main file.
-Currently, networks of publicly available electric vehicle fast chargers communicate with servers using the Open Charge Point Protocol (OCPP). Ideally, the software running on these servers would be error free and never crash. Numerous software verification tools exist to prove desirable properties of the server software, such as functional correctness, the absence of race conditions, memory leaks, and certain runtime errors. I compare the different features of several verification tools, and choose one of them to partially implement an OCPP server.
+Currently, networks of publicly available electric vehicle fast chargers communicate with servers using the Open Charge Point Protocol (OCPP). Ideally, the software running on these servers would be error free and never crash. Numerous software verification tools exist to prove desirable properties of the server software, such as functional correctness, the absence of race conditions, memory leaks, and certain runtime errors. The features of several verification tools were compared, and SPARK 2014 was chosen to partially implement an OCPP server.
+
+A JavaScript program was developed to parse the JSON protocol definition and automatically generate SPARK code that converts raw text into OCPP packets, and vice versa. The generated code includes verification conditions to prove data dependencies, termination, and functional correctness.
+
+The server was proven to be free of all runtime exceptions, excluding `out of memory' exceptions.
+
+
+
+
 
 \tableofcontents
 
@@ -264,9 +272,6 @@ Currently, networks of publicly available electric vehicle fast chargers communi
 %	\include{theory}
 
 \chapter{Introduction}
-
-
-
 The International Energy Agency \cite{GlobalEVOutlook2019} reports that the number of publicly available fast chargers ($>$ 22kW) increased from 107\,650 in 2017 to 143\,502 in 2018.\\
 
 \begin{figure}[htbp]
@@ -306,13 +311,11 @@ The International Energy Agency \cite{GlobalEVOutlook2019} reports that the numb
 \end{figure}
 
 
-The Open Charge Alliance \cite{ocaappraisal} reports that more than 10\,000 charging stations\footnote{Note that a ``charging station'' may consist of multiple fast chargers, thus the disparity between 143\,502 ``fast chargers'' and ``more than 10\,000 charging stations''} in over 50 countries are managed using the OCPP protocol.
-
-
+The Open Charge Alliance \cite{ocaappraisal} reports that more than 10\,000 charging stations\footnote{Note that a ``charging station'' may consist of multiple fast chargers, thus the disparity between 143\,502 ``fast chargers'' and ``more than 10\,000 charging stations''} in over 50 countries are managed using the OCPP protocol. A formally verified implementation of this protocol would be of great utility to charging infrastructure around the world.
  
-In this paper I investigate and compare the features of several different software verifiation tools and choose one to partially implement an OCPP server. The tools include Dafny, KeY, OpenJML, SPARK 2014, Spec\#, VCC, VeriFast, Viper, Whiley, and Why3.
+In this paper the features of several different software verification tools are investigated and one chosen to partially implement an OCPP server. The tools include Dafny, KeY, OpenJML, SPARK 2014, Spec\#, VCC, VeriFast, Viper, Whiley, and Why3.
 
-The tools vary in what guarantees they provide. Desirable guarantees that I was interested in are: 
+The tools vary in what guarantees they provide. Desirable guarantees include: 
 \label{criteria}
 \begin{itemize}
 	\item the absence of memory leaks
@@ -355,7 +358,7 @@ Numerous software verification tools were considered for use in implementing the
 	\subsection{Home Page}%	
 	https://www.key-project.org/
 	\subsection{Features} 
-		KeY offers functional verification for Java programs. The specifications are written as comments in JML in the Java source code. KeY is built on a formal logic called `Java Card DL', which is itself a first-order dynamic logic, and an extension of Hoare logic. It is targeted at JavaCard programs. 
+		KeY offers functional verification for Java programs. The specifications are written as comments in JML (Java Modelling Language \cite{openjml}) in the Java source code. KeY is built on a formal logic called `Java Card DL', which is itself a first-order dynamic logic, and an extension of Hoare logic. It is targeted at JavaCard programs. 
 	\subsection{Soundness} 
 		KeY is thought to be sound. Internet searches failed to find examples of unsoundness.
 	\subsection{Supported Platforms} 
@@ -409,12 +412,12 @@ Numerous software verification tools were considered for use in implementing the
 	Formally verifies:
 	\begin{itemize}
 		\item information flow
-		\item freedom from runtime errors, except `StorageError' (stack overflow / heap exhaustion)
+		\item freedom from runtime errors, except `Storage\_Error' (stack overflow / heap exhaustion)
 		\item functional correctness
 	\end{itemize}
 
 	\subsubsection{Safety Standards}
-		SPARK 2014 satisifes:
+		SPARK 2014 satisfies:
 	\begin{itemize}
 		\item DO-178B/C
 		\item Formal Methods supplement DO-333
@@ -651,7 +654,7 @@ https://www.pm.inf.ethz.ch/research/viper.html
 	WhyML.
 
 \section{Conclusion of Review of Background and Associated Work}
-Based on the properties of the verification tools available, it has been decided to use SPARK 2014 for the implementation and verification of the OCPP server. It has wide use in industry, which gives me confidence that it is a practical choice. It verifies all of the properties that are important to me, and has good library support.
+Based on the properties of the verification tools available, it has been decided to use SPARK 2014 for the implementation and verification of the OCPP server. It has wide use in industry, which gives confidence that it is a practical choice. It verifies most of the properties desired, and has good library support.
 
 
 %\section{Summary of Verification Tool Features}
@@ -772,7 +775,7 @@ Data Transfer& P01-P02 & DataTransfer\\
 \subsection{Boot Notification Discussion}
 To understand what interesting software properties may be proved, we will walk through a typical `BootNotification' sequence.\\
 
-Whenever a charger is powered on in the field, it establishes a websocket connection with the server, and sends a `BootNotificationRequest' packet to announce itself. A high level view of a typical boot notification sequence is given in figure \ref{fig:SD-B01}.
+Whenever a charger is powered on in the field, it establishes a websocket connection with the server, and sends a `BootNotificationRequest' packet to announce itself. A high level view of a typical boot notification sequence is given in Figure \ref{fig:SD-B01}.
 
 	\begin{center}
 		\begin{figure}[H]
@@ -782,7 +785,7 @@ Whenever a charger is powered on in the field, it establishes a websocket connec
 		\end{figure}
 	\end{center}
 	
-The `BootNotificationRequest' packet contains information describing the charger. If the server recognises the charger, it returns a `BootNotificationResponse' message with a status of `Accepted'. The contents of these packets is described in figure \ref{fig:CDBootNotification}.
+The `BootNotificationRequest' packet contains information describing the charger. If the server recognises the charger, it returns a `BootNotificationResponse' message with a status of `Accepted'. The contents of these packets is described in Figure \ref{fig:CDBootNotification}.
 
 	\begin{center}
 		\begin{figure}[H]
@@ -795,7 +798,7 @@ The `BootNotificationRequest' packet contains information describing the charger
 Note that figure \ref{fig:CDBootNotification} is a UML class diagram, the different arrow types have special meanings. The `BootNotificationRequest' class inherits from the `call' class, and has a member variable called `reason' of class `BootReasonEnumType'. It also has a member variable called `chargingStation' of class `ChargingStationType', which in turn has a member variable called `modem' of class `ModemType'.
 
 \pagebreak
-The `BootNotificationRequest' packet arrives at the server as a big blob of text, as follows:
+The `BootNotificationRequest' packet arrives at the server as JSON formatted text, as follows:
 \begin{verbatim}
 [2,	        // `2' indicates that this is a `request'
 "19223202",// this is the message ID, and associates requests with responses
@@ -818,7 +821,7 @@ The `BootNotificationRequest' packet arrives at the server as a big blob of text
 ]
 \end{verbatim}
 
-The server's job is to correctly parse this text, determine what kind of packet it is, and respond appropriately. In this example, the server converts the blob of incoming text into a `BootNotificationRequest' packet, builds a `BootNotificationResponse' packet, converts it to a blob of text, and sends it back over the websocket to the charger. The reponse looks like this:
+The server's job is to correctly parse this text, determine what kind of packet it is, and respond appropriately. In this example, the server converts the incoming JSON text into a `BootNotificationRequest' packet, builds a `BootNotificationResponse' packet, converts it to JSON formatted of text, and sends it back over the websocket to the charger. The response looks like this:
 
 \begin{verbatim}
 [3,// `3' indicates that this is a `response'
@@ -838,7 +841,7 @@ The server's job is to correctly parse this text, determine what kind of packet 
 Valid OCPP message types are either CALL, CALLRESULT, or CALLERROR.
 
 \subsubsection{CALL}
-A CALL consists of 4 parts, as described in \ref{tab:CALL}
+A CALL consists of 4 parts, as described in Table \ref{tab:CALL}
 
 \begin{table}[htp]
 \begin{tabular}{ |p{3cm}|p{2.5cm}|p{9cm}| }
@@ -859,7 +862,7 @@ a "BootNotificationRequest", this field shall be set to "BootNotification".\\
 
 
 \subsubsection{CALLRESULT}
-A CALL consists of 4 parts, as described in \ref{tab:CALLRESULT}
+A CALL consists of 4 parts, as described in Table \ref{tab:CALLRESULT}
 
 \begin{table}[H]
 \begin{tabular}{ |p{3cm}|p{2.5cm}|p{9cm}| }
@@ -877,7 +880,7 @@ A CALL consists of 4 parts, as described in \ref{tab:CALLRESULT}
 
 
 \subsubsection{CALLERROR}
-The CALLERROR message is only used when an error occurs during message transport, or in response to an invalid OCPP message. A CALL consists of 5 parts, as described in \ref{tab:CALLERROR}. 
+The CALLERROR message is only used when an error occurs during message transport, or in response to an invalid OCPP message. A CALL consists of 5 parts, as described in Table \ref{tab:CALLERROR}. 
 \begin{table}[htp]
 \begin{tabular}{ |p{3cm}|p{2.5cm}|p{9cm}| }
  \hline
@@ -899,11 +902,11 @@ a "BootNotificationRequest", this field shall be set to "BootNotification".\\
 \subsection{Implementation}
 The sequence diagram \ref{fig:SDBootNotification} describes the typical sequence of events that occurs when a charger is powered on, boots up and connects to a server. Prior to the charger booting, the charger is enrolled on the server. The server maintains a list of known chargers. Only chargers on this list may successfully start an OCPP session.\\
 Once a charger powers up, it establishes a websocket connection with the server and communicates with OCPP packets over this link. The first OCPP message the charger sends is a `BootNotificationRequest'.\\
-When the server receives a blob of text, it arrives in a function called `ReceivePacket'.
+When the server receives a message, it arrives in a function called `ReceivePacket'.
 
 \pagebreak
 \subsection{`Server.ReceivePacket' Function}
-
+The following code snippet contains the function prototype and verification conditions.
 \begin{verbatim}
    procedure ReceivePacket(theServer: in out ocpp.server.T;
                            msg: in NonSparkTypes.packet.Bounded_String;
@@ -934,7 +937,7 @@ The `Depends' clause means that:
 GNATprove reports an error if any of these specifications are not met by the implementation.\\
 
 
-The first thing the function `ReceivePacket' does is parse the `MessageType', as seen in \ref{fig:SDBootNotification}. 
+The first thing the function `ReceivePacket' does is parse the `MessageType', as seen in Figure \ref{fig:SDBootNotification}. 
 
 	\begin{center}
 		\begin{figure}[H]
@@ -960,10 +963,6 @@ The first thing the function `ReceivePacket' does is parse the `MessageType', as
                 (index < NonSparkTypes.packet.Length(msg))
              );
 \end{verbatim}
-\subsubsection{Global Data Dependencies}
-The line `$Global \Rightarrow null$' specifies that the procedure may not modify any global variables. 
-\subsubsection{`Annotate' section}
-By default, GNATprove does not prove termination of subprograms. The line `$Annotate \Rightarrow (GNATprove, Terminating)$' specifies that the procedure must terminate, i.e. can never enter an endless loop. 
 \subsubsection{`Post' section}
 The `Post' clause means that:
 \begin{itemize}
@@ -993,10 +992,6 @@ Once we have successfully parsed the message type, we know whether it is a `requ
        Post => (if valid = true then msgindex <= NonSparkTypes.packet.Length(msg));
    
 \end{verbatim}
-\subsubsection{`Global' section}
-The line `$Global \Rightarrow null$' means that the procedure does not modify any global state.
-\subsubsection{`Annotate' section}
-By default, GNATprove does not prove termination of subprograms. The line `$Annotate \Rightarrow (GNATprove, Terminating)$' specifies that the procedure must terminate, i.e. can never enter an endless loop. 
 \subsubsection{`Depends' section}
 \begin{itemize}
 \item The final value of `valid' depends only on `msg' and `msgindex'. The reason `valid' depends on `msgindex' is that if the index was already pointing at the end of the message, there would not be enough information left to construct a valid request.
@@ -1030,16 +1025,6 @@ The body of `HandleRequest()' calls `ParseAction' to determine what kind of requ
 
    
 \end{verbatim}
-\subsubsection{`Global' section}
-The line `$Global \Rightarrow null$' means that the procedure does not modify any global state.
-\subsubsection{`Annotate' section}
-By default, GNATprove does not prove termination of subprograms. The line `$Annotate \Rightarrow (GNATprove, Terminating)$' specifies that the procedure must terminate, i.e. can never enter an endless loop. 
-\subsubsection{`Depends' section}
-\begin{itemize}
-\item The final value of `valid' depends only on `msg' and `index'. The reason `valid' depends on `index' is that if the index was already pointing at the end of the message, there would not be enough information left to construct a valid request.
-\item The final value of `index' depends only on `msg' and `index'. This makes sense, as if the message was invalid, the function will return early, without parsing much of the message, thus affecting the final value of `index'. The reason the final value of `index' depends on the initial value of `index' is that if the index was already pointing at the end of the message, the function would return without advancing `index' through the message.
-\item The value of `response' depends on `msg', `index' and `theServer'. 
-\end{itemize}
 \subsubsection{`Post' section}
 The `Post' clause means that:
 \begin{itemize}
@@ -1072,18 +1057,6 @@ In this case, the action is `BootNotification', so `HandleRequest' calls `Handle
                    response => (msg, theServer)
                   );
 \end{verbatim}
-\subsubsection{`Global' section}
-The line `$Global \Rightarrow null$' means that the procedure does not modify any global state.
-\subsubsection{`Annotate' section}
-By default, GNATprove does not prove termination of subprograms. The line `$Annotate \Rightarrow (GNATprove, Terminating)$' specifies that the procedure must terminate, i.e. can never enter an endless loop. 
-\subsubsection{`Depends' section}
-\begin{itemize}
-\item The final value of `valid' depends only on `msg'.
-\item The final value of `index' depends only on `msg'.
-\item The value of `response' depends on `msg' and `theServer'. 
-\end{itemize}
-GNATprove reports an error if any of these specifications are not met by the implementation.\\
-
 The first thing this function does is call `BootNotificationRequest.parse'.
 
 
@@ -1109,17 +1082,6 @@ The first thing this function does is call `BootNotificationRequest.parse'.
             );
 
 \end{verbatim}
-\subsubsection{`Global' section}
-The line `$Global \Rightarrow null$' means that the procedure does not modify any global state.
-\subsubsection{`Annotate' section}
-By default, GNATprove does not prove termination of subprograms. The line `$Annotate \Rightarrow (GNATprove, Terminating)$' specifies that the procedure must terminate, i.e. can never enter an endless loop. 
-\subsubsection{`Depends' section}
-\begin{itemize}
-\item The final value of `valid' depends only on `msg'.
-\item The final value of `msgindex' depends only on `msg'.
-\item The value of `self' depends on `msg' and `theServer'. `Self' refers to the `BootNotificationRequest' object.
-\end{itemize}
-GNATprove reports an error if any of these specifications are not met by the implementation.\\
 
 The first thing this function does is call `Initialise', which sets all member variables to a known state.
 
@@ -1132,15 +1094,6 @@ The first thing this function does is call `Initialise', which sets all member v
     Annotate => (GNATprove, Terminating),
     Depends => (self => null);
 \end{verbatim}
-\subsubsection{`Global' section}
-The line `$Global \Rightarrow null$' means that the procedure does not modify any global state.
-\subsubsection{`Annotate' section}
-By default, GNATprove does not prove termination of subprograms. The line `$Annotate \Rightarrow (GNATprove, Terminating)$' specifies that the procedure must terminate, i.e. can never enter an endless loop. 
-\subsubsection{`Depends' section}
-\begin{itemize}
-\item The final value of `self' does not depend on any other state. 
-\end{itemize}
-GNATprove reports an error if any of these specifications are not met by the implementation.\\
 
 This function always sets member variables to the same values, and returns to `BootNotificationRequest.parse()'.\\
 
@@ -1156,12 +1109,6 @@ Next, ocpp.ParseMessageId() is called.
        Annotate => (GNATprove, Terminating);
 
 \end{verbatim}
-\subsubsection{`Global' section}
-The line `$Global \Rightarrow null$' means that the procedure does not modify any global state.
-\subsubsection{`Annotate' section}
-By default, GNATprove does not prove termination of subprograms. The line `$Annotate \Rightarrow (GNATprove, Terminating)$' specifies that the procedure must terminate, i.e. can never enter an endless loop. 
-GNATprove reports an error if any of these specifications are not met by the implementation.\\
-
 This function parses the `messageId', which is used to match ocpp requests with ocpp responses. It stores the result in a member variable, and returns to `BootNotificationRequest.parse(), which then calls additonal utility parsing functions until all of the `BootNotificationRequest' member variables have been populated with the corresponding values from the incoming message. The function then returns to `server.HandleBootNotificationRequest()', which calls `server.IsEnrolled()'.\\
 
 
@@ -1179,15 +1126,6 @@ This function parses the `messageId', which is used to match ocpp requests with 
                   );
 
 \end{verbatim}
-\subsubsection{`Global' section}
-The line `$Global \Rightarrow null$' means that the procedure does not modify any global state.
-\subsubsection{`Annotate' section}
-By default, GNATprove does not prove termination of subprograms. The line `$Annotate \Rightarrow (GNATprove, Terminating)$' specifies that the procedure must terminate, i.e. can never enter an endless loop. 
-\subsubsection{`Depends' section}
-\begin{itemize}
-\item The final value of `retval' depends on the serial number being checked, and the list of allowed serial numbers. 
-\end{itemize}
-GNATprove reports an error if any of these specifications are not met by the implementation.\\
 
 If the list contains the supplied serial number, it returns true, otherwise false. In this case, the serial number is in the list, so we respond to the BootNotificationRequest with a BootNotificationResponse with a status of `accepted'. This response packet is serialized into text, which is then sent to the charger. The server's job is complete, it has received a valid request, parsed it, created an appropriate response, and sent it back to the client.\\
 
@@ -1195,143 +1133,11 @@ The basic sequence of events is similar for all OCPP packets.
 
 \section{Automated Code Generation}
 
-The OCPP protocol defines 128 different messages. Some of these packets are deeply nested JSON structures, with lists of elements each containing further lists of elements. It was realised early in the project that the time required to manually implement serialising and deserialising (converting from raw text to a binary representation, and converting from the binary representation back to raw text) for each of these packets would be prohibitive. The protocol documentation includes the corresponding JSON definitions of all of these packets, each with their own `.js' file (eg. `BootNotificationRequest.json', `BootNotificationResponse.json'.
+The OCPP protocol defines 128 different messages. Some of these packets are deeply nested JSON structures, with lists of elements each containing further lists of elements. It was realised early in the project that the time required to manually implement serializing and deserializing (converting from raw text to a binary representation, and converting from the binary representation back to raw text) for each of these packets would be prohibitive. The protocol documentation includes the corresponding JSON definitions of all of these packets, each with their own `.json' file (eg. `BootNotificationRequest.json', `BootNotificationResponse.json').
 
-A `node.js' script `parse.js' was written to parse each of these `.json' files, and generate the corresponding SPARK implemenation and definition files (eg. `BootNotificationRequest.ads', `BootNotificationRequest.adb', `BootNotificationResponse.ads', `BootNotificationResponse.adb'). `BootNotificationRequest.json' is examined here in detail.
+A JavaScript program called `parse.js' was written to parse each of these `.json' files, and generate the corresponding SPARK implementation and definition files (eg. `BootNotificationRequest.ads', `BootNotificationRequest.adb', `BootNotificationResponse.ads', `BootNotificationResponse.adb'). `BootNotificationRequest.json' (see complete file in Appendix \ref{bootnotificationrequest.json}) is examined here in detail.
 
 \subsection{Automatically parsing BootNotificationRequest.json}
-The JSON definition for BootNotificationRequest is as follows:
-\begin{verbatim}
-{
-  "$schema": "http://json-schema.org/draft-06/schema#",
-  "$id": "urn:OCPP:Cp:2:2019:12:BootNotificationRequest",
-  "comment": "Errata sheet - release candidate",
-  "definitions": {
-    "CustomDataType": {
-      "description": "This class does not get 'AdditionalProperties = false' 
-      in the schema generation, so it can be extended with arbitrary JSON 
-      properties to allow adding custom data.",
-      "javaType": "CustomData",
-      "type": "object",
-      "properties": {
-        "vendorId": {
-          "type": "string",
-          "maxLength": 255
-        }
-      },
-      "required": [
-        "vendorId"
-      ]
-    },
-    "BootReasonEnumType": {
-      "description": "This contains the reason for sending this message 
-      to the CSMS.\r\n",
-      "javaType": "BootReasonEnum",
-      "type": "string",
-      "additionalProperties": false,
-      "enum": [
-        "ApplicationReset",
-        "FirmwareUpdate",
-        "LocalReset",
-        "PowerUp",
-        "RemoteReset",
-        "ScheduledReset",
-        "Triggered",
-        "Unknown",
-        "Watchdog"
-      ]
-    },
-    "ChargingStationType": {
-      "description": "Charge_ Point\r\nurn:x-oca:ocpp:uid:2:233122\r\n
-      The physical system where an Electrical Vehicle (EV) can be charged.\r\n",
-      "javaType": "ChargingStation",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "customData": {
-          "$ref": "#/definitions/CustomDataType"
-        },
-        "serialNumber": {
-          "description": "Device. Serial_ Number. Serial_ Number\r\n
-          urn:x-oca:ocpp:uid:1:569324\r\nVendor-specific device identifier.\r\n",
-          "type": "string",
-          "maxLength": 25
-        },
-        "model": {
-          "description": "Device. Model. CI20_ Text\r\n
-          urn:x-oca:ocpp:uid:1:569325\r\nDefines the model of the device.\r\n",
-          "type": "string",
-          "maxLength": 20
-        },
-        "modem": {
-          "$ref": "#/definitions/ModemType"
-        },
-        "vendorName": {
-          "description": "Identifies the vendor (not necessarily in a 
-          unique manner).\r\n",
-          "type": "string",
-          "maxLength": 50
-        },
-        "firmwareVersion": {
-          "description": "This contains the firmware version of the 
-          Charging Station.\r\n\r\n",
-          "type": "string",
-          "maxLength": 50
-        }
-      },
-      "required": [
-        "model",
-        "vendorName"
-      ]
-    },
-    "ModemType": {
-      "description": "Wireless_ Communication_ Module\r\n
-      urn:x-oca:ocpp:uid:2:233306\r\nDefines parameters required for initiating 
-      and maintaining wireless communication with other devices.\r\n",
-      "javaType": "Modem",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "customData": {
-          "$ref": "#/definitions/CustomDataType"
-        },
-        "iccid": {
-          "description": "Wireless_ Communication_ Module. ICCID. 
-          CI20_ Text\r\nurn:x-oca:ocpp:uid:1:569327\r\n
-          This contains the ICCID of the modem’s SIM card.\r\n",
-          "type": "string",
-          "maxLength": 20
-        },
-        "imsi": {
-          "description": "Wireless_ Communication_ Module. IMSI. CI20_ Text\r\n
-          urn:x-oca:ocpp:uid:1:569328\r\nThis contains the IMSI of the modem’s 
-          SIM card.\r\n",
-          "type": "string",
-          "maxLength": 20
-        }
-      }
-    }
-  },
-  "type": "object",
-  "additionalProperties": false,
-  "properties": {
-    "customData": {
-      "$ref": "#/definitions/CustomDataType"
-    },
-    "chargingStation": {
-      "$ref": "#/definitions/ChargingStationType"
-    },
-    "reason": {
-      "$ref": "#/definitions/BootReasonEnumType"
-    }
-  },
-  "required": [
-    "reason",
-    "chargingStation"
-  ]
-}
-\end{verbatim}
-
 The parsing script starts with the `definitions' section, which contains additional definitions for `CustomDataType', `BootReasonEnumType', `ChargingStationType' (which itself contains further subtype definitions), and `ModemType'.
 
 \subsubsection{CustomDataType}
@@ -1342,7 +1148,8 @@ The following JSON snippet contains the definition for an enumerated type.
 \begin{verbatim}
 {
     "BootReasonEnumType": {
-      "description": "This contains the reason for sending this message to the CSMS.\r\n",
+      "description": "This contains the reason for sending this 
+      	message to the CSMS.\r\n",
       "javaType": "BootReasonEnum",
       "type": "string",
       "additionalProperties": false,
@@ -1363,11 +1170,21 @@ The following JSON snippet contains the definition for an enumerated type.
 `parse.js' generates the following SPARK implementation and definition files to serialise and deserialise this enum.
 
 \subsubsection{BootReasonEnumType.ads}
+The server needs to be able to serialize and deserialize `BootReasonEnumType'. 
 \begin{verbatim}
 {
+\end{verbatim} 
+-- Note: an `.ads' file is the moral equivalent of a `.h' file in C/C++
+\begin{verbatim}
 -- start ocppBootReasonEnumType.ads
+\end{verbatim} 
+-- Note: The following is the same as a `\#include' statement in C/C++
+\begin{verbatim}
 with Ada.Strings.Bounded;
 
+\end{verbatim} 
+-- Note: The following is the same as an `enum' type definition in C/C++
+\begin{verbatim}
 package ocpp.BootReasonEnumType is
    type T is (
       ApplicationReset,
@@ -1381,7 +1198,14 @@ package ocpp.BootReasonEnumType is
       Watchdog
    );
 
-   package string_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 16);
+\end{verbatim} 
+-- Note: The following defines a new string type with a maximum length of 16 characters
+\begin{verbatim}
+   package string_t is new 
+   	Ada.Strings.Bounded.Generic_Bounded_Length(Max => 16);
+\end{verbatim} 
+-- Note: The following defines a new precedure to serialize raw text into a BootReasonEnumType object.
+\begin{verbatim}
    procedure FromString(str : in String;
                         attribute : out T;
                         valid : out Boolean)
@@ -1389,6 +1213,9 @@ package ocpp.BootReasonEnumType is
       Global => null,
       Annotate => (GNATprove, Terminating);
  
+\end{verbatim} 
+-- Note: The following defines a new precedure to deserialize a BootReasonEnumType object into raw text.
+\begin{verbatim}
    procedure ToString(attribute : in T;
                       str : out string_t.Bounded_String)
    with
@@ -1402,12 +1229,21 @@ end ocpp.BootReasonEnumType;
 \subsubsection{BootReasonEnumType.adb}
 \begin{verbatim}
 {
+\end{verbatim} 
+-- Note: An `.adb' file is the moral equivalent of a `.c' in C, or a `.cpp' file in C++.
+\begin{verbatim}
 -- ocpp-BootReasonEnumType.adb
 
 with ocpp.BootReasonEnumType; use ocpp.BootReasonEnumType;
+\end{verbatim} 
+-- Note: `NonSparkTypes' contains features that are needed that aren't proven by SPARK. For example, printing debug text to standard out cannot be proven to terminate.
+\begin{verbatim}
 with NonSparkTypes;
 
 package body ocpp.BootReasonEnumType is
+\end{verbatim} 
+-- Note: The following is the implementation of the `FromString' function.
+\begin{verbatim}
    procedure FromString(str : in String;
                         attribute : out T;
                         valid : out Boolean)
@@ -1444,15 +1280,24 @@ package body ocpp.BootReasonEnumType is
       use string_t;
    begin
       case attribute is
-         when ApplicationReset => str := To_Bounded_String("ApplicationReset");
-         when FirmwareUpdate => str := To_Bounded_String("FirmwareUpdate");
-         when LocalReset => str := To_Bounded_String("LocalReset");
-         when PowerUp => str := To_Bounded_String("PowerUp");
-         when RemoteReset => str := To_Bounded_String("RemoteReset");
-         when ScheduledReset => str := To_Bounded_String("ScheduledReset");
-         when Triggered => str := To_Bounded_String("Triggered");
-         when Unknown => str := To_Bounded_String("Unknown");
-         when Watchdog => str := To_Bounded_String("Watchdog");
+         when ApplicationReset => 
+         	str := To_Bounded_String("ApplicationReset");
+         when FirmwareUpdate 
+         	=> str := To_Bounded_String("FirmwareUpdate");
+         when LocalReset 
+         	=> str := To_Bounded_String("LocalReset");
+         when PowerUp 
+         	=> str := To_Bounded_String("PowerUp");
+         when RemoteReset
+         	=> str := To_Bounded_String("RemoteReset");
+         when ScheduledReset 
+         	=> str := To_Bounded_String("ScheduledReset");
+         when Triggered 
+         	=> str := To_Bounded_String("Triggered");
+         when Unknown 
+         	=> str := To_Bounded_String("Unknown");
+         when Watchdog 
+         	=> str := To_Bounded_String("Watchdog");
       end case;
    end ToString;
 end ocpp.BootReasonEnumType;
@@ -1465,7 +1310,9 @@ The following JSON snippet contains the definition for a more complex type, with
 \begin{verbatim}
 {
     "ChargingStationType": {
-      "description": "Charge_ Point\r\nurn:x-oca:ocpp:uid:2:233122\r\nThe physical system where an Electrical Vehicle (EV) can be charged.\r\n",
+      "description": "Charge_ Point\r\nurn:x-oca:ocpp:uid:2:233122\r\n
+      	The physical system where an Electrical Vehicle (EV) can be 
+      	charged.\r\n",
       "javaType": "ChargingStation",
       "type": "object",
       "additionalProperties": false,
@@ -1474,12 +1321,14 @@ The following JSON snippet contains the definition for a more complex type, with
           "$ref": "#/definitions/CustomDataType"
         },
         "serialNumber": {
-          "description": "Device. Serial_ Number. Serial_ Number\r\nurn:x-oca:ocpp:uid:1:569324\r\nVendor-specific device identifier.\r\n",
+          "description": "Device. Serial_ Number. Serial_ Number\r\
+          nurn:x-oca:ocpp:uid:1:569324\r\nVendor-specific device identifier.\r\n",
           "type": "string",
           "maxLength": 25
         },
         "model": {
-          "description": "Device. Model. CI20_ Text\r\nurn:x-oca:ocpp:uid:1:569325\r\nDefines the model of the device.\r\n",
+          "description": "Device. Model. CI20_ Text\r\n
+          urn:x-oca:ocpp:uid:1:569325\r\nDefines the model of the device.\r\n",
           "type": "string",
           "maxLength": 20
         },
@@ -1487,12 +1336,14 @@ The following JSON snippet contains the definition for a more complex type, with
           "$ref": "#/definitions/ModemType"
         },
         "vendorName": {
-          "description": "Identifies the vendor (not necessarily in a unique manner).\r\n",
+          "description": "Identifies the vendor (not necessarily in a unique 
+          manner).\r\n",
           "type": "string",
           "maxLength": 50
         },
         "firmwareVersion": {
-          "description": "This contains the firmware version of the Charging Station.\r\n\r\n",
+          "description": "This contains the firmware version of the Charging 
+          Station.\r\n\r\n",
           "type": "string",
           "maxLength": 50
         }
@@ -1517,6 +1368,10 @@ with ocpp; use ocpp;
 with ocpp.ModemType; use ocpp.ModemType;
 
 package ocpp.ChargingStationType is
+\end{verbatim} 
+-- Note: The `record' keyword is similar to a `struct' in C/C++.
+\begin{verbatim}
+
    type T is record
       zzzArrayElementInitialized : Boolean := False;
       serialNumber : 
@@ -1566,6 +1421,9 @@ with Ada.Strings; use Ada.Strings;
 
 package body ocpp.ChargingStationType is 
 
+\end{verbatim} 
+Note: The following function refines a `generic' function, with specialized types for `Max', `string\_t', and specialized functions for `length()', `To\_String()', and `To\_Bounded\_String()'.
+\begin{verbatim}
 procedure findquotedstring_packet is new findquotedstring(
    Max => NonSparkTypes.packet.Max_Length, 
    string_t => NonSparkTypes.packet.Bounded_String, 
@@ -1573,6 +1431,9 @@ procedure findquotedstring_packet is new findquotedstring(
    To_String => NonSparkTypes.packet.to_string,
    To_Bounded_String =>  NonSparkTypes.packet.To_Bounded_String);
 
+\end{verbatim} 
+Note: The following function is required in order to ensure all data is initialized before it is used.
+\begin{verbatim}
 procedure Initialize(self: out ocpp.ChargingStationType.T)
 is
 begin
@@ -1673,7 +1534,7 @@ begin
 end parse;
 
 procedure To_Bounded_String(Self: in T;
-                               retval: out NonSparkTypes.packet.Bounded_String)
+                            retval: out NonSparkTypes.packet.Bounded_String)
 is
    dummybounded: NonSparkTypes.packet.Bounded_String := 
       NonSparkTypes.packet.To_Bounded_String(""); 
@@ -1692,7 +1553,8 @@ begin
       & "    " & '"' & "modem" & '"' & ":" & 
       NonSparkTypes.packet.To_String(strmodem) & "," & ASCII.LF 
       & "    " & '"' & "vendorName" & '"' & ": " & '"' &
-      NonSparkTypes.ChargingStationType.strvendorName_t.To_String(Self.vendorName) & 
+      NonSparkTypes.ChargingStationType.strvendorName_t.To_String(
+      	Self.vendorName) & 
       '"' & "," & ASCII.LF
       & "    " & '"' & "firmwareVersion" & '"' & ": " & '"' &
       NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_String(
@@ -1709,7 +1571,10 @@ The following JSON snippet contains the definition for `ModemType', which is use
 
 \begin{verbatim}
     "ModemType": {
-      "description": "Wireless_ Communication_ Module\r\nurn:x-oca:ocpp:uid:2:233306\r\nDefines parameters required for initiating and maintaining wireless communication with other devices.\r\n",
+      "description": "Wireless_ Communication_ Module\r\n
+      urn:x-oca:ocpp:uid:2:233306\r\n
+      Defines parameters required for initiating and maintaining 
+      wireless communication with other devices.\r\n",
       "javaType": "Modem",
       "type": "object",
       "additionalProperties": false,
@@ -1718,12 +1583,16 @@ The following JSON snippet contains the definition for `ModemType', which is use
           "$ref": "#/definitions/CustomDataType"
         },
         "iccid": {
-          "description": "Wireless_ Communication_ Module. ICCID. CI20_ Text\r\nurn:x-oca:ocpp:uid:1:569327\r\nThis contains the ICCID of the modem’s SIM card.\r\n",
+          "description": "Wireless_ Communication_ Module. ICCID. CI20_ 
+          Text\r\nurn:x-oca:ocpp:uid:1:569327\r\nThis contains the ICCID 
+          of the modem’s SIM card.\r\n",
           "type": "string",
           "maxLength": 20
         },
         "imsi": {
-          "description": "Wireless_ Communication_ Module. IMSI. CI20_ Text\r\nurn:x-oca:ocpp:uid:1:569328\r\nThis contains the IMSI of the modem’s SIM card.\r\n",
+          "description": "Wireless_ Communication_ Module. IMSI. CI20_ 
+          Text\r\nurn:x-oca:ocpp:uid:1:569328\r\nThis contains the IMSI 
+          of the modem’s SIM card.\r\n",
           "type": "string",
           "maxLength": 20
         }
@@ -1769,7 +1638,7 @@ package ocpp.ModemType is
             );
 
    procedure To_Bounded_String(Self: in T;
-                               retval: out NonSparkTypes.packet.Bounded_String)
+                         retval: out NonSparkTypes.packet.Bounded_String)
       with
  Global => null,
  Annotate => (GNATprove, Terminating);
@@ -1847,7 +1716,7 @@ procedure findquotedstring_packet is new findquotedstring(
    end parse;
 
    procedure To_Bounded_String(Self: in T;
-                               retval: out NonSparkTypes.packet.Bounded_String)
+                         retval: out NonSparkTypes.packet.Bounded_String)
    is
       dummybounded: NonSparkTypes.packet.Bounded_String := 
          NonSparkTypes.packet.To_Bounded_String(""); 
@@ -1858,8 +1727,8 @@ procedure findquotedstring_packet is new findquotedstring(
          NonSparkTypes.ModemType.striccid_t.To_String(Self.iccid) & 
          '"' & "," & ASCII.LF & 
          "    " & '"' & "imsi" & '"' & ": " & '"' & 
-         NonSparkTypes.ModemType.strimsi_t.To_String(Self.imsi) & '"' & ASCII.LF
-         & "}" & ASCII.LF, Drop => Right);
+         NonSparkTypes.ModemType.strimsi_t.To_String(Self.imsi) & '"' 
+         & ASCII.LF  & "}" & ASCII.LF, Drop => Right);
    end To_Bounded_String;
 end ocpp.ModemType;
 
@@ -1922,6 +1791,9 @@ with ocpp.BootReasonEnumType; use ocpp.BootReasonEnumType;
 package ocpp.BootNotificationRequest is
    action : constant NonSparkTypes.action_t.Bounded_String :=
       NonSparkTypes.action_t.To_Bounded_String("BootNotification"); 
+\end{verbatim}
+-- Note that the following declaration of type `T' is an example of inheritance. `BootNotificationRequest.T' inherits from the type `call', and adds two member variables, `chargingStation' and `reason'.
+\begin{verbatim}
    type T is new call with record
       chargingStation : ChargingStationType.T;
       reason : BootReasonEnumType.T;
@@ -1953,7 +1825,7 @@ package ocpp.BootNotificationRequest is
             );
 
    procedure To_Bounded_String(Self: in T;
-                               retval: out NonSparkTypes.packet.Bounded_String)
+                         retval: out NonSparkTypes.packet.Bounded_String)
       with
  Global => null,
  Annotate => (GNATprove, Terminating);
@@ -1994,7 +1866,8 @@ procedure parse(msg:   in  NonSparkTypes.packet.Bounded_String;
                 self: out ocpp.BootNotificationRequest.T;
                 valid: out Boolean)
 is
-   dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
+   dummybounded: NonSparkTypes.packet.Bounded_String := 
+   		NonSparkTypes.packet.To_Bounded_String("");
    dummyInt: integer;
 begin
    Initialize(self);
@@ -2032,14 +1905,16 @@ begin
    ocpp.findQuotedKey(msg, msgIndex, valid, "chargingStation");
    if (valid = false) 
    then 
-      NonSparkTypes.put_line("355 Invalid BootNotificationRequestchargingStation"); 
+      NonSparkTypes.put_line(
+      "355 Invalid BootNotificationRequestchargingStation"); 
       return; 
    end if;
 
    ChargingStationType.parse(msg, msgindex, self.chargingStation, valid);
    if (valid = false) 
    then 
-      NonSparkTypes.put_line("357 Invalid BootNotificationRequestchargingStation"); 
+      NonSparkTypes.put_line(
+      "357 Invalid BootNotificationRequestchargingStation"); 
       return; 
    end if;
 
@@ -2125,12 +2000,12 @@ SPARK 2014 does automatically verify the absence of uninitialized memory reads. 
 SPARK 2014 partially implements this. It guarantees the absence of the following runtime errors:
 \begin{itemize}
 	\item the absence of explicitly raised exceptions. SPARK allows the programmer to raise exceptions, but the toolset will attempt to prove that the `raise' statement will never actually execute.
-	\item the absence of `ConstraintError' exceptions. These exceptions are raised in the following situations:
+	\item the absence of `Constraint\_Error' exceptions. These exceptions are raised in the following situations:
 		\subitem - a value is assigned to a variable that is outside of the variable's range constraint,
 		\subitem - an attempt is made to access an `out of bounds' array element,
-		\subitem - arithetic overflow.
+		\subitem - arithmetic overflow.
 	
-	\item the absence of all possible failures of assertions corresponding to raising exception `AssertError' at run time. For example, consider the following code:
+	\item the absence of all possible failures of assertions corresponding to raising exception `Assert\_Error' at run time. For example, consider the following code:
 \begin{verbatim}
 procedure TestAssert (X : Integer) with
   SPARK_Mode
@@ -2140,26 +2015,28 @@ begin
 end TestAssert;
 \end{verbatim}
 
-At runtime, if this function was called with a value of `X' less than zero, an `AssertionError' would be raised. At compile time, GNATprove cannot prove the assertion, and yields the following error message:
+At runtime, if this function was called with a value of `X' less than zero, an `Assert\_Error' would be raised. At compile time, GNATprove cannot prove the assertion, and yields the following error message:
 \begin{verbatim}
-TestAssert.adb:5:19: medium: assertion might fail, cannot prove X > 0 
-[possible explanation: subprogram at line 1 should mention X in a precondition]
+TestAssert.adb:5:19: medium: assertion might fail, 
+cannot prove X > 0 
+[possible explanation: subprogram at line 1 should mention X 
+	in a precondition]
 \end{verbatim}
 \end{itemize}
 
-The only runtime error not detected by GNATprove is the absence of `StorageError' exceptions. These exceptions occur when a program runs out of memory, either by running out of heap space when dynamically allocating objects, or by stack overflow. Stack overflow can be caused by instantiating too many objects, or by recursive functions. 
+The only runtime error not detected by GNATprove is the absence of `Storage\_Error' exceptions. These exceptions occur when a program runs out of memory, either by running out of heap space when dynamically allocating objects, or by stack overflow. Stack overflow can be caused by instantiating too many objects, or by recursive functions. 
 	
 \subsection{Automatically verify the program meets its requirements}
 SPARK 2014 does automatically verify that the program meets its requirements.
 
 \subsection{Automatically verify the absence of undefined behaviour}
-SPARK 2014 satisifes this goal. There are two types of undefined behaviour that SPARK inherits from Ada, `bounded error' and `erroneous execution'. These are detected by a combination of legality rules (the compiler) and verification rules (GNATprove).
+SPARK 2014 satisfies this goal. There are two types of undefined behaviour that SPARK inherits from Ada, `bounded error' and `erroneous execution'. These are detected by a combination of legality rules (the compiler) and verification rules (GNATprove).
 
 \subsection{Automatically verify the constraint of information flow}
-SPARK 2014 satisifes this goal, however this feature has not been used in the OCPP server implementation. 
+SPARK 2014 satisfies this goal, however this feature has not been used in the OCPP server implementation. 
 
 \subsection{Soundness}
-SPARK 2014 is thought to be sound. I could find no examples of unsound behaviour (i.e. the program never crashed unexpectedly). In some situations, the toolset produces `false alarms', where it cannot prove that something is correct. In these cases, the code was restructured to make it more amenable to verification.
+SPARK 2014 is thought to be sound. No examples of unsound behaviour were found (i.e. the program never crashed unexpectedly). In some situations, the toolset produces `false alarms', where it cannot prove that something is correct. In these cases, the code was restructured to make it more amenable to verification.
 
 \subsection{Software Verification Goals Summary}
 
@@ -2187,7 +2064,7 @@ The table below shows the original goals of this project as stated in the Projec
 \section{Software Functionality Goals}
 \begin{table}[htp]
 
-The following table lists the OCPP functionality goals and their completion status.
+The following table lists the OCPP functionality goals and their completion status. Green indicates complete, red indicates incomplete.
 \caption{Use cases for a basic implementation}
 \begin{tabular}{ |p{4cm}|p{3cm}|p{4cm}|p{2cm}| p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1cm}|p{1cm} }
  \hline
@@ -2203,7 +2080,7 @@ Configuring a charge station & B05-B07 & SetVariables, GetVariables, GetReportBa
  \hline
 Resetting a charge station& B11-B12 & Reset & \cellcolor{green}\\
  \hline
-Authorization Options& One of C01, C02, C04 & Authorize &\cellcolor{red}\\
+Authorization Options& One of C01, C02, C04 & Authorize &\cellcolor{green}\\
  \hline
 Transaction Mechanism & E01 (one of S1-S6), E02-E03,
 E05, E06 (one of S1-S6), E07-
@@ -2220,106 +2097,44 @@ Data Transfer& P01-P02 & DataTransfer & \cellcolor{red}\\
 \end{tabular}
 \label{tab:ocppCompletionStatus}
 \end{table}
-\pagebreak
-\subsection{Adherence to Project Plan}
 
-The gantt chart below shows the original plan from the Project Proposal. The green color indicates completion on time, the red color indicates a task that was not completed.
+Not all tasks were able to be completed in the given time. There was a significant learning curve in becoming proficient with the SPARK 2014 toolset, both in learning the language and in learning how to effectively use GNATprove to discharge verification conditions.
 
-\begin{ganttchart}[
-	expand chart=\textwidth,
-	hgrid,
-	vgrid,
-%	time slot format=isodate-yearmonth,
-	time slot format=isodate,
-	time slot unit=month,
-	]{2019-06-01}{2020-03-01}
-	\gantttitlecalendar{year, month=shortname} \\
-%	\ganttbar{Select a verification framework}{2019-08}{2019-09} \\
-%	\ganttlinkedbar{Ada websocket running}{2019-09}{2019-10} \ganttnewline
-%	\ganttlink{elem1}{elem2}
-\ganttbar[bar/.append style={fill=green}]{1}{2019-07-02}{2019-08-16} \\
-\ganttlinkedbar[bar/.append style={fill=green}]{2}{2019-08-16}{2019-09-01} \ganttnewline
-\ganttlinkedbar[bar/.append style={fill=red}]{3}{2019-09-01}{2019-09-15} \ganttnewline
-\ganttlinkedbar[bar/.append style={fill=red}]{4}{2019-09-15}{2019-10-01} \ganttnewline
-\ganttlinkedbar[bar/.append style={fill=green}]{5}{2019-10-01}{2019-10-14} \ganttnewline
-\ganttlinkedbar[bar/.append style={fill=green}]{6}{2019-10-14}{2019-11-01} \ganttnewline
-\ganttlinkedbar[bar/.append style={fill=green}]{7}{2019-11-01}{2019-11-15} \ganttnewline
-\ganttlinkedbar[bar/.append style={fill=red}]{8}{2019-11-15}{2019-12-01} \ganttnewline
-\ganttlinkedbar[bar/.append style={fill=red}]{9}{2019-12-01}{2019-12-15} \ganttnewline
-\ganttlinkedbar[bar/.append style={fill=red}]{10}{2019-12-15}{2020-01-01} \ganttnewline
-\ganttlinkedbar[bar/.append style={fill=red}]{11}{2020-01-02}{2020-01-15} \ganttnewline
-\ganttlinkedbar[bar/.append style={fill=red}]{12}{2020-01-15}{2020-02-01} \ganttnewline
-\ganttlinkedbar[bar/.append style={fill=red}]{13}{2020-02-01}{2020-02-16} \ganttnewline
-\end{ganttchart}
+\section{SPARK 2014}
+The experience with SPARK 2014 was on the whole an extremely positive one. The software developer can choose what level of software assurance to adopt, from `stone' (valid SPARK) through to `platinum' (all data initialized, correct data flow, absence of run time errors,  full functional correctness). In the author's opinion, `silver' (all data initialized, correct data flow, absence of run time errors) yields the greatest gains for the effort required. SPARK can be considered a `better C++', and its use is recommended anywhere quality is important.
 
-
+\subsection {Pros}
 \begin{itemize}
-	\item 1. Review the literature of the verification tools, and choose one based on the selection criteria.
-	
-	Duration: 8 days. 2019-07-02 $\rightarrow$ 2019-08-16.
-	
-	\item 2. Get an Ada websocket server running, and a basic websocket client connecting to it.
-	
-	Duration: 4 days. 2019-08-1 $\rightarrow$ 2019-09-01.
-	
-	\item 3. Modify the websocket client to request upgrading the websocket connection to an OCPP connection.
-	
-	Duration: 2 days. 2019-09-01 $\rightarrow$ 2019-09-15. 
-	
-	\item 4. Modify the websocket server to accept websocket connection `upgrade to OCPP' requests.
-	
-	Duration: 2 days. 2019-09-15 $\rightarrow$ 2019-10-01. 
-	
-	\item 5. Modify the OCPP server to accept and respond to `Boot Notification' requests.
-	
-	Duration: 2 days. 2019-10-01 $\rightarrow$ 2019-10-14.
-	
-	\item 6. Modify the OCPP server to accept and respond to `Get Variable' and 'Set Variable' requests.	
-	
-	Duration: 2 days. 2019-10-14 $\rightarrow$ 2019-11-01.
-	
-	\item 7. Modify the OCPP server to handle `Reset' requests and responses.	
-	
-	Duration: 2 days. 2019-11-01 $\rightarrow$ 2019-11-15.
-	
-	\item 8. Modify the OCPP server to handle `Authorize' requests and responses.
-	
-	Duration: 2 days. 2019-11-15 $\rightarrow$ 2019-12-01.
-	
-	\item 9. Modify the OCPP server to handle `TransactionEvent' requests and responses.	
-	
-	Duration: 2 days. 2019-12-01 $\rightarrow$ 2019-12-15.
-	
-	\item 10. Modify the OCPP server to handle `StatusNotification' requests and responses.	
-	
-	Duration: 2 days. 2019-12-15 $\rightarrow$ 2020-01-01.
-	
-	\item 11. Modify the OCPP server to handle `NotifyEvent' requests and responses.
-	
-	Duration: 2 days. 2020-01-01 $\rightarrow$ 2020-01-15.
-	
-	\item 12. Modify the OCPP server to handle `TransactionEvent (Meter Values)' requests and responses.
-	
-	Duration: 2 days. 2020-01-15 $\rightarrow$ 2020-02-01.
-	
-	\item 13. Modify the OCPP server to handle `DataTransfer' requests and responses.
-	Duration: 2 days. 2020-02-01 $\rightarrow$ 2020-02-16.
-	
+\item gives a level of quality impossible to attain with mainstream programming languages, especially in larger codebases
+\item the toolset automatically detects all possible run time exceptions, excluding `out of memory' conditions
+\item the `community' edition is free for GPL development
+\item likely to reduce costs over the lifetime of a software project
 \end{itemize}
-	
+
+\subsection {Cons}
+\begin{itemize}
+\item lengthy learning curve
+\item productivity `appears' to be lower with SPARK than with a mainstream language, as most (all?) of the bugs are discovered and resolved earlier in the software lifecycle. 
+\item very limited pool of software developers with SPARK experience makes it less likely that it will be chosen for new projects
+\item Commercial license pricing is opaque, and is unlikely to be cheap
+\end{itemize}
+
+
+
+\pagebreak
 
 \chapter{Conclusions}
 \section{Summary and conclusions}
 
 During the course of this project, an OCPP v2.1 server was partially implemented, with several important properties automatically verified by the SPARK 2014 toolset. These properties include the verified absence of all runtime exceptions, excluding `out of memory' exceptions. 
 
-An automated code generator was developed which exploits existing JSON definition files to create formally verified serialising and deserialising routines for arbitrarily deeply nested JSON data.
+An automated code generator was developed which exploits existing JSON definition files to create formally verified serializing and deserializing routines for arbitrarily deeply nested JSON data.
 
 
 \section{Possible future work}
 The following improvements could be made to improve the OCPP server.
 \begin {itemize}
-	\item Complete the remaining use cases required for a minimal OCPP server implementation described in table \ref{tab:ocppCompletionStatus}
+	\item Complete the remaining use cases required for a minimal OCPP server implementation described in Table \ref{tab:ocppCompletionStatus}
 	\item Implement all packets described in the OCPP specification \cite{ocpp}.
 	\item Extend the functional correctness proofs to verify more of the desired functionality.
 \end{itemize}
@@ -2345,8 +2160,8 @@ The following improvements could be made to improve the OCPP server.
 
 \chapter{Appendix}
 
+The following code snippet is an example contradicting Dafny's claim of `absence of runtime exceptions'.
 \section{Dafny}
-
 
 \label {dafnybug1}
 
@@ -2425,6 +2240,150 @@ Bryan Parno
 Mar 14 05:41
 We use reference counting via shared_ptr Which means it is possible to create memory leaks if you try hard enough (e.g., via a doubly-linked list). For the latter case, I've been thinking about adding an annotation that a developer could add that would give the compiler a hint that it should use a weak_ptr to break up such cycles, but I haven't gotten around to it yet
 \end{verbatim}
+
+\chapter{BootNotificationRequest.js}
+The following is an example of the JSON definition for an OCPP packet. These definition files were part of the OCPP download bundle.
+\label{bootnotificationrequest.json}
+\begin{verbatim}
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$id": "urn:OCPP:Cp:2:2019:12:BootNotificationRequest",
+  "comment": "Errata sheet - release candidate",
+  "definitions": {
+    "CustomDataType": {
+      "description": "This class does not get 'AdditionalProperties = 
+      	false' 
+      in the schema generation, so it can be extended with arbitrary 
+      JSON 
+      properties to allow adding custom data.",
+      "javaType": "CustomData",
+      "type": "object",
+      "properties": {
+        "vendorId": {
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "required": [
+        "vendorId"
+      ]
+    },
+    "BootReasonEnumType": {
+      "description": "This contains the reason for sending this message 
+      to the CSMS.\r\n",
+      "javaType": "BootReasonEnum",
+      "type": "string",
+      "additionalProperties": false,
+      "enum": [
+        "ApplicationReset",
+        "FirmwareUpdate",
+        "LocalReset",
+        "PowerUp",
+        "RemoteReset",
+        "ScheduledReset",
+        "Triggered",
+        "Unknown",
+        "Watchdog"
+      ]
+    },
+    "ChargingStationType": {
+      "description": "Charge_ Point\r\nurn:x-oca:ocpp:uid:2:233122\r\n
+      The physical system where an Electrical Vehicle (EV) can be 
+      	charged.\r\n",
+      "javaType": "ChargingStation",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "customData": {
+          "$ref": "#/definitions/CustomDataType"
+        },
+        "serialNumber": {
+          "description": "Device. Serial_ Number. Serial_ Number\r\n
+          urn:x-oca:ocpp:uid:1:569324\r\nVendor-specific device 
+          	identifier.\r\n",
+          "type": "string",
+          "maxLength": 25
+        },
+        "model": {
+          "description": "Device. Model. CI20_ Text\r\n
+          urn:x-oca:ocpp:uid:1:569325\r\nDefines the model of the 
+          	device.\r\n",
+          "type": "string",
+          "maxLength": 20
+        },
+        "modem": {
+          "$ref": "#/definitions/ModemType"
+        },
+        "vendorName": {
+          "description": "Identifies the vendor (not necessarily 
+          	in a unique manner).\r\n",
+          "type": "string",
+          "maxLength": 50
+        },
+        "firmwareVersion": {
+          "description": "This contains the firmware version of the 
+          Charging Station.\r\n\r\n",
+          "type": "string",
+          "maxLength": 50
+        }
+      },
+      "required": [
+        "model",
+        "vendorName"
+      ]
+    },
+    "ModemType": {
+      "description": "Wireless_ Communication_ Module\r\n
+      urn:x-oca:ocpp:uid:2:233306\r\nDefines parameters required 
+      	for initiating and maintaining wireless communication 
+      	with other devices.\r\n",
+      "javaType": "Modem",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "customData": {
+          "$ref": "#/definitions/CustomDataType"
+        },
+        "iccid": {
+          "description": "Wireless_ Communication_ Module. ICCID. 
+          CI20_ Text\r\nurn:x-oca:ocpp:uid:1:569327\r\n
+          This contains the ICCID of the modem’s SIM card.\r\n",
+          "type": "string",
+          "maxLength": 20
+        },
+        "imsi": {
+          "description": "Wireless_ Communication_ Module. IMSI. 
+          	CI20_ Text\r\n
+          urn:x-oca:ocpp:uid:1:569328\r\nThis contains the IMSI 
+          of the modem’s SIM card.\r\n",
+          "type": "string",
+          "maxLength": 20
+        }
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "customData": {
+      "$ref": "#/definitions/CustomDataType"
+    },
+    "chargingStation": {
+      "$ref": "#/definitions/ChargingStationType"
+    },
+    "reason": {
+      "$ref": "#/definitions/BootReasonEnumType"
+    }
+  },
+  "required": [
+    "reason",
+    "chargingStation"
+  ]
+}
+\end{verbatim}
+
+
+
 
 \chapter{Companion disk}
 The source code for this project exceeds 12000 lines of code, so it has not been included here. Full source is available at https://github.com/DanielMcInnes/thesis.git.
