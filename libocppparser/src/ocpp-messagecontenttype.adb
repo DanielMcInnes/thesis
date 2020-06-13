@@ -19,8 +19,8 @@ procedure findquotedstring_packet is new findquotedstring(
    begin
       self.zzzArrayElementInitialized := False;
       self.format := MessageFormatEnumType.ASCII;
-      self.language := NonSparkTypes.MessageContentType.strlanguage_t.To_Bounded_String("");
-      self.content := NonSparkTypes.MessageContentType.strcontent_t.To_Bounded_String("");
+      self.language := MessageContentTypeStrings.strlanguage_t.To_Bounded_String("");
+      self.content := MessageContentTypeStrings.strcontent_t.To_Bounded_String("");
 
    end Initialize;
 
@@ -43,12 +43,12 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "language", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid MessageContentTypelanguage"); return; end if;
 
-      self.language := NonSparkTypes.MessageContentType.strlanguage_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.language := MessageContentTypeStrings.strlanguage_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "content", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid MessageContentTypecontent"); return; end if;
 
-      self.content := NonSparkTypes.MessageContentType.strcontent_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.content := MessageContentTypeStrings.strcontent_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       if (valid = false) then NonSparkTypes.put_line("365 Invalid MessageContentTypecontent"); return; end if;
       valid := true;
@@ -64,8 +64,8 @@ procedure findquotedstring_packet is new findquotedstring(
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
                                                       & "       " & '"' & "format" & '"' & ":"  & '"' & MessageFormatEnumType.string_t.To_String(strformat) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "language" & '"' & ": " & '"' & NonSparkTypes.MessageContentType.strlanguage_t.To_String(Self.language) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "content" & '"' & ": " & '"' & NonSparkTypes.MessageContentType.strcontent_t.To_String(Self.content) & '"' & ASCII.LF
+                                                      & "    " & '"' & "language" & '"' & ": " & '"' & MessageContentTypeStrings.strlanguage_t.To_String(Self.language) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "content" & '"' & ": " & '"' & MessageContentTypeStrings.strcontent_t.To_String(Self.content) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
 , Drop => Right);
    end To_Bounded_String;

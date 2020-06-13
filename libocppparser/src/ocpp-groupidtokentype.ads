@@ -3,12 +3,13 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with GroupIdTokenTypestrings;
 with ocpp.IdTokenEnumType; use ocpp.IdTokenEnumType;
 
 package ocpp.GroupIdTokenType is
    type T is record
       zzzArrayElementInitialized : Boolean := False;
-      idToken : NonSparkTypes.GroupIdTokenType.stridToken_t.Bounded_String;
+      idToken : GroupIdTokenTypeStrings.stridToken_t.Bounded_String;
       zzztype : IdTokenEnumType.T;
    end record;
    procedure Initialize(self: out ocpp.GroupIdTokenType.T)

@@ -3,12 +3,13 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with ModemTypestrings;
 
 package ocpp.ModemType is
    type T is record
       zzzArrayElementInitialized : Boolean := False;
-      iccid : NonSparkTypes.ModemType.striccid_t.Bounded_String;
-      imsi : NonSparkTypes.ModemType.strimsi_t.Bounded_String;
+      iccid : ModemTypeStrings.striccid_t.Bounded_String;
+      imsi : ModemTypeStrings.strimsi_t.Bounded_String;
    end record;
    procedure Initialize(self: out ocpp.ModemType.T)
    with

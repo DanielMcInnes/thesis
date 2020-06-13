@@ -18,8 +18,8 @@ procedure findquotedstring_packet is new findquotedstring(
    is
    begin
       self.zzzArrayElementInitialized := False;
-      self.additionalIdToken := NonSparkTypes.AdditionalInfoType.stradditionalIdToken_t.To_Bounded_String("");
-      self.zzztype := NonSparkTypes.AdditionalInfoType.strtype_t.To_Bounded_String("");
+      self.additionalIdToken := AdditionalInfoTypeStrings.stradditionalIdToken_t.To_Bounded_String("");
+      self.zzztype := AdditionalInfoTypeStrings.strtype_t.To_Bounded_String("");
 
    end Initialize;
 
@@ -36,12 +36,12 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "additionalIdToken", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid AdditionalInfoTypeadditionalIdToken"); return; end if;
 
-      self.additionalIdToken := NonSparkTypes.AdditionalInfoType.stradditionalIdToken_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.additionalIdToken := AdditionalInfoTypeStrings.stradditionalIdToken_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "type", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid AdditionalInfoTypetype"); return; end if;
 
-      self.zzztype := NonSparkTypes.AdditionalInfoType.strtype_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.zzztype := AdditionalInfoTypeStrings.strtype_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       if (valid = false) then NonSparkTypes.put_line("365 Invalid AdditionalInfoTypetype"); return; end if;
       valid := true;
@@ -54,8 +54,8 @@ procedure findquotedstring_packet is new findquotedstring(
    begin
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "additionalIdToken" & '"' & ": " & '"' & NonSparkTypes.AdditionalInfoType.stradditionalIdToken_t.To_String(Self.additionalIdToken) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "type" & '"' & ": " & '"' & NonSparkTypes.AdditionalInfoType.strtype_t.To_String(Self.zzztype) & '"' & ASCII.LF
+                                                      & "    " & '"' & "additionalIdToken" & '"' & ": " & '"' & AdditionalInfoTypeStrings.stradditionalIdToken_t.To_String(Self.additionalIdToken) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "type" & '"' & ": " & '"' & AdditionalInfoTypeStrings.strtype_t.To_String(Self.zzztype) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
 , Drop => Right);
    end To_Bounded_String;

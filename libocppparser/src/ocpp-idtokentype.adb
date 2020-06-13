@@ -19,7 +19,7 @@ procedure findquotedstring_packet is new findquotedstring(
    begin
       self.zzzArrayElementInitialized := False;
       additionalInfoTypeArray.Initialize(self.additionalInfo);
-      self.idToken := NonSparkTypes.IdTokenType.stridToken_t.To_Bounded_String("");
+      self.idToken := IdTokenTypeStrings.stridToken_t.To_Bounded_String("");
       self.zzztype := IdTokenEnumType.Central;
 
    end Initialize;
@@ -43,7 +43,7 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "idToken", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid IdTokenTypeidToken"); return; end if;
 
-      self.idToken := NonSparkTypes.IdTokenType.stridToken_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.idToken := IdTokenTypeStrings.stridToken_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "type", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid IdTokenTypetype"); return; end if;
@@ -67,7 +67,7 @@ procedure findquotedstring_packet is new findquotedstring(
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
                                                       & "    " & '"' & "additionalInfo" & '"' & ": " & NonSparkTypes.packet.To_String(stradditionalInfo) & "," & ASCII.LF
-                                                      & "    " & '"' & "idToken" & '"' & ": " & '"' & NonSparkTypes.IdTokenType.stridToken_t.To_String(Self.idToken) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "idToken" & '"' & ": " & '"' & IdTokenTypeStrings.stridToken_t.To_String(Self.idToken) & '"' & "," & ASCII.LF
                                                       & "       " & '"' & "type" & '"' & ":"  & '"' & IdTokenEnumType.string_t.To_String(strtype) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
 , Drop => Right);

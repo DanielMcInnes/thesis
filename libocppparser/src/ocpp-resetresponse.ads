@@ -3,6 +3,7 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with ResetResponsestrings;
 with ocpp.ResetStatusEnumType; use ocpp.ResetStatusEnumType;
 
 package ocpp.ResetResponse is

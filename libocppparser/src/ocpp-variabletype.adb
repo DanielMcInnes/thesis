@@ -18,8 +18,8 @@ procedure findquotedstring_packet is new findquotedstring(
    is
    begin
       self.zzzArrayElementInitialized := False;
-      self.name := NonSparkTypes.VariableType.strname_t.To_Bounded_String("");
-      self.instance := NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("");
+      self.name := VariableTypeStrings.strname_t.To_Bounded_String("");
+      self.instance := VariableTypeStrings.strinstance_t.To_Bounded_String("");
 
    end Initialize;
 
@@ -36,12 +36,12 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "name", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid VariableTypename"); return; end if;
 
-      self.name := NonSparkTypes.VariableType.strname_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.name := VariableTypeStrings.strname_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "instance", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid VariableTypeinstance"); return; end if;
 
-      self.instance := NonSparkTypes.VariableType.strinstance_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.instance := VariableTypeStrings.strinstance_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       if (valid = false) then NonSparkTypes.put_line("365 Invalid VariableTypeinstance"); return; end if;
       valid := true;
@@ -54,8 +54,8 @@ procedure findquotedstring_packet is new findquotedstring(
    begin
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "name" & '"' & ": " & '"' & NonSparkTypes.VariableType.strname_t.To_String(Self.name) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "instance" & '"' & ": " & '"' & NonSparkTypes.VariableType.strinstance_t.To_String(Self.instance) & '"' & ASCII.LF
+                                                      & "    " & '"' & "name" & '"' & ": " & '"' & VariableTypeStrings.strname_t.To_String(Self.name) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "instance" & '"' & ": " & '"' & VariableTypeStrings.strinstance_t.To_String(Self.instance) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
 , Drop => Right);
    end To_Bounded_String;

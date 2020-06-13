@@ -83,6 +83,9 @@ parseJsonFile('./SetVariablesRequest.json')
 parseJsonFile('./SetVariablesResponse.json')
 parseJsonFile('./StatusNotificationRequest.json')
 parseJsonFile('./StatusNotificationResponse.json')
+parseJsonFile('./TransactionEventRequest.json')
+
+
 
 var path = process.argv[2];
 

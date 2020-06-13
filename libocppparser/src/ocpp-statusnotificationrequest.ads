@@ -3,12 +3,13 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with StatusNotificationRequeststrings;
 with ocpp.ConnectorStatusEnumType; use ocpp.ConnectorStatusEnumType;
 
 package ocpp.StatusNotificationRequest is
    action : constant NonSparkTypes.action_t.Bounded_String := NonSparkTypes.action_t.To_Bounded_String("StatusNotification"); 
    type T is new call with record
-      timestamp : NonSparkTypes.StatusNotificationRequest.strtimestamp_t.Bounded_String;
+      timestamp : StatusNotificationRequestStrings.strtimestamp_t.Bounded_String;
       connectorStatus : ConnectorStatusEnumType.T;
       evseId : integer;
       connectorId : integer;

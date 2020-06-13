@@ -19,10 +19,10 @@ procedure findquotedstring_packet is new findquotedstring(
    begin
       self.zzzArrayElementInitialized := False;
       self.hashAlgorithm := HashAlgorithmEnumType.SHA256;
-      self.issuerNameHash := NonSparkTypes.OCSPRequestDataType.strissuerNameHash_t.To_Bounded_String("");
-      self.issuerKeyHash := NonSparkTypes.OCSPRequestDataType.strissuerKeyHash_t.To_Bounded_String("");
-      self.serialNumber := NonSparkTypes.OCSPRequestDataType.strserialNumber_t.To_Bounded_String("");
-      self.responderURL := NonSparkTypes.OCSPRequestDataType.strresponderURL_t.To_Bounded_String("");
+      self.issuerNameHash := OCSPRequestDataTypeStrings.strissuerNameHash_t.To_Bounded_String("");
+      self.issuerKeyHash := OCSPRequestDataTypeStrings.strissuerKeyHash_t.To_Bounded_String("");
+      self.serialNumber := OCSPRequestDataTypeStrings.strserialNumber_t.To_Bounded_String("");
+      self.responderURL := OCSPRequestDataTypeStrings.strresponderURL_t.To_Bounded_String("");
 
    end Initialize;
 
@@ -45,22 +45,22 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "issuerNameHash", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid OCSPRequestDataTypeissuerNameHash"); return; end if;
 
-      self.issuerNameHash := NonSparkTypes.OCSPRequestDataType.strissuerNameHash_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.issuerNameHash := OCSPRequestDataTypeStrings.strissuerNameHash_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "issuerKeyHash", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid OCSPRequestDataTypeissuerKeyHash"); return; end if;
 
-      self.issuerKeyHash := NonSparkTypes.OCSPRequestDataType.strissuerKeyHash_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.issuerKeyHash := OCSPRequestDataTypeStrings.strissuerKeyHash_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "serialNumber", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid OCSPRequestDataTypeserialNumber"); return; end if;
 
-      self.serialNumber := NonSparkTypes.OCSPRequestDataType.strserialNumber_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.serialNumber := OCSPRequestDataTypeStrings.strserialNumber_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "responderURL", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid OCSPRequestDataTyperesponderURL"); return; end if;
 
-      self.responderURL := NonSparkTypes.OCSPRequestDataType.strresponderURL_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.responderURL := OCSPRequestDataTypeStrings.strresponderURL_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       if (valid = false) then NonSparkTypes.put_line("365 Invalid OCSPRequestDataTyperesponderURL"); return; end if;
       valid := true;
@@ -76,10 +76,10 @@ procedure findquotedstring_packet is new findquotedstring(
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
                                                       & "       " & '"' & "hashAlgorithm" & '"' & ":"  & '"' & HashAlgorithmEnumType.string_t.To_String(strhashAlgorithm) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "issuerNameHash" & '"' & ": " & '"' & NonSparkTypes.OCSPRequestDataType.strissuerNameHash_t.To_String(Self.issuerNameHash) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "issuerKeyHash" & '"' & ": " & '"' & NonSparkTypes.OCSPRequestDataType.strissuerKeyHash_t.To_String(Self.issuerKeyHash) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "serialNumber" & '"' & ": " & '"' & NonSparkTypes.OCSPRequestDataType.strserialNumber_t.To_String(Self.serialNumber) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "responderURL" & '"' & ": " & '"' & NonSparkTypes.OCSPRequestDataType.strresponderURL_t.To_String(Self.responderURL) & '"' & ASCII.LF
+                                                      & "    " & '"' & "issuerNameHash" & '"' & ": " & '"' & OCSPRequestDataTypeStrings.strissuerNameHash_t.To_String(Self.issuerNameHash) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "issuerKeyHash" & '"' & ": " & '"' & OCSPRequestDataTypeStrings.strissuerKeyHash_t.To_String(Self.issuerKeyHash) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "serialNumber" & '"' & ": " & '"' & OCSPRequestDataTypeStrings.strserialNumber_t.To_String(Self.serialNumber) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "responderURL" & '"' & ": " & '"' & OCSPRequestDataTypeStrings.strresponderURL_t.To_String(Self.responderURL) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
 , Drop => Right);
    end To_Bounded_String;

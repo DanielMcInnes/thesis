@@ -115,9 +115,6 @@ package NonSparkTypes is
    procedure put(msg : string);
    procedure put_line(msg : string);
 
-   procedure put(msg : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String);
-   procedure put_line(msg : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String);
-
    function Uncased_Equals (L, R : String) return Boolean;
 
 end NonSparkTypes;

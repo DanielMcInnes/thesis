@@ -20,7 +20,7 @@ procedure findquotedstring_packet is new findquotedstring(
       self.zzzArrayElementInitialized := False;
       self.attributeStatus := GetVariableStatusEnumType.Accepted;
       self.attributeType := AttributeEnumType.Actual;
-      self.attributeValue := NonSparkTypes.GetVariableResultType.strattributeValue_t.To_Bounded_String("");
+      self.attributeValue := GetVariableResultTypeStrings.strattributeValue_t.To_Bounded_String("");
       ComponentType.Initialize(self.component);
       VariableType.Initialize(self.variable);
 
@@ -51,7 +51,7 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "attributeValue", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid GetVariableResultTypeattributeValue"); return; end if;
 
-      self.attributeValue := NonSparkTypes.GetVariableResultType.strattributeValue_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.attributeValue := GetVariableResultTypeStrings.strattributeValue_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKey(msg, msgIndex, valid, "component");
       if (valid = false) then NonSparkTypes.put_line("355 Invalid GetVariableResultTypecomponent"); return; end if;
@@ -86,7 +86,7 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & "{" & ASCII.LF
                                                       & "       " & '"' & "attributeStatus" & '"' & ":"  & '"' & GetVariableStatusEnumType.string_t.To_String(strattributeStatus) & '"' & "," & ASCII.LF
                                                       & "       " & '"' & "attributeType" & '"' & ":"  & '"' & AttributeEnumType.string_t.To_String(strattributeType) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "attributeValue" & '"' & ": " & '"' & NonSparkTypes.GetVariableResultType.strattributeValue_t.To_String(Self.attributeValue) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "attributeValue" & '"' & ": " & '"' & GetVariableResultTypeStrings.strattributeValue_t.To_String(Self.attributeValue) & '"' & "," & ASCII.LF
                                                       & "    " & '"' & "component" & '"' & ":" & NonSparkTypes.packet.To_String(strcomponent) & "," & ASCII.LF
                                                       & "    " & '"' & "variable" & '"' & ":" & NonSparkTypes.packet.To_String(strvariable) & ASCII.LF
                                                       & "}" & ASCII.LF

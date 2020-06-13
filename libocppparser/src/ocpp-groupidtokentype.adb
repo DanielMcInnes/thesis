@@ -18,7 +18,7 @@ procedure findquotedstring_packet is new findquotedstring(
    is
    begin
       self.zzzArrayElementInitialized := False;
-      self.idToken := NonSparkTypes.GroupIdTokenType.stridToken_t.To_Bounded_String("");
+      self.idToken := GroupIdTokenTypeStrings.stridToken_t.To_Bounded_String("");
       self.zzztype := IdTokenEnumType.Central;
 
    end Initialize;
@@ -36,7 +36,7 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "idToken", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid GroupIdTokenTypeidToken"); return; end if;
 
-      self.idToken := NonSparkTypes.GroupIdTokenType.stridToken_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.idToken := GroupIdTokenTypeStrings.stridToken_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "type", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid GroupIdTokenTypetype"); return; end if;
@@ -57,7 +57,7 @@ procedure findquotedstring_packet is new findquotedstring(
       IdTokenEnumType.ToString(Self.zzztype, strtype);
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "idToken" & '"' & ": " & '"' & NonSparkTypes.GroupIdTokenType.stridToken_t.To_String(Self.idToken) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "idToken" & '"' & ": " & '"' & GroupIdTokenTypeStrings.stridToken_t.To_String(Self.idToken) & '"' & "," & ASCII.LF
                                                       & "       " & '"' & "type" & '"' & ":"  & '"' & IdTokenEnumType.string_t.To_String(strtype) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
 , Drop => Right);

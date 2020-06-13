@@ -19,8 +19,8 @@ procedure findquotedstring_packet is new findquotedstring(
    begin
       self.zzzArrayElementInitialized := False;
       EVSEType.Initialize(self.evse);
-      self.name := NonSparkTypes.ComponentType.strname_t.To_Bounded_String("");
-      self.instance := NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("");
+      self.name := ComponentTypeStrings.strname_t.To_Bounded_String("");
+      self.instance := ComponentTypeStrings.strinstance_t.To_Bounded_String("");
 
    end Initialize;
 
@@ -43,12 +43,12 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "name", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid ComponentTypename"); return; end if;
 
-      self.name := NonSparkTypes.ComponentType.strname_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.name := ComponentTypeStrings.strname_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "instance", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid ComponentTypeinstance"); return; end if;
 
-      self.instance := NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.instance := ComponentTypeStrings.strinstance_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       if (valid = false) then NonSparkTypes.put_line("365 Invalid ComponentTypeinstance"); return; end if;
       valid := true;
@@ -64,8 +64,8 @@ procedure findquotedstring_packet is new findquotedstring(
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
                                                       & "    " & '"' & "evse" & '"' & ":" & NonSparkTypes.packet.To_String(strevse) & "," & ASCII.LF
-                                                      & "    " & '"' & "name" & '"' & ": " & '"' & NonSparkTypes.ComponentType.strname_t.To_String(Self.name) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "instance" & '"' & ": " & '"' & NonSparkTypes.ComponentType.strinstance_t.To_String(Self.instance) & '"' & ASCII.LF
+                                                      & "    " & '"' & "name" & '"' & ": " & '"' & ComponentTypeStrings.strname_t.To_String(Self.name) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "instance" & '"' & ": " & '"' & ComponentTypeStrings.strinstance_t.To_String(Self.instance) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
 , Drop => Right);
    end To_Bounded_String;

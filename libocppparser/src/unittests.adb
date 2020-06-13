@@ -127,6 +127,17 @@ with ocpp.vpnenumtype;
 with ocpp.GetBaseReportRequest;
 with ocpp.GetBaseReportResponse;
 
+with BootNotificationRequestStrings;
+with BootNotificationResponseStrings;
+with ChargingStationTypeStrings;
+with ComponentTypeStrings;
+with GetVariableResultTypeStrings;
+with HeartbeatResponseStrings;
+with ModemTypeStrings;
+with SetVariableDataTypeStrings;
+with StatusNotificationRequestStrings;
+with VariableTypeStrings;
+
 with unittestb11;
 with unittestb12;
 with unittestc01;
@@ -185,9 +196,9 @@ package body unittests is
    procedure B01(result: out Boolean)
    is
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String ("00000000000000000001");
-      sn2 : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("00000000000000000002");
-      sn3 : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("01234567890123456789");
+      sn : ChargingStationTypeStrings.strserialNumber_t.Bounded_String := ChargingStationTypeStrings.strserialNumber_t.To_Bounded_String ("00000000000000000001");
+      sn2 : ChargingStationTypeStrings.strserialNumber_t.Bounded_String := ChargingStationTypeStrings.strserialNumber_t.To_Bounded_String("00000000000000000002");
+      sn3 : ChargingStationTypeStrings.strserialNumber_t.Bounded_String := ChargingStationTypeStrings.strserialNumber_t.To_Bounded_String("01234567890123456789");
       valid: Boolean;
 
       packet: NonSparkTypes.packet.Bounded_String;
@@ -199,20 +210,20 @@ package body unittests is
                                                                   chargingStation => (
                                                                                       zzzArrayElementInitialized => False,
                                                                                       serialNumber => sn,
-                                                                                      model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
-                                                                                      vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
-                                                                                      firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
+                                                                                      model => ChargingStationTypeStrings.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                                      vendorName => ChargingStationTypeStrings.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                                      firmwareVersion => ChargingStationTypeStrings.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
                                                                                       modem => (
                                                                                                 zzzArrayElementInitialized => False,
-                                                                                                iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
-                                                                                                imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
+                                                                                                iccid => ModemTypeStrings.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                                                imsi => ModemTypeStrings.strimsi_t.To_Bounded_String("01234567890123456789")
                                                                                                )
                                                                                      )                                                 
                                                                  );
       BootNotificationResponse: ocpp.BootNotificationResponse.T := (
                                                                     messagetypeid => 3,
                                                                     messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                                                    currentTime => NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
+                                                                    currentTime => BootNotificationResponseStrings.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
                                                                     interval => 300,
                                                                     status => RegistrationStatusEnumType.Accepted
                                                                    );
@@ -226,7 +237,7 @@ package body unittests is
          messageTypeId => 2,
          messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
          action => ocpp.StatusNotificationRequest.action,
-         timestamp => NonSparkTypes.StatusNotificationRequest.strtimestamp_t.To_Bounded_String("1234"),
+         timestamp => StatusNotificationRequestStrings.strtimestamp_t.To_Bounded_String("1234"),
          connectorStatus => ocpp.ConnectorStatusEnumType.Available,
          evseId => 1,
          connectorId => 1         
@@ -280,7 +291,7 @@ package body unittests is
    procedure B02(result: out Boolean)
    is
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("B030001");
+      sn : ChargingStationTypeStrings.strserialNumber_t.Bounded_String := ChargingStationTypeStrings.strserialNumber_t.To_Bounded_String("B030001");
       valid: Boolean;
       heartbeatRequest: ocpp.heartbeatRequest.T := (
                                                     messagetypeid => 2,
@@ -291,7 +302,7 @@ package body unittests is
       heartbeatResponse: ocpp.HeartbeatResponse.T := (
                                                       messagetypeid => 3,
                                                       messageid => heartbeatRequest.messageid,
-                                                      currentTime => NonSparkTypes.HeartbeatResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z")                                                      
+                                                      currentTime => HeartbeatResponseStrings.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z")                                                      
                                                      );
       
       bnr: ocpp.BootNotificationRequest.T := (
@@ -302,13 +313,13 @@ package body unittests is
                                               chargingStation => (
                                                                   zzzArrayElementInitialized => False,
                                                                   serialNumber => sn,
-                                                                  model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
-                                                                  vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
-                                                                  firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
+                                                                  model => ChargingStationTypeStrings.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                  vendorName => ChargingStationTypeStrings.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                  firmwareVersion => ChargingStationTypeStrings.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
                                                                   modem => (
                                                                             zzzArrayElementInitialized => False,
-                                                                            iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
-                                                                            imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
+                                                                            iccid => ModemTypeStrings.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                            imsi => ModemTypeStrings.strimsi_t.To_Bounded_String("01234567890123456789")
                                                                            )
                                                                  )                                                 
                                              );
@@ -316,7 +327,7 @@ package body unittests is
       bootNotificationResponse: ocpp.BootNotificationResponse.T := (
                                                                     messagetypeid => 3,
                                                                     messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                                                    currentTime => NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
+                                                                    currentTime => BootNotificationResponseStrings.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
                                                                     interval => 300,
                                                                     status => RegistrationStatusEnumType.Pending
                                                                    );
@@ -394,7 +405,7 @@ package body unittests is
    procedure B03(result: out Boolean)
    is
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("B030001");
+      sn : ChargingStationTypeStrings.strserialNumber_t.Bounded_String := ChargingStationTypeStrings.strserialNumber_t.To_Bounded_String("B030001");
       valid: Boolean;
       bootNotificationRequest: ocpp.BootNotificationRequest.T := (
                                                                   messagetypeid => 2,
@@ -404,20 +415,20 @@ package body unittests is
                                                                   chargingStation => (
                                                                                       zzzArrayElementInitialized => False,
                                                                                       serialNumber => sn,
-                                                                                      model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
-                                                                                      vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
-                                                                                      firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
+                                                                                      model => ChargingStationTypeStrings.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                                      vendorName => ChargingStationTypeStrings.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                                      firmwareVersion => ChargingStationTypeStrings.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
                                                                                       modem => (
                                                                                                 zzzArrayElementInitialized => False,
-                                                                                                iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
-                                                                                                imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
+                                                                                                iccid => ModemTypeStrings.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                                                imsi => ModemTypeStrings.strimsi_t.To_Bounded_String("01234567890123456789")
                                                                                                )
                                                                                      )                                                 
                                                                  );
       expectedresponse: ocpp.BootNotificationResponse.T := (
                                                        messagetypeid => 3,
                                                        messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                                       currentTime => NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
+                                                       currentTime => BootNotificationResponseStrings.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
                                                        interval => 300,
                                                        status => RegistrationStatusEnumType.Rejected);
       
@@ -472,7 +483,7 @@ package body unittests is
    procedure B04(result: out Boolean)
    is
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("B030001");
+      sn : ChargingStationTypeStrings.strserialNumber_t.Bounded_String := ChargingStationTypeStrings.strserialNumber_t.To_Bounded_String("B030001");
       valid: Boolean;
       heartbeatRequest: ocpp.heartbeatRequest.T := (
                                        messagetypeid => 2,
@@ -483,7 +494,7 @@ package body unittests is
       heartbeatResponse: ocpp.HeartbeatResponse.T := (
                                                       messagetypeid => 3,
                                                       messageid => heartbeatRequest.messageid,
-                                                      currentTime => NonSparkTypes.HeartbeatResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z")                                                      
+                                                      currentTime => HeartbeatResponseStrings.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z")                                                      
                                                      );
       
       
@@ -495,13 +506,13 @@ package body unittests is
                                               chargingStation => (
                                                                   zzzArrayElementInitialized => False,
                                                                   serialNumber => sn,
-                                                                  model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
-                                                                  vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
-                                                                  firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
+                                                                  model => ChargingStationTypeStrings.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                  vendorName => ChargingStationTypeStrings.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                  firmwareVersion => ChargingStationTypeStrings.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
                                                                   modem => (
                                                                             zzzArrayElementInitialized => False,
-                                                                            iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
-                                                                            imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
+                                                                            iccid => ModemTypeStrings.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                            imsi => ModemTypeStrings.strimsi_t.To_Bounded_String("01234567890123456789")
                                                                            )
                                                                  )                                                 
                                              );
@@ -509,7 +520,7 @@ package body unittests is
       bootNotificationResponse: ocpp.BootNotificationResponse.T := (
                                                        messagetypeid => 3,
                                                        messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                                       currentTime => NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
+                                                       currentTime => BootNotificationResponseStrings.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
                                                        interval => 300,
                                                        status => RegistrationStatusEnumType.Accepted);
       packet: NonSparkTypes.packet.Bounded_String;
@@ -561,7 +572,7 @@ package body unittests is
       --use ocpp.SetVariablesRequest.DataType;
 
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("01234567890123456789");
+      sn : ChargingStationTypeStrings.strserialNumber_t.Bounded_String := ChargingStationTypeStrings.strserialNumber_t.To_Bounded_String("01234567890123456789");
       valid: Boolean;
       bootNotificationRequest: ocpp.BootNotificationRequest.T := (
                                               messagetypeid => 2,
@@ -571,20 +582,20 @@ package body unittests is
                                               chargingStation => (
                                                                   zzzArrayElementInitialized => False,
                                                                   serialNumber => sn,
-                                                                  model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
-                                                                  vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
-                                                                  firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
+                                                                  model => ChargingStationTypeStrings.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                  vendorName => ChargingStationTypeStrings.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                  firmwareVersion => ChargingStationTypeStrings.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
                                                                   modem => (
                                                                             zzzArrayElementInitialized => False,
-                                                                            iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
-                                                                            imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
+                                                                            iccid => ModemTypeStrings.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                            imsi => ModemTypeStrings.strimsi_t.To_Bounded_String("01234567890123456789")
                                                                            )
                                                                  )                                                 
                                              );
       bootNotificationResponse: ocpp.BootNotificationResponse.T := (
                                                        messagetypeid => 3,
                                                        messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                                       currentTime => NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
+                                                       currentTime => BootNotificationResponseStrings.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
                                                        interval => 300,
                                                        status => RegistrationStatusEnumType.Accepted);
 
@@ -606,11 +617,11 @@ package body unittests is
                                                                        (
                                                                         zzzArrayElementInitialized => True,
                                                                         attributeType => AttributeEnumType.Actual,
-                                                                        attributeValue => NonSparkTypes.SetVariableDataType.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
+                                                                        attributeValue => SetVariableDataTypeStrings.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
                                                                         component => (
                                                                                       zzzArrayElementInitialized => True,
-                                                                                      name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("evse"),
-                                                                                      instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
+                                                                                      name => ComponentTypeStrings.strname_t.To_Bounded_String("evse"),
+                                                                                      instance => ComponentTypeStrings.strinstance_t.To_Bounded_String("0"),
                                                                                       evse => (
                                                                                                zzzArrayElementInitialized => True,
                                                                                                id => 0,
@@ -619,19 +630,19 @@ package body unittests is
                                                                                      ),
                                                                         variable => (
                                                                                      zzzArrayElementInitialized => True,
-                                                                                     name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
-                                                                                     instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
+                                                                                     name => VariableTypeStrings.strname_t.To_Bounded_String("loginPassword"),
+                                                                                     instance => VariableTypeStrings.strinstance_t.To_Bounded_String("0")
                                                                                     )
                                                                        ),
                                                                    others => 
                                                                      (
                                                                       zzzArrayElementInitialized => False,
                                                                       attributeType => AttributeEnumType.Actual,
-                                                                      attributeValue => NonSparkTypes.SetVariableDataType.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
+                                                                      attributeValue => SetVariableDataTypeStrings.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
                                                                       component => (
                                                                                     zzzArrayElementInitialized => False,
-                                                                                    name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("evse"),
-                                                                                    instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
+                                                                                    name => ComponentTypeStrings.strname_t.To_Bounded_String("evse"),
+                                                                                    instance => ComponentTypeStrings.strinstance_t.To_Bounded_String("0"),
                                                                                     evse => (
                                                                                              zzzArrayElementInitialized => False,
                                                                                              id => 0,
@@ -640,8 +651,8 @@ package body unittests is
                                                                                    ),
                                                                       variable => (
                                                                                    zzzArrayElementInitialized => False,
-                                                                                   name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
-                                                                                   instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
+                                                                                   name => VariableTypeStrings.strname_t.To_Bounded_String("loginPassword"),
+                                                                                   instance => VariableTypeStrings.strinstance_t.To_Bounded_String("0")
                                                                                   )
                                                                      )
                                                                   )
@@ -659,8 +670,8 @@ package body unittests is
                                                                                                    attributeStatus => ocpp.SetVariableStatusEnumType.Accepted,
                                                                                                    component => (
                                                                                                                  zzzArrayElementInitialized => True,
-                                                                                                                 name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("name001"),
-                                                                                                                 instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("instance001"),
+                                                                                                                 name => ComponentTypeStrings.strname_t.To_Bounded_String("name001"),
+                                                                                                                 instance => ComponentTypeStrings.strinstance_t.To_Bounded_String("instance001"),
                                                                                                                  evse => (
                                                                                                                           zzzArrayElementInitialized => True,
                                                                                                                           id => 0,
@@ -669,8 +680,8 @@ package body unittests is
                                                                                                                 ),
                                                                                                    variable => (
                                                                                                                 zzzArrayElementInitialized => True,
-                                                                                                                name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
-                                                                                                                instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
+                                                                                                                name => VariableTypeStrings.strname_t.To_Bounded_String("loginPassword"),
+                                                                                                                instance => VariableTypeStrings.strinstance_t.To_Bounded_String("0")
                                                                                                                )
                                                                                                   ),
                                                                                                 others => 
@@ -680,8 +691,8 @@ package body unittests is
                                                                                                    attributeStatus => ocpp.SetVariableStatusEnumType.Accepted,
                                                                                                    component => (
                                                                                                                  zzzArrayElementInitialized => False,
-                                                                                                                 name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("name001"),
-                                                                                                                 instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("instance001"),
+                                                                                                                 name => ComponentTypeStrings.strname_t.To_Bounded_String("name001"),
+                                                                                                                 instance => ComponentTypeStrings.strinstance_t.To_Bounded_String("instance001"),
                                                                                                                  evse => (
                                                                                                                           zzzArrayElementInitialized => False,
                                                                                                                           id => 0,
@@ -690,8 +701,8 @@ package body unittests is
                                                                                                                 ),
                                                                                                    variable => (
                                                                                                                 zzzArrayElementInitialized => False,
-                                                                                                                name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
-                                                                                                                instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
+                                                                                                                name => VariableTypeStrings.strname_t.To_Bounded_String("loginPassword"),
+                                                                                                                instance => VariableTypeStrings.strinstance_t.To_Bounded_String("0")
                                                                                                                )
                                                                                                   )
                                                                   
@@ -740,7 +751,7 @@ package body unittests is
    is
       use ocpp.GetVariablesResponse;
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("01234567890123456789");
+      sn : ChargingStationTypeStrings.strserialNumber_t.Bounded_String := ChargingStationTypeStrings.strserialNumber_t.To_Bounded_String("01234567890123456789");
       valid: Boolean;
       dummystring: NonSparkTypes.packet.Bounded_String;
       bootNotificationRequest: ocpp.BootNotificationRequest.T := (
@@ -751,13 +762,13 @@ package body unittests is
                                               chargingStation => (
                                                                   zzzArrayElementInitialized => False,
                                                                   serialNumber => sn,
-                                                                  model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
-                                                                  vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
-                                                                  firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
+                                                                  model => ChargingStationTypeStrings.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                  vendorName => ChargingStationTypeStrings.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                  firmwareVersion => ChargingStationTypeStrings.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
                                                                   modem => (
                                                                             zzzArrayElementInitialized => False,
-                                                                            iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
-                                                                            imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
+                                                                            iccid => ModemTypeStrings.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                            imsi => ModemTypeStrings.strimsi_t.To_Bounded_String("01234567890123456789")
                                                                            )
                                                                  )                                                 
                                              );
@@ -765,7 +776,7 @@ package body unittests is
       bootNotificationResponse: ocpp.BootNotificationResponse.T := (
                                                        messagetypeid => 3,
                                                        messageid => NonSparkTypes.messageid_t.To_Bounded_String("19223202"),
-                                                       currentTime => NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
+                                                       currentTime => BootNotificationResponseStrings.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z"),
                                                        interval => 300,
                                                        status => RegistrationStatusEnumType.Accepted);
 
@@ -787,8 +798,8 @@ package body unittests is
                                                                                                   attributeType => AttributeEnumType.Actual,
                                                                                                   component => (
                                                                                                                 zzzArrayElementInitialized => False,
-                                                                                                                name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String ("evse", Drop => Right),
-                                                                                                                instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("10"),
+                                                                                                                name => ComponentTypeStrings.strname_t.To_Bounded_String ("evse", Drop => Right),
+                                                                                                                instance => ComponentTypeStrings.strinstance_t.To_Bounded_String("10"),
                                                                                                                 evse => (
                                                                                                                          zzzArrayElementInitialized => False,
                                                                                                                          id => 11,
@@ -797,8 +808,8 @@ package body unittests is
                                                                                                                ),
                                                                                                   variable => (
                                                                                                                zzzArrayElementInitialized => False,
-                                                                                                               name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
-                                                                                                               instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("13")
+                                                                                                               name => VariableTypeStrings.strname_t.To_Bounded_String("loginPassword"),
+                                                                                                               instance => VariableTypeStrings.strinstance_t.To_Bounded_String("13")
                                                                                                               )
                                                                                                  ),
                                                                                             2 => (
@@ -806,8 +817,8 @@ package body unittests is
                                                                                                   attributeType => AttributeEnumType.MaxSet,
                                                                                                   component => (
                                                                                                                 zzzArrayElementInitialized => False,
-                                                                                                                name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String ("evse", Drop => Right),
-                                                                                                                instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("20"),
+                                                                                                                name => ComponentTypeStrings.strname_t.To_Bounded_String ("evse", Drop => Right),
+                                                                                                                instance => ComponentTypeStrings.strinstance_t.To_Bounded_String("20"),
                                                                                                                 evse => (
                                                                                                                          zzzArrayElementInitialized => False,
                                                                                                                          id => 21,
@@ -816,8 +827,8 @@ package body unittests is
                                                                                                                ),
                                                                                                   variable => (
                                                                                                                zzzArrayElementInitialized => False,
-                                                                                                               name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
-                                                                                                               instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
+                                                                                                               name => VariableTypeStrings.strname_t.To_Bounded_String("loginPassword"),
+                                                                                                               instance => VariableTypeStrings.strinstance_t.To_Bounded_String("0")
                                                                                                               )
                                                                                                  ),
                                                                                             others => (
@@ -825,8 +836,8 @@ package body unittests is
                                                                                                        attributeType => AttributeEnumType.Actual,
                                                                                                        component => (
                                                                                                                      zzzArrayElementInitialized => False,
-                                                                                                                     name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String ("", Drop => Right),
-                                                                                                                     instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String(""),
+                                                                                                                     name => ComponentTypeStrings.strname_t.To_Bounded_String ("", Drop => Right),
+                                                                                                                     instance => ComponentTypeStrings.strinstance_t.To_Bounded_String(""),
                                                                                                                      evse => (
                                                                                                                               zzzArrayElementInitialized => False,
                                                                                                                               id => 0,
@@ -835,8 +846,8 @@ package body unittests is
                                                                                                                     ),
                                                                                                        variable => (
                                                                                                                     zzzArrayElementInitialized => False,
-                                                                                                                    name => NonSparkTypes.VariableType.strname_t.To_Bounded_String(""),
-                                                                                                                    instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("")
+                                                                                                                    name => VariableTypeStrings.strname_t.To_Bounded_String(""),
+                                                                                                                    instance => VariableTypeStrings.strinstance_t.To_Bounded_String("")
                                                                                                                    )
                                                                                                       )
                                                                                            )
@@ -851,11 +862,11 @@ package body unittests is
                                                                                                      zzzArrayElementInitialized => True,
                                                                                                      attributeStatus => ocpp.GetVariableStatusEnumType.Accepted,
                                                                                                      attributeType => AttributeEnumType.Actual,
-                                                                                                     attributeValue => NonSparkTypes.GetVariableResultType.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
+                                                                                                     attributeValue => GetVariableResultTypeStrings.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
                                                                                                      component => (
                                                                                                                    zzzArrayElementInitialized => True,
-                                                                                                                   name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("evse"),
-                                                                                                                   instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
+                                                                                                                   name => ComponentTypeStrings.strname_t.To_Bounded_String("evse"),
+                                                                                                                   instance => ComponentTypeStrings.strinstance_t.To_Bounded_String("0"),
                                                                                                                    evse => (
                                                                                                                             zzzArrayElementInitialized => True,
                                                                                                                             id => 0,
@@ -864,19 +875,19 @@ package body unittests is
                                                                                                                   ),
                                                                                                      variable => (
                                                                                                                   zzzArrayElementInitialized => True,
-                                                                                                                  name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
-                                                                                                                  instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
+                                                                                                                  name => VariableTypeStrings.strname_t.To_Bounded_String("loginPassword"),
+                                                                                                                  instance => VariableTypeStrings.strinstance_t.To_Bounded_String("0")
                                                                                                                  )
                                                                                                     ),
                                                                                                others => (
                                                                                                           zzzArrayElementInitialized => False,
                                                                                                           attributeStatus => ocpp.GetVariableStatusEnumType.Accepted,
                                                                                                           attributeType => AttributeEnumType.Actual,
-                                                                                                          attributeValue => NonSparkTypes.GetVariableResultType.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
+                                                                                                          attributeValue => GetVariableResultTypeStrings.strattributeValue_t.To_Bounded_String("p@ssw0rd"),
                                                                                                           component => (
                                                                                                                         zzzArrayElementInitialized => False,
-                                                                                                                        name => NonSparkTypes.ComponentType.strname_t.To_Bounded_String("evse"),
-                                                                                                                        instance => NonSparkTypes.ComponentType.strinstance_t.To_Bounded_String("0"),
+                                                                                                                        name => ComponentTypeStrings.strname_t.To_Bounded_String("evse"),
+                                                                                                                        instance => ComponentTypeStrings.strinstance_t.To_Bounded_String("0"),
                                                                                                                         evse => (
                                                                                                                                  zzzArrayElementInitialized => False,
                                                                                                                                  id => 0,
@@ -885,8 +896,8 @@ package body unittests is
                                                                                                                        ),
                                                                                                           variable => (
                                                                                                                        zzzArrayElementInitialized => False,
-                                                                                                                       name => NonSparkTypes.VariableType.strname_t.To_Bounded_String("loginPassword"),
-                                                                                                                       instance => NonSparkTypes.VariableType.strinstance_t.To_Bounded_String("0")
+                                                                                                                       name => VariableTypeStrings.strname_t.To_Bounded_String("loginPassword"),
+                                                                                                                       instance => VariableTypeStrings.strinstance_t.To_Bounded_String("0")
                                                                                                                       )
                                                                                                          )
                                                                                               )
@@ -950,7 +961,7 @@ package body unittests is
                                                               status => GenericDeviceModelStatusEnumType.Accepted
                                                              );
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("01234567890123456789");
+      sn : ChargingStationTypeStrings.strserialNumber_t.Bounded_String := ChargingStationTypeStrings.strserialNumber_t.To_Bounded_String("01234567890123456789");
       valid: Boolean;
       bnr: ocpp.BootNotificationRequest.T := (
                                               messagetypeid => 2,
@@ -960,13 +971,13 @@ package body unittests is
                                               chargingStation => (
                                                                   zzzArrayElementInitialized => False,
                                                                   serialNumber => sn,
-                                                                  model => NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String("SingleSocketCharger"),
-                                                                  vendorName => NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String("VendorX"),
-                                                                  firmwareVersion => NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
+                                                                  model => ChargingStationTypeStrings.strmodel_t.To_Bounded_String("SingleSocketCharger"),
+                                                                  vendorName => ChargingStationTypeStrings.strvendorName_t.To_Bounded_String("VendorX"),
+                                                                  firmwareVersion => ChargingStationTypeStrings.strfirmwareVersion_t.To_Bounded_String("01.23456789"),
                                                                   modem => (
                                                                             zzzArrayElementInitialized => False,
-                                                                            iccid => ModemType.striccid_t.To_Bounded_String("01234567890123456789"),
-                                                                            imsi => ModemType.strimsi_t.To_Bounded_String("01234567890123456789")
+                                                                            iccid => ModemTypeStrings.striccid_t.To_Bounded_String("01234567890123456789"),
+                                                                            imsi => ModemTypeStrings.strimsi_t.To_Bounded_String("01234567890123456789")
                                                                            )
                                                                  )                                                 
                                              );

@@ -3,14 +3,15 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with ComponentTypestrings;
 with ocpp.EVSEType; use ocpp.EVSEType;
 
 package ocpp.ComponentType is
    type T is record
       zzzArrayElementInitialized : Boolean := False;
       evse : EVSEType.T;
-      name : NonSparkTypes.ComponentType.strname_t.Bounded_String;
-      instance : NonSparkTypes.ComponentType.strinstance_t.Bounded_String;
+      name : ComponentTypeStrings.strname_t.Bounded_String;
+      instance : ComponentTypeStrings.strinstance_t.Bounded_String;
    end record;
    procedure Initialize(self: out ocpp.ComponentType.T)
    with

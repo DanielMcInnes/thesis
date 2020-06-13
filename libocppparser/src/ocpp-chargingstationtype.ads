@@ -3,16 +3,17 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with ChargingStationTypestrings;
 with ocpp.ModemType; use ocpp.ModemType;
 
 package ocpp.ChargingStationType is
    type T is record
       zzzArrayElementInitialized : Boolean := False;
-      serialNumber : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
-      model : NonSparkTypes.ChargingStationType.strmodel_t.Bounded_String;
+      serialNumber : ChargingStationTypeStrings.strserialNumber_t.Bounded_String;
+      model : ChargingStationTypeStrings.strmodel_t.Bounded_String;
       modem : ModemType.T;
-      vendorName : NonSparkTypes.ChargingStationType.strvendorName_t.Bounded_String;
-      firmwareVersion : NonSparkTypes.ChargingStationType.strfirmwareVersion_t.Bounded_String;
+      vendorName : ChargingStationTypeStrings.strvendorName_t.Bounded_String;
+      firmwareVersion : ChargingStationTypeStrings.strfirmwareVersion_t.Bounded_String;
    end record;
    procedure Initialize(self: out ocpp.ChargingStationType.T)
    with

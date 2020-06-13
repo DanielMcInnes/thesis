@@ -19,7 +19,7 @@ procedure findquotedstring_packet is new findquotedstring(
    begin
       self.zzzArrayElementInitialized := False;
       self.attributeType := AttributeEnumType.Actual;
-      self.attributeValue := NonSparkTypes.SetVariableDataType.strattributeValue_t.To_Bounded_String("");
+      self.attributeValue := SetVariableDataTypeStrings.strattributeValue_t.To_Bounded_String("");
       ComponentType.Initialize(self.component);
       VariableType.Initialize(self.variable);
 
@@ -44,7 +44,7 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "attributeValue", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid SetVariableDataTypeattributeValue"); return; end if;
 
-      self.attributeValue := NonSparkTypes.SetVariableDataType.strattributeValue_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.attributeValue := SetVariableDataTypeStrings.strattributeValue_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKey(msg, msgIndex, valid, "component");
       if (valid = false) then NonSparkTypes.put_line("355 Invalid SetVariableDataTypecomponent"); return; end if;
@@ -76,7 +76,7 @@ procedure findquotedstring_packet is new findquotedstring(
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
                                                       & "       " & '"' & "attributeType" & '"' & ":"  & '"' & AttributeEnumType.string_t.To_String(strattributeType) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "attributeValue" & '"' & ": " & '"' & NonSparkTypes.SetVariableDataType.strattributeValue_t.To_String(Self.attributeValue) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "attributeValue" & '"' & ": " & '"' & SetVariableDataTypeStrings.strattributeValue_t.To_String(Self.attributeValue) & '"' & "," & ASCII.LF
                                                       & "    " & '"' & "component" & '"' & ":" & NonSparkTypes.packet.To_String(strcomponent) & "," & ASCII.LF
                                                       & "    " & '"' & "variable" & '"' & ":" & NonSparkTypes.packet.To_String(strvariable) & ASCII.LF
                                                       & "}" & ASCII.LF

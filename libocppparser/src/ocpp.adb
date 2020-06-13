@@ -2,6 +2,7 @@ pragma SPARK_Mode (On);
 
 with ocpp;
 with ada.strings.maps;
+with ComponentTypeStrings;
 
 package body ocpp is
 
@@ -141,16 +142,16 @@ package body ocpp is
    procedure Initialize(Self : out ModemType_t)
    is
    begin
-      self.iccid := NonSparkTypes.ModemType.striccid_t.To_Bounded_String("");
-      self.imsi := NonSparkTypes.ModemType.strimsi_t.To_Bounded_String("");
+      self.iccid := ModemTypeStrings.striccid_t.To_Bounded_String("");
+      self.imsi := ModemTypeStrings.strimsi_t.To_Bounded_String("");
    end Initialize;
    
    procedure Initialize(Self : out ChargingStation_t) is
    begin
-      self.serialNumber := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("");
-      self.model := NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String(""); -- eg. SingleSocketCharger
-      self.vendorName := NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String(""); -- eg. VendorX
-      self.firmwareVersion := NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("");
+      self.serialNumber := ChargingStationTypeStrings.strserialNumber_t.To_Bounded_String("");
+      self.model := ChargingStationTypeStrings.strmodel_t.To_Bounded_String(""); -- eg. SingleSocketCharger
+      self.vendorName := ChargingStationTypeStrings.strvendorName_t.To_Bounded_String(""); -- eg. VendorX
+      self.firmwareVersion := ChargingStationTypeStrings.strfirmwareVersion_t.To_Bounded_String("");
       Initialize(self.modem);
    end Initialize;
 

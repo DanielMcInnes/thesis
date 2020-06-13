@@ -19,7 +19,7 @@ procedure findquotedstring_packet is new findquotedstring(
    begin
       self.messageTypeId:= -1;
       self.messageId := NonSparkTypes.messageid_t.To_Bounded_String("");
-      self.currentTime := NonSparkTypes.HeartbeatResponse.strcurrentTime_t.To_Bounded_String("");
+      self.currentTime := HeartbeatResponseStrings.strcurrentTime_t.To_Bounded_String("");
 
    end Initialize;
 
@@ -46,7 +46,7 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "currentTime", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid HeartbeatResponsecurrentTime"); return; end if;
 
-      self.currentTime := NonSparkTypes.HeartbeatResponse.strcurrentTime_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.currentTime := HeartbeatResponseStrings.strcurrentTime_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       if (valid = false) then NonSparkTypes.put_line("365 Invalid HeartbeatResponsecurrentTime"); return; end if;
       valid := true;
@@ -61,7 +61,7 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & "[3," & ASCII.LF
                                                       & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "currentTime" & '"' & ": " & '"' & NonSparkTypes.HeartbeatResponse.strcurrentTime_t.To_String(Self.currentTime) & '"' & ASCII.LF
+                                                      & "    " & '"' & "currentTime" & '"' & ": " & '"' & HeartbeatResponseStrings.strcurrentTime_t.To_String(Self.currentTime) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
                                                       & "]", Drop => Right);
    end To_Bounded_String;

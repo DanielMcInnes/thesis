@@ -34,7 +34,7 @@ is
        global => null;
 
    procedure EnrolChargingStation(theList: in out ChargerList.vecChargers_t;
-                                  serialNumber: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
+                                  serialNumber: in ChargingStationTypeStrings.strserialNumber_t.Bounded_String;
                                   retval: out Boolean)
      with
        global => null,
@@ -44,7 +44,7 @@ is
                   );
    
    procedure IsEnrolled(theList: in ChargerList.vecChargers_t;
-                        serialNumber: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
+                        serialNumber: in ChargingStationTypeStrings.strserialNumber_t.Bounded_String;
                         retval: out Boolean)
      with
        global => null,

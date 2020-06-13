@@ -38,7 +38,7 @@ function cleanpropertyname(f) {
    if (retval != f) {
       console.log('renaming ' + f + ' to ' + retval)
    } else {
-      console.log('not renaming ' + f + ' to ' + retval)
+      //console.log('not renaming ' + f + ' to ' + retval)
    }
 
    return retval;
@@ -206,6 +206,83 @@ function createArrayType(name, schema) {
 
 }
 
+function createStringTypes(schema, name) {
+   //console.log('createStringType:', name, schema.properties)
+   var propertyHasStrings = false
+   for (var i in schema.properties) {
+      var property = schema.properties[i]
+      if (property.type === 'string') {
+         propertyHasStrings = true
+      }
+   }
+
+   if (propertyHasStrings === false) {
+      return
+   }
+
+   var _outfile = name.toLowerCase() + 'strings.ads'
+   var _buffer = '--pragma SPARK_Mode (Off);\n\n'
+   _buffer += 'with Ada.Strings.Bounded;\n\n'
+   _buffer += 'package ' + name + 'Strings is\n'
+   
+   for (var i in schema.properties) {
+      var property = schema.properties[i]
+      //console.log('property:', property)
+      if (property.type === 'string') {
+         //console.log('found string: ', i, property);
+         _buffer += '   package str' + i + '_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => ' + (!!property.maxLength ? property.maxLength : 100) + ');\n'
+         
+      }
+   }
+
+
+
+
+
+
+
+
+
+
+   _buffer += 'end ' + name + 'Strings;'
+   //console.log('_buffer:', _buffer)
+   fs.writeFile((_outfile), _buffer, function (err, file) {
+      if (err) throw err;
+      console.log('Saved %s', _outfile);
+   });
+}
+
+function includeStringTypes(schema, name) {
+   var propertyHasStrings = false
+   for (var i in schema.properties) {
+      var property = schema.properties[i]
+      if (property.type === 'string') {
+         propertyHasStrings = true
+      }
+   }
+
+   if (propertyHasStrings === false) {
+      return ''
+   }
+
+   var _buffer = 'with ' + name + 'strings;\n'
+   
+   /*
+   for (var i in schema.properties) {
+      var property = schema.properties[i]
+      //console.log('property:', property)
+      if (property.type === 'string') {
+         //console.log('found string: ', i, property);
+         _buffer += 'with str' + i + '_t is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => ' + (!!property.maxLength ? property.maxLength : 100) + ');\n'
+         
+      }
+   }
+   */
+   return _buffer
+   //console.log('_buffer:', _buffer)
+
+}
+
 module.exports.parse = function (name, schema) {
    name = cleanfilename(name);
 
@@ -224,12 +301,16 @@ module.exports.parse = function (name, schema) {
    _buffer += ('with ocpp; use ocpp;\n')
 
 
-   // include definitions for any types we need
+   createStringTypes(schema, name)
+   _buffer += includeStringTypes(schema, name)
+
+
+    // include definitions for any types we need
    for (var property in schema.properties) {
       if (property === 'customData') {
          continue;
       }
-      
+     
       if (!!schema.properties[property]['type'] && schema.properties[property]['type'] === 'array') {
          console.log('207: property:', property, schema.properties[property]['type'], 'schema.properties[property]:', schema.properties[property]);
          createArrayType(property, schema.properties[property]);
@@ -281,7 +362,7 @@ module.exports.parse = function (name, schema) {
             if (!!_javaType && _javaType.endsWith('Enum') ) {
                _type = _javaType + 'Type.T';
             } else {
-               _type = 'NonSparkTypes.' + name + '.str' + property + '_t.Bounded_String';
+               _type = name + 'Strings.str' + property + '_t.Bounded_String';
             }
             break;
          case 'object':
@@ -389,7 +470,7 @@ module.exports.parse = function (name, schema) {
                if (!!_javaType && _javaType.endsWith('Enum')) { // eg: getBaseReportRequest.reportBase : ocpp.ReportBaseEnum
                   _buffer += '      self.' + cleanpropertyname(property) + ' := ' + _javaType + 'Type.' + clean(schema.properties[property]["enum"][0]) +';\n';
                } else {
-                  _buffer += '      self.' + cleanpropertyname(property) + ' := NonSparkTypes.' + name + '.str' + property + '_t.To_Bounded_String("");\n';
+                  _buffer += '      self.' + cleanpropertyname(property) + ' := ' + name + 'Strings.str' + property + '_t.To_Bounded_String("");\n';
                }
             break;
          case 'boolean':
@@ -508,7 +589,7 @@ module.exports.parse = function (name, schema) {
                _buffer += '      if (valid = false) then NonSparkTypes.put_line("334 Invalid ' + name + property + '"); return; end if;\n'
             } else
             {
-               _buffer += '      self.' + cleanpropertyname(property) + ' := NonSparkTypes.' + name + '.str' + property + '_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);\n';
+               _buffer += '      self.' + cleanpropertyname(property) + ' := ' + name + 'Strings.str' + property + '_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);\n';
             }
             
             break;
@@ -645,7 +726,7 @@ module.exports.parse = function (name, schema) {
                _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & NonSparkTypes.packet.To_String(str' + property + ')' 
             break;
          case 'string':
-               _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & \'"\' & NonSparkTypes.' + name + '.str' + property + '_t.To_String(Self.' + cleanpropertyname(property) + ') & \'"\'' 
+               _buffer +=    '                                                      & "    " & \'"\' & "' + property + '" & \'"\' & ": " & \'"\' & ' + name + 'Strings.str' + property + '_t.To_String(Self.' + cleanpropertyname(property) + ') & \'"\'' 
             break;
          default:
             if (type.endsWith('EnumType')) {

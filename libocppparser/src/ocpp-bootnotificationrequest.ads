@@ -3,6 +3,7 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with BootNotificationRequeststrings;
 with ocpp.ChargingStationType; use ocpp.ChargingStationType;
 with ocpp.BootReasonEnumType; use ocpp.BootReasonEnumType;
 

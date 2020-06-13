@@ -3,12 +3,13 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with AdditionalInfoTypestrings;
 
 package ocpp.AdditionalInfoType is
    type T is record
       zzzArrayElementInitialized : Boolean := False;
-      additionalIdToken : NonSparkTypes.AdditionalInfoType.stradditionalIdToken_t.Bounded_String;
-      zzztype : NonSparkTypes.AdditionalInfoType.strtype_t.Bounded_String;
+      additionalIdToken : AdditionalInfoTypeStrings.stradditionalIdToken_t.Bounded_String;
+      zzztype : AdditionalInfoTypeStrings.strtype_t.Bounded_String;
    end record;
    procedure Initialize(self: out ocpp.AdditionalInfoType.T)
    with

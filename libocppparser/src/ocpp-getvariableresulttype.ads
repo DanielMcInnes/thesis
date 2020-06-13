@@ -3,6 +3,7 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with GetVariableResultTypestrings;
 with ocpp.GetVariableStatusEnumType; use ocpp.GetVariableStatusEnumType;
 with ocpp.AttributeEnumType; use ocpp.AttributeEnumType;
 with ocpp.ComponentType; use ocpp.ComponentType;
@@ -13,7 +14,7 @@ package ocpp.GetVariableResultType is
       zzzArrayElementInitialized : Boolean := False;
       attributeStatus : GetVariableStatusEnumType.T;
       attributeType : AttributeEnumType.T;
-      attributeValue : NonSparkTypes.GetVariableResultType.strattributeValue_t.Bounded_String;
+      attributeValue : GetVariableResultTypeStrings.strattributeValue_t.Bounded_String;
       component : ComponentType.T;
       variable : VariableType.T;
    end record;

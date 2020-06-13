@@ -18,8 +18,8 @@ procedure findquotedstring_packet is new findquotedstring(
    is
    begin
       self.zzzArrayElementInitialized := False;
-      self.iccid := NonSparkTypes.ModemType.striccid_t.To_Bounded_String("");
-      self.imsi := NonSparkTypes.ModemType.strimsi_t.To_Bounded_String("");
+      self.iccid := ModemTypeStrings.striccid_t.To_Bounded_String("");
+      self.imsi := ModemTypeStrings.strimsi_t.To_Bounded_String("");
 
    end Initialize;
 
@@ -36,12 +36,12 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "iccid", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid ModemTypeiccid"); return; end if;
 
-      self.iccid := NonSparkTypes.ModemType.striccid_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.iccid := ModemTypeStrings.striccid_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "imsi", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid ModemTypeimsi"); return; end if;
 
-      self.imsi := NonSparkTypes.ModemType.strimsi_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.imsi := ModemTypeStrings.strimsi_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       if (valid = false) then NonSparkTypes.put_line("365 Invalid ModemTypeimsi"); return; end if;
       valid := true;
@@ -54,8 +54,8 @@ procedure findquotedstring_packet is new findquotedstring(
    begin
       retval := NonSparkTypes.packet.To_Bounded_String(""
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "iccid" & '"' & ": " & '"' & NonSparkTypes.ModemType.striccid_t.To_String(Self.iccid) & '"' & "," & ASCII.LF
-                                                      & "    " & '"' & "imsi" & '"' & ": " & '"' & NonSparkTypes.ModemType.strimsi_t.To_String(Self.imsi) & '"' & ASCII.LF
+                                                      & "    " & '"' & "iccid" & '"' & ": " & '"' & ModemTypeStrings.striccid_t.To_String(Self.iccid) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "imsi" & '"' & ": " & '"' & ModemTypeStrings.strimsi_t.To_String(Self.imsi) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF
 , Drop => Right);
    end To_Bounded_String;

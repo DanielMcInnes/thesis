@@ -22,6 +22,9 @@ with ocpp.ResetResponse;
 with ocpp.StatusNotificationRequest;
 with ocpp.StatusNotificationResponse;
 
+with BootNotificationResponseStrings;
+with HeartbeatResponseStrings;
+
 package body ocpp.server 
 is
    procedure Initialize(self: out T)
@@ -38,14 +41,14 @@ is
    end Initialize;
 
    procedure EnrolChargingStation(theList: in out ChargerList.vecChargers_t;
-                                  serialNumber: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
+                                  serialNumber: in ChargingStationTypeStrings.strserialNumber_t.Bounded_String;
                                   retval: out Boolean)
    is
    begin
       ChargerList.contains(theList, serialNumber, retval);      
       if (retval) then
          --if (theList.Contains(serialNumber)) then
-         NonSparkTypes.put("ocpp.server.addChargingStation: already contains charger"); NonSparkTypes.put_line(NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(serialNumber));
+         NonSparkTypes.put("ocpp.server.addChargingStation: already contains charger"); NonSparkTypes.put_line(ChargingStationTypeStrings.strserialNumber_t.To_String(serialNumber));
          retval := true;
          return;
       end if;
@@ -54,12 +57,11 @@ is
    end EnrolChargingStation;
    
    procedure IsEnrolled(theList: in ChargerList.vecChargers_t;
-                        serialNumber: in NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String;
+                        serialNumber: in ChargingStationTypeStrings.strserialNumber_t.Bounded_String;
                         retval: out Boolean)
    is
    begin
       ChargerList.contains(theList, serialNumber, retval);      
-      NonSparkTypes.put("ocpp.server.isEnrolled: "); NonSparkTypes.put(serialNumber); NonSparkTypes.put(retval'Image); --NonSparkTypes.put_line(enrolledChargers.Length'Image);
    end IsEnrolled;
    
    procedure SendRequest(theServer: in out ocpp.server.T;
@@ -309,7 +311,7 @@ is
       pragma assert (bootNotificationResponse.messagetypeid = 3);
           
       bootNotificationResponse.messageid := bootNotificationRequest.messageid;
-      bootNotificationResponse.currentTime := NonSparkTypes.bootnotificationresponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z");
+      bootNotificationResponse.currentTime := BootNotificationResponseStrings.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z");
       bootNotificationResponse.interval := 300;
          
       IsEnrolled(theServer.enrolledChargers, bootNotificationRequest.chargingStation.serialNumber, isChargerEnrolled);
@@ -347,7 +349,7 @@ is
       
       heartbeatResponse.messagetypeid := 3;
       heartbeatResponse.messageid := heartbeatRequest.messageid;
-      heartbeatResponse.currentTime := NonSparkTypes.HeartbeatResponse.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z");
+      heartbeatResponse.currentTime := HeartbeatResponseStrings.strcurrentTime_t.To_Bounded_String("2013-02-01T20:53:32.486Z");
       heartbeatResponse.To_Bounded_String(response);
       NonSparkTypes.put("ocpp-server: 137: response:"); NonSparkTypes.put_line(NonSparkTypes.packet.To_String(response));
    end HandleHeartbeatRequest;

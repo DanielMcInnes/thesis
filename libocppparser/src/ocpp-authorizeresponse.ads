@@ -3,6 +3,7 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with AuthorizeResponsestrings;
 with ocpp.IdTokenInfoType; use ocpp.IdTokenInfoType;
 with ocpp.AuthorizeCertificateStatusEnumType; use ocpp.AuthorizeCertificateStatusEnumType;
 

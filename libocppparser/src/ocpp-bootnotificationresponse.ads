@@ -3,11 +3,12 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with BootNotificationResponsestrings;
 with ocpp.RegistrationStatusEnumType; use ocpp.RegistrationStatusEnumType;
 
 package ocpp.BootNotificationResponse is
    type T is new callresult with record
-      currentTime : NonSparkTypes.BootNotificationResponse.strcurrentTime_t.Bounded_String;
+      currentTime : BootNotificationResponseStrings.strcurrentTime_t.Bounded_String;
       interval : integer;
       status : RegistrationStatusEnumType.T;
    end record;

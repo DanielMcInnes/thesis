@@ -3,14 +3,15 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with MessageContentTypestrings;
 with ocpp.MessageFormatEnumType; use ocpp.MessageFormatEnumType;
 
 package ocpp.MessageContentType is
    type T is record
       zzzArrayElementInitialized : Boolean := False;
       format : MessageFormatEnumType.T;
-      language : NonSparkTypes.MessageContentType.strlanguage_t.Bounded_String;
-      content : NonSparkTypes.MessageContentType.strcontent_t.Bounded_String;
+      language : MessageContentTypeStrings.strlanguage_t.Bounded_String;
+      content : MessageContentTypeStrings.strcontent_t.Bounded_String;
    end record;
    procedure Initialize(self: out ocpp.MessageContentType.T)
    with

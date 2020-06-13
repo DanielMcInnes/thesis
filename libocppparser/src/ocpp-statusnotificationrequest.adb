@@ -20,7 +20,7 @@ procedure findquotedstring_packet is new findquotedstring(
       self.messageTypeId:= -1;
       self.messageId := NonSparkTypes.messageid_t.To_Bounded_String("");
       self.action := NonSparkTypes.action_t.To_Bounded_String("");
-      self.timestamp := NonSparkTypes.StatusNotificationRequest.strtimestamp_t.To_Bounded_String("");
+      self.timestamp := StatusNotificationRequestStrings.strtimestamp_t.To_Bounded_String("");
       self.connectorStatus := ConnectorStatusEnumType.Available;
       self.evseId := -1;
       self.connectorId := -1;
@@ -53,7 +53,7 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "timestamp", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid StatusNotificationRequesttimestamp"); return; end if;
 
-      self.timestamp := NonSparkTypes.StatusNotificationRequest.strtimestamp_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.timestamp := StatusNotificationRequestStrings.strtimestamp_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "connectorStatus", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid StatusNotificationRequestconnectorStatus"); return; end if;
@@ -85,7 +85,7 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
                                                       & '"' & NonSparkTypes.action_t.To_String(Self.action) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "timestamp" & '"' & ": " & '"' & NonSparkTypes.StatusNotificationRequest.strtimestamp_t.To_String(Self.timestamp) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "timestamp" & '"' & ": " & '"' & StatusNotificationRequestStrings.strtimestamp_t.To_String(Self.timestamp) & '"' & "," & ASCII.LF
                                                       & "       " & '"' & "connectorStatus" & '"' & ":"  & '"' & ConnectorStatusEnumType.string_t.To_String(strconnectorStatus) & '"' & "," & ASCII.LF
                                                       & "    " & '"' & "evseId" & '"' & ": " & Self.evseId'Image & "," & ASCII.LF
                                                       & "    " & '"' & "connectorId" & '"' & ": " & Self.connectorId'Image & ASCII.LF

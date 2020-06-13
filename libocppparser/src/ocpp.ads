@@ -6,6 +6,9 @@ with Ada.Strings.Bounded;
 with Ada.Text_IO;
 with NonSparkTypes; use NonSparkTypes; use NonSparkTypes.action_t;
 
+with ChargingStationTypeStrings;
+with ModemTypeStrings;
+
 package ocpp is
    type call is tagged record
       messagetypeid : integer := 2;-- eg. 2
@@ -51,16 +54,16 @@ package ocpp is
                );
 
    type ModemType_t is tagged record
-      iccid: ModemType.striccid_t.Bounded_String;
-      imsi: ModemType.strimsi_t.Bounded_String;
+      iccid: ModemTypeStrings.striccid_t.Bounded_String;
+      imsi: ModemTypeStrings.strimsi_t.Bounded_String;
    end record;   
    procedure Initialize(Self : out ModemType_t);
    
    type ChargingStation_t is tagged record
-      serialNumber : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("");
-      model:  NonSparkTypes.ChargingStationType.strmodel_t.Bounded_String := NonSparkTypes.ChargingStationType.strmodel_t.To_Bounded_String(""); -- eg. SingleSocketCharger
-      vendorName: NonSparkTypes.ChargingStationType.strvendorName_t.Bounded_String := NonSparkTypes.ChargingStationType.strvendorName_t.To_Bounded_String(""); -- eg. VendorX
-      firmwareVersion: NonSparkTypes.ChargingStationType.strfirmwareVersion_t.Bounded_String := NonSparkTypes.ChargingStationType.strfirmwareVersion_t.To_Bounded_String("");
+      serialNumber : ChargingStationTypeStrings.strserialNumber_t.Bounded_String := ChargingStationTypeStrings.strserialNumber_t.To_Bounded_String("");
+      model:  ChargingStationTypeStrings.strmodel_t.Bounded_String := ChargingStationTypeStrings.strmodel_t.To_Bounded_String(""); -- eg. SingleSocketCharger
+      vendorName: ChargingStationTypeStrings.strvendorName_t.Bounded_String := ChargingStationTypeStrings.strvendorName_t.To_Bounded_String(""); -- eg. VendorX
+      firmwareVersion: ChargingStationTypeStrings.strfirmwareVersion_t.Bounded_String := ChargingStationTypeStrings.strfirmwareVersion_t.To_Bounded_String("");
       modem: ModemType_t;
    end record;
    

@@ -3,6 +3,7 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with GetVariableDataTypestrings;
 with ocpp.AttributeEnumType; use ocpp.AttributeEnumType;
 with ocpp.ComponentType; use ocpp.ComponentType;
 with ocpp.VariableType; use ocpp.VariableType;

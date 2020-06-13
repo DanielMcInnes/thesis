@@ -3,6 +3,7 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with SetVariableDataTypestrings;
 with ocpp.AttributeEnumType; use ocpp.AttributeEnumType;
 with ocpp.ComponentType; use ocpp.ComponentType;
 with ocpp.VariableType; use ocpp.VariableType;
@@ -11,7 +12,7 @@ package ocpp.SetVariableDataType is
    type T is record
       zzzArrayElementInitialized : Boolean := False;
       attributeType : AttributeEnumType.T;
-      attributeValue : NonSparkTypes.SetVariableDataType.strattributeValue_t.Bounded_String;
+      attributeValue : SetVariableDataTypeStrings.strattributeValue_t.Bounded_String;
       component : ComponentType.T;
       variable : VariableType.T;
    end record;

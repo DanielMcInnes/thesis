@@ -6,6 +6,8 @@ with ocpp.ResetRequest;
 with ocpp.ResetResponse;
 with ocpp.server;
 
+with ChargingStationTypeStrings;
+
 package body unittestb11 is
    procedure test(result: out Boolean)
    is
@@ -23,7 +25,7 @@ package body unittestb11 is
                                          status => ResetStatusEnumType.Accepted
                                         );
       server: ocpp.server.T;
-      sn : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String := NonSparkTypes.ChargingStationType.strserialNumber_t.To_Bounded_String("01234567890123456789");
+      sn : ChargingStationTypeStrings.strserialNumber_t.Bounded_String := ChargingStationTypeStrings.strserialNumber_t.To_Bounded_String("01234567890123456789");
       packet: NonSparkTypes.packet.Bounded_String;
       response: NonSparkTypes.packet.Bounded_String;
       expectedresponse: NonSparkTypes.packet.Bounded_String;

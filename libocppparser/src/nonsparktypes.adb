@@ -17,18 +17,6 @@ package body NonSparkTypes is
       ada.Text_IO.put_line(msg);
    end put_line;
 
-   procedure put(msg : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String)
-   is
-   begin
-      ada.Text_IO.put(NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(msg));
-   end;
-
-   procedure put_line(msg : NonSparkTypes.ChargingStationType.strserialNumber_t.Bounded_String)
-   is
-   begin
-      ada.Text_IO.put_line(NonSparkTypes.ChargingStationType.strserialNumber_t.To_String(msg));
-   end;
-
    function Uncased_Equals (L, R : String) return Boolean
    is
       use Ada.Strings.Fixed;

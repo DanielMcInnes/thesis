@@ -3,12 +3,13 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with VariableTypestrings;
 
 package ocpp.VariableType is
    type T is record
       zzzArrayElementInitialized : Boolean := False;
-      name : NonSparkTypes.VariableType.strname_t.Bounded_String;
-      instance : NonSparkTypes.VariableType.strinstance_t.Bounded_String;
+      name : VariableTypeStrings.strname_t.Bounded_String;
+      instance : VariableTypeStrings.strinstance_t.Bounded_String;
    end record;
    procedure Initialize(self: out ocpp.VariableType.T)
    with

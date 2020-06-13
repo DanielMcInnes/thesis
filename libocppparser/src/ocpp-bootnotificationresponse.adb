@@ -19,7 +19,7 @@ procedure findquotedstring_packet is new findquotedstring(
    begin
       self.messageTypeId:= -1;
       self.messageId := NonSparkTypes.messageid_t.To_Bounded_String("");
-      self.currentTime := NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_Bounded_String("");
+      self.currentTime := BootNotificationResponseStrings.strcurrentTime_t.To_Bounded_String("");
       self.interval := -1;
       self.status := RegistrationStatusEnumType.Accepted;
 
@@ -48,7 +48,7 @@ procedure findquotedstring_packet is new findquotedstring(
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "currentTime", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid BootNotificationResponsecurrentTime"); return; end if;
 
-      self.currentTime := NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
+      self.currentTime := BootNotificationResponseStrings.strcurrentTime_t.To_Bounded_String(NonSparkTypes.packet.To_String(dummybounded), Drop => Right);
 
       ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "interval", dummyInt);
       if (valid = false) then NonSparkTypes.put_line("328 Invalid BootNotificationResponseinterval"); return; end if;
@@ -75,7 +75,7 @@ procedure findquotedstring_packet is new findquotedstring(
                                                       & "[3," & ASCII.LF
                                                       & '"'  &  NonSparkTypes.messageid_t.To_String(Self.messageid) & '"' & "," & ASCII.LF
                                                       & "{" & ASCII.LF
-                                                      & "    " & '"' & "currentTime" & '"' & ": " & '"' & NonSparkTypes.BootNotificationResponse.strcurrentTime_t.To_String(Self.currentTime) & '"' & "," & ASCII.LF
+                                                      & "    " & '"' & "currentTime" & '"' & ": " & '"' & BootNotificationResponseStrings.strcurrentTime_t.To_String(Self.currentTime) & '"' & "," & ASCII.LF
                                                       & "    " & '"' & "interval" & '"' & ": " & Self.interval'Image & "," & ASCII.LF
                                                       & "       " & '"' & "status" & '"' & ":"  & '"' & RegistrationStatusEnumType.string_t.To_String(strstatus) & '"' & ASCII.LF
                                                       & "}" & ASCII.LF

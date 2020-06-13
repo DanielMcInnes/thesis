@@ -3,10 +3,11 @@ pragma SPARK_mode (on);
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with NonSparkTypes; use NonSparkTypes.action_t; 
 with ocpp; use ocpp;
+with HeartbeatResponsestrings;
 
 package ocpp.HeartbeatResponse is
    type T is new callresult with record
-      currentTime : NonSparkTypes.HeartbeatResponse.strcurrentTime_t.Bounded_String;
+      currentTime : HeartbeatResponseStrings.strcurrentTime_t.Bounded_String;
    end record;
    procedure Initialize(self: out ocpp.HeartbeatResponse.T)
    with
