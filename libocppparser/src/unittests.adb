@@ -141,6 +141,7 @@ with VariableTypeStrings;
 with unittestb11;
 with unittestb12;
 with unittestc01;
+with unittestj02;
 
 package body unittests is
    
@@ -152,17 +153,18 @@ package body unittests is
    procedure testall(result: out Boolean)
    is
    begin
-      B01(result);      if (result = false) then         fail; return;      end if;
-      B02(result);      if (result = false) then         fail; return;      end if;
-      B03(result);      if (result = false) then         fail; return;      end if;
-      B04(result);      if (result = false) then         fail; return;      end if;
-      B05(result);      if (result = false) then         fail; return;      end if;
-      B06(result);      if (result = false) then         fail; return;      end if;
-      B07(result);      if (result = false) then         fail; return;      end if; -- GetBaseReportRequest
+      --B01(result);      if (result = false) then         fail; return;      end if;
+      --B02(result);      if (result = false) then         fail; return;      end if;
+      --B03(result);      if (result = false) then         fail; return;      end if;
+      --B04(result);      if (result = false) then         fail; return;      end if;
+      --B05(result);      if (result = false) then         fail; return;      end if;
+      --B06(result);      if (result = false) then         fail; return;      end if;
+      --B07(result);      if (result = false) then         fail; return;      end if; -- GetBaseReportRequest
       
-      unittestb11.test(result); if (result = false) then fail; return; end if; -- ResetRequest
-      unittestb12.test(result); if (result = false) then fail; return; end if; -- ResetRequest
-      unittestc01.test(result); if (result = false) then fail; return; end if; -- ResetRequest
+      --unittestb11.test(result); if (result = false) then fail; return; end if; -- ResetRequest
+      --unittestb12.test(result); if (result = false) then fail; return; end if; 
+      --unittestc01.test(result); if (result = false) then fail; return; end if; 
+      unittestj02.test(result); if (result = false) then fail; return; end if; 
       
       --TODO:
       -- one of C01, C02, C04

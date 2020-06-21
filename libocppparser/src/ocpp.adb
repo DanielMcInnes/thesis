@@ -139,6 +139,47 @@ package body ocpp is
       
    end findnextinteger;
    
+   procedure findnextboolean(msg: in NonSparkTypes.packet.Bounded_String;
+                             index : in out Positive;
+                             foundInteger: out Boolean;
+                             found : out Boolean) 
+   is
+      temp : character;
+      last : integer;
+      package tfstring is new Ada.Strings.Bounded.Generic_Bounded_Length(Max => 5);
+      substring : tfstring.Bounded_String;
+   begin
+      found := false;
+      if (index > NonSparkTypes.packet.Length(msg)) then
+         found := false;
+         NonSparkTypes.put("    20: index: "); NonSparkTypes.put_line("ERROR");
+         return;
+      end if;
+           
+      NonSparkTypes.packet.Find_Token(Source => msg,
+                                      Set => Ada.Strings.Maps.To_Set(","),
+                                      From => Integer(index),
+                                      First => Integer(index),
+                                      Test => Ada.Strings.Inside,
+                                      Last => last);
+      if (index > NonSparkTypes.packet.Length(msg) or index = 0)
+      then
+         found := false;
+         return;
+      end if;
+      
+      if (last > NonSparkTypes.packet.Length(msg)) then
+         found := false;
+         return;
+      end if;
+      
+      
+      temp := NonSparkTypes.packet.Element(msg, index);
+      
+      found := true;
+      
+   end findnextboolean;
+   
    procedure Initialize(Self : out ModemType_t)
    is
    begin
@@ -621,6 +662,37 @@ package body ocpp is
       
       findnextinteger(msg, msgIndex, value, valid);
    end findQuotedKeyUnquotedValue;
+
+   procedure findQuotedKeyUnquotedBoolean(msg: in NonSparkTypes.packet.Bounded_String;
+                                        msgIndex: in out Integer;
+                                        valid: out Boolean;
+                                        key: in string;
+                                        value: out Boolean)
+   is
+      dummybounded: NonSparkTypes.packet.Bounded_String := NonSparkTypes.packet.To_Bounded_String("");
+      tempPositive: integer;
+      
+      use NonSparkTypes.packet;
+   begin
+      value := -1;
+      findString(msg, msgIndex, valid, key);
+      if (valid = false) then
+         return;
+      end if;
+      
+      if (msgIndex < 1) then
+         valid := false;
+         return;
+      end if;
+      
+      ocpp.moveIndexPastToken(msg, ':', msgindex, tempPositive); if (tempPositive = 0) then NonSparkTypes.put_line("ERROR: 233"); return; end if;
+      if (msgIndex < 1) then
+         valid := false;
+         return;
+      end if;
+      
+      findnextinteger(msg, msgIndex, value, valid);
+   end findQuotedKeyUnquotedBoolean;
 
    procedure findQuotedKey(msg: in NonSparkTypes.packet.Bounded_String;
                                       msgIndex: in out Integer;

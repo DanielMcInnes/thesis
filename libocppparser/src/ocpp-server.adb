@@ -21,6 +21,8 @@ with ocpp.ResetRequest;
 with ocpp.ResetResponse;
 with ocpp.StatusNotificationRequest;
 with ocpp.StatusNotificationResponse;
+with ocpp.TransactionEventRequest;
+with ocpp.TransactionEventResponse;
 
 with BootNotificationResponseStrings;
 with HeartbeatResponseStrings;
@@ -169,6 +171,14 @@ is
       elsif (action = ocpp.AuthorizeRequest.action)
       then
          HandleAuthorizeRequest(msg, msgindex, valid, response);
+         if (msgindex > NonSparkTypes.packet.Length(msg))
+         then
+            valid := false;
+            return;
+         end if;
+      elsif (action = ocpp.TransactionEventRequest.action)
+      then
+         HandleTransactionEventRequest(msg, msgindex, valid, response);
          if (msgindex > NonSparkTypes.packet.Length(msg))
          then
             valid := false;
@@ -406,7 +416,6 @@ is
       
    end HandleStatusNotificationRequest;
 
-
    procedure HandleAuthorizeRequest(msg: in NonSparkTypes.packet.Bounded_String;
                                              index : in out Integer;
                                              valid: out Boolean;
@@ -433,5 +442,32 @@ is
       valid := true;
       
    end HandleAuthorizeRequest;
+
+   procedure HandleTransactionEventRequest(msg: in NonSparkTypes.packet.Bounded_String;
+                                             index : in out Integer;
+                                             valid: out Boolean;
+                                             response: out NonSparkTypes.packet.Bounded_String
+                                            )
+   is
+      transactionEventRequest : ocpp.TransactionEventRequest.T;
+      transactionEventResponse : ocpp.TransactionEventResponse.T;
+      dummyBounded : NonSparkTypes.packet.Bounded_String;
+   begin
+      response := NonSparkTypes.packet.To_Bounded_String("");
+      transactionEventResponse.Initialize;
+      ocpp.TransactionEventRequest.parse(msg, index, transactionEventRequest, valid);
+      
+      if (valid = false) then
+         NonSparkTypes.put_line("ocpp-server: 462: invalid TransactionEventRequest");
+         return;
+      end if;
+      
+      transactionEventResponse.messagetypeid := 3;
+      transactionEventResponse.messageid := transactionEventRequest.messageid;
+      
+      transactionEventResponse.To_Bounded_String(response);
+      valid := true;
+      
+   end HandleTransactionEventRequest;
 
 end ocpp.server;

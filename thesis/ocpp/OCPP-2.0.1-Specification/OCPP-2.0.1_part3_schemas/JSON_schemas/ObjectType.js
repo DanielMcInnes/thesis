@@ -576,6 +576,8 @@ module.exports.parse = function (name, schema) {
       var _javaType = schema.properties[property]['javaType'] 
 
       switch (type) {
+         case 'boolean':
+         case 'number':
          case 'integer':
             _buffer += '      ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "' + property + '", dummyInt);\n';
             _buffer += '      if (valid = false) then NonSparkTypes.put_line("328 Invalid ' + name + property + '"); return; end if;\n'
@@ -605,6 +607,8 @@ module.exports.parse = function (name, schema) {
                _buffer += '      if (valid = false) then NonSparkTypes.put_line("355 Invalid ' + name + property + '"); return; end if;\n\n'
                _buffer += '      ' + utils.parseType(schema.properties[property]) + 'Type.parse(msg, msgindex, self.' + property + ', valid);\n';
                _buffer += '      if (valid = false) then NonSparkTypes.put_line("357 Invalid ' + name + property + '"); return; end if;\n'
+            } else {
+               
             }
             break;
       }

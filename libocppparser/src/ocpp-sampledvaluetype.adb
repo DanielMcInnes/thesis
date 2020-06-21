@@ -38,6 +38,9 @@ procedure findquotedstring_packet is new findquotedstring(
       dummyInt: integer;
    begin
       Initialize(self);
+      ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "value", dummyInt);
+      if (valid = false) then NonSparkTypes.put_line("328 Invalid SampledValueTypevalue"); return; end if;
+      self.value := dummyInt;
 
       ocpp.findQuotedKeyQuotedValue(msg, msgIndex, valid, "context", dummybounded);
       if (valid = false) then NonSparkTypes.put_line("333 Invalid SampledValueTypecontext"); return; end if;

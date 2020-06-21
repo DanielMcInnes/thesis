@@ -84,6 +84,7 @@ parseJsonFile('./SetVariablesResponse.json')
 parseJsonFile('./StatusNotificationRequest.json')
 parseJsonFile('./StatusNotificationResponse.json')
 parseJsonFile('./TransactionEventRequest.json')
+parseJsonFile('./TransactionEventResponse.json')
 
 
 

@@ -25,18 +25,5 @@ package body NonSparkTypes is
       return Translate (L, Lower_Case_Map) = Translate (R, Lower_Case_Map);
    end Uncased_Equals;
 
-   package body attributeValue_t is
-      procedure FromString(attribute : in string;
-                           str : out string_t.Bounded_String)
-      is
-      begin
-         str := attributeValue_t.string_t.To_Bounded_String(attribute, Drop => Right);
-      end FromString;
-
-   end attributeValue_t;
-
-
-
-
 
 end NonSparkTypes;

@@ -85,11 +85,17 @@ procedure findquotedstring_packet is new findquotedstring(
       if (valid = false) then NonSparkTypes.put_line("328 Invalid TransactionEventRequestseqNo"); return; end if;
       self.seqNo := dummyInt;
 
+      ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "offline", dummyInt);
+      if (valid = false) then NonSparkTypes.put_line("328 Invalid TransactionEventRequestoffline"); return; end if;
+      self.offline := dummyInt;
 
       ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "numberOfPhasesUsed", dummyInt);
       if (valid = false) then NonSparkTypes.put_line("328 Invalid TransactionEventRequestnumberOfPhasesUsed"); return; end if;
       self.numberOfPhasesUsed := dummyInt;
 
+      ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "cableMaxCurrent", dummyInt);
+      if (valid = false) then NonSparkTypes.put_line("328 Invalid TransactionEventRequestcableMaxCurrent"); return; end if;
+      self.cableMaxCurrent := dummyInt;
 
       ocpp.findQuotedKeyUnquotedValue(msg, msgIndex, valid, "reservationId", dummyInt);
       if (valid = false) then NonSparkTypes.put_line("328 Invalid TransactionEventRequestreservationId"); return; end if;

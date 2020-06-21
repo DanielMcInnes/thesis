@@ -1,4 +1,4 @@
-window_sizes 1920 1016 316 1598 843 120
+window_sizes 1920 1053 316 1598 880 120
 cleanlooks_style
 diagrams
   classdiagram_ref 128002 // cd1
@@ -8,7 +8,7 @@ diagrams
   classdiagram_ref 147586 // cd2 function deps
     1528 843 80 A0 0 0
   active  sequencediagram_ref 154114 // sd1 boot not
-    1598 843 120 A0 0 0
+    1598 880 80 A0 84 0
   classdiagram_ref 160642 // cd3 SetVariables
     1598 843 60 A0 5 166
   classdiagram_ref 167170 // cd4 getbasereport

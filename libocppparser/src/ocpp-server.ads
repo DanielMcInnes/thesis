@@ -226,4 +226,18 @@ is
                    null => index
                   );
 
+   procedure HandleTransactionEventRequest(msg: in NonSparkTypes.packet.Bounded_String;
+                                             index : in out Integer;
+                                             valid: out Boolean;
+                                             response: out NonSparkTypes.packet.Bounded_String
+                                            )
+     with
+       global => null,
+       Depends => (
+                     index => (msg),
+                   valid => (msg),
+                   response => (msg),
+                   null => index
+                  );
+
 end ocpp.server;

@@ -78,6 +78,14 @@ package ocpp is
      Annotate => (GNATprove, terminating),
      post => (if found = true then index < Integer'Last);
    
+   procedure findnextboolean(msg: in NonSparkTypes.packet.Bounded_String;
+                             index : in out Positive;
+                             foundInteger: out Boolean;
+                             found : out Boolean) 
+     with  Global => null,
+     Annotate => (GNATprove, terminating),
+     post => (if found = true then index < Integer'Last);
+   
    
    procedure ParseMessageType(msg:   in  NonSparkTypes.packet.Bounded_String;
                               messagetypeid : out integer;-- eg. 2
@@ -149,6 +157,12 @@ package ocpp is
                                         valid: out Boolean;
                                         key: in string;
                                         value: out Integer);
+
+   procedure findQuotedKeyUnquotedBoolean(msg: in NonSparkTypes.packet.Bounded_String;
+                                        msgIndex: in out Integer;
+                                        valid: out Boolean;
+                                        key: in string;
+                                        value: out Boolean);
 
 private
    
